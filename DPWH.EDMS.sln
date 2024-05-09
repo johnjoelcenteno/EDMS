@@ -1,0 +1,54 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34728.123
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{91E967A8-D3E5-4E84-80F1-4B58C2FC74EB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Client", "Client", "{7158232B-293E-430A-82C7-139289DEBE08}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DPWH.EDMS.Web.Server", "src\DPWH.EDMS.Web\Server\DPWH.EDMS.Web.Server.csproj", "{FAAAC269-1C27-4159-B71D-1FE97824C3C1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DPWH.EDMS.Web.Client", "src\DPWH.EDMS.Web\Client\DPWH.EDMS.Web.Client.csproj", "{7E4377BB-A595-4880-BAE5-FC6F700FD3A2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DPWH.EDMS.Web.Shared", "src\DPWH.EDMS.Web\Shared\DPWH.EDMS.Web.Shared.csproj", "{33FABB6F-AC10-46A6-89C7-8FA32E39100D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DPWH.EDMS.Components", "DPWH.EDMS.Components\DPWH.EDMS.Components.csproj", "{1616A7D2-495E-48BA-8B63-55F8BD8A2422}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FAAAC269-1C27-4159-B71D-1FE97824C3C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FAAAC269-1C27-4159-B71D-1FE97824C3C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FAAAC269-1C27-4159-B71D-1FE97824C3C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FAAAC269-1C27-4159-B71D-1FE97824C3C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7E4377BB-A595-4880-BAE5-FC6F700FD3A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7E4377BB-A595-4880-BAE5-FC6F700FD3A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7E4377BB-A595-4880-BAE5-FC6F700FD3A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7E4377BB-A595-4880-BAE5-FC6F700FD3A2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{33FABB6F-AC10-46A6-89C7-8FA32E39100D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{33FABB6F-AC10-46A6-89C7-8FA32E39100D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{33FABB6F-AC10-46A6-89C7-8FA32E39100D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{33FABB6F-AC10-46A6-89C7-8FA32E39100D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1616A7D2-495E-48BA-8B63-55F8BD8A2422}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1616A7D2-495E-48BA-8B63-55F8BD8A2422}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1616A7D2-495E-48BA-8B63-55F8BD8A2422}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1616A7D2-495E-48BA-8B63-55F8BD8A2422}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{7158232B-293E-430A-82C7-139289DEBE08} = {91E967A8-D3E5-4E84-80F1-4B58C2FC74EB}
+		{FAAAC269-1C27-4159-B71D-1FE97824C3C1} = {7158232B-293E-430A-82C7-139289DEBE08}
+		{7E4377BB-A595-4880-BAE5-FC6F700FD3A2} = {7158232B-293E-430A-82C7-139289DEBE08}
+		{33FABB6F-AC10-46A6-89C7-8FA32E39100D} = {7158232B-293E-430A-82C7-139289DEBE08}
+		{1616A7D2-495E-48BA-8B63-55F8BD8A2422} = {7158232B-293E-430A-82C7-139289DEBE08}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {54938F8D-3930-43EF-89C2-9082C2F379E7}
+	EndGlobalSection
+EndGlobal
