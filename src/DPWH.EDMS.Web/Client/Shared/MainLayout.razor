@@ -1,17 +1,31 @@
-﻿@inherits LayoutComponentBase
+﻿@using DPWH.EDMS.Web.Client.Shared.Nav
+@using DPWH.EDMS.Web.Client.Shared.Services.Navigation
+
+@inherits LayoutComponentBase
+
+@inject NavRx NavRx
 
 <div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
-
     <main>
-        <div class="top-row px-4">
-            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+        <div class="top-row">
+            <NavMenu />
         </div>
 
-        <article class="content px-4">
+        <article class="content px-4" style="margin-left: @(IsSidebarExpanded ? "320px" : "64px");">
             @Body
         </article>
     </main>
 </div>
+
+@code {
+    protected bool IsSidebarExpanded = false;
+
+    protected override void OnInitialized()
+    {
+        NavRx.IsExpanded.Subscribe((res) =>
+        {
+            IsSidebarExpanded = res;
+            StateHasChanged();
+        });
+    }
+}

@@ -1,0 +1,144 @@
+﻿@inherits NavMenuBase
+
+<nav class="navbar" id="navbar-revamp">
+    <div class="container-fluid flex-nowrap">
+        <a class="navbar-brand" href="/" tabindex="-1">
+            <img src="_content/DPWH.EDMS.Components/images/dpwh_logo.svg" alt="logo-detailed" />
+        </a>
+        @*  <AuthorizeView>
+        <Authorized>
+
+        </Authorized>
+        <NotAuthorized>
+        <a href="bff/login" class="login">Login</a>
+        </NotAuthorized>
+        </AuthorizeView> *@
+        <div class="rv-right-nav">
+        </div>
+    </div>
+</nav>
+
+<div style="width: @(DrawerRef.Expanded ? "320px" : "64px");" class="sidebar shadow d-flex flex-column flex-shrink-0">
+    <div class="sidebar-container">
+        <div class="d-flex flex-row justify-content-center align-items-center">
+            <img style="width: @(DrawerRef.Expanded ? "100px" : "80px");"
+                 class="p-2" src="_content/DPWH.EDMS.Components/images/dpwh_logo.svg" alt="logo-detailed" />
+        </div>
+
+        <ul class="nav nav-pills flex-column mb-auto mt-2">
+            @if (SelectedLevel1Item == null) // Show this view if no child/dropdown is selected ( DEFAULT VIEW )
+            {
+                @foreach (var level0Item in NavMenus)
+                {
+                    if (level0Item.Children == null)
+                    {
+                        <li class="d-flex align-items-center">
+                            <NavLink @onclick="@(() => NavManager.NavigateTo(level0Item.Url!))"
+                                     Match="@( level0Item.Url == "" ? NavLinkMatch.All : NavLinkMatch.Prefix )"
+                                     href="@level0Item.Url"
+                                     class="nav-link d-flex align-items-center flex-grow-1 p-4"
+                                     aria-current="page">
+                                @if (level0Item.Icon != null)
+                                {
+                                    <span class="bi me-2 material-symbols-outlined">
+                                        @level0Item.Icon
+                                    </span>
+                                }
+                                @(DrawerRef.Expanded ? level0Item.Text : "")
+                            </NavLink>
+                        </li>
+
+                    }
+                    else
+                    {
+                        <li>
+                            <NavLink class="nav-link d-flex align-items-center flex-grow-1 py-2 ps-4"
+                                     @onclick="() => ToggleMenuItem(level0Item)">
+                                @if (level0Item.Icon != null)
+                                {
+                                    <span class="bi me-2 material-symbols-outlined">
+                                        @level0Item.Icon
+                                    </span>
+                                }
+                                @(DrawerRef.Expanded ? level0Item.Text : "")
+                                <span class="material-symbols-outlined xl ms-auto">@(level0Item.Expanded ? "expand_less" : "expand_more")</span>
+                            </NavLink>
+                            @if (level0Item.Expanded && level0Item.Children != null)
+                            {
+                                <ul class="nav-link-subitem">
+                                    @foreach (var level1Item in level0Item.Children)
+                                    {
+                                        <li>
+                                            <NavLink class="nav-link d-flex align-items-center flex-grow-1 px-4 py-3"
+                                                     @onclick="() => ToggleLevel1Item(level1Item)">
+                                                @if (level1Item.Icon != null)
+                                                {
+                                                    <span class="bi me-2 material-symbols-outlined">
+                                                        @level1Item.Icon
+                                                    </span>
+                                                }
+                                                @(DrawerRef.Expanded ? level0Item.Text : "")
+                                                <span class="material-symbols-outlined lg ms-auto">east</span>
+                                            </NavLink>
+                                        </li>
+                                    }
+                                </ul>
+                            }
+                        </li>
+                    }
+                }
+            }
+            else // Show this view if child/dropdown is selected ( EXPANDED VIEW )
+            {
+                <li>
+                    <NavLink class="nav-link d-flex align-items-center flex-grow-1 p-4 fw-bolder"
+                             @onclick="() => ToggleLevel1Item(null!)">
+                        <span class="material-symbols-outlined lg me-2">west</span>
+                        <p class="mb-0" style="font-size: 20px;">@SelectedLevel1Item.Text</p>
+                    </NavLink>
+                </li>
+                @if (SelectedLevel1Item != null && SelectedLevel1Item.Children != null)
+                {
+                    var level2Items = SelectedLevel1Item.Children.OrderBy(c => c.SortOrder);
+
+                    if (level2Items != null && level2Items.Count() > 0)
+                    {
+                        foreach (var level2Item in level2Items)
+                        {
+                            <li class="d-flex align-items-center">
+                                <NavLink @onclick="@(() => NavManager.NavigateTo(level2Item.Url!))"
+                                         Match="@( level2Item.Url == "" ? NavLinkMatch.All : NavLinkMatch.Prefix )"
+                                         href="@level2Item.Url"
+                                         class="nav-link d-flex align-items-center flex-grow-1 p-4"
+                                         aria-current="page">
+                                    @if (level2Item.Icon != null)
+                                    {
+                                        <span class="bi me-2 material-symbols-outlined">
+                                            @level2Item.Icon
+                                        </span>
+                                    }
+                                    @(DrawerRef.Expanded ? level2Item.Text : "")
+                                </NavLink>
+                            </li>
+                        }
+                    }
+
+                }
+            }
+        </ul>
+
+        <div id="sidebar-expander">
+            <TelerikButton OnClick="@ToggleDrawer" FillMode="@(ThemeConstants.Button.FillMode.Flat)">
+                <span class="material-symbols-outlined xl">@(DrawerRef.Expanded ? "chevron_left" : "chevron_right") </span>
+            </TelerikButton>
+        </div>
+    </div>
+</div>
+
+<style>
+    .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+        color: #fff;
+        padding: 10px !important;
+        background: transparent;
+    }
+</style>

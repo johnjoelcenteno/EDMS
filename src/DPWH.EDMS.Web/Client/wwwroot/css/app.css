@@ -156,3 +156,56 @@ a, .btn-link {
 .k-loader-container, .k-loader-container-overlay {
     position: fixed !important;
 }
+
+/* Rules for sizing the icon. */
+.material-symbols-outlined.xs,
+.material-icons.xs {
+    font-size: 14px;
+}
+
+.material-symbols-outlined.sm,
+.material-icons.sm {
+    font-size: 16px;
+}
+
+.material-symbols-outlined.md,
+.material-icons.md {
+    font-size: 18px;
+}
+
+.material-symbols-outlined.lg,
+.material-icons.lg {
+    font-size: 24px;
+}
+
+.material-symbols-outlined.xl,
+.material-icons.xl {
+    font-size: 36px;
+}
+
+.material-symbols-outlined.xxl,
+.material-icons.xxl {
+    font-size: 48px;
+}
+
+/* Rules for using icons as black on a light background. */
+.material-symbols-outlined.md-dark,
+.material-icons.md-dark {
+    color: rgba(0, 0, 0, 0.54);
+}
+
+    .material-symbols-outlined.md-dar.md-inactive,
+    .material-icons.md-dark.md-inactive {
+        color: rgba(0, 0, 0, 0.26);
+    }
+
+/* Rules for using icons as white on a dark background. */
+.material-symbols-outlined.md-light,
+.material-icons.md-light {
+    color: rgba(255, 255, 255, 1);
+}
+
+    .material-symbols-outlined.md-light.md-inactive,
+    .material-icons.md-light.md-inactive {
+        color: rgba(255, 255, 255, 0.3);
+    }
