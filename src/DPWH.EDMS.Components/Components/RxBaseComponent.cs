@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 
-namespace DPWH.EDMS.Web.Client.Shared;
+namespace DPWH.EDMS.Components;
 
 public class RxBaseComponent : ComponentBase, IDisposable
 {

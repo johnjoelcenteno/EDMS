@@ -1,21 +1,31 @@
-﻿@using DPWH.EDMS.Web.Client.Shared.Nav
+﻿@using Blazored.Toast
+@using Blazored.Toast.Configuration
+@using DPWH.EDMS.Web.Client.Shared.Nav
 @using DPWH.EDMS.Web.Client.Shared.Services.Navigation
 
 @inherits LayoutComponentBase
 
 @inject NavRx NavRx
+<TelerikRootComponent>
+     <BlazoredToasts Position="ToastPosition.TopRight"
+                    Timeout="10"
+                    IconType="Blazored.Toast.Configuration.IconType.FontAwesome"
+                    ErrorIcon="fa fa-bug"
+                    SuccessIcon="fa fa-check"
+                    InfoIcon="fa fa-info"
+                    ShowProgressBar="true" />
+    <div class="page">
+        <main>
+            <div class="top-row">
+                <NavMenu />
+            </div>
 
-<div class="page">
-    <main>
-        <div class="top-row">
-            <NavMenu />
-        </div>
-
-        <article class="content px-4" style="margin-left: @(IsSidebarExpanded ? "320px" : "64px");">
-            @Body
-        </article>
-    </main>
-</div>
+            <article class="content px-4" style="margin-left: @(IsSidebarExpanded ? "320px" : "64px");">
+                @Body
+            </article>
+        </main>
+    </div>
+</TelerikRootComponent>
 
 @code {
     protected bool IsSidebarExpanded = false;

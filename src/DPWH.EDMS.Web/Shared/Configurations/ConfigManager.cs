@@ -4,9 +4,7 @@ namespace DPWH.EDMS.Web.Shared.Configurations;
 
 public class ConfigManager
 {
-    private ConfigManager()
-    {
-    }
+    private ConfigManager(){}
     
     public static ConfigManager Instance(IConfiguration configuration)
     {
@@ -19,6 +17,5 @@ public class ConfigManager
     public string BaseApiClientName { get; set; }
     public string BaseApiUrl { get; set; }
     public string PublicPortalUrl { get; set; }
-    public string[] PropertyStatus { get; set; }
 
 }

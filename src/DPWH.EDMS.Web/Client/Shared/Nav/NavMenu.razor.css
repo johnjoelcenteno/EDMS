@@ -1,4 +1,4 @@
-﻿#navbar-revamp {
+﻿#main-nav {
     height: 60px;
     width: 100%;
     background-color: #fff;
@@ -11,12 +11,12 @@
     padding-right: 30px;
 }
 
-    #navbar-revamp .navbar-brand img {
+    #main-nav .navbar-brand img {
         max-width: 300px;
         width: 100%;
     }
 
-    #navbar-revamp a.login {
+    #main-nav a.login {
         /* border: 2px solid #0073EC;*/
         /*border-radius: 10px;*/
         padding: 5px 20px;
@@ -25,7 +25,7 @@
         text-transform: capitalize;
     }
 
-    #navbar-revamp .rv-right-nav {
+    #main-nav .rv-right-nav {
         display: flex;
         flex-direction: row;
         justify-content: end;
@@ -40,18 +40,19 @@
     transition: 200ms;
 }
 
-.sidebar .sidebar-container {
-    position: relative;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-}
-    .sidebar .sidebar-container #sidebar-expander {
-        position: absolute !important;
-        bottom: 0;
-        color: #fff;
-        right: 0;
+    .sidebar .sidebar-container {
+        position: relative;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
     }
+
+        .sidebar .sidebar-container #sidebar-expander {
+            position: absolute !important;
+            bottom: 0;
+            color: #fff;
+            right: 0;
+        }
 
 
     .sidebar .logo img {
@@ -68,3 +69,43 @@ ul.nav-link-subitem {
     max-height: 60vh;
 }
 
+div.avatar-container {
+    margin-top: 25px;
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+    padding: 8px;
+}
+
+    div.avatar-container div.avatar img {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background-color: #cacaca;
+    }
+
+    div.avatar-container div.details {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: start;
+    }
+
+        div.avatar-container div.details div.name {
+            color: #FFF;
+            font-size: 16px;
+            font-family: Roboto;
+            font-style: normal;
+            font-weight: 400;
+            line-height: 16px;
+        }
+
+        div.avatar-container div.details div.role {
+            color: #CCB5FF;
+            font-size: 12px;
+            font-family: Roboto;
+            font-style: normal;
+            font-weight: 400;
+            line-height: 14px;
+        }
