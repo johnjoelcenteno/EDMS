@@ -1,4 +1,5 @@
-﻿using DPWH.EDMS.Web.Client.Shared.Services.Navigation;
+﻿using DPWH.EDMS.Components;
+using DPWH.EDMS.Web.Client.Shared.Services.Navigation;
 using DPWH.EDMS.Web.Shared.Configurations;
 using DPWH.EDMS.Web.Shared.Models;
 using Microsoft.AspNetCore.Components;
@@ -25,8 +26,8 @@ public class NavMenuBase: RxBaseComponent
     //protected bool Large { get; set; }
     protected List<IDisposable> RxSubscriptions { get; set; } = new();
 
-    protected string DisplayName = string.Empty;
-    protected string RoleTitle = string.Empty;
+    protected string DisplayName = "Juan Doe";
+    protected string RoleTitle = "Super Admin";
 
     protected MenuModel? SelectedLevel1Item = null;
 
@@ -46,6 +47,15 @@ public class NavMenuBase: RxBaseComponent
         //));
 
         await SetMenu();
+
+        RxSubscriptions.Add(NavRx.IsExpanded.Subscribe(expanded =>
+        {
+            if (!expanded)
+            {
+                SelectedLevel1Item = default;
+            }
+        }));
+
     }
 
     private async Task SetMenu()
@@ -105,7 +115,26 @@ public class NavMenuBase: RxBaseComponent
 
     protected void ToggleLevel1Item(MenuModel item)
     {
+        if (!DrawerRef.Expanded)
+        {
+            NavRx.IsExpanded.OnNext(true);
+            DrawerRef.ToggleAsync();
+        }
+
         SelectedLevel1Item = item;
         StateHasChanged();
     }
+
+    protected void OnToggleLevel1Item(MenuModel item)
+    {
+        if( item.Children != null && item.Children.Count() > 0)
+        {
+            ToggleLevel1Item(item);
+        }
+        else
+        {
+            NavManager.NavigateTo(item.Url ?? "");
+        }
+    }
+
 }

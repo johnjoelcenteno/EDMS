@@ -1,8 +1,18 @@
+using DPWH.EDMS.Web.Server.Infrastructure.Extensions;
+using DPWH.EDMS.Web.Shared.Configurations;
 using Microsoft.AspNetCore.ResponseCompression;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// setup config
+var configuration = (new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory())
+    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true))
+    .Build();
+var configManager = ConfigManager.Instance(configuration);
+builder.Services.AddSingleton(configManager);
+
 // Add services to the container.
+builder.Services.AddBffServices(configManager.Oidc, configuration);
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
@@ -28,9 +38,14 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
+app.UseBff();
+app.UseAuthorization();
+
+app.MapBffManagementEndpoints();
 
 app.MapRazorPages();
-app.MapControllers();
+app.MapControllers().RequireAuthorization().AsBffApiEndpoint();
 app.MapFallbackToFile("index.html");
 
 app.Run();
