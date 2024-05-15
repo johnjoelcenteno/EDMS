@@ -1,0 +1,50 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<RootNamespace>DPWH.EDMS.Api</RootNamespace>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<PackageId>DPWH.EDMS.Api</PackageId>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Asp.Versioning.Http" Version="7.0.0" />
+		<PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="7.0.0" />
+		<PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.5.2" />
+		<PackageReference Include="IdentityModel.AspNetCore.OAuth2Introspection" Version="6.2.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.0" />
+		<PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.21.0" />
+		
+		<!-- Swagger-->
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+		<PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.5.0" />
+		<PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="7.0.6" />
+
+		<PackageReference Include="NSwag.MSBuild" Version="13.19.0">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\DPWH.EDMS.Application\DPWH.EDMS.Application.csproj" />
+		<ProjectReference Include="..\DPWH.EDMS.Infrastructure\DPWH.EDMS.Infrastructure.csproj" />
+	</ItemGroup>
+	
+	<!-- Required by Swagger (doco generation).-->
+	<PropertyGroup>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<NoWarn>$(NoWarn);1591</NoWarn>
+		<RootNamespace>DPWH.EDMS.Api</RootNamespace>
+	</PropertyGroup>
+
+	<!-- Build targets to create a CS files client based off the API.-->
+	<Target Name="BeforeNSwag" AfterTargets="Build">
+		<Exec Command="dotnet tool restore" />
+		<Exec Command="dotnet swagger tofile --output ./swagger.json $(OutDir)DPWH.EDMS.Api.dll 1.0" Condition="'$(Configuration)' != 'Release'" />
+		<Exec Command="dotnet swagger tofile --output ./swagger.json $(OutDir)DPWH.EDMS.Api.dll 1.0" EnvironmentVariables="DOTNET_ROLL_FORWARD=LatestMajor" Condition="'$(Configuration)' == 'Release'" />
+	</Target>
+
+</Project>

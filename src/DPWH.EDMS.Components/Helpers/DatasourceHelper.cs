@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DPWH.NGOBIA.Components.Helpers
+namespace DPWH.EDMS.Components.Helpers
 {
     public static class DataSourceHelper
     {
