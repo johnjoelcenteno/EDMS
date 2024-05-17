@@ -1,4 +1,4 @@
-﻿using DPWH.EDMS.Web.Shared.Configurations;
+﻿using DPWH.EDMS.Client.Shared.Configurations;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.IdentityModel.Tokens;
 

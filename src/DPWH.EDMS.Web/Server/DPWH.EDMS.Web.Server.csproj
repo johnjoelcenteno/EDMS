@@ -15,8 +15,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\DPWH.EDMS.IDP.Core\DPWH.EDMS.IDP.Core.csproj" />
+    <ProjectReference Include="..\..\DPWH.EMDS.Shared\DPWH.EDMS.Client.Shared.csproj" />
     <ProjectReference Include="..\Client\DPWH.EDMS.Web.Client.csproj" />
-    <ProjectReference Include="..\Shared\DPWH.EDMS.Web.Shared.csproj" />
   </ItemGroup>
 
 
