@@ -1,4 +1,4 @@
-namespace DPWH.EDMS.Web.Shared.Configurations;
+namespace DPWH.EDMS.Client.Shared.Configurations;
 
 public class OidcConfig
 {

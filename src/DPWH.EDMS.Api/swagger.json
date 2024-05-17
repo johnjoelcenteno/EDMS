@@ -14668,7 +14668,7 @@
             "authorizationUrl": "https://localhost:5001/connect/authorize",
             "tokenUrl": "https://localhost:5001/connect/token",
             "scopes": {
-              "dpwhngobiaapi.write": "api read & write access"
+              "dpwhedmsapi.write": "api read & write access"
             }
           }
         }

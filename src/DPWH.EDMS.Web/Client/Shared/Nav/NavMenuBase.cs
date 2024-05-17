@@ -1,10 +1,10 @@
-﻿using DPWH.EDMS.Components;
+﻿using DPWH.EDMS.Client.Shared.Configurations;
+using DPWH.EDMS.Components;
 using DPWH.EDMS.Web.Client.Shared.Services.Navigation;
-using DPWH.EDMS.Web.Shared.Configurations;
-using DPWH.EDMS.Web.Shared.Models;
+using DPWH.EDMS.Client.Shared.Models;
 using Microsoft.AspNetCore.Components;
-using System.Security.Claims;
 using Telerik.Blazor.Components;
+using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 
 namespace DPWH.EDMS.Web.Client.Shared.Nav;
 
@@ -56,6 +56,12 @@ public class NavMenuBase: RxBaseComponent
             }
         }));
 
+    }
+
+    public void OnLogout()
+    {
+        //Visible = false;
+        NavManager.NavigateToLogout("authentication/logout");
     }
 
     private async Task SetMenu()

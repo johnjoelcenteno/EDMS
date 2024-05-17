@@ -1,4 +1,4 @@
-﻿using DPWH.EDMS.Web.Shared.Models;
+﻿using DPWH.EDMS.Client.Shared.Models;
 
 namespace DPWH.EDMS.Web.Client.Shared.Services.Navigation;
 
