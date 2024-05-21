@@ -16,6 +16,7 @@ public class ConfigManager
     }
 
     public OidcConfig Oidc { get; set; }
+    public string WebServerClientName { get; set; }
     public string BaseApiClientName { get; set; }
     public string BaseApiUrl { get; set; }
     public string PublicPortalUrl { get; set; }

@@ -1,8 +1,15 @@
 ﻿@page "/"
 
+@using DPWH.EDMS.Api.Contracts
+@using DPWH.EDMS.Client.Shared.APIClient.Services.Lookups
+@using DPWH.EDMS.Components.Helpers
+@using DPWH.NGOBIA.Client.Shared.APIClient.Services.Users
 @using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Authorization
 
 @attribute [Authorize(Policy = "RequireActiveRoles")]
+
+@inject ILookupsService service
 
 <PageTitle>Index</PageTitle>
 
@@ -12,3 +19,22 @@ Welcome to your new app.
 
 <SurveyPrompt Title="How is Blazor working for you?" />
 <TelerikButton>TEST</TelerikButton>
+
+<ul>
+    @foreach (var item in Lookups)
+    {
+        <li> @item.Key </li>
+    }    
+</ul>
+
+
+
+@code {
+    List<Lookup> Lookups = new List<Lookup>();
+
+    protected async override Task OnInitializedAsync()
+    {
+        var res = await service.GetLookups();
+        Lookups = res.Lookups.ToList();
+    }
+}

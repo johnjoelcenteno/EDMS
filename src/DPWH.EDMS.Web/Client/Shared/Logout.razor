@@ -1,10 +1,12 @@
 ﻿@page "/logout"
+@using Microsoft.AspNetCore.Components.Authorization
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 
-@inject SignOutSessionStateManager SignOutManager
 @inject NavigationManager Navigation
 
 @code {
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateAsync { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
         await BeginSignOut(default!);
@@ -12,8 +14,17 @@
 
     private async Task BeginSignOut(MouseEventArgs args)
     {
-        await SignOutManager.SetSignOutState();
-        Navigation.NavigateTo("bff/logout");
+        if (AuthenticationStateAsync is null)
+            return;
+
+        var authState = await AuthenticationStateAsync;
+        var user = authState.User;
+
+        if (user.Identity is not null && user.Identity.IsAuthenticated)
+        {
+            var logoutUrl = user.FindFirst("bff:logout_url")?.Value;
+            Navigation.NavigateToLogout(logoutUrl);
+        }        
     }
 }
 

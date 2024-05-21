@@ -5,12 +5,14 @@ using DPWH.EDMS.Client.Shared.Models;
 using Microsoft.AspNetCore.Components;
 using Telerik.Blazor.Components;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
+using Microsoft.AspNetCore.Components.Web;
+using Microsoft.AspNetCore.Components.Authorization;
 
 namespace DPWH.EDMS.Web.Client.Shared.Nav;
 
 public class NavMenuBase: RxBaseComponent
 {
-    //[CascadingParameter] private Task<AuthenticationState>? AuthenticationStateAsync { get; set; }
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateAsync { get; set; }
     //[Inject] public required AuthRxService AuthRxService { get; set; }
     [Inject] public required ConfigManager ConfigManager { get; set; }
     [Inject] public required IMenuDataService MenuDataService { get; set; }
@@ -58,10 +60,19 @@ public class NavMenuBase: RxBaseComponent
 
     }
 
-    public void OnLogout()
+    protected async Task BeginSignOut()
     {
-        //Visible = false;
-        NavManager.NavigateToLogout("authentication/logout");
+        if (AuthenticationStateAsync is null)
+            return;
+
+        var authState = await AuthenticationStateAsync;
+        var user = authState.User;
+
+        if (user.Identity is not null && user.Identity.IsAuthenticated)
+        {
+            var logoutUrl = user.FindFirst("bff:logout_url")?.Value;
+            NavManager.NavigateTo(logoutUrl!,true);
+        }
     }
 
     private async Task SetMenu()

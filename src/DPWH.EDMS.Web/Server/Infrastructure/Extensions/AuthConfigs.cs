@@ -6,7 +6,7 @@ namespace DPWH.EDMS.Web.Server.Infrastructure.Extensions;
 
 public static class AuthConfigs
 {
-    public static void AddBffServices(this IServiceCollection services, OidcConfig oidcSettings, IConfiguration configuration)
+    public static void AddAuthServices(this IServiceCollection services, OidcConfig oidcSettings, IConfiguration configuration)
     {
         services.AddBff();
 
@@ -26,35 +26,28 @@ public static class AuthConfigs
                 configuration.Bind("oidc", options);
                 options.Authority = oidcSettings.Authority;
 
-                options.ClientId = "bookingportal";
-                options.ClientSecret = "bookingportalsecret";
-                options.ResponseType = "code";
-                options.ResponseMode = "query";
+                options.ClientId = oidcSettings.ClientId;
+                options.ClientSecret = string.Empty; 
+                options.ResponseType = oidcSettings.ResponseType;
 
                 //options.ReturnUrlParameter = "https://localhost:7232";
                 //options.SignedOutRedirectUri = "https://localhost:7232";
 
                 options.Scope.Clear();
-                options.Scope.Add("openid");
-                options.Scope.Add("profile");
-                options.Scope.Add("bookingplatform");
-                options.Scope.Add("bookingplatformapi.read");
-                options.Scope.Add("bookingplatformapi.write");
 
-                // Customize OIDC options
-                options.ClaimActions.MapUniqueJsonKey("role", "role");
-
-                // Configure the ClaimsPrincipalFactory
-                options.TokenValidationParameters = new TokenValidationParameters
+                foreach (var scope in oidcSettings.DefaultScopes)
                 {
-                    NameClaimType = "name",
-                    RoleClaimType = "role"
-                };
+                    options.Scope.Add(scope);
+                }
+
+                foreach (var claim in oidcSettings.DefaultClaims)
+                {
+                    options.ClaimActions.MapUniqueJsonKey(claim, claim);
+                }
 
                 options.MapInboundClaims = false;
                 options.GetClaimsFromUserInfoEndpoint = true;
                 options.SaveTokens = true;
             });
-        //.AddIdentityCookies();
     }
 }
