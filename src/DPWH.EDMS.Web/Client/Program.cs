@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using DPWH.EDMS.Client.Shared.APIClient.Core;
 using DPWH.EDMS.Components.Helpers;
+using DPWH.EDMS.Web.Client.BFF;
+using Microsoft.AspNetCore.Components.Authorization;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
@@ -32,31 +34,34 @@ builder.Services.AddBlazoredToast();
 
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
 
-// add httpClient using appsettings.json
+// Services
+builder.Services.AddRestApiServices();
+
+// BFF services
+builder.Services.AddTransient<AntiforgeryHandler>();
+builder.Services.AddScoped<AccessTokenHandler>();
+
+
 builder.Services.AddHttpClient(configManager.BaseApiClientName, client =>
 {
     client.BaseAddress = new Uri(configManager.BaseApiUrl);
-}).AddHttpMessageHandler(sp =>
-{
-    var handler = sp.GetService<AuthorizationMessageHandler>()!
-        .ConfigureHandler(
-            authorizedUrls: new[] { configManager.BaseApiUrl },
-            scopes: new[] { "movementsoftadminapi.read", "movementsoftadminapi.write" });
-    return handler;
-}); ;
+}).AddHttpMessageHandler<AccessTokenHandler>(); ;
+
+// Server HTTP Client
+builder.Services.AddHttpClient(configManager.WebServerClientName, client => client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress))
+    .AddHttpMessageHandler<AntiforgeryHandler>();
+builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient(configManager.WebServerClientName));
+
 
 // Add all api services. This function is for pointing all services in DPWH.NGOBIA.Client.Shared
-builder.Services.AddRestApiServices();
-
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(
         policy =>
         {
-            policy.AllowAnyOrigin();  //set the allowed origin
+            policy.AllowAnyOrigin();
         });
 });
-
 
 builder.Services.AddAuthorizationCore(options =>
 {
@@ -69,5 +74,7 @@ builder.Services.AddOidcAuthentication(options =>
     builder.Configuration.Bind("oidc", options.ProviderOptions);
     options.UserOptions.RoleClaim = "role";
 });
+
+builder.Services.AddScoped<AuthenticationStateProvider, BffAuthenticationStateProvider>();
 
 await builder.Build().RunAsync();

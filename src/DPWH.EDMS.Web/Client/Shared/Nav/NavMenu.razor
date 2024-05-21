@@ -21,7 +21,7 @@
             <NotAuthorized>
                 <ul class="nav nav-pills flex-column mb-auto mt-2">
                     <li class="d-flex align-items-center mt-4">
-                        <NavLink title="Login" @onclick="@(() => NavManager.NavigateTo("/authentication/login"))" class="nav-link d-flex align-items-center flex-grow-1 p-4">
+                        <NavLink title="Login" @onclick="@(() => NavManager.NavigateTo("/bff/login", true))" class="nav-link d-flex align-items-center flex-grow-1 p-4">
                             <span class="bi me-2 material-symbols-outlined">login</span>@(DrawerRef.Expanded ? "Login" : "")
                         </NavLink>
                     </li>
@@ -113,7 +113,7 @@
                             }
                         }
                         <li class="d-flex align-items-center mt-4">
-                            <NavLink title="Logout" @onclick="@(() => OnLogout())" class="nav-link d-flex align-items-center flex-grow-1 p-4">
+                            <NavLink title="Logout" @onclick="BeginSignOut" class="nav-link d-flex align-items-center flex-grow-1 p-4">
                                 <span class="bi me-2 material-symbols-outlined">logout</span>@(DrawerRef.Expanded ? "Logout" : "")
                             </NavLink>
                         </li>

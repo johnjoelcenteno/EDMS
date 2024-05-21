@@ -1,13 +1,13 @@
-@* @inject NavigationManager Navigation
+@inject NavigationManager Navigation
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 @code {
     protected override void OnInitialized()
     {
         Navigation.NavigateTo("bff/login");
     }
-} *@
+}
 
-@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@* @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 
 @inject NavigationManager Navigation
 
@@ -17,3 +17,4 @@
         Navigation.NavigateTo($"authentication/login?returnUrl={Uri.EscapeDataString(Navigation.Uri)}");
     }
 }
+ *@

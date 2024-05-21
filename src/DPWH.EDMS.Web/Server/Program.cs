@@ -15,31 +15,10 @@ var configManager = ConfigManager.Instance(configuration);
 builder.Services.AddSingleton(configManager);
 
 // Add services to the container.
-//builder.Services.AddBffServices(configManager.Oidc, configuration);
+builder.Services.AddAuthServices(configManager.Oidc, configuration);
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
-
-builder.Services.AddCors(options =>
-{
-    options.AddDefaultPolicy(
-        policy =>
-        {
-            policy.AllowAnyOrigin();  //set the allowed origin
-        });
-});
-
-//builder.Services.AddAuthorizationCore(options =>
-//{
-//    options.AddPolicy(nameof(ApplicationPolicies.RequireActiveRoles), policy => policy.RequireRole(ApplicationPolicies.RequireActiveRoles));
-//    options.AddPolicy(nameof(ApplicationPolicies.AdminOnly), policy => policy.RequireRole(ApplicationPolicies.AdminOnly));
-//});
-
-//builder.Services.AddOidcAuthentication(options =>
-//{
-//    builder.Configuration.Bind("oidc", options.ProviderOptions);
-//    options.UserOptions.RoleClaim = "role";
-//});
 
 var app = builder.Build();
 
@@ -64,13 +43,13 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthentication();
-//app.UseBff();
+app.UseBff();
 app.UseAuthorization();
 
-//app.MapBffManagementEndpoints();
+app.MapBffManagementEndpoints();
 
 app.MapRazorPages();
-//app.MapControllers().RequireAuthorization().AsBffApiEndpoint();
+app.MapControllers().RequireAuthorization().AsBffApiEndpoint();
 app.MapControllers();
 app.MapFallbackToFile("index.html");
 
