@@ -6,15 +6,18 @@
     <LogInFailed></LogInFailed>
     <LogOut>
         @* <DefaultLoader loadingText="Logging Out.." /> *@
+        <TelerikLoaderContainer Text="Logging Out.."></TelerikLoaderContainer>
     </LogOut>
     <LogOutSucceeded>
         <RedirectToLogin />
     </LogOutSucceeded>
     <LoggingIn>
+        <TelerikLoaderContainer Text="Logging In.."></TelerikLoaderContainer>
         @* <DefaultLoader loadingText="Logging In.." /> *@
     </LoggingIn>
     <CompletingLoggingIn>
         @* <DefaultLoader loadingText="Completing Logging In.." /> *@
+        <TelerikLoaderContainer Text="Completing Logging In.."></TelerikLoaderContainer>
     </CompletingLoggingIn>
 </RemoteAuthenticatorView>
 

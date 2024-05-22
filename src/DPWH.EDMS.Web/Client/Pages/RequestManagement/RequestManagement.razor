@@ -1,0 +1,6 @@
+﻿@page "/request-management"
+
+@inherits RequestManagementBase
+@attribute [Authorize(Policy = "RequireActiveRoles")]
+
+<h3>RequestManagement</h3>

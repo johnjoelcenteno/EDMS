@@ -1,0 +1,104 @@
+﻿@page "/"
+
+@inherits HomeBase
+@attribute [Authorize(Policy = "RequireActiveRoles")]
+
+<TelerikMediaQuery Media="(max-width: 480px)" OnChange="((changed) => XSmall = changed)"></TelerikMediaQuery>
+
+<TelerikCard Width="100%">
+    <CardHeader>
+        <h3 class="mb-0">Overview</h3>
+    </CardHeader>
+</TelerikCard>
+<div class="d-flex flex-row flex-wrap gap-3 mt-3">
+    @foreach (var status in OverviewStatusList)
+    {
+        <TelerikCard Class="flex-grow-1">
+            <CardHeader>
+                <h5 class="mb-0">@status.Id</h5>
+                <h2 class="p-2 mb-0">@status.Name</h2>
+            </CardHeader>
+        </TelerikCard>
+    }
+</div>
+
+<div class="d-flex flex-row mt-3">
+    <TelerikCard Width="100%">
+        <CardBody>
+            <div class="d-flex flex-row justify-content-between">
+                <CardTitle Class="mb-0">Request History</CardTitle>
+                <TelerikButton Title="View All" Icon="@FontIcon.ChevronRight"></TelerikButton>
+            </div>
+            <CardSeparator Class="my-2"></CardSeparator>
+            <div class="mobile-property-grid">
+
+                @if (EmployeeList != null && !XSmall)
+                {
+                    <TelerikGrid TItem="EmployeeModel"
+                                 @bind-PageSize="@PageSize"
+                                 Height="@GridHeight"
+                                 Sortable=true
+                                 Data="EmployeeList"
+                                 OnStateChanged="@OnStateChanged"
+                                 @ref="GridRef"
+                                Context="employee">
+                        <GridSettings>
+                            <GridPagerSettings PageSizes="@PageSizes">
+                            </GridPagerSettings>
+                        </GridSettings>
+                        <GridColumns>
+                            <GridColumn Field=@nameof(EmployeeModel.ControlNumber) Title="Control No." />
+                            <GridColumn Field=@nameof(EmployeeModel.DateRequested) Title="Date Requested" />
+                            <GridColumn Field=@nameof(EmployeeModel.FullName) Title="Full Name" />
+                            <GridColumn Field=@nameof(EmployeeModel.RecordRequested) Title="Records Requested" />
+                            <GridColumn Field=@nameof(EmployeeModel.Purpose) Title="Purpose" />
+                            <GridColumn Field=@nameof(EmployeeModel.Status) Title="Status" />
+                        </GridColumns>
+                    </TelerikGrid>
+                }
+               @*  else if (GridData != null && XSmall)
+                {
+                    <TelerikGrid Class="grid-no-scroll"
+                                 TItem="AssetModel"
+                                 @bind-PageSize="@PageSize"
+                                 Height="@GridHeight"
+                                 Sortable=true
+                                 Data="GridData"
+                                 OnStateChanged="@OnStateChanged">
+                        <GridSettings>
+                            <GridPagerSettings PageSizes="@PageSizes">
+                            </GridPagerSettings>
+                        </GridSettings>
+                        <DetailTemplate>
+                            @{
+                                var prop = context as AssetModel;
+                                <div class="d-flex flex-column">
+                                    <p><b>Property ID.:</b> @prop.PropertyId </p>
+                                    <p><b>Building ID:</b> @prop.BuildingId </p>
+                                    <p><b>Region/Implementing Office</b> @prop.ImplementingOffice </p>
+                                    <p><b>Agency</b> @prop.Agency </p>
+                                    <p><b>Created :</b> @prop.Created.DateTime.ToString("MMM dd, yyyy") </p>
+                                </div>
+                            }
+                        </DetailTemplate>
+                        <GridColumns>
+                            <GridColumn Field=@nameof(AssetModel.Name) />
+                        </GridColumns>
+                    </TelerikGrid>
+                } *@
+                else
+                {
+                    <span>No Data to display.</span>
+                }
+            </div>
+            <TelerikPager PageChanged="@PageChangedHandler"
+                          Total="TotalItems"
+                          ButtonCount="6"
+                          PageSize="@PageSize"
+                          PageSizeChanged="@PageSizeChangedHandler"
+                          PageSizes="@(new List<int?> {5, 10, 20})"
+                          Page="@Page">
+            </TelerikPager>
+        </CardBody>
+    </TelerikCard>
+</div>
