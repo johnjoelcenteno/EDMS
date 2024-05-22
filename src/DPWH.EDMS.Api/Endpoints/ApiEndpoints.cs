@@ -279,4 +279,11 @@ public static class ApiEndpoints
         public const string ArcgisSync = $"{Base}/arcgis";
         public const string Query = $"{Base}/query";
     }
+
+    public static class DocumentRequest
+    {
+        private const string Base = $"{ApiBase}/documentrequest";
+        public const string Query = $"{Base}/query";
+        public const string Get = $"{Base}/{{id}}";
+    }
 }

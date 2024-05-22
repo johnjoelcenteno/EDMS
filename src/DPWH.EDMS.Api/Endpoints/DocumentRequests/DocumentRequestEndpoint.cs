@@ -12,7 +12,7 @@ public static class DocumentRequestEndpoint
 
     public static IEndpointRouteBuilder MapDocumentRequestEndpoint(this IEndpointRouteBuilder app)
     {
-        app.MapGet(ApiEndpoints.DocumentRequestEndpoint.Query, async (string employeeId, IDpwhApiService dpwhApiService) =>
+        app.MapGet(ApiEndpoints.DocumentRequest.Query, async (string employeeId, IDpwhApiService dpwhApiService) =>
             {
                 return "Ok";
             })
