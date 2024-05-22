@@ -1,0 +1,6 @@
+﻿@page "/user-management"
+
+@inherits UserManagementBase
+@attribute [Authorize(Policy = "RequireActiveRoles")]
+
+<h3>UserManagement</h3>

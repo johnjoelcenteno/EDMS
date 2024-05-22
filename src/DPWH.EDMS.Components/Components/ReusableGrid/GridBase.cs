@@ -10,7 +10,7 @@ using DPWH.EDMS.Components.Helpers;
 
 namespace DPWH.EDMS.Components.Components.ReusableGrid;
 
-public class ReusableGridBase<T> : RxBaseComponent
+public class GridBase<T> : RxBaseComponent
 {
     // TODO
 }

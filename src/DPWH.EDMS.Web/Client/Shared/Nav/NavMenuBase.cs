@@ -56,6 +56,8 @@ public class NavMenuBase: RxBaseComponent
             {
                 SelectedLevel1Item = default;
             }
+
+            DrawerRef.Expanded = expanded;
         }));
 
     }
