@@ -1,0 +1,240 @@
+﻿# API deployment job
+
+# The environment parameter is passed through from the calling api-pipeline yaml file.
+parameters:
+- name: environment
+  type: string
+  default: 'dev'
+
+jobs:
+  - deployment: Deploy
+    displayName: Deploy API
+    environment: '${{ parameters.environment }}'
+    #Here we are specifying two templates: environment specific + global.
+    variables:
+    - template: '../../variables/api/api-${{ parameters.environment }}-variables.yml'
+    - template: '../../variables/api/api-variables.yml'
+      parameters:
+        environment: '${{ parameters.environment }}'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+            # Deploy Azure Resource Group (keyvault)
+          - task: AzureResourceGroupDeployment@2
+            displayName: 'Deploy Resource Group (KeyVault)'
+            enabled: false
+            inputs:
+              azureSubscription: '${{ variables.AzureSubscription }}'
+              resourceGroupName: '${{ variables.ResourceGroupName }}'
+              location: '${{ variables.LocationFull }}'
+              csmFile: '$(Pipeline.Workspace)/drop/arm/rg-keyvault-arm.json'
+              # Pro tip: make sure there is a space at the end of each line in the overrideParameters list!
+              overrideParameters: |
+                -_azureTenantId "${{ variables.AzureTenantId }}"
+                -_azureDevOpsServiceConnectionObjectId "${{ variables.AzureDevOpsServiceConnectionObjectId }}"
+                -_keyVaultName "${{ variables.KeyVaultName }}"
+                -_keyVaultSkuFamily "${{ variables.KeyVaultSkuFamily }}"
+                -_keyVaultSkuName "${{ variables.KeyVaultSkuName }}"
+                -_locationShort "${{ variables.LocationShort }}"
+
+          # Get secrets (marked accordingly in relevant variables yaml file) from keyvault
+          - task: AzureKeyVault@1
+            displayName: 'Get Secrets from KeyVault'
+            inputs:
+              azureSubscription: '${{ variables.AzureSubscription }}'
+              keyVaultName: '${{ variables.KeyVaultName }}'
+              secretsFilter: '*'
+
+            # Deploy Azure Resource Group (app service, sql database and app insights)
+          - task: AzureResourceGroupDeployment@2
+            displayName: 'Deploy Resource Group (App Service, SQL Database and AppInsights)'
+            enabled: false
+            inputs:
+              azureSubscription: '${{ variables.AzureSubscription }}'
+              resourceGroupName: '${{ variables.ResourceGroupName }}'
+              location: '${{ variables.LocationFull }}'
+              csmFile: '$(Pipeline.Workspace)/drop/arm/rg-api-arm.json'
+              # Pro tip: make sure there is a space at the end of each line in the overrideParameters list!
+              overrideParameters: |
+                -_webAppName "${{ variables.WebAppName }}"
+                -_sqlServerName "${{ variables.SqlServerName }}"
+                -_sqlServerAdministratorLogin "$(SqlServerAdministratorLogin)"
+                -_sqlServerAdministratorPassword "$(SqlServerAdministratorPassword)"
+                -_sqlServerSkuName "${{ variables.SqlServerSkuName }}"
+                -_sqlServerSkuTier "${{ variables.SqlServerSkuTier }}"
+                -_sqlServerSkuCapacity "${{ variables.SqlServerSkuCapacity }}"
+                -_dbName "${{ variables.SqlDatabaseName }}"
+                -_appInsName "${{ variables.ApplicationInsightsName }}"
+                -_subscriptionId "${{ variables.AzureSubscriptionId }}"
+                -_hostAspName "${{ variables.HostAppServicePlanName }}"
+                -_hostAspRgName "${{ variables.HostAppServiceResourceGroupName }}"
+                -_locationFull "${{ variables.LocationFull }}"
+                -_locationShort "${{ variables.LocationShort }}"
+                -_environment "${{ parameters.environment }}"
+                -_appSetting_connectionStrings_defaultConnection "${{ variables.DefaultConnectionString }}"
+                -_appSetting_azure_ad_applicationId "${{ variables.AadApplicationId }}"
+                -_appSetting_azure_ad_authority "${{ variables.AadAuthority }}"
+                -_appSetting_security_corsUrls "${{ variables.CorsUrls }}"
+
+          - task: PowerShell@2
+            displayName: 'Configure DbUp AppSettings'
+            inputs:
+              targetType: inline
+              workingDirectory: '$(Pipeline.Workspace)/drop/dbup'
+              continueOnError: true
+              script: |
+                $appSettings = Get-Content 'appsettings.json' | ConvertFrom-Json
+                $appSettings.ConnectionStrings.DefaultConnection = "${{ variables.DefaultConnectionString }}"
+                $appSettings.Serilog.Properties.EnvironmentName = "${{ parameters.environment }}"
+                $appSettings | ConvertTo-Json -Depth 10  | set-content 'appsettings.json'
+
+            # Update settings
+          - task: AzureAppServiceSettings@1
+            displayName: 'Azure App Service Settings'
+            inputs:
+              azureSubscription: ${{ variables.AzureSubscription }}
+              appName: '${{ variables.WebAppName }}'
+            # To deploy the settings on a slot, provide slot name as below. By default, the settings would be applied to the actual Web App (Production slot)
+            # slotName: staging
+              appSettings: |
+                [ 
+                  {
+                    "name": "Security:IdentityServerUrl",
+                    "value": "${{ variables.IdentityServerUrl }}",
+                    "slotSetting": false
+                  },
+                  {
+                    "name": "Security:CorsUrls",
+                    "value": "${{ variables.CorsUrls }}",
+                    "slotSetting": false
+                  },
+                  {
+                    "name": "DpwhIntegration:BaseApiUrl",
+                    "value": "${{ variables.DpwhIntegrationBaseApiUrl }}",
+                    "slotSetting": false
+                  },
+                  {
+                    "name": "DpwhIntegration:UserName",
+                    "value": "${{ variables.DpwhIntegrationApiUserName }}",
+                    "slotSetting": false
+                  },
+                  {
+                    "name": "DpwhIntegration:Password",
+                    "value": "${{ variables.DpwhIntegrationApiPassword }}",
+                    "slotSetting": false
+                  },
+                  {
+                    "name": "ArcgisIntegration:UserName",
+                    "value": "${{ variables.ArcgisIntegrationUserName }}",
+                    "slotSetting": false
+                  },
+                  {
+                    "name": "ArcgisIntegration:Password",
+                    "value": "${{ variables.ArcgisIntegrationPassword }}",
+                    "slotSetting": false
+                  },
+                  {
+                    "name": "ArcgisIntegration:OrgId",
+                    "value": "${{ variables.ArcgisIntegrationOrgId }}",
+                    "slotSetting": false
+                  },
+                  {
+                    "name": "EnableSwaggerUI",
+                    "value": "${{ variables.EnableSwaggerUI }}",
+                    "slotSetting": false
+                  }
+                ]
+              connectionStrings: |
+                [                  
+                  {
+                    "name": "DefaultConnection",
+                    "value": "${{ variables.DefaultConnectionString }}",
+                    "type": "Custom",
+                    "slotSetting": false
+                  },
+                  {
+                    "name": "IdentityConnection",
+                    "value": "${{ variables.IdentityConnectionString }}",
+                    "type": "Custom",
+                    "slotSetting": false
+                  },
+                  {
+                    "name": "StorageAccountConnection",
+                    "value": "${{ variables.StorageAccountConnectionString }}",
+                    "type": "Custom",
+                    "slotSetting": false
+                  }                  
+                ]
+
+            # Deploy database using DbUp
+          - task: DotNetCoreCLI@2
+            displayName: 'Deploy database using DbUp'
+            inputs:
+              command: custom
+              custom: 'DPWH.EDMS.DbUp.dll'
+              workingDirectory: '$(Pipeline.Workspace)/drop/dbup'      
+
+            # Deploy API - Step 1: setup site package
+          - task: PowerShell@2
+            displayName: 'Deploy API - Step 1/5: Setup SitePackage'
+            inputs:
+              targetType: inline
+              workingDirectory: '$(Pipeline.Workspace)/drop'
+              continueOnError: true
+              script: |
+                New-Item -ItemType Directory -Force -Path $(Pipeline.Workspace)/drop/temp
+                Move-Item -Path "$(Pipeline.Workspace)/drop/DPWH.EDMS.Api.zip" -Destination $(Pipeline.Workspace)/drop/temp/build-$(Build.BuildNumber).zip
+                "build-$(Build.BuildNumber).zip" | Out-File $(Pipeline.Workspace)/drop/temp/packagename.txt -NoNewline -Encoding Ascii
+
+            # Deploy API - Step 2: get FTP publish settings
+          - task: AzurePowerShell@3
+            displayName: 'Deploy API - Step 2/5: Get Publish FTP Settings -test'
+            inputs:
+              azureSubscription: '${{ variables.AzureSubscription }}'
+              azurePowerShellVersion: LatestVersion
+              ScriptType: InlineScript
+              FailOnStandardError: true
+              Inline: |
+                $i="//*[@publishMethod=`"FTP`"]/"
+                [xml]$x=Get-AzureRMWebAppPublishingProfile -ResourceGroupName '${{ variables.ResourceGroupName }}' -Name '${{ variables.WebAppName }}'
+                $u=$x.SelectNodes("$i@userName").value
+                $p=$x.SelectNodes("$i@userPWD").value
+                $s=$x.SelectNodes("$i@publishUrl").value
+                $z="##vso[task.setvariable variable"
+                Write-Host "$z=ftpusername]$u"
+                Write-Host "$z=ftppassword]$p"
+                Write-Host "$z=ftpserver]$s"
+
+            # Deploy API - Step 3: Stop app service
+          - task: AzureAppServiceManage@0
+            displayName: 'Deploy API - Step 3/5: Stop Azure App Service'
+            inputs:
+              azureSubscription: '${{ variables.AzureSubscription }}'
+              Action: 'Stop Azure App Service'
+              WebAppName: '${{ variables.WebAppName }}'
+
+            # Deploy API - Step 4: Deploy using SFTP
+          - task: FtpUpload@2
+            displayName: 'Deploy API - Step 4/5: Upload with FTPS'
+            inputs:
+              credentialsOption: inputs
+              serverUrl: '$(ftpserver)'
+              username: '$(ftpusername)'
+              password: '$(ftppassword)'
+              rootDirectory: '$(Pipeline.Workspace)/drop/temp'
+              filePatterns: |
+                *.zip
+                packagename.txt
+              remoteDirectory: /data/SitePackages/
+              preservePaths: true
+
+            # Deploy API - Step 5: Start app service
+          - task: AzureAppServiceManage@0
+            displayName: 'Deploy API - Step 5/5: Start Azure App Service'
+            inputs:
+              azureSubscription: '${{ variables.AzureSubscription }}'
+              Action: 'Start Azure App Service'
+              WebAppName: '${{ variables.WebAppName }}'
+
+# The end!

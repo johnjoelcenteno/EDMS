@@ -1,0 +1,101 @@
+﻿# API build job
+
+jobs:
+- job: BuildJob
+  displayName: Build API
+  variables:
+    buildConfiguration: 'Release'
+  steps:
+    # This tells the build agent which version of .NET Core we want to use.
+    - task: UseDotNet@2
+      displayName: 'Use .NET Core sdk 8.0'
+      inputs:
+        packageType: sdk
+        version: 8.0.x
+        installationPath: $(Agent.ToolsDirectory)/dotnet
+
+    # Restore all nuget pacakges used by the API project.
+    - task: DotNetCoreCLI@2
+      displayName: 'Nuget Restore'
+      enabled: true
+      inputs:
+        command: restore
+        projects: '**/DPWH.EDMS.Api.csproj'
+        #feedsToUse: 'config'
+        #nugetConfigPath: 'src/DPWH.EDMS.Api/nuget.config'
+
+    # Sets up a local dotnet tools environment within the build agent so that we can run
+    # the Swagger CLI below.
+    - task: DotNetCoreCLI@2
+      displayName: Create local dotnet-tools manifest
+      inputs:
+        command: 'custom'
+        custom: new
+        arguments: tool-manifest
+
+    # Install the Swagger CLI so that when the build is executed below, the TypeScript
+    # client is generated (as per the MSBUild directive within the API project setup).
+    - task: DotNetCoreCLI@2
+      displayName: Install swashbuckle/swagger cli (local tool)
+      inputs:
+        command: 'custom'
+        custom: 'tool'
+        arguments: 'install swashbuckle.aspnetcore.cli --version 6.5.0'
+    
+    # Publish the DbUp artifacts to the 'drop' so they can be consumed in the release pipeline.
+    - task: DotNetCoreCLI@2
+      displayName: 'Publish DbUp (to be consumed in release pipeline)'
+      enabled: true
+      inputs:
+        command: publish
+        publishWebProjects: false
+        projects: src/DPWH.EDMS.DbUp/DPWH.EDMS.DbUp.csproj
+        arguments: '--configuration $(buildConfiguration) --output $(build.artifactstagingdirectory)/dbup'
+        zipAfterPublish: false
+        modifyOutputPath: false
+
+    # Builds the API.
+    - task: DotNetCoreCLI@2
+      displayName: 'Build API'
+      enabled: true
+      inputs:
+        projects: '**/DPWH.EDMS.Api.csproj'
+        arguments: '--configuration $(buildConfiguration) --no-restore'
+
+    # Builds the Unit Tests.
+    - task: DotNetCoreCLI@2
+      displayName: 'Build Unit Tests'
+      enabled: false
+      inputs:
+        projects: '**/DPWH.EDMS.Api.UnitTests.csproj'
+        arguments: '--configuration $(buildConfiguration)'
+
+    # Runs the Unit Tests.
+    - task: VSTest@2
+      displayName: 'Run Unit Tests'
+      enabled: false
+      inputs:
+        codeCoverageEnabled: true
+        testAssemblyVer2: 'DPWH.EDMS.Api.UnitTests.dll'
+        searchFolder: '$(System.DefaultWorkingDirectory)/test/DPWH.EDMS.Api.UnitTests/bin/$(buildConfiguration)/$(runtime)'
+        vsTestVersion: '16.0'    
+
+    # Publish and zip the API artifacts to the 'drop' so they can be consumed in the release pipeline.
+    - task: DotNetCoreCLI@2
+      displayName: 'Publish API'
+      inputs:
+        command: publish
+        projects: src/DPWH.EDMS.Api/DPWH.EDMS.Api.csproj
+        publishWebProjects: false
+        arguments: '--configuration $(buildConfiguration) --output $(build.artifactstagingdirectory)'
+        zipAfterPublish: True
+
+    # Package up all artifacts into the 'drop', ready for the release pipeline.
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish API Build Artifact'
+      inputs:
+        PathtoPublish: '$(build.artifactstagingdirectory)'
+        ArtifactName: drop
+      condition: succeededOrFailed()
+
+# The end!
