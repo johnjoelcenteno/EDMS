@@ -1,4 +1,4 @@
-﻿namespace DPWH.EDMS.Web.Client.Pages.Home.Models;
+﻿namespace DPWH.EDMS.Client.Shared.MockModels;
 
 public class EmployeeModel
 {

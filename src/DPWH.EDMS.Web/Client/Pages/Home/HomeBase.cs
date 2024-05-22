@@ -1,10 +1,11 @@
 ﻿using DPWH.EDMS.Api.Contracts;
+using DPWH.EDMS.Client.Shared.MockModels;
 using DPWH.EDMS.Components;
-using DPWH.EDMS.Web.Client.Pages.Home.Models;
+using DPWH.EDMS.Components.Components.ReusableGrid;
 
 namespace DPWH.EDMS.Web.Client.Pages.Home;
 
-public class HomeBase : RxBaseComponent
+public class HomeBase : GridBase<EmployeeModel>
 {
     protected List<SimpleKeyValue> OverviewStatusList = new List<SimpleKeyValue>();
     protected List<EmployeeModel> EmployeeList = new List<EmployeeModel>();
@@ -39,7 +40,7 @@ public class HomeBase : RxBaseComponent
             },
         };
 
-        EmployeeList = GenerateEmployeeRecords(50);
+        EmployeeList = GenerateEmployeeRecords(5);
     }
 
     private List<EmployeeModel> GenerateEmployeeRecords(int count)
