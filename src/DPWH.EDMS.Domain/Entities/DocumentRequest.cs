@@ -1,6 +1,6 @@
 ﻿namespace DPWH.EDMS.Domain;
 
-public class DocumentRequst
+public class DocumentRequest
 {
     public Guid Id { get; set; }
     public string ControlNumber { get; set; }

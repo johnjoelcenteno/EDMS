@@ -1,6 +1,6 @@
 ﻿namespace DPWH.EDMS.Domain;
 
-public class DocumentRecords
+public class DocumentRecord
 {
     public Guid Id { get; set; }
     public string Title { get; set; }

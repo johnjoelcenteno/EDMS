@@ -1,6 +1,6 @@
 ﻿namespace DPWH.EDMS.Domain;
 
-public class EmployeeRecords
+public class EmployeeRecord
 {
     public Guid Id { get; set; }
     public string FirstName { get; set; }
