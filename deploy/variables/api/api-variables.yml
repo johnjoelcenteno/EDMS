@@ -16,12 +16,12 @@ variables:
   LocationShort: 'australiaeast'
   LocationCode: 'aue'
 
-  ProjectName: 'ngobia'
+  ProjectName: 'edms'
   WebAppName: 'app-api-$(ProjectName)-dpwh-${{ parameters.environment }}'
   ApplicationInsightsName: 'app-api-$(ProjectName)-dpwh-${{ parameters.environment }}'
 
   # Azure KeyVault
-  #KeyVaultName: 'kv-ngobia-shared'
+  #KeyVaultName: 'kv-edms-shared'
   KeyVaultSkuFamily: 'A'
   KeyVaultSkuName: 'Standard'
 

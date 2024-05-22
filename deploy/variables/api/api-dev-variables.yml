@@ -19,7 +19,7 @@ variables:
   SqlDatabaseName: 'sqldb-edms-dpwh-dev'
   IdPSqlDatabaseName: 'sqldb-ngobia-dpwh-idp-dev'
   SqlServerAdministratorLogin: 'sqladmin'
-  DefaultConnectionString: 'Server=$(SqlServerName).database.windows.net;Initial Catalog=$(SqlDatabaseName);Persist Security Info=False;User ID=$(SqlServerAdministratorLogin);Password=$(SqlServerAdministratorPassword);MultipleActiveResultSets=True;Encrypt=True;TrustServerCertificate=False;Connection Timeout=300;Command Timeout=300'
+  DefaultConnectionString: 'Server=$(SqlServerName).database.windows.net;Initial Catalog=$(SqlDatabaseName);Persist Security Info=False;User ID=$(SqlServerAdministratorLogin);Password=$(SqlServerAdministratorPassword);MultipleActiveResultSets=True;Encrypt=True;TrustServerCertificate=False;Connection Timeout=300'
   IdentityConnectionString: 'Server=$(SqlServerName).database.windows.net;Initial Catalog=$(IdPSqlDatabaseName);Persist Security Info=False;User ID=$(SqlServerAdministratorLogin);Password=$(SqlServerAdministratorPassword);MultipleActiveResultSets=True;Encrypt=True;TrustServerCertificate=False;Connection Timeout=300'
   StorageAccountConnectionString: '$(StorageAccountConnectionString)'  
   EnableSwaggerUI: 'true'
