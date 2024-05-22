@@ -1,0 +1,37 @@
+# UAT ENVIRONMENT PUBLIC API pipeline variables
+
+variables:
+
+  # This is the Azure Service Connection which is used to deploy the ARM template(s).
+  # You will need to have one created specific to your project and the DEV environment.
+  AzureSubscription: 'SC-NGOBIA'
+
+  # This is the AAD object ID of the Azure Service Connection (NGOBIA DevOps) which is used to deploy the ARM template(s).
+  # You will need to have one created specific to your project and the DEV environment.
+  AzureDevOpsServiceConnectionObjectId: 'db09627f-10b3-4ddf-ae99-f2cacec14737'
+
+  # This is our Azure Development subscription ID. MovementSoft Subscription
+  AzureSubscriptionId: 'c98075bb-7436-4c42-b5aa-f0513533bda4'
+
+  # Configurations from AppSettings
+  SqlServerName: 'sql-ngobia-dpwh-prd'
+  SqlServerFullyQualifiedDomainName: '$(SqlServerName).database.windows.net'
+  SqlDatabaseName: 'sqldb-ngobia-dpwh-uat'
+  IdPSqlDatabaseName: 'sqldb-ngobia-dpwh-idp-uat'
+  SqlServerAdministratorLogin: 'sqladmin'
+  DefaultConnectionString: 'Server=$(SqlServerName).database.windows.net;Initial Catalog=$(SqlDatabaseName);Persist Security Info=False;User ID=$(SqlServerAdministratorLogin);Password=$(SqlServerAdministratorPassword);MultipleActiveResultSets=True;Encrypt=True;TrustServerCertificate=False;Connection Timeout=300'
+  IdentityConnectionString: 'Server=$(SqlServerName).database.windows.net;Initial Catalog=$(IdPSqlDatabaseName);Persist Security Info=False;User ID=$(SqlServerAdministratorLogin);Password=$(SqlServerAdministratorPassword);MultipleActiveResultSets=True;Encrypt=True;TrustServerCertificate=False;Connection Timeout=300'
+  StorageAccountConnectionString: '$(StorageAccountConnectionStringUat)'
+  EnableSwaggerUI: 'true'
+  Environment: 'Production'
+  CorsUrls: 'https://dpwh-ngobia-trn.movementsoft.com,https://app-publicweb-ngobia-dpwh-uat.azurewebsites.net,https://app-web-ngobia-dpwh-uat.azurewebsites.net'
+  IdentityServerUrl: 'https://dpwh-ngobia-idp-trn.movementsoft.com'
+
+  KeyVaultName: 'kv-ngobia-dpwh-prd'
+
+  # Azure Resource Group Name and ASE details
+  ResourceGroupName: 'rg-ngobia-dpwh-prd'
+  HostAppServicePlanName: 'asp-ngobia-dpwh-prd'
+  HostAppServiceResourceGroupName: 'rg-ngobia-dpwh-prd'
+
+  DpwhIntegrationBaseApiUrl: 'https://apps.dpwh.gov.ph/pis_api_training/webservice.asmx'

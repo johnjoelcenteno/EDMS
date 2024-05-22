@@ -1,0 +1,38 @@
+﻿# Global Public API pipeline variables
+
+# The environment parameter is passed through from the calling api-pipeline yaml file.
+parameters:
+- name: environment
+  type: string
+  default: 'dev'
+
+variables:
+
+  # Directory (dev) ID when viewing in Azure Portal (use the main Tenant - movementsoft)
+  AzureTenantId: 'c98075bb-7436-4c42-b5aa-f0513533bda4'
+
+  # Azure location details
+  LocationFull: 'Australia East'
+  LocationShort: 'australiaeast'
+  LocationCode: 'aue'
+
+  ProjectName: 'ngobia'
+  WebAppName: 'app-api-$(ProjectName)-dpwh-${{ parameters.environment }}'
+  ApplicationInsightsName: 'app-api-$(ProjectName)-dpwh-${{ parameters.environment }}'
+
+  # Azure KeyVault
+  #KeyVaultName: 'kv-ngobia-shared'
+  KeyVaultSkuFamily: 'A'
+  KeyVaultSkuName: 'Standard'
+
+  # These ftp variables are will be set in a release task and used to deploy the app service via SFTP.
+  ftpserver: ''
+  ftpusername: ''
+  ftppassword: ''
+
+  DpwhIntegrationApiUserName: '$(DpwhApiUserName)'
+  DpwhIntegrationApiPassword: '$(DpwhApiPassword)'
+  ArcgisIntegrationUserName: '$(ArcgisIntegrationUserName)'
+  ArcgisIntegrationPassword: '$(ArcgisIntegrationPassword)'
+  ArcgisIntegrationOrgId: '$(ArcgisIntegrationOrgId)'
+# The end!

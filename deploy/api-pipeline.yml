@@ -1,0 +1,65 @@
+# Public API build and release pipeline
+
+pool:
+  #name: Default
+  name: Azure Pipelines
+  vmImage: 'windows-latest'
+
+# Don't run this pipeline against a client commit, only Public API.
+trigger:
+  batch: true
+  branches:
+    include:
+      - main
+  paths:
+    include:
+      - src/DPWH.EDMS.Api/*
+      - src/DPWH.EDMS.Domain/*
+      - src/DPWH.EDMS.Application/*
+      - src/DPWH.EDMS.Infrastructure/*
+      - src/DPWH.EDMS.DbUp/*
+    exclude:
+      - src/*
+
+# Don't run this pipeline against a PR
+pr: none
+
+name: $(Year:yyyy).$(Month).$(DayOfMonth)$(Rev:.r)
+
+stages:
+  # Build the API
+  - stage: Build
+    jobs:
+      - template: 'jobs/api/api-build-job.yml'
+
+  # Release to DEV
+  - stage: DevRelease
+    displayName: Release to DEV
+    dependsOn: Build
+    condition: succeeded('Build')
+    jobs:
+      - template: 'jobs/api/api-deploy-job.yml'
+        parameters:
+          environment: dev
+
+  # Release to UAT
+  - stage: UatRelease
+    displayName: Release to UAT
+    dependsOn: DevRelease
+    condition: succeeded('DevRelease')
+    jobs:
+      - template: 'jobs/api/api-deploy-job.yml'
+        parameters:
+          environment: uat
+
+  # Release to PROD
+  - stage: ProdRelease
+    displayName: Release to PROD
+    dependsOn: UatRelease
+    condition: succeeded('UatRelease')
+    jobs:
+      - template: 'jobs/api/api-deploy-job.yml'
+        parameters:
+          environment: prd
+
+  #The end!
