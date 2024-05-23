@@ -1,0 +1,54 @@
+# Client build job
+
+jobs:
+- job: BuildJob
+  displayName: Build client portal
+  variables:
+    buildConfiguration: 'Release'
+  steps:
+    # This tells the build agent which version of .NET Core we want to use.
+    - task: UseDotNet@2
+      displayName: 'Use .NET Core sdk 8.0'
+      inputs:
+        packageType: sdk
+        version: 8.0.x
+        installationPath: $(Agent.ToolsDirectory)/dotnet    
+
+    # Restore all nuget packages used by the project.
+    - task: DotNetCoreCLI@2
+      displayName: 'Nuget Restore'
+      enabled: true
+      inputs:
+        command: restore
+        projects: '**/DPWH.EDMS.Web.Server.csproj'
+        feedsToUse: config
+        nugetConfigPath: src/DPWH.EDMS.Web/Server/nuget.config
+        externalFeedCredentials: 'SC-Telerik'
+
+    # Builds the Project.
+    - task: DotNetCoreCLI@2
+      displayName: 'Build Blazor BFF'
+      enabled: true
+      inputs:
+        projects: '**/DPWH.EDMS.Web.Server.csproj'
+        arguments: '--configuration $(buildConfiguration) --no-restore'
+
+    # Publish and zip the artifacts to the 'drop' so they can be consumed in the release pipeline.
+    - task: DotNetCoreCLI@2
+      displayName: 'Publish Blazor BFF'
+      inputs:
+        command: publish
+        projects: src/DPWH.EDMS.Web/Server/DPWH.EDMS.Web.Server.csproj
+        publishWebProjects: false
+        arguments: '--configuration $(buildConfiguration) --output $(build.artifactstagingdirectory)'
+        zipAfterPublish: True
+
+    # Package up all artifacts into the 'drop', ready for the release pipeline.
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Blazor Build Artifact'
+      inputs:
+        PathtoPublish: '$(build.artifactstagingdirectory)'
+        ArtifactName: drop
+      condition: succeededOrFailed()
+
+# The end!
