@@ -31,6 +31,15 @@
         justify-content: end;
     }
 
+.menu-divider {
+    height: 1px;
+    width: 310px;
+    margin: 5px;
+    background-color: #ccccccd1;
+    padding: 0px 111px;
+    border-radius: 50%;
+}
+
 .sidebar {
     background-color: #634792;
     width: 64px;

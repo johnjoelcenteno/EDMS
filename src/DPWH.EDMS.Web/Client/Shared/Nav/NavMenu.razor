@@ -36,13 +36,19 @@
                     {
                         <div class="details ps-2">
                             <div class="name">@DisplayName</div>
-                            <div class="role">@RoleTitle</div>
-                        </div>
+                            <div class="role">@GetRoleDisplayText()</div>
+                        </div>                        
                     }
                 </div>
                 <ul class="nav nav-pills flex-column mb-auto mt-2">
                     @if (SelectedLevel1Item == null) // Show this view if no child/dropdown is selected ( DEFAULT VIEW )
                     {
+                        if (DrawerRef.Expanded)
+                        {
+                            <div class="menu-divider"></div>
+                        }
+
+                        @* Main Menu *@
                         @foreach (var level0Item in NavMenus)
                         {
                             if (level0Item.Children == null)
@@ -112,7 +118,161 @@
                                 </li>
                             }
                         }
-                        <li class="d-flex align-items-center mt-4">
+
+                        @if (DrawerRef.Expanded)
+                        {
+                            <div class="menu-divider"></div>
+                        }
+
+                        @* Menus  *@
+                        @foreach (var level0Item in NavMenus2)
+                        {
+                            if (level0Item.Children == null)
+                            {
+                                <li class="d-flex align-items-center">
+                                    <NavLink title="@level0Item.Text" @onclick="@(() => NavManager.NavigateTo(level0Item.Url!))"
+                                             Match="@( level0Item.Url == "" ? NavLinkMatch.All : NavLinkMatch.Prefix )"
+                                             href="@level0Item.Url"
+                                             class="nav-link d-flex align-items-center flex-grow-1 p-4"
+                                             aria-current="page">
+                                        @if (level0Item.Icon != null)
+                                        {
+                                            <span class="bi me-2 material-symbols-outlined">
+                                                @level0Item.Icon
+                                            </span>
+                                        }
+                                        @(DrawerRef.Expanded ? level0Item.Text : "")
+                                    </NavLink>
+                                </li>
+
+                            }
+                            else
+                            {
+                                <li>
+                                    <NavLink title="@level0Item.Text" class="nav-link d-flex align-items-center flex-grow-1"
+                                             @onclick="() => ToggleMenuItem(level0Item)">
+                                        @if (level0Item.Icon != null)
+                                        {
+                                            <span class="bi me-2 material-symbols-outlined">
+                                                @level0Item.Icon
+                                            </span>
+                                        }
+
+                                        @if (DrawerRef.Expanded)
+                                        {
+                                            @(level0Item.Text)
+                                            <span class="material-symbols-outlined xl ms-auto">@(level0Item.Expanded ? "expand_less" : "expand_more")</span>
+                                        }
+                                    </NavLink>
+                                    @if (level0Item.Expanded && level0Item.Children != null && level0Item.Children.Count() > 0)
+                                    {
+                                        <ul class="nav-link-subitem">
+                                            @foreach (var level1Item in level0Item.Children)
+                                            {
+                                                <li>
+                                                    <NavLink title="@level1Item.Text" class="nav-link d-flex align-items-center flex-grow-1 px-4 py-3"
+                                                             @onclick="() => OnToggleLevel1Item(level1Item)">
+                                                        @if (level1Item.Icon != null)
+                                                        {
+                                                            <span class="bi me-2 material-symbols-outlined">
+                                                                @level1Item.Icon
+                                                            </span>
+                                                        }
+                                                        @if (DrawerRef.Expanded)
+                                                        {
+                                                            @(level1Item.Text)
+                                                            if (level1Item.Children != null && level1Item.Children.Count() > 0)
+                                                            {
+                                                                <span class="material-symbols-outlined lg ms-auto">east</span>
+                                                            }
+                                                        }
+                                                    </NavLink>
+                                                </li>
+                                            }
+                                        </ul>
+                                    }
+                                </li>
+                            }
+                        }
+
+                        @if (NavMenus2.Count > 0 && DrawerRef.Expanded)
+                        {
+                            <div class="menu-divider"></div>
+                        }
+
+                        @* Settings *@
+                        @foreach (var level0Item in NavSettings)
+                        {
+                            if (level0Item.Children == null)
+                            {
+                                <li class="d-flex align-items-center">
+                                    <NavLink title="@level0Item.Text" @onclick="@(() => NavManager.NavigateTo(level0Item.Url!))"
+                                             Match="@( level0Item.Url == "" ? NavLinkMatch.All : NavLinkMatch.Prefix )"
+                                             href="@level0Item.Url"
+                                             class="nav-link d-flex align-items-center flex-grow-1 p-4"
+                                             aria-current="page">
+                                        @if (level0Item.Icon != null)
+                                        {
+                                            <span class="bi me-2 material-symbols-outlined">
+                                                @level0Item.Icon
+                                            </span>
+                                        }
+                                        @(DrawerRef.Expanded ? level0Item.Text : "")
+                                    </NavLink>
+                                </li>
+
+                            }
+                            else
+                            {
+                                <li>
+                                    <NavLink title="@level0Item.Text" class="nav-link d-flex align-items-center flex-grow-1"
+                                             @onclick="() => ToggleMenuItem(level0Item)">
+                                        @if (level0Item.Icon != null)
+                                        {
+                                            <span class="bi me-2 material-symbols-outlined">
+                                                @level0Item.Icon
+                                            </span>
+                                        }
+
+                                        @if (DrawerRef.Expanded)
+                                        {
+                                            @(level0Item.Text)
+                                            <span class="material-symbols-outlined xl ms-auto">@(level0Item.Expanded ? "expand_less" : "expand_more")</span>
+                                        }
+                                    </NavLink>
+                                    @if (level0Item.Expanded && level0Item.Children != null && level0Item.Children.Count() > 0)
+                                    {
+                                        <ul class="nav-link-subitem">
+                                            @foreach (var level1Item in level0Item.Children)
+                                            {
+                                                <li>
+                                                    <NavLink title="@level1Item.Text" class="nav-link d-flex align-items-center flex-grow-1 px-4 py-3"
+                                                             @onclick="() => OnToggleLevel1Item(level1Item)">
+                                                        @if (level1Item.Icon != null)
+                                                        {
+                                                            <span class="bi me-2 material-symbols-outlined">
+                                                                @level1Item.Icon
+                                                            </span>
+                                                        }
+                                                        @if (DrawerRef.Expanded)
+                                                        {
+                                                            @(level1Item.Text)
+                                                            if (level1Item.Children != null && level1Item.Children.Count() > 0)
+                                                            {
+                                                                <span class="material-symbols-outlined lg ms-auto">east</span>
+                                                            }
+                                                        }
+                                                    </NavLink>
+                                                </li>
+                                            }
+                                        </ul>
+                                    }
+                                </li>
+                            }
+                        }
+
+                        // LOGUT
+                        <li class="d-flex align-items-center">
                             <NavLink title="Logout" @onclick="BeginSignOut" class="nav-link d-flex align-items-center flex-grow-1 p-4">
                                 <span class="bi me-2 material-symbols-outlined">logout</span>@(DrawerRef.Expanded ? "Logout" : "")
                             </NavLink>

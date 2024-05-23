@@ -7,6 +7,7 @@ using Telerik.Blazor.Components;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.Authorization;
+using DPWH.EDMS.IDP.Core.Constants;
 
 namespace DPWH.EDMS.Web.Client.Shared.Nav;
 
@@ -22,6 +23,8 @@ public class NavMenuBase: RxBaseComponent
     protected bool IsNavMenuCollapsed = false;
     protected TelerikDrawer<MenuModel> DrawerRef = new();
     protected List<MenuModel> NavMenus { get; set; } = new List<MenuModel>();
+    protected List<MenuModel> NavMenus2 { get; set; } = new List<MenuModel>();
+    protected List<MenuModel> NavSettings { get; set; } = new List<MenuModel>();
     //protected bool XSmall { get; set; }
     //protected bool Small { get; set; }
     //protected bool Medium { get; set; }
@@ -29,7 +32,7 @@ public class NavMenuBase: RxBaseComponent
     protected List<IDisposable> RxSubscriptions { get; set; } = new();
 
     protected string DisplayName = "Juan Doe";
-    protected string RoleTitle = "Super Admin";
+    protected string Role = ApplicationRoles.EndUser;
 
     protected MenuModel? SelectedLevel1Item = null;
 
@@ -77,6 +80,15 @@ public class NavMenuBase: RxBaseComponent
         }
     }
 
+    protected string GetRoleDisplayText()
+    { 
+
+        var displayName = "";
+        ApplicationRoles.UserAccessMapping.TryGetValue(Role, out displayName);
+
+        return !string.IsNullOrEmpty(displayName) ? displayName : "Unknown Role";
+    }
+
     private async Task SetMenu()
     {
         //if (AuthenticationStateAsync is null)
@@ -94,7 +106,9 @@ public class NavMenuBase: RxBaseComponent
         //    NavMenus = menus.Where(x => x.AuthorizedRoles.Any(role => roles.Contains(role))).ToList();
         //}
 
-        NavMenus = MenuDataService.GetMenuItems().ToList();
+        NavMenus = MenuDataService.GetMenuItems().Where( m => m.AuthorizedRoles.Any(r => r == Role) ).ToList();
+        NavMenus2 = MenuDataService.GetMenuItems2().Where( m => m.AuthorizedRoles.Any(r => r == Role) ).ToList();
+        NavSettings = MenuDataService.GetSettingsItems().Where( m => m.AuthorizedRoles.Any(r => r == Role) ).ToList();
     }
     //private IList<string> GetRoles(ClaimsPrincipal claimsPrincipal)
     //{
