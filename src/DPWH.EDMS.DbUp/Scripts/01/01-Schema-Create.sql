@@ -60,7 +60,7 @@ END IF NOT EXISTS (
 	ValidId NVARCHAR(100),
 	SupportingDocument NVARCHAR(100),
 	DocumentRecordsId UNIQUEIDENTIFIER NOT NULL,
-	DateRequested DATETIME NOT NULL DEFAULT,
+	DateRequested DATETIME NOT NULL,
 	RequestedRecord NVARCHAR(100),
 	Purpose NVARCHAR(100),
 	Status NVARCHAR(50),
