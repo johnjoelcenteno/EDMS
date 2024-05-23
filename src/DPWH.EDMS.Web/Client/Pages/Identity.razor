@@ -1,0 +1,43 @@
+﻿@page "/identity"
+
+@using System.Security.Claims
+
+@attribute [Authorize]
+
+<article class="content px-4">
+    <div class="container">
+        <h3>Profile</h3>
+        <hr />
+        @if (_claims.Any())
+        {
+            <ul>
+                @foreach (var claim in _claims)
+                {
+                    <li style="border-bottom: #cacaca;"><b>@claim.Type:</b> @claim.Value</li>
+                }
+            </ul>
+        }
+    </div>
+</article>
+
+@code {
+
+    [CascadingParameter]
+    public Task<AuthenticationState>? AuthenticationStateAsync { get; set; }
+
+    private IEnumerable<Claim> _claims = Enumerable.Empty<Claim>();
+
+    protected override async Task OnInitializedAsync() => await GetClaimsPrincipalData();
+
+    private async Task GetClaimsPrincipalData()
+    {
+        if(AuthenticationStateAsync is null)
+            return;
+
+        var authState = await AuthenticationStateAsync;
+        var user = authState.User;
+
+        if (user.Identity is not null && user.Identity.IsAuthenticated)
+            _claims = user.Claims;
+    }
+}
