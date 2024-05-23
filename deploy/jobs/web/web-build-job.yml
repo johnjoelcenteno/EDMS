@@ -40,14 +40,14 @@ jobs:
         command: publish
         projects: src/DPWH.EDMS.Web/Server/DPWH.EDMS.Web.Server.csproj
         publishWebProjects: false
-        arguments: '--configuration $(buildConfiguration) --output $(build.artifactstagingdirectory)/DPWH.EDMS.Web'
+        arguments: '--configuration $(buildConfiguration) --output $(build.artifactstagingdirectory)'
         zipAfterPublish: True
 
     # Package up all artifacts into the 'drop', ready for the release pipeline.
     - task: PublishBuildArtifacts@1
       displayName: 'Publish Blazor Build Artifact'
       inputs:
-        PathtoPublish: '$(build.artifactstagingdirectory)/DPWH.EDMS.Web'
+        PathtoPublish: '$(build.artifactstagingdirectory)'
         ArtifactName: drop
       condition: succeededOrFailed()
 
