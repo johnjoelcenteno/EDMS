@@ -34,7 +34,7 @@ jobs:
             displayName: 'File transformation: appsettings.json'
             enabled: true
             inputs:
-              folderPath: '$(Pipeline.Workspace)/drop/DPWH.EDMS.Web.zip'
+              folderPath: '$(Pipeline.Workspace)/drop/Server.zip'
               targetFiles: '**/appsettings.json'
               fileType: json
 
@@ -47,7 +47,7 @@ jobs:
               continueOnError: true
               script: |
                 New-Item -ItemType Directory -Force -Path $(Pipeline.Workspace)/drop/temp
-                Move-Item -Path "$(Pipeline.Workspace)/drop/DPWH.EDMS.Web.zip" -Destination $(Pipeline.Workspace)/drop/temp/build-$(Build.BuildNumber).zip
+                Move-Item -Path "$(Pipeline.Workspace)/drop/Server.zip" -Destination $(Pipeline.Workspace)/drop/temp/build-$(Build.BuildNumber).zip
                 "build-$(Build.BuildNumber).zip" | Out-File $(Pipeline.Workspace)/drop/temp/packagename.txt -NoNewline -Encoding Ascii          
 
             # Deploy - Step 2: get FTP publish settings
