@@ -1,0 +1,38 @@
+# Global client pipeline variables
+
+# The environment parameter is passed through from the calling client-pipeline yaml file.
+parameters:
+- name: environment
+  type: string
+  default: 'dev'
+
+variables:
+
+  # Directory (dev) ID when viewing in Azure Portal (use the main Tenant - Azure AD)
+  AzureTenantId: 'ceda96a3-1eac-4f6e-bd29-f67b87980abf' 
+
+  # Azure location details
+  LocationFull: 'Australia East'
+  LocationShort: 'australiaeast'
+  LocationCode: 'aue'
+
+  ProjectName: 'edms'  
+  WebAppName: 'app-web-$(ProjectName)-dpwh-${{ parameters.environment }}'
+  ApplicationInsightsName: 'app-web-$(ProjectName)-dpwh-${{ parameters.environment }}'
+
+  # Azure KeyVault
+  KeyVaultName: 'kv-$(ProjectName)-dpwh-${{ parameters.environment }}'
+  KeyVaultSkuFamily: 'A'
+  KeyVaultSkuName: 'Standard'
+
+  # If you need to spec the database differently per envionment, duplicate in the envionment statements below.
+  # SqlServerSkuName: 'Basic'
+  # SqlServerSkuTier: 'Basic'
+  # SqlServerSkuCapacity: '5'
+
+  # These ftp variables are will be set in a release task and used to deploy the app service via SFTP.   
+  ftpserver: ''
+  ftpusername: ''
+  ftppassword: ''
+  
+# The end!          

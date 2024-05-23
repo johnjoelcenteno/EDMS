@@ -1,0 +1,103 @@
+# Web client deployment job
+
+# The environment parameter is passed through from the calling web-pipeline yaml file.
+parameters:
+- name: environment
+  type: string
+  default: 'dev'
+
+jobs:
+  - deployment: Deploy
+    displayName: Deploy Web Client
+    environment: '${{ parameters.environment }}'
+    #Here we are specifying two templates: environment specific + gloabl.
+    variables:
+    - template: '../../variables/web/web-${{ parameters.environment }}-variables.yml'
+    - template: '../../variables/web/web-variables.yml'
+      parameters:
+        environment: '${{ parameters.environment }}'
+    strategy: 
+      runOnce:
+        deploy:
+          steps:
+          # Get secrets (marked accordingly in relevant variables yaml file) from keyvault
+          - task: AzureKeyVault@1
+            displayName: 'Get Secrets from KeyVault'
+            enabled: false
+            inputs:
+              azureSubscription: '${{ variables.AzureSubscription }}'
+              keyVaultName: '${{ variables.KeyVaultName }}'
+              secretsFilter: '*'
+                
+            # Update appsettings.json file
+          - task: FileTransform@1
+            displayName: 'File transformation: appsettings.json'
+            enabled: true
+            inputs:
+              folderPath: '$(Pipeline.Workspace)/drop/DPWH.EDMS.Web.zip'
+              targetFiles: '**/appsettings.json'
+              fileType: json
+
+            # Deploy Blazor - Step 1: setup site package
+          - task: PowerShell@2
+            displayName: 'Deploy Blazor - Step 1/5: Setup SitePackage'
+            inputs:
+              targetType: inline
+              workingDirectory: '$(Pipeline.Workspace)/drop'
+              continueOnError: true
+              script: |
+                New-Item -ItemType Directory -Force -Path $(Pipeline.Workspace)/drop/temp
+                Move-Item -Path "$(Pipeline.Workspace)/drop/DPWH.EDMS.Web.zip" -Destination $(Pipeline.Workspace)/drop/temp/build-$(Build.BuildNumber).zip
+                "build-$(Build.BuildNumber).zip" | Out-File $(Pipeline.Workspace)/drop/temp/packagename.txt -NoNewline -Encoding Ascii          
+
+            # Deploy - Step 2: get FTP publish settings
+          - task: AzurePowerShell@3
+            displayName: 'Deploy Blazor - Step 2/5: Get Publish FTP Settings'
+            inputs:
+              azureSubscription: '${{ variables.AzureSubscription }}'
+              azurePowerShellVersion: LatestVersion
+              ScriptType: InlineScript
+              FailOnStandardError: true
+              Inline: |
+                $i="//*[@publishMethod=`"FTP`"]/"
+                [xml]$x=Get-AzureRMWebAppPublishingProfile -ResourceGroupName '${{ variables.ResourceGroupName }}' -Name ${{ variables.WebAppName }}
+                $u=$x.SelectNodes("$i@userName").value
+                $p=$x.SelectNodes("$i@userPWD").value
+                $s=$x.SelectNodes("$i@publishUrl").value                
+                $z="##vso[task.setvariable variable"
+                Write-Host "$z=ftpusername]$u"
+                Write-Host "$z=ftppassword]$p"
+                Write-Host "$z=ftpserver]$s"
+
+            # Deploy - Step 3: Stop app service
+          - task: AzureAppServiceManage@0
+            displayName: 'Deploy Blazor - Step 3/5: Stop Azure App Service'
+            inputs:
+              azureSubscription: '${{ variables.AzureSubscription }}'
+              Action: 'Stop Azure App Service'
+              WebAppName: '${{ variables.WebAppName }}'
+
+            # Deploy - Step 4: Deploy using SFTP
+          - task: FtpUpload@2
+            displayName: 'Deploy Blazor - Step 4/5: Upload with FTPS'
+            inputs:
+              credentialsOption: inputs
+              serverUrl: '$(ftpserver)'
+              username: '$(ftpusername)'
+              password: '$(ftppassword)'
+              rootDirectory: '$(Pipeline.Workspace)/drop/temp'
+              filePatterns: |
+                *.zip
+                packagename.txt
+              remoteDirectory: /data/SitePackages/
+              preservePaths: true
+
+            # Deploy - Step 5: Start app service
+          - task: AzureAppServiceManage@0
+            displayName: 'Deploy Blazor Client - Step 5/5: Start Azure App Service'
+            inputs:
+              azureSubscription: '${{ variables.AzureSubscription }}'
+              Action: 'Start Azure App Service'
+              WebAppName: '${{ variables.WebAppName }}'
+
+# The end!          
