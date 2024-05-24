@@ -3,4 +3,139 @@
 @inherits UserManagementBase
 @attribute [Authorize(Policy = "RequireActiveRoles")]
 
-<h3>UserManagement</h3>
+<TelerikBreadcrumb Data="@BreadcrumbItems" />
+<h3>User Management</h3>
+<hr />
+<div class="d-flex flex-row gap-3 flex-wrap">
+    <div class="d-flex">
+        <TelerikCard Class="um-card h-100">
+            <CardHeader>
+                <h5 class="mb-0">Full License</h5>
+            </CardHeader>
+            <CardBody>
+                <p class="um-value">@LicenseAccumulated/@LicenseLimit</p>
+                <div class="d-flex flex-row justify-content-between">
+                    <p class="mb-0 k-font-size-sm">Used/Available</p>
+                    <p class="mb-0 k-font-size-sm">Total License: @LicenseLimit</p>
+                </div>
+                <TelerikProgressBar Value="GetLicenseAccumulatedPercentage()">
+                    <ProgressBarLabel Visible="true">
+                        <Template>
+                            @(GetLicenseAccumulatedPercentage())%
+                        </Template>
+                    </ProgressBarLabel>
+                </TelerikProgressBar>
+            </CardBody>
+        </TelerikCard>
+    </div>
+    <div class="d-flex">
+        <TelerikCard Class="um-card h-100">
+            <CardHeader>
+                <h5 class="mb-0">View-Only Licenses</h5>
+            </CardHeader>
+            <CardBody>
+                <p class="um-value">No Limit</p>
+                <div class="d-flex flex-row justify-content-between">
+                    <p class="mb-0 k-font-size-sm">Unlimited Licenses</p>
+                    <p class="mb-0 k-font-size-sm">Total User: @TotalUsers</p>
+                </div>
+            </CardBody>
+        </TelerikCard>
+    </div>
+</div>
+<div class="d-flex flex-row mt-3">
+    <TelerikCard Width="100%">
+        <CardBody>
+            <div class="d-flex flex-row justify-content-between">
+                <CardTitle Class="mb-0">Users</CardTitle>
+                <TelerikButton Title="View All" Icon="@FontIcon.ChevronRight"></TelerikButton>
+            </div>
+            <CardSeparator Class="my-2"></CardSeparator>
+            <div>
+                @if (EmployeeList != null && !XSmall)
+                {
+                    <TelerikGrid TItem="EmployeeModel"
+                                 @bind-PageSize="@PageSize"
+                                 Height="@GridHeight"
+                                 Sortable=true
+                                 Data="EmployeeList"
+                                 OnStateChanged="@OnStateChanged"
+                                 @ref="GridRef"
+                                 Context="employee">
+                        <GridSettings>
+                            <GridPagerSettings PageSizes="@PageSizes">
+                            </GridPagerSettings>
+                        </GridSettings>
+                        <GridColumns>
+                            <GridColumn Field=@nameof(EmployeeModel.FirstName) Title="First Name" />
+                            <GridColumn Field=@nameof(EmployeeModel.LastName) Title="Last Name" />
+                            <GridColumn Field=@nameof(EmployeeModel.Email) Title="Email" />
+                            <GridColumn Field=@nameof(EmployeeModel.UserAccess) Title="User Access" />
+                        </GridColumns>
+                    </TelerikGrid>
+                }
+                @*  else if (GridData != null && XSmall)
+                {
+                <TelerikGrid Class="grid-no-scroll"
+                TItem="AssetModel"
+                @bind-PageSize="@PageSize"
+                Height="@GridHeight"
+                Sortable=true
+                Data="GridData"
+                OnStateChanged="@OnStateChanged">
+                <GridSettings>
+                <GridPagerSettings PageSizes="@PageSizes">
+                </GridPagerSettings>
+                </GridSettings>
+                <DetailTemplate>
+                @{
+                var prop = context as AssetModel;
+                <div class="d-flex flex-column">
+                <p><b>Property ID.:</b> @prop.PropertyId </p>
+                <p><b>Building ID:</b> @prop.BuildingId </p>
+                <p><b>Region/Implementing Office</b> @prop.ImplementingOffice </p>
+                <p><b>Agency</b> @prop.Agency </p>
+                <p><b>Created :</b> @prop.Created.DateTime.ToString("MMM dd, yyyy") </p>
+                </div>
+                }
+                </DetailTemplate>
+                <GridColumns>
+                <GridColumn Field=@nameof(AssetModel.Name) />
+                </GridColumns>
+                </TelerikGrid>
+                } *@
+                else
+                {
+                    <span>No Data to display.</span>
+                }
+            </div>
+            <TelerikPager PageChanged="@PageChangedHandler"
+                          Total="TotalItems"
+                          ButtonCount="6"
+                          PageSize="@PageSize"
+                          PageSizeChanged="@PageSizeChangedHandler"
+                          PageSizes="@(new List<int?> {5, 10, 20})"
+                          Page="@Page">
+            </TelerikPager>
+        </CardBody>
+    </TelerikCard>
+</div>
+
+<style>
+    .um-card {
+        display: flex;
+        width: 450px;
+
+    }
+
+        .um-card .k-card-header {
+            border-bottom: 1px solid #dee2e6;
+            background-color: transparent;
+        }
+
+        .um-card .k-card-body .um-value {
+            color: #7F56D9;
+            font-size: 40px;
+            font-weight: 400;
+        }
+</style>

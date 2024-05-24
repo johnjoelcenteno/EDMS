@@ -1,0 +1,8 @@
+﻿@page "/Records"
+@page "/my-Records"
+
+@inherits RecordsBase
+
+@attribute [Authorize(Policy = "RequireActiveRoles")]
+
+<h3>My Records</h3>

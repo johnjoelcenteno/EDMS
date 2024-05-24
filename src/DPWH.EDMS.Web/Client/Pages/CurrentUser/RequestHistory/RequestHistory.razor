@@ -1,0 +1,8 @@
+﻿@page "/request-history"
+@page "/my-request-history"
+
+@inherits RequestHistoryBase
+
+@attribute [Authorize(Policy = "RequireActiveRoles")]
+
+<h3>My Request History</h3>

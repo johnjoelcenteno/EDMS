@@ -1,6 +1,13 @@
-﻿@page "/user-profile"
+﻿@page "/profile"
 
 @inherits UserProfileBase
 @attribute [Authorize(Policy = "RequireActiveRoles")]
 
-<h3>UserProfile</h3>
+
+<TelerikBreadcrumb Data="@BreadcrumbItems" />
+
+<h3>Profile</h3>
+<p>Juan Doe (ABC12345)</p>
+<p>Email: juan.doe@example.com / Contact: +63123456789</p>
+
+<hr />
