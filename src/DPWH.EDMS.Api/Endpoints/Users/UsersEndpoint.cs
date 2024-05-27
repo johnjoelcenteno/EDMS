@@ -8,7 +8,6 @@ using DPWH.EDMS.Application.Features.Users.Commands.UpdateUser;
 using DPWH.EDMS.Application.Features.Users.Queries.GetUserById;
 using DPWH.EDMS.Application.Features.Users.Queries.GetUsers;
 using DPWH.EDMS.Application.Models;
-using DPWH.EDMS.IDP.Core;
 using DPWH.EDMS.IDP.Core.Constants;
 using KendoNET.DynamicLinq;
 using MediatR;
