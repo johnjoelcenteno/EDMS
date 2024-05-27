@@ -9,7 +9,9 @@
 
   <ItemGroup>
     <None Remove="appsettings.json" />
+    <None Remove="Scripts\01\01-Schema-Configs.sql" />
     <None Remove="Scripts\01\01-Schema-Create.sql" />
+    <None Remove="Scripts\01\03-Schema-AddChangeLogs.sql" />
   </ItemGroup>
 
   <ItemGroup>
@@ -19,7 +21,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Scripts\01\01-Schema-Configs.sql" />
     <EmbeddedResource Include="Scripts\01\01-Schema-Create.sql" />
+    <EmbeddedResource Include="Scripts\01\03-Schema-AddChangeLogs.sql" />
   </ItemGroup>
   
 	<ItemGroup>

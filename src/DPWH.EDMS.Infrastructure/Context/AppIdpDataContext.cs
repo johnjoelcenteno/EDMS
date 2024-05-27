@@ -14,7 +14,10 @@ public class AppIdpDataContext : IdentityDbContext<ApplicationUser>, IReadAppIdp
 
     }
 
-    public IQueryable<ApplicationUser> UsersView => Users.AsNoTracking();
+    public IQueryable<ApplicationUser> UsersView => Users
+    .Include(u => u.UserBasicInfo)
+    .Include(u => u.EmployeeInfo)
+    .AsNoTracking();
     public IQueryable<IdentityUserClaim<string>> UserClaimsView => UserClaims.AsNoTracking();
     public required DbSet<ViewUserAccess> ViewUserAccess { get; init; }
 
@@ -35,12 +38,12 @@ public class AppIdpDataContext : IdentityDbContext<ApplicationUser>, IReadAppIdp
             b.HasOne(u => u.UserBasicInfo)
                 .WithOne()
                 .HasForeignKey<UserBasicInfo>(u => u.Id);
-            b.Navigation(u => u.UserBasicInfo);
+            b.Navigation(u => u.UserBasicInfo).IsRequired();
 
             b.HasOne(u => u.EmployeeInfo)
                 .WithOne()
                 .HasForeignKey<EmployeeInfo>(u => u.Id);
-            b.Navigation(u => u.EmployeeInfo);
+            b.Navigation(u => u.EmployeeInfo).IsRequired();
         });
 
         base.OnModelCreating(builder);
