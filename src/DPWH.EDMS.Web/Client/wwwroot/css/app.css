@@ -282,3 +282,17 @@ a, .btn-link {
     font-weight: 900;
     font-style: italic;
 }
+
+.k-breadcrumb {
+    background-color: transparent;
+    margin-bottom: 16px;
+}
+
+.k-breadcrumb-current-item .k-breadcrumb-link, .k-breadcrumb-last-item .k-breadcrumb-link {
+    color: #7f56d9;
+}
+
+.edms-text-header-small {
+    color: #7F56D9;
+    font-weight: bold;
+}

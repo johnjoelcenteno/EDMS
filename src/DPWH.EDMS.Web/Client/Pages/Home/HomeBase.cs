@@ -59,7 +59,8 @@ public class HomeBase : GridBase<EmployeeModel>
                 MiddleInitial = "M",
                 RecordRequested = $"RecordType{random.Next(1, 5)}",
                 Purpose = $"Purpose{random.Next(1, 5)}",
-                Status = random.Next(0, 2) == 0 ? "Pending" : "Completed"
+                Status = random.Next(0, 2) == 0 ? "Pending" : "Completed",
+                UserAccess = "EndUser"
             };
 
             employees.Add(employee);

@@ -40,6 +40,16 @@ public class MenuDataService : IMenuDataService
                 SortOrder = 2,
                 AuthorizedRoles = new List<string>{ApplicationRoles.SuperAdmin }
             },
+              new ()
+            {
+                Text = "User Management",
+                Url = "/user-management",
+                Icon = "people",
+                Children = default,
+                Level = 0,
+                SortOrder = 3,
+                AuthorizedRoles = new List<string>{ApplicationRoles.SuperAdmin }
+            },
             
 
         //// END USER MENUS
@@ -72,9 +82,9 @@ public class MenuDataService : IMenuDataService
                 Level = 0,
                 SortOrder = 2,
                 AuthorizedRoles = new List<string>{ ApplicationRoles.EndUser }
-            },         
+            },
         };
-    
+
     public IEnumerable<MenuModel> GetMenuItems2() =>
         new List<MenuModel>
         {

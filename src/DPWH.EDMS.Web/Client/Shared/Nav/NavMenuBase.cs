@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.Authorization;
 using DPWH.EDMS.IDP.Core.Constants;
+using System.Security.Claims;
 
 namespace DPWH.EDMS.Web.Client.Shared.Nav;
 
@@ -32,7 +33,7 @@ public class NavMenuBase: RxBaseComponent
     protected List<IDisposable> RxSubscriptions { get; set; } = new();
 
     protected string DisplayName = "Juan Doe";
-    protected string Role = ApplicationRoles.EndUser;
+    protected string Role = ApplicationRoles.SuperAdmin;
 
     protected MenuModel? SelectedLevel1Item = null;
 
@@ -91,51 +92,23 @@ public class NavMenuBase: RxBaseComponent
 
     private async Task SetMenu()
     {
-        //if (AuthenticationStateAsync is null)
-        //    return;
+        if (AuthenticationStateAsync is null)
+            return;
 
         //var menus = MenuDataService.GetMenuItems();
 
-        //var authState = await AuthenticationStateAsync;
-        //var user = authState.User;
+        var authState = await AuthenticationStateAsync;
+        var user = authState.User;
 
-        //if (user.Identity is not null && user.Identity.IsAuthenticated)
-        //{
-        //    DisplayName = user.GetFullName();
-        //    var roles = GetRoles(user);
-        //    NavMenus = menus.Where(x => x.AuthorizedRoles.Any(role => roles.Contains(role))).ToList();
-        //}
-
-        NavMenus = MenuDataService.GetMenuItems().Where( m => m.AuthorizedRoles.Any(r => r == Role) ).ToList();
-        NavMenus2 = MenuDataService.GetMenuItems2().Where( m => m.AuthorizedRoles.Any(r => r == Role) ).ToList();
-        NavSettings = MenuDataService.GetSettingsItems().Where( m => m.AuthorizedRoles.Any(r => r == Role) ).ToList();
+        if (user.Identity is not null && user.Identity.IsAuthenticated)
+        {
+            //DisplayName = user.FullName;
+            //GetRoleDisplayText();
+            NavMenus = MenuDataService.GetMenuItems().Where(m => m.AuthorizedRoles.Any(r => r == Role)).ToList();
+            NavMenus2 = MenuDataService.GetMenuItems2().Where(m => m.AuthorizedRoles.Any(r => r == Role)).ToList();
+            NavSettings = MenuDataService.GetSettingsItems().Where(m => m.AuthorizedRoles.Any(r => r == Role)).ToList();
+        }        
     }
-    //private IList<string> GetRoles(ClaimsPrincipal claimsPrincipal)
-    //{
-    //    if (claimsPrincipal.IsClient())
-    //    {
-    //        RoleTitle = RoleConstants.CorporateRole;
-    //        return new List<string> { RoleConstants.CorporateRole };
-    //    }
-    //    else
-    //    {
-    //        var _roles = claimsPrincipal.GetRoles();
-    //        if (_roles != null && _roles.Any())
-    //        {
-    //            if (_roles.Any(role => BookingPlatformRoles.Policy.AdminOnly.Any(x => x == role)))
-    //            {
-    //                RoleTitle = RoleConstants.Admin;
-    //                return new List<string> { RoleConstants.Admin, RoleConstants.SalesRole };
-    //            }
-    //            else if (_roles.Any(role => role == BookingPlatformRoles.Sales))
-    //            {
-    //                RoleTitle = RoleConstants.SalesRole;
-    //                return new List<string> { RoleConstants.SalesRole };
-    //            }
-    //        }
-    //    }
-    //    return new List<string>();
-    //}
 
     protected async Task ToggleDrawer()
     {

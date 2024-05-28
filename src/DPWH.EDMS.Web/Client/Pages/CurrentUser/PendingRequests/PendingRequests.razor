@@ -1,0 +1,8 @@
+﻿@page "/pending-request"
+@page "/my-pending-request"
+
+@inherits PendingRequestsBase
+
+@attribute [Authorize(Policy = "RequireActiveRoles")]
+
+<h3>My Pending Request</h3>
