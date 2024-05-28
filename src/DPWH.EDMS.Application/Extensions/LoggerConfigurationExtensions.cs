@@ -14,8 +14,8 @@ public static class LoggerConfigurationExtensions
     {
         var environment = configuration.GetValue<string>("Environment") ?? Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 
-        var instrumentationKey = configuration.GetValue<string>("APPINSIGHTS_INSTRUMENTATIONKEY") ?? "";
-        var isAppInsightsConfigured = !string.IsNullOrEmpty(instrumentationKey);
+        var connectionString = configuration.GetValue<string>("APPLICATIONINSIGHTS_CONNECTION_STRING") ?? "";
+        var isAppInsightsConfigured = !string.IsNullOrEmpty(connectionString);
 
         var isConsoleConfigured = environment == "Development" || configuration.GetValue<bool>("ConsoleLogging");
 
@@ -42,15 +42,14 @@ public static class LoggerConfigurationExtensions
             .Enrich.WithProperty("Environment", environment)
             .If(isConsoleConfigured, c => c.WriteTo.Console())
             .If(isAppInsightsConfigured,
-                c => c.WriteTo.ApplicationInsights(new TelemetryConfiguration(instrumentationKey), TelemetryConverter.Traces));
-        //c => c.WriteTo.ApplicationInsights(TelemetryConfiguration.CreateDefault(), TelemetryConverter.Traces));
+                c => c.WriteTo.ApplicationInsights(TelemetryConfiguration.CreateDefault(), TelemetryConverter.Traces));
 
         var logger = loggerConfiguration.CreateLogger();
 
         logger.Information("startupType?.BaseType?.Name = {StartupType}", startupType?.BaseType?.BaseType?.Name);
         logger.Information("environment = {Environment}", environment);
         logger.Information("isAppInsightsConfigured = {IsAppInsightsConfigured}", isAppInsightsConfigured);
-        logger.Information("instrumentationKey = {InstrumentationKey}", instrumentationKey);
+        logger.Information("appInsightConnectionString = {AppInsightConnectionString}", connectionString);
         logger.Information("isConsoleConfigured = {IsConsoleConfigured}", isConsoleConfigured);
         logger.Information("applicationName = {ApplicationName}", assemblyName);
         logger.Information("applicationVersion = {ApplicationVersion}", assemblyVersion);
