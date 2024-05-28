@@ -50,3 +50,17 @@ CREATE TABLE [dbo].[AuditLogs](
       PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
     ) ON [PRIMARY]
 GO
+
+-- Create Table Data Library
+CREATE TABLE [dbo].[DataLibraries](
+    [Id] [UNIQUEIDENTIFIER] NOT NULL,
+    [Type] [nvarchar](50) NOT NULL,
+    [Value] [nvarchar](100) NULL,
+    [IsDeleted] [bit] NOT NULL DEFAULT 0,
+    [CreatedBy] [nvarchar](100) NOT NULL,
+    [Created] [DATETIMEOFFSET](7) NOT NULL,
+    [LastModifiedBy] [nvarchar](100) NULL,
+    [LastModified] [DATETIMEOFFSET](7) NULL
+    CONSTRAINT [PK_DataLibraries] PRIMARY KEY CLUSTERED ( [Id] ASC )
+    WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]) ON [PRIMARY]
+GO
