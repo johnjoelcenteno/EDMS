@@ -15,12 +15,13 @@ variables:
 
   # Configurations from AppSettings
   SqlServerName: 'sql-ngobia-dpwh-prd'
+  IdpSqlServerName: 'sql-ngobia-dpwh-prd'
   SqlServerFullyQualifiedDomainName: '$(SqlServerName).database.windows.net'
   SqlDatabaseName: 'sqldb-ngobia-dpwh-uat'
   IdPSqlDatabaseName: 'sqldb-ngobia-dpwh-idp-uat'
   SqlServerAdministratorLogin: 'sqladmin'
   DefaultConnectionString: 'Server=$(SqlServerName).database.windows.net;Initial Catalog=$(SqlDatabaseName);Persist Security Info=False;User ID=$(SqlServerAdministratorLogin);Password=$(SqlServerAdministratorPassword);MultipleActiveResultSets=True;Encrypt=True;TrustServerCertificate=False;Connection Timeout=300'
-  IdentityConnectionString: 'Server=$(SqlServerName).database.windows.net;Initial Catalog=$(IdPSqlDatabaseName);Persist Security Info=False;User ID=$(SqlServerAdministratorLogin);Password=$(SqlServerAdministratorPassword);MultipleActiveResultSets=True;Encrypt=True;TrustServerCertificate=False;Connection Timeout=300'
+  IdentityConnectionString: 'Server=$(IdpSqlServerName).database.windows.net;Initial Catalog=$(IdPSqlDatabaseName);Persist Security Info=False;User ID=$(SqlServerAdministratorLogin);Password=$(SqlServerAdministratorPassword);MultipleActiveResultSets=True;Encrypt=True;TrustServerCertificate=False;Connection Timeout=300'
   StorageAccountConnectionString: '$(StorageAccountConnectionStringUat)'
   EnableSwaggerUI: 'true'
   Environment: 'Production'
