@@ -15,14 +15,22 @@ IF NOT EXISTS (
 	Email NVARCHAR(100),
 	MobileNumber NVARCHAR(15),
 	EmployeeNumber NVARCHAR(50) NOT NULL UNIQUE,
+	EmployeeId NVARCHAR(75) NOT NULL UNIQUE,
 	RegionCentralOffice NVARCHAR(100),
 	DistrictBureauService NVARCHAR(100),
 	Position NVARCHAR(100),
 	Designation NVARCHAR(100),
+	Role NVARCHAR(150),
+	UserAccess NVARCHAR(50),
+	Department NVARCHAR(150),
+	RegionalOfficeRegion NVARCHAR(150),
+	RegionalOfficeProvince NVARCHAR(150),
+	DistrictEngineeringOffice NVARCHAR(150),
+	DesignationTitle NVARCHAR(150),
 	Created [DATETIMEOFFSET](7) NOT NULL,
 	CreatedBy NVARCHAR(50),
-	Modified [DATETIMEOFFSET](7) NOT NULL,
-	ModifiedBy NVARCHAR(50)
+	LastModified [DATETIMEOFFSET](7) NULL,
+	LastModifiedBy NVARCHAR(50) NULL
 );
 
 END IF NOT EXISTS (
@@ -38,8 +46,8 @@ END IF NOT EXISTS (
 	Title NVARCHAR(100) NOT NULL,
 	Created [DATETIMEOFFSET](7) NOT NULL,
 	CreatedBy NVARCHAR(50),
-	Modified [DATETIMEOFFSET](7) NOT NULL,
-	ModifiedBy NVARCHAR(50)
+	LastModified [DATETIMEOFFSET](7) NULL,
+	LastModifiedBy NVARCHAR(50)
 );
 
 END IF NOT EXISTS (
@@ -66,11 +74,8 @@ END IF NOT EXISTS (
 	Status NVARCHAR(50),
 	Created [DATETIMEOFFSET](7) NOT NULL,
 	CreatedBy NVARCHAR(50),
-	Modified [DATETIMEOFFSET](7) NOT NULL,
-	ModifiedBy NVARCHAR(50),
-	CONSTRAINT FK_DocumentRequests_EmployeeRecords FOREIGN KEY (EmployeeRecordsId) REFERENCES EmployeeRecords(Id),
-	CONSTRAINT FK_DocumentRequests_DocumentRecords FOREIGN KEY (DocumentRecordsId) REFERENCES DocumentRecords(Id),
-	CONSTRAINT FK_DocumentRequests_EmployeeNumber FOREIGN KEY (EmployeeNumber) REFERENCES EmployeeRecords(EmployeeNumber)
+	LastModified [DATETIMEOFFSET](7) NULL,
+	LastModifiedBy NVARCHAR(50) NULL,
 );
 
 END

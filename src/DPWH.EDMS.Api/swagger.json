@@ -2161,6 +2161,267 @@
         }
       }
     },
+    "/api/DocumentRequests/Query": {
+      "get": {
+        "tags": [
+          "DocumentRequests"
+        ],
+        "operationId": "Query document request by id",
+        "parameters": [
+          {
+            "name": "employeeId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmployeeBaseApiResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain; api-version=1.0": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/DocumentRequests/Create": {
+      "post": {
+        "tags": [
+          "DocumentRequests"
+        ],
+        "operationId": "Create DocumentRequest",
+        "parameters": [
+          {
+            "name": "employeeRecordId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "documentRecordsId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json; api-version=1.0": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateUpdateDocumentRequestModel"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmployeeBaseApiResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/DocumentRequests/Update": {
+      "put": {
+        "tags": [
+          "DocumentRequests"
+        ],
+        "operationId": "Update document request",
+        "parameters": [
+          {
+            "name": "employeeId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmployeeBaseApiResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain; api-version=1.0": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/DocumentRequests/Delete": {
+      "delete": {
+        "tags": [
+          "DocumentRequests"
+        ],
+        "operationId": "Delete document request",
+        "parameters": [
+          {
+            "name": "employeeId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmployeeBaseApiResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain; api-version=1.0": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/dpwhintegrations/employees/{employeeId}": {
       "get": {
         "tags": [
@@ -2374,6 +2635,308 @@
               "application/json; api-version=1.0": {
                 "schema": {
                   "$ref": "#/components/schemas/ImplementingOfficeArrayBaseApiResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/EmployeeRecords/Query": {
+      "get": {
+        "tags": [
+          "EmployeeRecord"
+        ],
+        "operationId": "Query employee request",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmployeeBaseApiResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain; api-version=1.0": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/EmployeeRecords/{id}": {
+      "get": {
+        "tags": [
+          "EmployeeRecord"
+        ],
+        "operationId": "Query employee request by id",
+        "parameters": [
+          {
+            "name": "employeeRecordId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmployeeBaseApiResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain; api-version=1.0": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "EmployeeRecord"
+        ],
+        "operationId": "Update employee",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json; api-version=1.0": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateUpdateEmployeeModel"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmployeeBaseApiResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "EmployeeRecord"
+        ],
+        "operationId": "Delete Employee",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmployeeBaseApiResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/EmployeeRecords": {
+      "post": {
+        "tags": [
+          "EmployeeRecord"
+        ],
+        "operationId": "Create Employee",
+        "requestBody": {
+          "content": {
+            "application/json; api-version=1.0": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateUpdateEmployeeModel"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmployeeBaseApiResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
                 }
               }
             }
@@ -8542,6 +9105,142 @@
         },
         "additionalProperties": false
       },
+      "CreateUpdateDocumentRequestModel": {
+        "type": "object",
+        "properties": {
+          "employeeNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "controlNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "employeeRecordsId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "claimedBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "authorizedRepresentative": {
+            "type": "string",
+            "nullable": true
+          },
+          "validId": {
+            "type": "string",
+            "nullable": true
+          },
+          "supportingDocument": {
+            "type": "string",
+            "nullable": true
+          },
+          "documentRecordsId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "dateRequested": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "requestedRecord": {
+            "type": "string",
+            "nullable": true
+          },
+          "purpose": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreateUpdateEmployeeModel": {
+        "type": "object",
+        "properties": {
+          "firstName": {
+            "type": "string",
+            "nullable": true
+          },
+          "middleName": {
+            "type": "string",
+            "nullable": true
+          },
+          "lastName": {
+            "type": "string",
+            "nullable": true
+          },
+          "office": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "mobileNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "employeeNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "regionCentralOffice": {
+            "type": "string",
+            "nullable": true
+          },
+          "districtBureauService": {
+            "type": "string",
+            "nullable": true
+          },
+          "position": {
+            "type": "string",
+            "nullable": true
+          },
+          "designation": {
+            "type": "string",
+            "nullable": true
+          },
+          "employeeId": {
+            "type": "string",
+            "nullable": true
+          },
+          "role": {
+            "type": "string",
+            "nullable": true
+          },
+          "userAccess": {
+            "type": "string",
+            "nullable": true
+          },
+          "department": {
+            "type": "string",
+            "nullable": true
+          },
+          "regionalOfficeRegion": {
+            "type": "string",
+            "nullable": true
+          },
+          "regionalOfficeProvince": {
+            "type": "string",
+            "nullable": true
+          },
+          "districtEngineeringOffice": {
+            "type": "string",
+            "nullable": true
+          },
+          "designationTitle": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "CreateUserCommand": {
         "type": "object",
         "properties": {
@@ -14665,8 +15364,8 @@
         "type": "oauth2",
         "flows": {
           "authorizationCode": {
-            "authorizationUrl": "https://localhost:5001/connect/authorize",
-            "tokenUrl": "https://localhost:5001/connect/token",
+            "authorizationUrl": "https://app-idp-ngobia-dpwh-dev.azurewebsites.net/connect/authorize",
+            "tokenUrl": "https://app-idp-ngobia-dpwh-dev.azurewebsites.net/connect/token",
             "scopes": {
               "dpwhedmsapi.write": "api read & write access"
             }

@@ -1,11 +1,19 @@
-﻿namespace DPWH.EDMS.Domain;
+﻿using DPWH.EDMS.Domain.Common;
 
-public class DocumentRecord
+namespace DPWH.EDMS.Domain;
+
+public class DocumentRecord : EntityBase
 {
-    public Guid Id { get; set; }
-    public string Title { get; set; }
-    public DateTimeOffset Created { get; set; }
-    public string CreatedBy { get; set; }
-    public DateTimeOffset Modified { get; set; }
-    public string ModifiedBy { get; set; }
+    private DocumentRecord()
+    {
+
+    }
+
+    public DocumentRecord Create(string title)
+    {
+        return new DocumentRecord { Id = Guid.NewGuid(), Title = title };
+    }
+
+    private Guid Id { get; set; }
+    private string Title { get; set; }
 }

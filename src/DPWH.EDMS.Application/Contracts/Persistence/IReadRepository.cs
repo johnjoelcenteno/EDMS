@@ -1,9 +1,11 @@
-﻿using DPWH.EDMS.Domain.Entities;
+﻿using DPWH.EDMS.Domain;
+using DPWH.EDMS.Domain.Entities;
 
 namespace DPWH.EDMS.Application.Contracts.Persistence;
 
 public interface IReadRepository
 {
+    IQueryable<EmployeeRecord> EmployeeRecordsView { get; }
     IQueryable<Asset> AssetsView { get; }
     IQueryable<InspectionRequest> InspectionRequestsView { get; }
     IQueryable<MaintenanceRequest> MaintenanceRequestsView { get; }

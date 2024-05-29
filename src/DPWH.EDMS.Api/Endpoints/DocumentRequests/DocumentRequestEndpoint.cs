@@ -1,7 +1,9 @@
-﻿using DPWH.EDMS.Application.Contracts.Services;
+﻿using DPWH.EDMS.Application;
+using DPWH.EDMS.Application.Contracts.Services;
 using DPWH.EDMS.Application.Models;
 using DPWH.EDMS.Application.Models.DpwhResponses;
 using DPWH.EDMS.Domain.Exceptions;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DPWH.EDMS.Api.Endpoints.DpwhIntegrations;
@@ -12,19 +14,62 @@ public static class DocumentRequestEndpoint
 
     public static IEndpointRouteBuilder MapDocumentRequestEndpoint(this IEndpointRouteBuilder app)
     {
-        app.MapGet(ApiEndpoints.DocumentRequest.Query, async (string employeeId, IDpwhApiService dpwhApiService) =>
+        app.MapGet(ApiEndpoints.DocumentRequestEndpoint.Query, async (string employeeId, IDpwhApiService dpwhApiService) =>
             {
                 return "Ok";
             })
-            .WithName("Query document request")
+            .WithName("Query document request by id")
             .WithTags(TagName)
-            .WithDescription("Get all document requests")
+            .WithDescription("Get document request by employee id")
             .WithApiVersionSet(ApiVersioning.VersionSet)
             .HasApiVersion(1.0)
             .Produces<BaseApiResponse<Employee>>()
             .Produces(StatusCodes.Status404NotFound)
             .Produces<ProblemDetails>(StatusCodes.Status400BadRequest)
             .Produces<ProblemDetails>(StatusCodes.Status500InternalServerError);
+
+        app.MapPost(ApiEndpoints.DocumentRequestEndpoint.Create, async (CreateUpdateDocumentRequestModel model, Guid employeeRecordId, Guid documentRecordsId, IMediator mediator) =>
+            {
+                var result = await mediator.Send(new CreateDocumentRequest(employeeRecordId, documentRecordsId, model));
+                return result;
+            })
+            .WithName("Create DocumentRequest")
+            .WithTags(TagName)
+            .WithDescription("Create document request")
+            .WithApiVersionSet(ApiVersioning.VersionSet)
+            .HasApiVersion(1.0)
+            .Produces<BaseApiResponse<Employee>>()
+            .Produces(StatusCodes.Status404NotFound)
+            .Produces<ProblemDetails>(StatusCodes.Status400BadRequest)
+            .Produces<ProblemDetails>(StatusCodes.Status500InternalServerError);
+
+        app.MapPut(ApiEndpoints.DocumentRequestEndpoint.Update, async (string employeeId, IMediator mediator) =>
+            {
+                return "Ok";
+            })
+            .WithName("Update document request")
+            .WithTags(TagName)
+            .WithDescription("Update document requests")
+            .WithApiVersionSet(ApiVersioning.VersionSet)
+            .HasApiVersion(1.0)
+            .Produces<BaseApiResponse<Employee>>()
+            .Produces(StatusCodes.Status404NotFound)
+            .Produces<ProblemDetails>(StatusCodes.Status400BadRequest)
+            .Produces<ProblemDetails>(StatusCodes.Status500InternalServerError);
+
+        app.MapDelete(ApiEndpoints.DocumentRequestEndpoint.Delete, async (string employeeId, IMediator mediator) =>
+        {
+            return "Ok";
+        })
+        .WithName("Delete document request")
+        .WithTags(TagName)
+        .WithDescription("Delete document requests")
+        .WithApiVersionSet(ApiVersioning.VersionSet)
+        .HasApiVersion(1.0)
+        .Produces<BaseApiResponse<Employee>>()
+        .Produces(StatusCodes.Status404NotFound)
+        .Produces<ProblemDetails>(StatusCodes.Status400BadRequest)
+        .Produces<ProblemDetails>(StatusCodes.Status500InternalServerError);
 
         return app;
     }
