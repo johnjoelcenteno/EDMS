@@ -1,0 +1,13 @@
+﻿<TelerikLoaderContainer Visible="@Visible">
+    <Template>
+        <div class="loader">
+            <div class="loader-circle"></div>
+            <span class="loader-text">@Text</span>
+        </div>
+    </Template>
+</TelerikLoaderContainer>
+
+@code {
+    [Parameter] public bool Visible { get; set; }
+    [Parameter] public string Text { get; set; } = "Loading...";
+}
