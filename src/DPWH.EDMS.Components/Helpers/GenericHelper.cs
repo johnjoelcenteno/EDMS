@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using Newtonsoft.Json;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
 
@@ -14,23 +15,23 @@ namespace DPWH.EDMS.Components.Helpers
         }
         public static List<Dto> GetListByDataSource<Dto>(ICollection<object> data)
         {
-            var jsonResult = JsonSerializer.Serialize(data);
-            var listResult = JsonSerializer.Deserialize<List<Dto>>(jsonResult)!.ToList();
+            var jsonResult = JsonConvert.SerializeObject(data);
+            var listResult = JsonConvert.DeserializeObject<List<Dto>>(jsonResult)!.ToList();
 
             return listResult;
         }
 
         public static ObservableCollection<Dto> GetObservableCollectionByDataSource<Dto>(ICollection<object> data)
         {
-            var jsonResult = JsonSerializer.Serialize(data);
-            var listResult = JsonSerializer.Deserialize<List<Dto>>(jsonResult)!.ToList();
+            var jsonResult = JsonConvert.SerializeObject(data);
+            var listResult = JsonConvert.DeserializeObject<List<Dto>>(jsonResult)!.ToList();
 
             return new ObservableCollection<Dto>(listResult);
         }
         public static T DeepCopy<T>(this T self)
         {
-            var serialized = JsonSerializer.Serialize(self);
-            return JsonSerializer.Deserialize<T>(serialized)!;
+            var serialized = JsonConvert.SerializeObject(self);
+            return JsonConvert.DeserializeObject<T>(serialized)!;
         }
         public static string GetDisplayValue(string? text, string emptyMessage = "N/A")
         {

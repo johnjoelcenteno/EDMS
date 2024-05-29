@@ -1,7 +1,11 @@
 ﻿@page "/user-management"
+@using DPWH.EDMS.Client.Shared.Models
+@using DPWH.EDMS.Components.Components
 
 @inherits UserManagementBase
 @attribute [Authorize(Policy = "RequireActiveRoles")]
+
+<EdmsLoader Visible="@IsLoading" />
 
 <TelerikBreadcrumb Data="@BreadcrumbItems" />
 <h3>User Management</h3>
@@ -10,10 +14,10 @@
     <div class="d-flex">
         <TelerikCard Class="um-card h-100">
             <CardHeader>
-                <h5 class="mb-0">Full License</h5>
+                <h5 clLicenseUsedcense</h5>
             </CardHeader>
             <CardBody>
-                <p class="um-value">@LicenseAccumulated/@LicenseLimit</p>
+                <p class="um-value">@LicenseUsed/@LicenseLimit</p>
                 <div class="d-flex flex-row justify-content-between">
                     <p class="mb-0 k-font-size-sm">Used/Available</p>
                     <p class="mb-0 k-font-size-sm">Total License: @LicenseLimit</p>
@@ -52,25 +56,25 @@
             </div>
             <CardSeparator Class="my-2"></CardSeparator>
             <div>
-                @if (EmployeeList != null && !XSmall)
+                @if (GridData != null && !XSmall)
                 {
-                    <TelerikGrid TItem="EmployeeModel"
+                    <TelerikGrid TItem="UserModel"
                                  @bind-PageSize="@PageSize"
                                  Height="@GridHeight"
                                  Sortable=true
-                                 Data="EmployeeList"
+                                 Data="GridData"
                                  OnStateChanged="@OnStateChanged"
                                  @ref="GridRef"
-                                 Context="employee">
+                                 Context="user">
                         <GridSettings>
                             <GridPagerSettings PageSizes="@PageSizes">
                             </GridPagerSettings>
                         </GridSettings>
                         <GridColumns>
-                            <GridColumn Field=@nameof(EmployeeModel.FirstName) Title="First Name" />
-                            <GridColumn Field=@nameof(EmployeeModel.LastName) Title="Last Name" />
-                            <GridColumn Field=@nameof(EmployeeModel.Email) Title="Email" />
-                            <GridColumn Field=@nameof(EmployeeModel.UserAccess) Title="User Access" />
+                            <GridColumn Field=@nameof(UserModel.FirstName) Title="First Name" />
+                            <GridColumn Field=@nameof(UserModel.LastName) Title="Last Name" />
+                            <GridColumn Field=@nameof(UserModel.Email) Title="Email" />
+                            <GridColumn Field=@nameof(UserModel.UserAccess) Title="User Access" />
                         </GridColumns>
                     </TelerikGrid>
                 }

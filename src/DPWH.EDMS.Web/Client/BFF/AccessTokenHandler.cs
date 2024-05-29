@@ -32,11 +32,11 @@ public class AccessTokenHandler : DelegatingHandler
             if (!string.IsNullOrEmpty(tokenRes))
             { 
                 request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", tokenRes);
-            }
-            else
-            {
-                _navManager.NavigateTo("/401");
-            }
+            }            
+        }
+        else
+        {
+            _navManager.NavigateTo("/bff/login", true);
         }
 
         return await base.SendAsync(request, cancellationToken);

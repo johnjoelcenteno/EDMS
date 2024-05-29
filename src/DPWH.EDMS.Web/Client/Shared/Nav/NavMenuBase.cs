@@ -33,7 +33,7 @@ public class NavMenuBase: RxBaseComponent
     protected List<IDisposable> RxSubscriptions { get; set; } = new();
 
     protected string DisplayName = "Juan Doe";
-    protected string Role = ApplicationRoles.EndUser;
+    protected string Role = ApplicationRoles.SuperAdmin;
 
     protected MenuModel? SelectedLevel1Item = null;
 

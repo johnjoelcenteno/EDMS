@@ -1,18 +1,21 @@
-﻿using DPWH.EDMS.Client.Shared.MockModels;
+﻿using DPWH.EDMS.Client.Shared.APIClient.Services.Licenses;
 using DPWH.EDMS.Client.Shared.Models;
-using DPWH.EDMS.Components;
 using DPWH.EDMS.Components.Components.ReusableGrid;
+using DPWH.EDMS.Web.Client.Shared.Services.ExceptionHandler;
+using DPWH.NGOBIA.Client.Shared.APIClient.Services.Users;
+using Microsoft.AspNetCore.Components;
 using Telerik.FontIcons;
-
 namespace DPWH.EDMS.Web.Client.Pages.UserManagement;
 
-public class UserManagementBase : GridBase<EmployeeModel>
+public class UserManagementBase : GridBase<UserModel>
 {
-    protected double LicenseLimit = 15;
-    protected double LicenseAccumulated = 1;
-    protected double TotalUsers = 633;
+    [Inject] public required IUsersService UserService { get; set; }
+    [Inject] public required ILicensesService LicensesService { get; set; }
+    [Inject] public required IExceptionHandlerService ExceptionHandlerService { get; set; }
 
-    protected List<EmployeeModel> EmployeeList = new List<EmployeeModel>();
+    protected double LicenseLimit = 0;
+    protected double LicenseUsed = 0;
+    protected double TotalUsers = 0;
 
     protected override void OnInitialized()
     {
@@ -22,40 +25,30 @@ public class UserManagementBase : GridBase<EmployeeModel>
             Text = "User Management",
             Url = "/user-management"
         });
+    }
 
-        EmployeeList = GenerateEmployeeRecords(5);
+    protected override async Task OnInitializedAsync()
+    {
+        ServiceCb = UserService.Query;
+        await LoadData();
+
+        await ExceptionHandlerService.HandleApiException(
+            async () =>
+            {
+                var licenseRes = await LicensesService.GetLicenseStatus();
+
+                if (licenseRes.Success)
+                {
+                    var licenseData = licenseRes.Data;
+                    LicenseUsed = licenseData.Limit - licenseData.Available;
+                    LicenseLimit = licenseData.Limit;
+                }
+            });       
     }
 
     protected double GetLicenseAccumulatedPercentage()
     {
-        return Math.Round((LicenseAccumulated / LicenseLimit) * 100, 2);
+        return Math.Round((LicenseUsed / LicenseLimit) * 100, 2);
     }
 
-    private List<EmployeeModel> GenerateEmployeeRecords(int count)
-    {
-        var employees = new List<EmployeeModel>();
-        var random = new Random();
-
-        for (int i = 1; i <= count; i++)
-        {
-            var employee = new EmployeeModel
-            {
-                ControlNumber = $"CN{i:D4}",
-                DateRequested = DateTime.Now.AddDays(-random.Next(0, 365)),
-                LastName = $"LastName{i}",
-                FirstName = $"FirstName{i}",
-                FullName = $"FirstName{i} M. LastName{i}",
-                MiddleInitial = "M",
-                Email= $"example{i}@sample.com",
-                RecordRequested = $"RecordType{random.Next(1, 5)}",
-                Purpose = $"Purpose{random.Next(1, 5)}",
-                Status = random.Next(0, 2) == 0 ? "Pending" : "Completed",
-                UserAccess = "EndUser"
-            };
-
-            employees.Add(employee);
-        }
-
-        return employees;
-    }
 }
