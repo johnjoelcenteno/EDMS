@@ -9,13 +9,13 @@ public class EntityBase
     public DateTimeOffset? LastModified { get; protected set; }
     public string? LastModifiedBy { get; protected set; }
 
-    protected void SetCreated(string createdBy)
+    public void SetCreated(string createdBy)
     {
         CreatedBy = createdBy;
         Created = DateTimeOffset.Now;
     }
 
-    protected void SetModified(string updatedBy)
+    public void SetModified(string updatedBy)
     {
         LastModifiedBy = updatedBy;
         LastModified = DateTimeOffset.Now;

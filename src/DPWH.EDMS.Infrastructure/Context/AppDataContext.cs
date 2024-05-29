@@ -2,6 +2,7 @@
 using DPWH.EDMS.Application.Contracts.Persistence;
 using DPWH.EDMS.Domain.Entities;
 using DPWH.EDMS.Domain.Enums;
+using DPWH.EDMS.Domain;
 
 namespace DPWH.EDMS.Infrastructure.Context;
 
@@ -11,6 +12,11 @@ public class AppDataContext : DbContext, IReadRepository, IWriteRepository
     {
 
     }
+    public DbSet<DocumentRequest> DocumentRequests { get; set; }
+    public IQueryable<DocumentRequest> DocumentRequestView => DocumentRequests.AsNoTracking();
+
+    public DbSet<EmployeeRecord> EmployeeRecords { get; set; }
+    public IQueryable<EmployeeRecord> EmployeeRecordsView => EmployeeRecords.AsNoTracking();
 
     public DbSet<Asset> Assets { get; set; }
     public IQueryable<Asset> AssetsView => Assets.AsNoTracking();

@@ -41,4 +41,9 @@
 	  <ProjectReference Include="..\DPWH.EDMS.IDP.Core\DPWH.EDMS.IDP.Core.csproj" />	  
 	  <ProjectReference Include="..\DPWH.EDMS.Shared\DPWH.EDMS.Shared.csproj" />
 	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Features/DocumentRequests/Queries/" />
+	  <Folder Include="Features/EmployeeRecords/Queries/" />
+	</ItemGroup>
 </Project>

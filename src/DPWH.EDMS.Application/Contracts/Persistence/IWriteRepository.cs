@@ -1,4 +1,5 @@
-﻿using DPWH.EDMS.Domain.Entities;
+﻿using DPWH.EDMS.Domain;
+using DPWH.EDMS.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 
@@ -6,6 +7,9 @@ namespace DPWH.EDMS.Application.Contracts.Persistence;
 
 public interface IWriteRepository
 {
+    DbSet<EmployeeRecord> EmployeeRecords { get; }
+    DbSet<DocumentRequest> DocumentRequests { get; }
+
     DbSet<Asset> Assets { get; }
     DbSet<InspectionRequest> InspectionRequests { get; }
     DbSet<InspectionRequestDocument> InspectionRequestDocuments { get; }

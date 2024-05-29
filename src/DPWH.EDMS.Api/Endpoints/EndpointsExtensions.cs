@@ -22,6 +22,10 @@ public static class EndpointsExtensions
 {
     public static IEndpointRouteBuilder MapApiEndpoints(this IEndpointRouteBuilder app)
     {
+        // new endpoints
+        app.MapDocumentRequestsEndpoints();
+        app.MapEmployeeRequestEndpointExtensions();
+
         app.MapRootEndpoints();
         app.MapAssetEndpoints();
         app.MapLookupsEndpoints();

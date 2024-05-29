@@ -1,6 +1,8 @@
-﻿namespace DPWH.EDMS.Domain;
+﻿using DPWH.EDMS.Domain.Common;
 
-public class EmployeeRecord
+namespace DPWH.EDMS.Domain;
+
+public class EmployeeRecord : EntityBase
 {
     public Guid Id { get; set; }
     public string FirstName { get; set; }
@@ -14,8 +16,12 @@ public class EmployeeRecord
     public string DistrictBureauService { get; set; }
     public string Position { get; set; }
     public string Designation { get; set; }
-    public DateTimeOffset Created { get; set; }
-    public string CreatedBy { get; set; }
-    public DateTimeOffset Modified { get; set; }
-    public string ModifiedBy { get; set; }
+    public string EmployeeId { get; set; }
+    public string Role { get; set; }
+    public string UserAccess { get; set; }
+    public string Department { get; set; }
+    public string RegionalOfficeRegion { get; set; }
+    public string RegionalOfficeProvince { get; set; }
+    public string DistrictEngineeringOffice { get; set; }
+    public string DesignationTitle { get; set; }
 }

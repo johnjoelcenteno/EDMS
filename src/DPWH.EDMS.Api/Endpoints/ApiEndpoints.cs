@@ -4,6 +4,27 @@ public static class ApiEndpoints
 {
     private const string ApiBase = "api";
 
+    public static class DocumentRequestEndpoint
+    {
+        private const string Base = $"{ApiBase}/DocumentRequests";
+
+        public const string Query = $"{Base}/Query";
+        public const string Create = $"{Base}/Create";
+        public const string Update = $"{Base}/Update";
+        public const string Delete = $"{Base}/Delete";
+    }
+
+    public static class EmployeeRecordEndpoints
+    {
+        private const string Base = $"{ApiBase}/EmployeeRecords";
+
+        public const string Query = $"{Base}/Query";
+        public const string QueryById = $"{Base}/{{id:guid}}";
+        public const string Create = $"{Base}";
+        public const string Update = $"{Base}/{{id:guid}}";
+        public const string Delete = $"{Base}/{{id:guid}}";
+    }
+
     public static class Assets
     {
         private const string Base = $"{ApiBase}/assets";
@@ -278,12 +299,5 @@ public static class ApiEndpoints
         public const string SyncEmployee = $"{Base}/employees/{{employeeId}}";
         public const string ArcgisSync = $"{Base}/arcgis";
         public const string Query = $"{Base}/query";
-    }
-
-    public static class DocumentRequest
-    {
-        private const string Base = $"{ApiBase}/documentrequest";
-        public const string Query = $"{Base}/query";
-        public const string Get = $"{Base}/{{id}}";
     }
 }
