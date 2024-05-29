@@ -4,8 +4,10 @@
 @using DPWH.EDMS.Web.Client.Shared.Services.Navigation
 
 @inherits LayoutComponentBase
-
 @inject NavRx NavRx
+
+<TelerikMediaQuery Media="(max-width: 480px)" OnChange="((changed) => XSmall = changed)"></TelerikMediaQuery>
+
 <TelerikRootComponent>
      <BlazoredToasts Position="ToastPosition.TopRight"
                     Timeout="10"
@@ -20,7 +22,7 @@
                 <NavMenu />
             </div>
 
-            <article class="content px-4" style="margin-left: @(IsSidebarExpanded ? "320px" : "64px");">
+            <article class="content px-4" style="margin-left: @(IsSidebarExpanded ? "320px" : "64px"); @(XSmall ? "margin-left: 0px; margin-top: 64px" : "")">
                 @Body
             </article>
         </main>
@@ -28,6 +30,7 @@
 </TelerikRootComponent>
 
 @code {
+    protected bool XSmall { get; set; }
     protected bool IsSidebarExpanded = false;
 
     protected override void OnInitialized()
