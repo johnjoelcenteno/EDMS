@@ -1,17 +1,26 @@
 ﻿@using Microsoft.AspNetCore.Components.Authorization
 @inherits NavMenuBase
 
+<TelerikMediaQuery Media="(max-width: 480px)" OnChange="((changed) => XSmall = changed)"></TelerikMediaQuery>
+
 <nav class="navbar" id="main-nav">
     <div class="container-fluid flex-nowrap">
-        <a class="navbar-brand" href="/" tabindex="-1">
+        <TelerikButton Class="nav-button collapse-expand"
+                       OnClick="OnXsSidebarCollapse"
+                       Size="@ThemeConstants.Button.Size.Large"
+                       ThemeColor="@ThemeConstants.Button.ThemeColor.Dark"
+                       FillMode="@ThemeConstants.Button.FillMode.Flat"
+                       Icon="@(IsNavMenuCollapsed ? SvgIcon.Rows : SvgIcon.X)">
+        </TelerikButton>
+        @* <a class="navbar-brand" href="/" tabindex="-1">
             <img src="_content/DPWH.EDMS.Components/images/dpwh_logo.svg" alt="logo-detailed" />
         </a>
         <div class="rv-right-nav">
-        </div>
+        </div> *@
     </div>
 </nav>
 
-<div style="width: @(DrawerRef.Expanded ? "320px" : "64px");" class="sidebar shadow d-flex flex-column flex-shrink-0">
+<div style="width: @(!XSmall && DrawerRef.Expanded ? "320px" : "64px");" class="sidebar shadow d-flex flex-column flex-shrink-0 @(XSmall && IsNavMenuCollapsed ? "d-none" : "") @(XSmall ? "xs-screen" : "")">
     <div class="sidebar-container">
         <div class="d-flex flex-row justify-content-center align-items-center">
             <img style="width: @(DrawerRef.Expanded ? "100px" : "80px");"
@@ -22,7 +31,7 @@
                 <ul class="nav nav-pills flex-column mb-auto mt-2">
                     <li class="d-flex align-items-center mt-4">
                         <NavLink title="Login" @onclick="@(() => NavManager.NavigateTo("/bff/login", true))" class="nav-link d-flex align-items-center flex-grow-1 p-4">
-                            <span class="bi me-2 material-symbols-outlined">login</span>@(DrawerRef.Expanded ? "Login" : "")
+                            <span class="bi me-2 material-symbols-outlined">login</span>@(XSmall || DrawerRef.Expanded ? "Login" : "")
                         </NavLink>
                     </li>
                 </ul>
@@ -32,7 +41,7 @@
                     <div class="avatar">
                         <img class="profile-img" src="_content/DPWH.EDMS.Components/images/avatar_male.jpg" />
                     </div>
-                    @if (DrawerRef.Expanded)
+                    @if (XSmall || DrawerRef.Expanded)
                     {
                         <div class="details ps-2">
                             <div class="name">@DisplayName</div>
@@ -43,7 +52,7 @@
                 <ul class="nav nav-pills flex-column mb-auto mt-2">
                     @if (SelectedLevel1Item == null) // Show this view if no child/dropdown is selected ( DEFAULT VIEW )
                     {
-                        if (DrawerRef.Expanded)
+                        if (XSmall || DrawerRef.Expanded)
                         {
                             <div class="menu-divider"></div>
                         }
@@ -54,7 +63,7 @@
                             if (level0Item.Children == null)
                             {
                                 <li class="d-flex align-items-center">
-                                    <NavLink title="@level0Item.Text" @onclick="@(() => NavManager.NavigateTo(level0Item.Url!))"
+                                    <NavLink title="@level0Item.Text" @onclick="@(() => { OnXsSidebarCollapse(); NavManager.NavigateTo(level0Item.Url!); })"
                                              Match="@( level0Item.Url == "" ? NavLinkMatch.All : NavLinkMatch.Prefix )"
                                              href="@level0Item.Url"
                                              class="nav-link d-flex align-items-center flex-grow-1 p-4"
@@ -65,7 +74,7 @@
                                                 @level0Item.Icon
                                             </span>
                                         }
-                                        @(DrawerRef.Expanded ? level0Item.Text : "")
+                                        @(XSmall || DrawerRef.Expanded ? level0Item.Text : "")
                                     </NavLink>
                                 </li>
 
@@ -82,7 +91,7 @@
                                             </span>
                                         }
 
-                                        @if (DrawerRef.Expanded)
+                                        @if (XSmall || DrawerRef.Expanded)
                                         {
                                             @(level0Item.Text)
                                             <span class="material-symbols-outlined xl ms-auto">@(level0Item.Expanded ? "expand_less" : "expand_more")</span>
@@ -102,7 +111,7 @@
                                                                 @level1Item.Icon
                                                             </span>
                                                         }
-                                                        @if (DrawerRef.Expanded)
+                                                        @if (XSmall || DrawerRef.Expanded)
                                                         {
                                                             @(level1Item.Text)
                                                             if (level1Item.Children != null && level1Item.Children.Count() > 0)
@@ -119,7 +128,7 @@
                             }
                         }
 
-                        @if (DrawerRef.Expanded)
+                        @if (XSmall || DrawerRef.Expanded)
                         {
                             <div class="menu-divider"></div>
                         }
@@ -130,7 +139,7 @@
                             if (level0Item.Children == null)
                             {
                                 <li class="d-flex align-items-center">
-                                    <NavLink title="@level0Item.Text" @onclick="@(() => NavManager.NavigateTo(level0Item.Url!))"
+                                    <NavLink title="@level0Item.Text" @onclick="@(() => { OnXsSidebarCollapse(); NavManager.NavigateTo(level0Item.Url!); })"
                                              Match="@( level0Item.Url == "" ? NavLinkMatch.All : NavLinkMatch.Prefix )"
                                              href="@level0Item.Url"
                                              class="nav-link d-flex align-items-center flex-grow-1 p-4"
@@ -141,7 +150,7 @@
                                                 @level0Item.Icon
                                             </span>
                                         }
-                                        @(DrawerRef.Expanded ? level0Item.Text : "")
+                                        @(XSmall || DrawerRef.Expanded ? level0Item.Text : "")
                                     </NavLink>
                                 </li>
 
@@ -158,7 +167,7 @@
                                             </span>
                                         }
 
-                                        @if (DrawerRef.Expanded)
+                                        @if (XSmall || DrawerRef.Expanded)
                                         {
                                             @(level0Item.Text)
                                             <span class="material-symbols-outlined xl ms-auto">@(level0Item.Expanded ? "expand_less" : "expand_more")</span>
@@ -178,7 +187,7 @@
                                                                 @level1Item.Icon
                                                             </span>
                                                         }
-                                                        @if (DrawerRef.Expanded)
+                                                        @if (XSmall || DrawerRef.Expanded)
                                                         {
                                                             @(level1Item.Text)
                                                             if (level1Item.Children != null && level1Item.Children.Count() > 0)
@@ -206,7 +215,7 @@
                             if (level0Item.Children == null)
                             {
                                 <li class="d-flex align-items-center">
-                                    <NavLink title="@level0Item.Text" @onclick="@(() => NavManager.NavigateTo(level0Item.Url!))"
+                                    <NavLink title="@level0Item.Text" @onclick="@(() => { OnXsSidebarCollapse(); NavManager.NavigateTo(level0Item.Url!); })"
                                              Match="@( level0Item.Url == "" ? NavLinkMatch.All : NavLinkMatch.Prefix )"
                                              href="@level0Item.Url"
                                              class="nav-link d-flex align-items-center flex-grow-1 p-4"
@@ -217,7 +226,7 @@
                                                 @level0Item.Icon
                                             </span>
                                         }
-                                        @(DrawerRef.Expanded ? level0Item.Text : "")
+                                        @(XSmall || DrawerRef.Expanded ? level0Item.Text : "")
                                     </NavLink>
                                 </li>
 
@@ -234,7 +243,7 @@
                                             </span>
                                         }
 
-                                        @if (DrawerRef.Expanded)
+                                        @if (XSmall || DrawerRef.Expanded)
                                         {
                                             @(level0Item.Text)
                                             <span class="material-symbols-outlined xl ms-auto">@(level0Item.Expanded ? "expand_less" : "expand_more")</span>
@@ -254,7 +263,7 @@
                                                                 @level1Item.Icon
                                                             </span>
                                                         }
-                                                        @if (DrawerRef.Expanded)
+                                                        @if (XSmall || DrawerRef.Expanded)
                                                         {
                                                             @(level1Item.Text)
                                                             if (level1Item.Children != null && level1Item.Children.Count() > 0)
@@ -274,7 +283,7 @@
                         // LOGUT
                         <li class="d-flex align-items-center">
                             <NavLink title="Logout" @onclick="BeginSignOut" class="nav-link d-flex align-items-center flex-grow-1 p-4">
-                                <span class="bi me-2 material-symbols-outlined">logout</span>@(DrawerRef.Expanded ? "Logout" : "")
+                                <span class="bi me-2 material-symbols-outlined">logout</span>@(XSmall || DrawerRef.Expanded ? "Logout" : "")
                             </NavLink>
                         </li>
                     }
@@ -296,7 +305,7 @@
                                 foreach (var level2Item in level2Items)
                                 {
                                     <li class="d-flex align-items-center">
-                                        <NavLink title="@level2Item.Text" @onclick="@(() => NavManager.NavigateTo(level2Item.Url!))"
+                                        <NavLink title="@level2Item.Text" @onclick="@(() => { OnXsSidebarCollapse(); NavManager.NavigateTo(level2Item.Url!); })"
                                                  Match="@( level2Item.Url == "" ? NavLinkMatch.All : NavLinkMatch.Prefix )"
                                                  href="@level2Item.Url"
                                                  class="nav-link d-flex align-items-center flex-grow-1 p-4"
@@ -307,7 +316,7 @@
                                                     @level2Item.Icon
                                                 </span>
                                             }
-                                            @(DrawerRef.Expanded ? level2Item.Text : "")
+                                            @(XSmall || DrawerRef.Expanded ? level2Item.Text : "")
                                         </NavLink>
                                     </li>
                                 }
@@ -353,5 +362,16 @@
         background-color: #fff !important;
         color: #634792;
         font-weight: 600;
+    }
+
+    .xs-screen {
+        z-index: 3 !important;
+        width: 100% !important;
+        margin-top: 58px !important;
+    }
+
+    .nav-button {
+        color: #7F56D9;
+        transform: scale(1.3);
     }
 </style>

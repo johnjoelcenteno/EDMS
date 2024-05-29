@@ -7,8 +7,8 @@
     width: 100%;
     left: 0;
     z-index: 3;
-    padding-left: 30px;
-    padding-right: 30px;
+    /*padding-left: 30px;
+    padding-right: 30px;*/
 }
 
     #main-nav .navbar-brand img {
@@ -33,7 +33,6 @@
 
 .menu-divider {
     height: 1px;
-    width: 310px;
     margin: 5px;
     background-color: #ccccccd1;
     padding: 0px 111px;

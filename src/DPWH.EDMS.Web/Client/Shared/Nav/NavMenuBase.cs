@@ -1,14 +1,11 @@
 ﻿using DPWH.EDMS.Client.Shared.Configurations;
-using DPWH.EDMS.Components;
-using DPWH.EDMS.Web.Client.Shared.Services.Navigation;
 using DPWH.EDMS.Client.Shared.Models;
-using Microsoft.AspNetCore.Components;
-using Telerik.Blazor.Components;
-using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
-using Microsoft.AspNetCore.Components.Web;
-using Microsoft.AspNetCore.Components.Authorization;
+using DPWH.EDMS.Components;
 using DPWH.EDMS.IDP.Core.Constants;
-using System.Security.Claims;
+using DPWH.EDMS.Web.Client.Shared.Services.Navigation;
+using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
+using Telerik.Blazor.Components;
 
 namespace DPWH.EDMS.Web.Client.Shared.Nav;
 
@@ -22,11 +19,12 @@ public class NavMenuBase: RxBaseComponent
     [Inject] public required NavigationManager NavManager { get; set; }
 
     protected bool IsNavMenuCollapsed = false;
+
     protected TelerikDrawer<MenuModel> DrawerRef = new();
     protected List<MenuModel> NavMenus { get; set; } = new List<MenuModel>();
     protected List<MenuModel> NavMenus2 { get; set; } = new List<MenuModel>();
     protected List<MenuModel> NavSettings { get; set; } = new List<MenuModel>();
-    //protected bool XSmall { get; set; }
+    protected bool XSmall { get; set; }
     //protected bool Small { get; set; }
     //protected bool Medium { get; set; }
     //protected bool Large { get; set; }
@@ -143,4 +141,9 @@ public class NavMenuBase: RxBaseComponent
         }
     }
 
+    protected void OnXsSidebarCollapse()
+    {
+        IsNavMenuCollapsed = !IsNavMenuCollapsed;
+        StateHasChanged();
+    }
 }
