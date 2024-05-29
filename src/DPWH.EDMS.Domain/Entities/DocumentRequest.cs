@@ -4,17 +4,54 @@ namespace DPWH.EDMS.Domain;
 
 public class DocumentRequest : EntityBase
 {
-    public Guid Id { get; set; }
-    public string EmployeeNumber { get; set; }
-    public string ControlNumber { get; set; }
-    public Guid EmployeeRecordsId { get; set; }
-    public string ClaimedBy { get; set; }
-    public string AuthorizedRepresentative { get; set; }
-    public string ValidId { get; set; }
-    public string SupportingDocument { get; set; }
-    public Guid DocumentRecordsId { get; set; }
-    public DateTimeOffset DateRequested { get; set; }
-    public string RequestedRecord { get; set; }
-    public string Purpose { get; set; }
-    public string Status { get; set; }
+    private DocumentRequest()
+    {
+
+    }
+
+    public static DocumentRequest Create(
+       string employeeNumber,
+       string controlNumber,
+       Guid employeeRecordsId,
+       string claimedBy,
+       string authorizedRepresentative,
+       string validId,
+       string supportingDocument,
+       Guid documentRecordsId,
+       DateTimeOffset dateRequested,
+       string requestedRecord,
+       string purpose,
+       string status
+    )
+    {
+        return new DocumentRequest
+        {
+            EmployeeNumber = employeeNumber,
+            ControlNumber = controlNumber,
+            EmployeeRecordsId = employeeRecordsId,
+            ClaimedBy = claimedBy,
+            AuthorizedRepresentative = authorizedRepresentative,
+            ValidId = validId,
+            SupportingDocument = supportingDocument,
+            DocumentRecordsId = documentRecordsId,
+            DateRequested = dateRequested,
+            RequestedRecord = requestedRecord,
+            Purpose = purpose,
+            Status = status,
+        };
+    }
+
+    private Guid Id { get; set; }
+    private string EmployeeNumber { get; set; }
+    private string ControlNumber { get; set; }
+    private Guid EmployeeRecordsId { get; set; }
+    private string ClaimedBy { get; set; }
+    private string AuthorizedRepresentative { get; set; }
+    private string ValidId { get; set; }
+    private string SupportingDocument { get; set; }
+    private Guid DocumentRecordsId { get; set; }
+    private DateTimeOffset DateRequested { get; set; }
+    private string RequestedRecord { get; set; }
+    private string Purpose { get; set; }
+    private string Status { get; set; }
 }

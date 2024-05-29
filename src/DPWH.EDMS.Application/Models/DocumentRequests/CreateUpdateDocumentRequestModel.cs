@@ -22,21 +22,19 @@ public static class CreateUpdateDocumentRequestMapper
 {
     public static DocumentRequest MapToEntity(CreateUpdateDocumentRequestModel model, Guid employeeRecordsId, Guid documentRecordsId)
     {
-        return new DocumentRequest()
-        {
-            Id = Guid.NewGuid(),
-            EmployeeNumber = model.EmployeeNumber,
-            ControlNumber = model.ControlNumber,
-            EmployeeRecordsId = employeeRecordsId,
-            ClaimedBy = model.ClaimedBy,
-            AuthorizedRepresentative = model.AuthorizedRepresentative,
-            ValidId = model.ValidId,
-            SupportingDocument = model.SupportingDocument,
-            DocumentRecordsId = documentRecordsId,
-            DateRequested = model.DateRequested,
-            RequestedRecord = model.RequestedRecord,
-            Purpose = model.Purpose,
-            Status = model.Status,
-        };
+        return DocumentRequest.Create(
+            model.EmployeeNumber,
+            model.ControlNumber,
+            model.EmployeeRecordsId,
+            model.ClaimedBy,
+            model.AuthorizedRepresentative,
+            model.ValidId,
+            model.SupportingDocument,
+            model.DocumentRecordsId,
+            model.DateRequested,
+            model.RequestedRecord,
+            model.Purpose,
+            model.Status
+        );
     }
 }

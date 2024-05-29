@@ -19,17 +19,28 @@ public class UpdateEmployee : IRequestHandler<UpdateEmployeeRequest, Guid>
     {
         var record = await _writeRepository.EmployeeRecords.FirstOrDefaultAsync(x => x.Id == request.Id);
         if (record is null) throw new Exception("No records found");
-        record.FirstName = request.model.FirstName;
-        record.MiddleName = request.model.MiddleName;
-        record.LastName = request.model.LastName;
-        record.Office = request.model.Office;
-        record.Email = request.model.Email;
-        record.MobileNumber = request.model.MobileNumber;
-        record.EmployeeNumber = request.model.EmployeeNumber;
-        record.RegionCentralOffice = request.model.RegionCentralOffice;
-        record.DistrictBureauService = request.model.DistrictBureauService;
-        record.Position = request.model.Position;
-        record.Designation = request.model.Designation;
+
+        record.Update(
+            request.model.FirstName,
+            request.model.MiddleName,
+            request.model.LastName,
+            request.model.Office,
+            request.model.Email,
+            request.model.MobileNumber,
+            request.model.EmployeeNumber,
+            request.model.RegionCentralOffice,
+            request.model.DistrictBureauService,
+            request.model.Position,
+            request.model.Designation,
+            request.model.EmployeeId,
+            request.model.Role,
+            request.model.UserAccess,
+            request.model.Department,
+            request.model.RegionalOfficeRegion,
+            request.model.RegionalOfficeProvince,
+            request.model.DistrictEngineeringOffice,
+            request.model.DesignationTitle
+        );
         record.SetModified("Testing");
 
         _writeRepository.EmployeeRecords.Update(record);

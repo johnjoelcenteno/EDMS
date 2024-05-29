@@ -29,28 +29,26 @@ public static class CreateUpdateEmployeeMappers
 {
     public static EmployeeRecord MapModelToEntity(CreateUpdateEmployeeModel model)
     {
-        return new EmployeeRecord()
-        {
-            Id = Guid.NewGuid(),
-            FirstName = model.FirstName,
-            MiddleName = model.MiddleName,
-            LastName = model.LastName,
-            Office = model.Office,
-            Email = model.Email,
-            MobileNumber = model.MobileNumber,
-            EmployeeNumber = model.EmployeeNumber,
-            RegionCentralOffice = model.RegionCentralOffice,
-            DistrictBureauService = model.DistrictBureauService,
-            Position = model.Position,
-            Designation = model.Designation,
-            EmployeeId = model.EmployeeId,
-            Role = model.Role,
-            UserAccess = model.UserAccess,
-            Department = model.Department,
-            RegionalOfficeRegion = model.RegionalOfficeRegion,
-            RegionalOfficeProvince = model.RegionalOfficeProvince,
-            DistrictEngineeringOffice = model.DistrictEngineeringOffice,
-            DesignationTitle = model.DesignationTitle,
-        };
+        return EmployeeRecord.Create(
+            model.FirstName,
+            model.MiddleName,
+            model.LastName,
+            model.Office,
+            model.Email,
+            model.MobileNumber,
+            model.EmployeeNumber,
+            model.RegionCentralOffice,
+            model.DistrictBureauService,
+            model.Position,
+            model.Designation,
+            model.EmployeeId,
+            model.Role,
+            model.UserAccess,
+            model.Department,
+            model.RegionalOfficeRegion,
+            model.RegionalOfficeProvince,
+            model.DistrictEngineeringOffice,
+            model.DesignationTitle
+        );
     }
 }
