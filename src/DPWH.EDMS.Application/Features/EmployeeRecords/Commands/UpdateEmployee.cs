@@ -43,7 +43,6 @@ public class UpdateEmployee : IRequestHandler<UpdateEmployeeRequest, Guid>
         );
         record.SetModified("Testing");
 
-        _writeRepository.EmployeeRecords.Update(record);
         await _writeRepository.SaveChangesAsync();
         return record.Id;
     }
