@@ -64,6 +64,8 @@ public class UserAccessLevelService : IUserAccessLevelService
             userList.AddRange(users);
         }
 
-        return new GetLicenseStatusResult(maxLimit, maxLimit - userList.Count);
+        var endUsers = await _userManager.GetUsersForClaimAsync(new Claim("role", ApplicationRoles.EndUser.ToString()));
+
+        return new GetLicenseStatusResult(maxLimit, maxLimit - userList.Count, EndUsersCount: endUsers.Count);
     }
 }

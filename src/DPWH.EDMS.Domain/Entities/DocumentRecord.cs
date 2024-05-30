@@ -14,6 +14,5 @@ public class DocumentRecord : EntityBase
         return new DocumentRecord { Id = Guid.NewGuid(), Title = title };
     }
 
-    private Guid Id { get; set; }
     private string Title { get; set; }
 }
