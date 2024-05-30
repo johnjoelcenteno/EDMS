@@ -25,7 +25,7 @@ variables:
   StorageAccountConnectionString: '$(StorageAccountConnectionString)'  
   EnableSwaggerUI: 'true'
   Environment: 'Development'
-  CorsUrls: 'https://localhost:7081,https://localhost:7281,https://dpwh-edms-dev.movementsoft.com'
+  CorsUrls: 'https://localhost:7082,https://localhost:7281,https://dpwh-edms-dev.movementsoft.com'
   IdentityServerUrl: 'https://app-idp-ngobia-dpwh-dev.azurewebsites.net'
 
   KeyVaultName: 'kv-edms-dpwh-dev'
