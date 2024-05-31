@@ -1,5 +1,29 @@
 ﻿@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 
+:root {
+    --edms-primary-background-color: #211d70;
+    --edms-primary-text-color: #38339B;
+    --edms-text-color: #38339B;
+    --edms-danger-color: #DC3545;
+    --edms-secondary-color: #eb4a1f;
+}
+
+.edms-primary-background-color {
+    background-color: var(--edms-primary-background-color);
+}
+.edms-primary-text-color {
+    color: var(--edms-primary-text-color);
+}
+.edms-text-color {
+    color: var(--edms-text-color);
+}
+.edms-danger-color {
+    color: var(--edms-danger-color);
+}
+.edms-secondary-color {
+    color: var(--edms-secondary-color);
+}
+
 html, body {
     font-family: "Roboto", sans-serif;
     background-color: #f1f3f4;
@@ -97,8 +121,8 @@ a, .btn-link {
     width: 120px;
     height: 120px;
     border-radius: 50%;
-    background-color: #7f56d9;
-    background-image: url('/dpwh_logo.svg'); /* Path to your image */
+    background-color: #eb4a1f;
+    background-image: url('/dpwh_dark.png'); /* Path to your image */
     background-size: calc(100% - 10px) calc(100% - 10px); /* Adjust size to account for padding */
     background-repeat: no-repeat;
     background-position: center;
@@ -114,7 +138,7 @@ a, .btn-link {
 }
 
 .loader-text {
-    color: #7e3af2;
+    color: #211d70;
     font-size: 20px;
     font-weight: bold;
     margin-top: 16px;
@@ -280,6 +304,6 @@ a, .btn-link {
 }
 
 .edms-text-header-small {
-    color: #7F56D9;
+    color: var(--edms-primary-text-color);
     font-weight: bold;
 }

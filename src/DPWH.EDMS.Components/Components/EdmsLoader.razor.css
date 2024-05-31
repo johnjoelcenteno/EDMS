@@ -17,8 +17,8 @@
     width: 120px;
     height: 120px;
     border-radius: 50%;
-    background-color: #7f56d9;
-    background-image: url('/dpwh_logo.svg'); /* Path to your image */
+    background-color: #eb4a1f;
+    background-image: url('/dpwh_dark.png'); /* Path to your image */
     background-size: calc(100% - 10px) calc(100% - 10px); /* Adjust size to account for padding */
     background-repeat: no-repeat;
     background-position: center;
@@ -34,7 +34,7 @@
 }
 
 .loader-text {
-    color: #7e3af2;
+    color: #211d70;
     font-size: 20px;
     font-weight: bold;
     margin-top: 16px;

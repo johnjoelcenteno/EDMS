@@ -21,7 +21,7 @@ public class UserManagementBase : GridBase<UserModel>
     {
         BreadcrumbItems.Add(new BreadcrumbModel
         {
-            Icon = FontIcon.Rows,
+            Icon = "group",
             Text = "User Management",
             Url = "/user-management"
         });
@@ -42,6 +42,7 @@ public class UserManagementBase : GridBase<UserModel>
                     var licenseData = licenseRes.Data;
                     LicenseUsed = licenseData.Limit - licenseData.Available;
                     LicenseLimit = licenseData.Limit;
+                    TotalUsers = licenseData.EndUsersCount;
                 }
             });       
     }

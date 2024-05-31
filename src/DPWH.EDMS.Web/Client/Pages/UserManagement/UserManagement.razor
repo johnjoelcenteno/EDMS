@@ -1,13 +1,12 @@
 ﻿@page "/user-management"
 @using DPWH.EDMS.Client.Shared.Models
-@using DPWH.EDMS.Components.Components
 
 @inherits UserManagementBase
 @attribute [Authorize(Policy = "RequireActiveRoles")]
 
 <EdmsLoader Visible="@IsLoading" />
 
-<TelerikBreadcrumb Data="@BreadcrumbItems" />
+<EdmsBreadcrumbs Data="@BreadcrumbItems" />
 <h3>User Management</h3>
 <hr />
 <div class="d-flex flex-row gap-3 flex-wrap">
@@ -129,7 +128,6 @@
     .um-card {
         display: flex;
         width: 450px;
-
     }
 
         .um-card .k-card-header {
@@ -138,7 +136,7 @@
         }
 
         .um-card .k-card-body .um-value {
-            color: #7F56D9;
+            color: #38339b;
             font-size: 40px;
             font-weight: 400;
         }

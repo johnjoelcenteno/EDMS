@@ -10,7 +10,7 @@ public class UserProfileBase : RxBaseComponent
     {
         BreadcrumbItems.Add(new BreadcrumbModel
         {
-            Icon = FontIcon.Rows,
+            Icon = "person",
             Text = "Profile",
             Url = "/profile"
         });
