@@ -34,7 +34,8 @@ public static class CreateUpdateDocumentRequestMapper
             model.DateRequested,
             model.RequestedRecord,
             model.Purpose,
-            model.Status
+            model.Status,
+            string.Empty
         );
     }
 }

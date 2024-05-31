@@ -91,8 +91,7 @@ public class EmployeeRecord : EntityBase
         DistrictEngineeringOffice = districtEngineeringOffice;
         DesignationTitle = designationTitle;
     }
-
-    private Guid Id { get; set; }
+    
     private string FirstName { get; set; }
     private string MiddleName { get; set; }
     private string LastName { get; set; }

@@ -4,10 +4,7 @@ namespace DPWH.EDMS.Domain;
 
 public class DocumentRequest : EntityBase
 {
-    private DocumentRequest()
-    {
-
-    }
+    private DocumentRequest() { }
 
     public static DocumentRequest Create(
        string employeeNumber,
@@ -21,10 +18,11 @@ public class DocumentRequest : EntityBase
        DateTimeOffset dateRequested,
        string requestedRecord,
        string purpose,
-       string status
+       string status,
+       string createdBy
     )
     {
-        return new DocumentRequest
+        var entity = new DocumentRequest
         {
             EmployeeNumber = employeeNumber,
             ControlNumber = controlNumber,
@@ -39,9 +37,11 @@ public class DocumentRequest : EntityBase
             Purpose = purpose,
             Status = status,
         };
+
+        entity.SetCreated(createdBy);
+        return entity;
     }
 
-    private Guid Id { get; set; }
     private string EmployeeNumber { get; set; }
     private string ControlNumber { get; set; }
     private Guid EmployeeRecordsId { get; set; }
