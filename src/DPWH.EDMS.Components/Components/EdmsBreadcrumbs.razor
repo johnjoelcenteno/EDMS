@@ -1,0 +1,38 @@
+﻿@using DPWH.EDMS.Client.Shared.Models
+<TelerikBreadcrumb Data="@Data">
+    <ItemTemplate>
+        <div class="item ps-3" role="button">
+            @{
+                var item = context as BreadcrumbModel;
+            }
+            <p class="mb-0 bc-item"><span class="bc-icon"><i class="material-symbols-outlined">@item.Icon</i></span> @item.Text</p>
+
+        </div>
+    </ItemTemplate>
+</TelerikBreadcrumb>
+
+@code {
+    [Parameter] public required List<BreadcrumbModel> Data { get; set; }
+}
+
+<style>
+    .k-breadcrumb-item  .bc-item {        
+        color: #38339B;
+    }
+    
+    .k-breadcrumb-item  .bc-icon {
+        position: relative;
+        color: #38339B;
+    }
+
+    .k-breadcrumb-item:first-child  span.bc-icon i {
+        top: -10px !important;
+        left: -12px !important;    
+    }
+    .k-breadcrumb-item  span.bc-icon i {
+            position: absolute;
+            font-size: 20px;
+            left: -22px;
+            top: 2px;
+    }
+</style>

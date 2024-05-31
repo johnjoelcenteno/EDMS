@@ -23,4 +23,8 @@
 	  <ProjectReference Include="..\..\DPWH.EMDS.Shared\DPWH.EDMS.Client.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\fonts\" />
+  </ItemGroup>
+
 </Project>

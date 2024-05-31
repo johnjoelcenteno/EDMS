@@ -8,6 +8,22 @@
     --edms-secondary-color: #eb4a1f;
 }
 
+.edms-primary-background-color {
+    background-color: var(--edms-primary-background-color);
+}
+.edms-primary-text-color {
+    color: var(--edms-primary-text-color);
+}
+.edms-text-color {
+    color: var(--edms-text-color);
+}
+.edms-danger-color {
+    color: var(--edms-danger-color);
+}
+.edms-secondary-color {
+    color: var(--edms-secondary-color);
+}
+
 html, body {
     font-family: "Roboto", sans-serif;
     background-color: #f1f3f4;
