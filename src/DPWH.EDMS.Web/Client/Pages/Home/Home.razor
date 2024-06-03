@@ -4,24 +4,47 @@
 @attribute [Authorize(Policy = "RequireActiveRoles")]
 
 <TelerikMediaQuery Media="(max-width: 480px)" OnChange="((changed) => XSmall = changed)"></TelerikMediaQuery>
+<TelerikMediaQuery Media="(max-width: 960px)" OnChange="((changed) => Small = changed)"></TelerikMediaQuery>
+<TelerikMediaQuery Media="(max-width: 1280px)" OnChange="((changed) => Medium = changed)"></TelerikMediaQuery>
+<TelerikMediaQuery Media="(min-width: 1281px)" OnChange="((changed) => Large = changed)"></TelerikMediaQuery>
 
-<TelerikCard Width="100%">
-    <CardHeader>
-        <h3 class="mb-0">Overview</h3>
+<TelerikCard Width="100%" Class="ch-card mb-4">
+    <CardHeader Class="ch-card">
+        <h3 class="mb-0">Overview </h3>
     </CardHeader>
 </TelerikCard>
-<div class="d-flex flex-row flex-wrap gap-3 mt-3">
-    @foreach (var status in OverviewStatusList)
-    {
-        <TelerikCard Class="flex-grow-1">
-            <CardHeader>
-                <h5 class="mb-0">@status.Id</h5>
-                <h2 class="p-2 mb-0">@status.Name</h2>
-            </CardHeader>
-        </TelerikCard>
-    }
-</div>
-
+<TelerikCard Width="100%">
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="col d-flex flex-row flex-wrap gap-3">
+                @foreach (var status in OverviewStatusList)
+                {
+                    <TelerikCard Class="ch-card-flex flex-grow-1">
+                        <CardHeader Class="ch-card-flex">
+                            <h6 style="font-size: 12px;" class="mb-0">@status.Id</h6>
+                            <h1 class="mb-0">@status.Name</h1>
+                        </CardHeader>
+                    </TelerikCard>
+                }
+            </div>
+            <div class="col d-flex flex-row flex-wrap m-0 pr-0">
+                @foreach (var status in SecondStatusList)
+                {
+                    <TelerikCard Class="ch-card-flex flex-grow-1">
+                        <CardHeader Class="ch-card-flex d-inline-flex">
+                            <strong style="font-size: 12px; align-content:center;" class="mb-0">@status.Id</strong>
+                            <span class="ov-circle">@status.Name</span>
+                        </CardHeader>
+                    </TelerikCard>
+                }
+            </div>
+        </div>
+        <div class="col-lg-4 d-flex flex-wrap flex-row justify-content-center align-content-center">
+            <img class="inspectionBanner" src="_content/DPWH.EDMS.Components/images/inspection-banner.svg" alt="inspection-banner" />
+        </div>
+    </div>
+    
+</TelerikCard>
 <div class="d-flex flex-row mt-3">
     <TelerikCard Width="100%">
         <CardBody>
@@ -37,6 +60,7 @@
                     <TelerikGrid TItem="EmployeeModel"
                                  @bind-PageSize="@PageSize"
                                  Height="@GridHeight"
+                                 FilterMode="GridFilterMode.FilterRow"
                                  Sortable=true
                                  Data="EmployeeList"
                                  OnStateChanged="@OnStateChanged"
@@ -47,10 +71,45 @@
                             </GridPagerSettings>
                         </GridSettings>
                         <GridColumns>
-                            <GridColumn Field=@nameof(EmployeeModel.ControlNumber) Title="Control No." />
-                            <GridColumn Field=@nameof(EmployeeModel.DateRequested) Title="Date Requested" />
+                            <GridColumn Field=@nameof(EmployeeModel.ControlNumber) Title="Control No." Filterable = "false" />
                             <GridColumn Field=@nameof(EmployeeModel.FullName) Title="Full Name" />
-                            <GridColumn Field=@nameof(EmployeeModel.RecordRequested) Title="Records Requested" />
+                            <GridColumn Field=@nameof(EmployeeModel.RecordRequested) Title="Records Requested" ShowFilterCellButtons="false">
+                                <FilterCellTemplate>
+                                    <TelerikDropDownList 
+                                                         Class="col-6"
+                                                         ValueField="@nameof(EmployeeModel.RecordRequested)"
+                                                         TextField="@nameof(EmployeeModel.RecordRequested)"
+                                                         DefaultText="All"
+                                                         @bind-Value="DropDownListValue"
+
+                                                         Data="EmployeeList">
+                                    </TelerikDropDownList>
+                                    <TelerikButton ButtonType="ButtonType.Button"
+                                                   Class="k-clear-button-visible ml-2"
+                                                   Icon="@SvgIcon.Filter"
+                                                   OnClick="@(async () =>
+                                          {
+                                             
+
+                                              // clear filter through the method the context provides
+                                              await context.FilterAsync();
+                                          })">
+                                    </TelerikButton>
+                                    <TelerikButton ButtonType="ButtonType.Button"
+                                                   Class="k-clear-button-visible ml-2"
+                                                   Icon="@SvgIcon.FilterClear"
+                                                   Enabled="@( DropDownListValue != null )"
+                                                   OnClick="@(async () =>
+                                          {
+                                              DropDownListValue = null;
+
+                                              // clear filter through the method the context provides
+                                              await context.ClearFilterAsync();
+                                          })">
+                                    </TelerikButton>
+                            </FilterCellTemplate> 
+                            </GridColumn>
+                            <GridColumn Field=@nameof(EmployeeModel.DateRequested) Title="Date Requested" />
                             <GridColumn Field=@nameof(EmployeeModel.Purpose) Title="Purpose" />
                             <GridColumn Field=@nameof(EmployeeModel.Status) Title="Status" />
                         </GridColumns>
@@ -102,3 +161,118 @@
         </CardBody>
     </TelerikCard>
 </div>
+<div class="d-flex flex-lg-row flex-column mt-3 gap-3">
+        <div class="col">
+            <TelerikCard Width="100%">
+                <CardHeader Class="ch-card">
+                    <h5 class="mb-0">Fullfilled Request </h5>
+                </CardHeader>
+                <div class="container">
+                    <TelerikChart Class="PieChart" @ref="FullfilledChartRef">
+                        <ChartSeriesItems>
+                            <ChartSeries Type="ChartSeriesType.Pie" Data="@pieData"
+                                                Field="@nameof(MyPieChartModel.SegmentValue)" CategoryField="@nameof(MyPieChartModel.SegmentName)">
+                            <ChartSeriesTooltip Visible="true">
+                                <Template>
+                                    @((context.DataItem as MyPieChartModel).SegmentName) for @((context.DataItem as MyPieChartModel).SegmentValue)
+                                </Template>
+                            </ChartSeriesTooltip>
+                                <ChartSeriesLabels Position="ChartSeriesLabelsPosition.Center"
+                                                   Visible="true"
+                                                   Font="16px 'Times New Roman'"
+                                                   Background="transparent"></ChartSeriesLabels>
+                            </ChartSeries>
+                        </ChartSeriesItems>
+                        @if (XSmall)
+                        {
+                            <ChartLegend Position="ChartLegendPosition.Bottom">
+
+                            </ChartLegend>
+                        }
+                        else
+                        {
+                            FullfilledChartRef.Refresh();
+                            <ChartLegend Position="ChartLegendPosition.Right">
+
+                            </ChartLegend>
+                        }
+                </TelerikChart>
+                </div>
+            </TelerikCard>
+        </div>
+        <div class="col">
+            <TelerikCard Width="100%">
+                <CardHeader Class="ch-card">
+                    <h5 class="mb-0">Requested Documents </h5>
+                </CardHeader>
+                <div class="container">
+                    <TelerikChart @ref="RequstChartRef">
+                        <ChartSeriesItems>
+                            <ChartSeries Type="ChartSeriesType.Pie" Data="@pieData"
+                                         Field="@nameof(MyPieChartModel.SegmentValue)" CategoryField="@nameof(MyPieChartModel.SegmentName)">
+                            <ChartSeriesTooltip Visible="true">
+                                <Template>
+                                    @((context.DataItem as MyPieChartModel).SegmentName) for @((context.DataItem as MyPieChartModel).SegmentValue)
+                                </Template>
+                            </ChartSeriesTooltip>
+                                <ChartSeriesLabels Position="ChartSeriesLabelsPosition.Center"
+                                                   Visible="true"
+                                                   Font="16px 'Times New Roman'"
+                                                   Background="transparent"></ChartSeriesLabels>
+                            
+                            </ChartSeries>
+                        </ChartSeriesItems>
+                        
+                        @if (XSmall)
+                        {
+                            <ChartLegend Position="ChartLegendPosition.Bottom">
+
+                            </ChartLegend>
+                        }
+                        else
+                        {
+                        RequstChartRef.Refresh();
+                            <ChartLegend Position="ChartLegendPosition.Right">
+
+                            </ChartLegend>
+                        }
+                
+                    </TelerikChart>
+                </div>
+            </TelerikCard>
+        </div>
+    </div>
+
+<style>
+    .ch-card {
+        background-color: transparent;
+        border-width: 0px 0px 1px 0px;
+    }
+        .ch-card .k-card-header {
+            border-style: none;
+            background-color: transparent;
+        }
+
+    .ch-card-flex{
+        border: none;
+        background-color: transparent;
+    }
+    h1{
+        color: #38339B;
+    }
+
+    .ov-circle{
+        color: white;
+        border:1px black;
+        text-align: center;
+        padding: .25rem .5rem .25rem .5rem;
+        margin-left: .50rem;
+        border-radius: 50%;
+        background: #38339B;
+        font-weight: 400;
+    }
+
+    .inspectionBanner{
+        padding-right: 4rem
+    }
+</style>
