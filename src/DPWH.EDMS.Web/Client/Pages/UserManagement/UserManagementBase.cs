@@ -44,7 +44,7 @@ public class UserManagementBase : GridBase<UserModel>
                     LicenseLimit = licenseData.Limit;
                     TotalUsers = licenseData.EndUsersCount;
                 }
-            });       
+            });
     }
 
     protected double GetLicenseAccumulatedPercentage()

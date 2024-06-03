@@ -179,6 +179,16 @@ namespace DPWH.EDMS.Components.Helpers
             return $"{fileSizeInBytes:0.##} {sizes[order]}";
         }
 
+        public static string CapitalizeFirstLetter(string str)
+        {
+            if (string.IsNullOrEmpty(str))
+            {
+                return str;
+            }
+
+            return char.ToUpper(str[0]) + str.Substring(1);
+        }
+
         //public static async Task<List<T>> GetListByQuery<T>(
         //    DataSourceRequest dReq, 
         //    Func<DataSourceRequest, Task<DataSourceResult>> ServiceCb, 

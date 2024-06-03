@@ -1,0 +1,158 @@
+﻿@page "/401"
+@using Blazored.Toast.Services
+@using DPWH.EDMS.Api.Contracts
+@using DPWH.EDMS.IDP.Core
+@using DPWH.EDMS.IDP.Core.Extensions
+@using DPWH.NGOBIA.Client.Shared.APIClient.Services.Users
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@layout ErrorLayout
+
+<div id="error-status-container" class="container">
+    @* <h1 class="error-header">401</h1> *@
+    <img src="_content/DPWH.EDMS.Components/images/unauthorized_access.svg" />
+    <p class="heading">Unauthorized Access</p>
+    <p class="sub-heading">
+        Oops! Looks like you don't have permission to access this page
+    </p>
+    <AuthorizeView>
+        <Authorized>
+            @if (isUserDeact)
+            {
+                <button @onclick="RedirectToLogin" class="dashboard-btn">Redirect to Login</button>
+            }
+            else
+            {
+                <button @onclick="RedirectToDashboard" class="dashboard-btn">Go Back to Dashboard</button>
+            }
+           
+        </Authorized>
+        <NotAuthorized>
+            <button @onclick="RedirectToLogin" class="dashboard-btn">Redirect to Login</button>
+        </NotAuthorized>
+    </AuthorizeView>
+    
+</div>
+
+@code {
+    [Inject] public NavigationManager NavigationManager { get; set; } = default!;
+    [Inject] protected IUsersService usersService { get; set; } = default!;
+    [Inject] private IToastService _ToastService { get; set; } = default!;
+
+
+    private void RedirectToDashboard()
+    {
+        NavigationManager.NavigateTo("/");
+    }
+
+    private void RedirectToLogin()
+    {
+        NavigationManager.NavigateToLogout("authentication/logout");
+    }
+    [CascadingParameter]
+    private Task<AuthenticationState> AuthenticationStateAsync { get; set; } = default!;
+    private bool isUserDeact = false;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        AuthenticationState? isDeact = await AuthenticationStateAsync;
+        if(isDeact != null)
+        {
+            var user = isDeact.User;
+
+            if (user != null && user.Identity is not null && user.Identity.IsAuthenticated)
+            {
+                Guid userId = user.GetUserId();
+                try
+                {
+                    var result = await usersService.GetById(userId);
+                    if (result.Success)
+                    {
+                        isUserDeact = result.Data.UserAccess == "Deactivated" || result.Data.UserAccess == "Unauthorized" || result.Data.UserAccess =="None";
+                        if (result.Data.UserAccess == "None")
+                        {
+                            _ToastService.ShowError("Oops! It looks like this user is not currently available. Please try again later.");
+                        }
+                    }
+                }
+                catch (Exception ex) when (ex is ApiException<ProblemDetails> apiExtension)
+                {
+                    var problemDetails = apiExtension.Result;
+                    var error = problemDetails.AdditionalProperties.ContainsKey("error") ? problemDetails.AdditionalProperties["error"].ToString() : problemDetails.AdditionalProperties["errors"].ToString();
+                    _ToastService.ShowError(error);
+                }
+            }
+        }
+       
+    }
+}
+
+<style>
+    #error-status-container {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        align-items: center;
+        margin-top: 80px;
+    }
+
+        #error-status-container img {
+            width: 100%;
+            max-width: 700px;
+            margin: auto;
+        }
+
+        #error-status-container p.heading {
+            color: #191919;
+            font-size: 210%;
+            font-style: normal;
+            font-weight: 700;
+            margin-bottom: 0;
+        }
+
+        #error-status-container p.sub-heading {
+            color: #191919;
+            text-align: center;
+            font-size: 120%;
+            font-style: normal;
+            font-weight: 400;
+            margin-bottom: 0;
+        }
+
+        #error-status-container button.dashboard-btn {
+            color: #fefefe;
+            font-size: 14px;
+            font-style: normal;
+            font-weight: 600;
+            line-height: normal;
+            border: none;
+            padding: 12px 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 40px;
+            background: #634792;
+            box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.10), 0px 1px 3px 0px rgba(0, 0, 0, 0.10), 0px 5px 5px 0px rgba(0, 0, 0, 0.09), 0px 11px 7px 0px rgba(0, 0, 0, 0.05), 0px 20px 8px 0px rgba(0, 0, 0, 0.01), 0px 31px 9px 0px rgba(0, 0, 0, 0.00);
+        }
+
+            #error-status-container button.dashboard-btn:hover {
+                background: #8566ba;
+                box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.10), 0px 1px 3px 0px rgba(0, 0, 0, 0.10), 0px 5px 5px 0px rgba(0, 0, 0, 0.09), 0px 11px 7px 0px rgba(0, 0, 0, 0.05), 0px 20px 8px 0px rgba(0, 0, 0, 0.01), 0px 31px 9px 0px rgba(0, 0, 0, 0.00);
+            }
+
+            #error-status-container button.dashboard-btn:active {
+                background: #7b5eab;
+                box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.10), 0px 1px 3px 0px rgba(0, 0, 0, 0.10), 0px 5px 5px 0px rgba(0, 0, 0, 0.09), 0px 11px 7px 0px rgba(0, 0, 0, 0.05), 0px 20px 8px 0px rgba(0, 0, 0, 0.01), 0px 31px 9px 0px rgba(0, 0, 0, 0.00), inset 0px 2px 4px 0px rgba(0, 0, 0, 0.25);
+            }
+
+
+    h1.error-header {
+        color: #fefefe;
+        text-align: center;
+        font-size: 8em;
+        font-weight: 600;
+        text-shadow: 4px 4px 8px #634792;
+        margin-bottom: 0;
+    }
+
+
+</style>
