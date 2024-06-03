@@ -2,7 +2,10 @@
 using DPWH.EDMS.Client.Shared.MockModels;
 using DPWH.EDMS.Components;
 using DPWH.EDMS.Components.Components.ReusableGrid;
-using Telerik.Blazor;
+using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Components;
+using Telerik.SvgIcons;
+using DPWH.EDMS.IDP.Core.Constants;
 using Telerik.Blazor.Components;
 using Telerik.DataSource;
 
@@ -10,6 +13,9 @@ namespace DPWH.EDMS.Web.Client.Pages.Home;
 
 public class HomeBase : GridBase<EmployeeModel>
 {
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateAsync { get; set; }
+    [Inject] public required NavigationManager NavigationManager { get; set; }    
+
     protected List<SimpleKeyValue> OverviewStatusList = new List<SimpleKeyValue>();
     protected List<SimpleKeyValue> SecondStatusList = new List<SimpleKeyValue>();
     protected List<EmployeeModel> EmployeeList = new List<EmployeeModel>();
@@ -79,9 +85,27 @@ public class HomeBase : GridBase<EmployeeModel>
         DropDownListValue = "All";
 
         EmployeeList = GenerateEmployeeRecords(5);
-
-
     }
+
+    protected async override Task OnInitializedAsync()
+    {
+        await HandleEndUserAccess();
+    }
+
+    private async Task HandleEndUserAccess()
+    {
+        var authState = await AuthenticationStateAsync!;
+        var user = authState.User;
+
+        if (user.Identity is not null && user.Identity.IsAuthenticated)
+        {
+            if (user.IsInRole(ApplicationRoles.EndUser))
+            {
+                NavigationManager.NavigateTo("/pending-request");
+            }
+        }
+    }
+
     public class MyPieChartModel
     {
         public string SegmentName { get; set; }
@@ -147,5 +171,4 @@ public class HomeBase : GridBase<EmployeeModel>
 
         return employees;
     }
-   
 }

@@ -2,7 +2,7 @@
 @using DPWH.EDMS.Client.Shared.Models
 
 @inherits UserManagementBase
-@attribute [Authorize(Policy = "RequireActiveRoles")]
+@attribute [Authorize(Roles = "dpwh_superadmin, system_admin")]
 
 <EdmsLoader Visible="@IsLoading" />
 

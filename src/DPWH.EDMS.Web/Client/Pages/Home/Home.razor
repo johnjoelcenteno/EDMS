@@ -1,7 +1,7 @@
 ﻿@page "/"
 
+@attribute [Authorize(Roles = "dpwh_superadmin, system_admin, dpwh_enduser")]
 @inherits HomeBase
-@attribute [Authorize(Policy = "RequireActiveRoles")]
 
 <TelerikMediaQuery Media="(max-width: 480px)" OnChange="((changed) => XSmall = changed)"></TelerikMediaQuery>
 <TelerikMediaQuery Media="(max-width: 960px)" OnChange="((changed) => Small = changed)"></TelerikMediaQuery>

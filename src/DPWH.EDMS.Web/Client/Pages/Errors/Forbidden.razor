@@ -1,0 +1,82 @@
+﻿@page "/403"
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@layout ErrorLayout
+
+<div id="error-status-container" class="container">
+    @* <img src="_content/DPWH.NGOBIA.Components/images/status-errors/403.svg" /> *@
+    <img src="_content/DPWH.NGOBIA.Components/images/unauthorized_access.svg" />
+    <p class="heading">Forbidden Access</p>
+    <p class="sub-heading">
+        Oops! It seems you've reached a page you don't have permission to view. We apologize for any inconvenience.
+    </p>
+    <button @onclick="RedirectToLogin" class="dashboard-btn">Redirect to Login</button>
+</div>
+
+@code {
+    [Inject]
+    public NavigationManager NavigationManager { get; set; } = default!;
+
+    private void RedirectToLogin()
+    {
+        NavigationManager.NavigateToLogout("authentication/logout");
+    }
+}
+
+<style>
+    #error-status-container {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+        align-items: center;
+        margin-top: 80px;
+    }
+
+        #error-status-container img {
+            width: 100%;
+            max-width: 700px;
+            margin: auto;
+        }
+
+        #error-status-container p.heading {
+            color: #191919;
+            font-size: 210%;
+            font-style: normal;
+            font-weight: 700;
+            margin-bottom: 0;
+        }
+
+        #error-status-container p.sub-heading {
+            color: #191919;
+            text-align: center;
+            font-size: 120%;
+            font-style: normal;
+            font-weight: 400;
+            margin-bottom: 0;
+        }
+
+        #error-status-container button.dashboard-btn {
+            color: #fefefe;
+            font-size: 14px;
+            font-style: normal;
+            font-weight: 600;
+            line-height: normal;
+            border: none;
+            padding: 12px 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 40px;
+            background: #634792;
+            box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.10), 0px 1px 3px 0px rgba(0, 0, 0, 0.10), 0px 5px 5px 0px rgba(0, 0, 0, 0.09), 0px 11px 7px 0px rgba(0, 0, 0, 0.05), 0px 20px 8px 0px rgba(0, 0, 0, 0.01), 0px 31px 9px 0px rgba(0, 0, 0, 0.00);
+        }
+
+            #error-status-container button.dashboard-btn:hover {
+                background: #8566ba;
+                box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.10), 0px 1px 3px 0px rgba(0, 0, 0, 0.10), 0px 5px 5px 0px rgba(0, 0, 0, 0.09), 0px 11px 7px 0px rgba(0, 0, 0, 0.05), 0px 20px 8px 0px rgba(0, 0, 0, 0.01), 0px 31px 9px 0px rgba(0, 0, 0, 0.00);
+            }
+
+            #error-status-container button.dashboard-btn:active {
+                background: #7b5eab;
+                box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.10), 0px 1px 3px 0px rgba(0, 0, 0, 0.10), 0px 5px 5px 0px rgba(0, 0, 0, 0.09), 0px 11px 7px 0px rgba(0, 0, 0, 0.05), 0px 20px 8px 0px rgba(0, 0, 0, 0.01), 0px 31px 9px 0px rgba(0, 0, 0, 0.00), inset 0px 2px 4px 0px rgba(0, 0, 0, 0.25);
+            }
+</style>

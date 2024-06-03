@@ -23,7 +23,7 @@
         if (user.Identity is not null && user.Identity.IsAuthenticated)
         {
             var logoutUrl = user.FindFirst("bff:logout_url")?.Value;
-            Navigation.NavigateToLogout(logoutUrl);
+            Navigation.NavigateTo(logoutUrl!, true);
         }        
     }
 }

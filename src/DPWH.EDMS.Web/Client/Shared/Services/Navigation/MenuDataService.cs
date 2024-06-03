@@ -17,7 +17,7 @@ public class MenuDataService : IMenuDataService
                 Children = default,
                 Level = 0,
                 SortOrder = 0,
-                AuthorizedRoles = new List<string>{ ApplicationRoles.SuperAdmin }
+                AuthorizedRoles = new List<string>{ ApplicationRoles.SuperAdmin, ApplicationRoles.SystemAdmin }
             },
              new ()
             {
@@ -27,7 +27,7 @@ public class MenuDataService : IMenuDataService
                 Children = default,
                 Level = 0,
                 SortOrder = 1,
-                AuthorizedRoles = new List<string>{ ApplicationRoles.SuperAdmin }
+                AuthorizedRoles = new List<string>{ ApplicationRoles.SuperAdmin, ApplicationRoles.SystemAdmin }
             },
 
              new ()
@@ -38,7 +38,7 @@ public class MenuDataService : IMenuDataService
                 Children = default,
                 Level = 0,
                 SortOrder = 2,
-                AuthorizedRoles = new List<string>{ApplicationRoles.SuperAdmin }
+                AuthorizedRoles = new List<string>{ ApplicationRoles.SuperAdmin, ApplicationRoles.SystemAdmin }
             },
               new ()
             {
@@ -48,7 +48,7 @@ public class MenuDataService : IMenuDataService
                 Children = default,
                 Level = 0,
                 SortOrder = 3,
-                AuthorizedRoles = new List<string>{ApplicationRoles.SuperAdmin }
+                AuthorizedRoles = new List<string>{ApplicationRoles.SuperAdmin, ApplicationRoles.SystemAdmin }
             },
             
 
@@ -96,7 +96,7 @@ public class MenuDataService : IMenuDataService
                 Children = default,
                 Level = 0,
                 SortOrder = 0,
-                AuthorizedRoles = new List<string>{ApplicationRoles.SuperAdmin }
+                AuthorizedRoles = new List<string>{ApplicationRoles.SuperAdmin, ApplicationRoles.SystemAdmin }
             },
             new ()
             {
@@ -106,7 +106,7 @@ public class MenuDataService : IMenuDataService
                 Children = default,
                 Level = 0,
                 SortOrder = 1,
-                AuthorizedRoles = new List<string>{ApplicationRoles.SuperAdmin }
+                AuthorizedRoles = new List<string>{ ApplicationRoles.SuperAdmin, ApplicationRoles.SystemAdmin }
             },
             new ()
             {
@@ -116,7 +116,7 @@ public class MenuDataService : IMenuDataService
                 Children = default,
                 Level = 0,
                 SortOrder = 2,
-                AuthorizedRoles = new List<string>{ ApplicationRoles.SuperAdmin }
+                AuthorizedRoles = new List<string>{ ApplicationRoles.SuperAdmin, ApplicationRoles.SystemAdmin }
             },
         };
 
@@ -131,7 +131,7 @@ public class MenuDataService : IMenuDataService
                 Children = default,
                 Level = 0,
                 SortOrder = 0,
-                AuthorizedRoles = new List<string>{ApplicationRoles.SuperAdmin, ApplicationRoles.EndUser }
+                AuthorizedRoles = new List<string>{ApplicationRoles.SuperAdmin, ApplicationRoles.EndUser, ApplicationRoles.SystemAdmin }
             },
              new ()
             {
@@ -141,7 +141,7 @@ public class MenuDataService : IMenuDataService
                 Children = default,
                 Level = 0,
                 SortOrder = 1,
-                AuthorizedRoles = new List<string>{ ApplicationRoles.SuperAdmin, ApplicationRoles.EndUser }
+                AuthorizedRoles = new List<string>{ ApplicationRoles.SuperAdmin, ApplicationRoles.EndUser, ApplicationRoles.SystemAdmin }
             },
              new ()
             {
@@ -151,7 +151,7 @@ public class MenuDataService : IMenuDataService
                 Children = default,
                 Level = 0,
                 SortOrder = 2,
-                AuthorizedRoles = new List<string>{ ApplicationRoles.SuperAdmin, ApplicationRoles.EndUser }
+                AuthorizedRoles = new List<string>{ ApplicationRoles.SuperAdmin, ApplicationRoles.EndUser, ApplicationRoles.SystemAdmin }
             }
         };
 }

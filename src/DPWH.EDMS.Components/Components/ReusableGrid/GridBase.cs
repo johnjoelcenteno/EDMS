@@ -2,6 +2,7 @@
 using DPWH.EDMS.Api.Contracts;
 using DPWH.EDMS.Components.Helpers;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using System.Runtime.InteropServices;
 using Telerik.Blazor.Components;
 
@@ -9,7 +10,8 @@ namespace DPWH.EDMS.Components.Components.ReusableGrid;
 
 public class GridBase<T> : RxBaseComponent
 {
-    [Inject] private IToastService _ToastService { get; set; } = default!;
+    [Inject] public required IToastService ToastService { get; set; }
+    [Inject] public required NavigationManager NavManager { get; set; }
     protected List<T> GridData { get; set; } = new();
     protected TelerikGrid<T> GridRef { get; set; } = new();
     protected int Page { get; set; } = 1;
@@ -63,18 +65,23 @@ public class GridBase<T> : RxBaseComponent
         }
         catch (Exception ex) when (ex is ApiException<ProblemDetails> apiExtension)
         {
-            var problemDetails = apiExtension.Result;
+            var problemDetails = apiExtension.Result;            
             var error = problemDetails.AdditionalProperties.ContainsKey("error") ? problemDetails.AdditionalProperties["error"].ToString() : problemDetails.AdditionalProperties["errors"].ToString();
-            _ToastService.ShowError(error);
+            ToastService.ShowError(error);
 
+            if (problemDetails.Status == 401)
+                NavManager.NavigateTo("/logout", true);
         }
-        catch (Exception ex) when (ex is ApiException apiExtention)
+        catch (Exception ex) when (ex is ApiException apiExt)
         {
             var htmlContent = new RenderFragment(builder =>
             {
-                builder.AddMarkupContent(0, apiExtention.Message);
+                builder.AddMarkupContent(0, apiExt.Message);
             });
-            _ToastService.ShowError(htmlContent);
+            ToastService.ShowError(htmlContent);
+
+            if (apiExt.StatusCode == 401)
+                NavManager.NavigateTo("/logout", true);
         }
 
         // Loading is complete

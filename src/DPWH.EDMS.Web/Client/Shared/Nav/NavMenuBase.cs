@@ -1,10 +1,12 @@
 ﻿using DPWH.EDMS.Client.Shared.Configurations;
 using DPWH.EDMS.Client.Shared.Models;
 using DPWH.EDMS.Components;
+using DPWH.EDMS.Components.Helpers;
 using DPWH.EDMS.IDP.Core.Constants;
 using DPWH.EDMS.Web.Client.Shared.Services.Navigation;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using System.Security.Claims;
 using Telerik.Blazor.Components;
 
 namespace DPWH.EDMS.Web.Client.Shared.Nav;
@@ -30,8 +32,8 @@ public class NavMenuBase: RxBaseComponent
     //protected bool Large { get; set; }
     protected List<IDisposable> RxSubscriptions { get; set; } = new();
 
-    protected string DisplayName = "Juan Doe";
-    protected string Role = ApplicationRoles.SuperAdmin;
+    protected string DisplayName = "---";
+    protected string Role = string.Empty;
 
     protected MenuModel? SelectedLevel1Item = null;
 
@@ -39,17 +41,6 @@ public class NavMenuBase: RxBaseComponent
 
     protected override async Task OnInitializedAsync()
     {
-        //RxSubscriptions.Add(
-        //    AuthRxService.IsLoggedIn.Subscribe(async loginSuccess =>
-        //    {
-        //        if (loginSuccess)
-        //        {
-        //            await SetMenu();
-        //            StateHasChanged();
-        //        }
-        //    }
-        //));
-
         await SetMenu();
 
         RxSubscriptions.Add(NavRx.IsExpanded.Subscribe(expanded =>
@@ -59,35 +50,12 @@ public class NavMenuBase: RxBaseComponent
                 SelectedLevel1Item = default;
             }
 
+            #pragma warning disable BL0005 // Component parameter should not be set outside of its component.
             DrawerRef.Expanded = expanded;
+            #pragma warning restore BL0005 // Component parameter should not be set outside of its component.
         }));
 
     }
-
-    protected async Task BeginSignOut()
-    {
-        if (AuthenticationStateAsync is null)
-            return;
-
-        var authState = await AuthenticationStateAsync;
-        var user = authState.User;
-
-        if (user.Identity is not null && user.Identity.IsAuthenticated)
-        {
-            var logoutUrl = user.FindFirst("bff:logout_url")?.Value;
-            NavManager.NavigateTo(logoutUrl!,true);
-        }
-    }
-
-    protected string GetRoleDisplayText()
-    { 
-
-        var displayName = "";
-        ApplicationRoles.UserAccessMapping.TryGetValue(Role, out displayName);
-
-        return !string.IsNullOrEmpty(displayName) ? displayName : "Unknown Role";
-    }
-
     private async Task SetMenu()
     {
         if (AuthenticationStateAsync is null)
@@ -100,12 +68,18 @@ public class NavMenuBase: RxBaseComponent
 
         if (user.Identity is not null && user.Identity.IsAuthenticated)
         {
-            //DisplayName = user.FullName;
-            //GetRoleDisplayText();
-            NavMenus = MenuDataService.GetMenuItems().Where(m => m.AuthorizedRoles.Any(r => r == Role)).ToList();
-            NavMenus2 = MenuDataService.GetMenuItems2().Where(m => m.AuthorizedRoles.Any(r => r == Role)).ToList();
-            NavSettings = MenuDataService.GetSettingsItems().Where(m => m.AuthorizedRoles.Any(r => r == Role)).ToList();
+            var roleValue = user.Claims.FirstOrDefault(c => c.Type == "role")!.Value;
+            DisplayName = !string.IsNullOrEmpty(user.Identity.Name) ? GenericHelper.CapitalizeFirstLetter(user.Identity.Name) : "---";
+            Role = GetRoleLabel(roleValue);
+            NavMenus = MenuDataService.GetMenuItems().Where(m => m.AuthorizedRoles.Any(r => r == roleValue)).ToList();
+            NavMenus2 = MenuDataService.GetMenuItems2().Where(m => m.AuthorizedRoles.Any(r => r == roleValue)).ToList();
+            NavSettings = MenuDataService.GetSettingsItems().Where(m => m.AuthorizedRoles.Any(r => r == roleValue)).ToList();            
         }        
+    }
+
+    private string GetRoleLabel(string roleValue)
+    {
+        return ApplicationRoles.GetDisplayRoleName(roleValue, "Unknown Role");
     }
 
     protected async Task ToggleDrawer()
