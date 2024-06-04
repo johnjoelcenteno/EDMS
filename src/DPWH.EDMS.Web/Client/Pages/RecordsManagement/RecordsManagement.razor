@@ -3,4 +3,61 @@
 @inherits RecordsManagementBase
 @attribute [Authorize(Policy = "RequireActiveRoles")]
 
-<h3>RecordsManagement</h3>
+@* <EdmsLoader Visible="@IsLoading" /> *@
+<TelerikMediaQuery Media="(max-width: 480px)" OnChange="((changed) => XSmall = changed)"></TelerikMediaQuery>
+
+<EdmsBreadcrumbs Data="@BreadcrumbItems" />
+<h3>Record Management</h3>
+<hr />
+
+<div class="d-flex flex-row mt-3">
+    <TelerikCard Width="100%">
+        <CardBody>
+            <div class="d-flex flex-row justify-content-between">
+                <CardTitle Class="mb-0">Employee Records</CardTitle>
+            </div>
+            <CardSeparator Class="my-2"></CardSeparator>
+            <div>
+                @if (RecordList != null && !XSmall)
+                {
+                    <TelerikGrid TItem="RecordModel"
+                                 @bind-PageSize="@PageSize"
+                                 Height="@GridHeight"
+                                 FilterMode="GridFilterMode.FilterRow"
+                                 Sortable=true
+                                 Data="RecordList"
+                                 OnStateChanged="@OnStateChanged"
+                                 @ref="GridRef"
+                                 Context="record">
+                        <GridSettings>
+                            <GridPagerSettings PageSizes="@PageSizes">
+                            </GridPagerSettings>
+                        </GridSettings>
+                        <GridColumns>
+                            <GridColumn Field=@nameof(RecordModel.FirstName) Title="First Name" />
+                            <GridColumn Field=@nameof(RecordModel.LastName) Title="Last Name" />
+                            <GridColumn Field=@nameof(RecordModel.MiddleName) Title="Middle Name" />
+                            <GridColumn Field=@nameof(RecordModel.Office) Title="Office" />
+                            <GridColumn Field=@nameof(RecordModel.BureauServiceDivisionSectionUnit) Title="Bureau/Service/Division/Section/Unit" />
+                            <GridCommandColumn Width="50px">
+                                <TelerikButton Icon="@FontIcon.MoreVertical"></TelerikButton>
+                            </GridCommandColumn>
+                        </GridColumns>
+                    </TelerikGrid>
+                }
+                else
+                {
+                    <span>No data to display</span>
+                }
+            </div>
+            <TelerikPager PageChanged="@PageChangedHandler"
+                          Total="TotalItems"
+                          ButtonCount="6"
+                          PageSize="@PageSize"
+                          PageSizeChanged="@PageSizeChangedHandler"
+                          PageSizes="@(new List<int?> {5, 10, 20})"
+                          Page="@Page">
+            </TelerikPager>
+        </CardBody>
+    </TelerikCard>
+</div>
