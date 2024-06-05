@@ -2663,11 +2663,21 @@
       }
     },
     "/api/EmployeeRecords/Query": {
-      "get": {
+      "post": {
         "tags": [
           "EmployeeRecord"
         ],
         "operationId": "Query employee request",
+        "requestBody": {
+          "content": {
+            "application/json; api-version=1.0": {
+              "schema": {
+                "$ref": "#/components/schemas/DataSourceRequest"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "description": "Success",
@@ -2682,9 +2692,9 @@
           "404": {
             "description": "Not Found",
             "content": {
-              "text/plain; api-version=1.0": {
+              "application/json; api-version=1.0": {
                 "schema": {
-                  "type": "string"
+                  "$ref": "#/components/schemas/DataSourceResult"
                 }
               }
             }
@@ -15368,8 +15378,8 @@
         "type": "oauth2",
         "flows": {
           "authorizationCode": {
-            "authorizationUrl": "https://localhost:5001/connect/authorize",
-            "tokenUrl": "https://localhost:5001/connect/token",
+            "authorizationUrl": "https://app-idp-ngobia-dpwh-dev.azurewebsites.net/connect/authorize",
+            "tokenUrl": "https://app-idp-ngobia-dpwh-dev.azurewebsites.net/connect/token",
             "scopes": {
               "dpwhedmsapi.write": "api read & write access"
             }
