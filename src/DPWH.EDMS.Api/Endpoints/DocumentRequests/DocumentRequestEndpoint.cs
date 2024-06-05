@@ -3,6 +3,7 @@ using DPWH.EDMS.Application.Contracts.Services;
 using DPWH.EDMS.Application.Models;
 using DPWH.EDMS.Application.Models.DpwhResponses;
 using DPWH.EDMS.Domain.Exceptions;
+using KendoNET.DynamicLinq;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,13 +15,14 @@ public static class DocumentRequestEndpoint
 
     public static IEndpointRouteBuilder MapDocumentRequestEndpoint(this IEndpointRouteBuilder app)
     {
-        app.MapGet(ApiEndpoints.DocumentRequestEndpoint.Query, async (string employeeId, IDpwhApiService dpwhApiService) =>
+        app.MapPost(ApiEndpoints.DocumentRequestEndpoint.Query, async (DataSourceRequest request, IMediator mediator) =>
             {
-                return "Ok";
+                var result = await mediator.Send(new DocumentQueryRequest(request));
+                return result;
             })
-            .WithName("Query document request by id")
+            .WithName("Query document request")
             .WithTags(TagName)
-            .WithDescription("Get document request by employee id")
+            .WithDescription("Get document request")
             .WithApiVersionSet(ApiVersioning.VersionSet)
             .HasApiVersion(1.0)
             .Produces<BaseApiResponse<Employee>>()

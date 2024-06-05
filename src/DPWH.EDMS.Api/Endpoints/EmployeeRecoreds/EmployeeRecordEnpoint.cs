@@ -3,6 +3,7 @@ using DPWH.EDMS.Application;
 using DPWH.EDMS.Application.Contracts.Services;
 using DPWH.EDMS.Application.Models;
 using DPWH.EDMS.Application.Models.DpwhResponses;
+using KendoNET.DynamicLinq;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualBasic;
@@ -15,9 +16,10 @@ public static class EmployeeRecordEnpoint
 
     public static IEndpointRouteBuilder MapEmployeeRecordEndpoint(this IEndpointRouteBuilder app)
     {
-        app.MapGet(ApiEndpoints.EmployeeRecordEndpoints.Query, async (IDpwhApiService dpwhApiService) =>
+        app.MapPost(ApiEndpoints.EmployeeRecordEndpoints.Query, async ([FromBody] DataSourceRequest request, IMediator mediator) =>
             {
-                return "Ok";
+                var result = await mediator.Send(new QueryEmployeeRequest(request));
+                return result;
             })
             .WithName("Query employee request")
             .WithTags(TagName)
