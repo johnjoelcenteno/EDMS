@@ -2162,21 +2162,21 @@
       }
     },
     "/api/DocumentRequests/Query": {
-      "get": {
+      "post": {
         "tags": [
           "DocumentRequests"
         ],
-        "operationId": "Query document request by id",
-        "parameters": [
-          {
-            "name": "employeeId",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string"
+        "operationId": "Query document request",
+        "requestBody": {
+          "content": {
+            "application/json; api-version=1.0": {
+              "schema": {
+                "$ref": "#/components/schemas/DataSourceRequest"
+              }
             }
-          }
-        ],
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "description": "Success",
@@ -2191,9 +2191,9 @@
           "404": {
             "description": "Not Found",
             "content": {
-              "text/plain; api-version=1.0": {
+              "application/json; api-version=1.0": {
                 "schema": {
-                  "type": "string"
+                  "$ref": "#/components/schemas/DataSourceResult"
                 }
               }
             }
