@@ -416,12 +416,12 @@ namespace DPWH.EDMS.Api.Contracts
     {
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<EmployeeBaseApiResponse> Query_document_request_by_idAsync(string employeeId);
+        System.Threading.Tasks.Task<EmployeeBaseApiResponse> Query_document_requestAsync(DataSourceRequest body);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<EmployeeBaseApiResponse> Query_document_request_by_idAsync(string employeeId, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<EmployeeBaseApiResponse> Query_document_requestAsync(DataSourceRequest body, System.Threading.CancellationToken cancellationToken);
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -507,12 +507,12 @@ namespace DPWH.EDMS.Api.Contracts
     {
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<EmployeeBaseApiResponse> Query_employee_requestAsync();
+        System.Threading.Tasks.Task<EmployeeBaseApiResponse> Query_employee_requestAsync(DataSourceRequest body);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<EmployeeBaseApiResponse> Query_employee_requestAsync(System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<EmployeeBaseApiResponse> Query_employee_requestAsync(DataSourceRequest body, System.Threading.CancellationToken cancellationToken);
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>

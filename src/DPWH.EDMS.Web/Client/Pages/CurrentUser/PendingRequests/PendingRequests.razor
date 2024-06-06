@@ -5,4 +5,69 @@
 
 @attribute [Authorize(Policy = "RequireActiveRoles")]
 
+@if (!IsEndUser)
+{
+    <EdmsBreadcrumbs Data="@BreadcrumbItems" />
+}
+
 <h3>My Pending Request</h3>
+
+<hr />
+
+<div class="d-flex flex-row mt-3">
+    <TelerikCard Width="100%">
+        <CardBody>
+            <div class="d-flex flex-row">
+                <CardTitle Class="mb-0">Pending Requests</CardTitle>
+            </div>
+            <CardSeparator Class="my-2"></CardSeparator>
+            <div>
+                <TelerikButton Class="mb-2" Icon="@FontIcon.Plus" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary">Add Request</TelerikButton>
+                @if (GridData != null && !XSmall)
+                {
+                    <TelerikGrid TItem="DocumentRequestModel"
+                                 @bind-PageSize="@PageSize"
+                                 Height="@GridHeight"
+                                 FilterMode="GridFilterMode.FilterRow"
+                                 Sortable=true
+                                 Data="GridData"
+                                 OnStateChanged="@OnStateChanged"
+                                 @ref="GridRef"
+                                 Context="item">
+                        <GridSettings>
+                            <GridPagerSettings PageSizes="@PageSizes">
+                            </GridPagerSettings>
+                        </GridSettings>
+                        <GridColumns>
+                            <GridColumn Field=@nameof(DocumentRequestModel.ControlNumber) Title="Control No." Filterable="false" />
+                            <GridColumn Field=@nameof(DocumentRequestModel.ControlNumber) Title="Records Requested" Filterable="false">
+                                <Template>
+                                    @{
+                                        var req = context as DocumentRequestModel;
+                                        string recs = req!.RecordsRequested.Count > 0 ? String.Join(", ", req.RecordsRequested) : "-";
+                                    }
+                                    <p class="mb-0">@recs</p>
+                                </Template>
+                            </GridColumn>
+                            <GridColumn Field=@nameof(DocumentRequestModel.DateRequested) Title="Date Requested" />
+                            <GridColumn Field=@nameof(DocumentRequestModel.Purpose) Title="Purpose" />
+                            <GridColumn Field=@nameof(DocumentRequestModel.Status) Title="Status" />
+                        </GridColumns>
+                    </TelerikGrid>
+                }
+                else
+                {
+                    <span>No Data to display.</span>
+                }
+            </div>
+            <TelerikPager PageChanged="@PageChangedHandler"
+                          Total="TotalItems"
+                          ButtonCount="6"
+                          PageSize="@PageSize"
+                          PageSizeChanged="@PageSizeChangedHandler"
+                          PageSizes="@(new List<int?> {5, 10, 20})"
+                          Page="@Page">
+            </TelerikPager>
+        </CardBody>
+    </TelerikCard>
+</div>
