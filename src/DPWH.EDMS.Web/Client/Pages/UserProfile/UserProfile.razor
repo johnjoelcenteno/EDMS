@@ -9,10 +9,10 @@
 
 <h3>Profile</h3>
     <div class="d-flex flex-row align-items-center mb-2">
-    <p>@(GenericHelper.GetDisplayValue(currentUser.UserName, "---")) (@(GenericHelper.GetDisplayValue(currentUser.EmployeeId, "---")))</p>
+    <p>@(GenericHelper.GetDisplayValue(CurrentUser.UserName)) (@(GenericHelper.GetDisplayValue(CurrentUser.EmployeeId)))</p>
     <span class="role-chip">Super Admin</span>
 </div>
-    <p>Email: @(GenericHelper.GetDisplayValue(currentUser.Email, "---")) / Contact: @(GenericHelper.GetDisplayValue(currentUser.MobileNumber, "---"))</p>
+    <p>Email: @(GenericHelper.GetDisplayValue(CurrentUser.Email)) / Contact: @(GenericHelper.GetDisplayValue(CurrentUser.MobileNumber))</p>
 <hr />
 
 <TelerikTabStrip>
@@ -27,20 +27,20 @@
                     <p class="edms-text-header-small">Designation Details</p>
                 </div>
                 <div class="detail-flex">
-                    <p><b>Regional/Central Office:</b>&nbsp;@(GenericHelper.GetDisplayValue(currentUser.RegionalOfficeRegion, "---"))</p>
-                    <p><b>Position:</b>&nbsp; @(GenericHelper.GetDisplayValue(currentUser.Position, "---"))</p>
+                    <p><b>Regional/Central Office:</b>&nbsp;@(GenericHelper.GetDisplayValue(CurrentUser.RegionalOfficeRegion))</p>
+                    <p><b>Position:</b>&nbsp; @(GenericHelper.GetDisplayValue(CurrentUser.Position))</p>
                 </div>
                 <div class="detail-flex">
-                    <p><b>District/Bureau/Service:</b>&nbsp; @(GenericHelper.GetDisplayValue(currentUser.DistrictEngineeringOffice, "---"))</p>
-                    <p><b>Designation:</b>&nbsp;@(GenericHelper.GetDisplayValue(currentUser.DesignationTitle, "---"))</p>
+                    <p><b>District/Bureau/Service:</b>&nbsp; @(GenericHelper.GetDisplayValue(CurrentUser.DistrictEngineeringOffice))</p>
+                    <p><b>Designation:</b>&nbsp;@(GenericHelper.GetDisplayValue(CurrentUser.DesignationTitle))</p>
                 </div>
                 <hr />
                 <div class="d-flex flex-row mb-2">
                     <p class="edms-text-header-small">Account Information</p>
                 </div>
                 <div class="detail-flex">
-                    <p><b>Account Status:</b>&nbsp; @(currentUser.UserAccess != "Deactivated"? "Active" : "Inactive")</p>
-                        <p><b>Date Joined:</b>&nbsp;@(GenericHelper.GetDisplayValue(GenericHelper.GetDateDisplay(currentUser.Created), "---"))</p>
+                    <p><b>Account Status:</b>&nbsp; @(CurrentUser.UserAccess != "Deactivated"? "Active" : "Inactive")</p>
+                        <p><b>Date Joined:</b>&nbsp;@(GenericHelper.GetDisplayValue(GenericHelper.GetDateDisplay(CurrentUser.Created)))</p>
                 </div>
          </div>
         </Content>
