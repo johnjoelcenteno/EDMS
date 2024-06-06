@@ -1,4 +1,5 @@
 ﻿@page "/profile"
+@using DPWH.EDMS.Components.Helpers
 
 @inherits UserProfileBase
 @attribute [Authorize(Policy = "RequireActiveRoles")]
@@ -7,14 +8,11 @@
 <EdmsBreadcrumbs Data="@BreadcrumbItems" />
 
 <h3>Profile</h3>
-@foreach (var user in UserList)
-{
     <div class="d-flex flex-row align-items-center mb-2">
-        <p>@(user.UserName != "N/A" ? user.UserName : "---") (@(user.EmployeeId != "N/A" ? user.EmployeeId : "---"))</p>
+    <p>@(GenericHelper.GetDisplayValue(currentUser.UserName, "---")) (@(GenericHelper.GetDisplayValue(currentUser.EmployeeId, "---")))</p>
     <span class="role-chip">Super Admin</span>
 </div>
-    <p>Email: @(user.Email != "N/A" ? user.Email : "---") / Contact: @(user.MobileNumber != "N/A" ? user.MobileNumber : "---")</p>
-}
+    <p>Email: @(GenericHelper.GetDisplayValue(currentUser.Email, "---")) / Contact: @(GenericHelper.GetDisplayValue(currentUser.MobileNumber, "---"))</p>
 <hr />
 
 <TelerikTabStrip>
@@ -24,30 +22,27 @@
             Personal Details
         </HeaderTemplate>
         <Content>
-            @foreach (var user in UserList)
-            {
                 <div class="d-flex flex-column">
                     <div class="d-flex flex-row mb-2">
                     <p class="edms-text-header-small">Designation Details</p>
                 </div>
                 <div class="detail-flex">
-                        <p><b>Regional/Central Office:</b>&nbsp;@(user.RegionalOfficeRegion != "N/A" ? user.RegionalOfficeRegion : "---")</p>
-                        <p><b>Position:</b>&nbsp; @(user.Position != "N/A" ? user.Position : "---")</p>
+                    <p><b>Regional/Central Office:</b>&nbsp;@(GenericHelper.GetDisplayValue(currentUser.RegionalOfficeRegion, "---"))</p>
+                    <p><b>Position:</b>&nbsp; @(GenericHelper.GetDisplayValue(currentUser.Position, "---"))</p>
                 </div>
                 <div class="detail-flex">
-                        <p><b>District/Bureau/Service:</b>&nbsp; @(user.DistrictEngineeringOffice != "N/A" ? user.DistrictEngineeringOffice : "---")</p>
-                        <p><b>Designation:</b>&nbsp;@(user.DesignationTitle != "N/A" ? user.DesignationTitle : "---")</p>
+                    <p><b>District/Bureau/Service:</b>&nbsp; @(GenericHelper.GetDisplayValue(currentUser.DistrictEngineeringOffice, "---"))</p>
+                    <p><b>Designation:</b>&nbsp;@(GenericHelper.GetDisplayValue(currentUser.DesignationTitle, "---"))</p>
                 </div>
                 <hr />
                 <div class="d-flex flex-row mb-2">
                     <p class="edms-text-header-small">Account Information</p>
                 </div>
                 <div class="detail-flex">
-                    <p><b>Account Status:</b>&nbsp; @(user.UserAccess != "Deactivated"? "Active" : "Inactive")</p>
-                        <p><b>Date Joined:</b>&nbsp;@(user.Created != null? user.Created?.ToString("MM/dd/yyyy"): "---")</p>
+                    <p><b>Account Status:</b>&nbsp; @(currentUser.UserAccess != "Deactivated"? "Active" : "Inactive")</p>
+                        <p><b>Date Joined:</b>&nbsp;@(GenericHelper.GetDisplayValue(GenericHelper.GetDateDisplay(currentUser.Created), "---"))</p>
                 </div>
          </div>
-            }
         </Content>
     </TabStripTab>   
 </TelerikTabStrip>
