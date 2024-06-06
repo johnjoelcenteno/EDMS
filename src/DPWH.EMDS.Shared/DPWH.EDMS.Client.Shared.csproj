@@ -21,6 +21,10 @@
 		<PackageReference Include="System.Reactive" Version="6.0.0" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="APIClient\Services\DocumentRequest\" />
+	</ItemGroup>
+
 	<!-- Build and Fetch latest generated files from API-->
 	<Target Name="CustomBeforeBuild" BeforeTargets="BeforeBuild">
 		<Exec Command="$(NSwagExe_Net80) openapi2csclient /input:../DPWH.EDMS.Api/swagger.json /output:./APIClient/Contracts/DPWH.EDMS.Api.Swagger.generated.cs /GenerateContractsOutput:true /GenerateClientInterfaces:true /UseBaseUrl:false /ContractsNamespace:DPWH.EDMS.Api.Contracts /ContractsOutput:./APIClient/Contracts/DPWH.EDMS.Api.Swagger.Contracts.generated.cs /Namespace:DPWH.EDMS.Api.Contracts /GenerateClientClasses:true /OperationGenerationMode:MultipleClientsFromFirstTagAndOperationName" />
