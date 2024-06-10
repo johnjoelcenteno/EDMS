@@ -118,6 +118,16 @@ public class MenuDataService : IMenuDataService
                 SortOrder = 2,
                 AuthorizedRoles = new List<string>{ ApplicationRoles.SuperAdmin, ApplicationRoles.SystemAdmin }
             },
+            new ()
+            {
+                Text = "Data Library",
+                Url = "/data-library",
+                Icon = "description",
+                Children = default,
+                Level = 0,
+                SortOrder = 3,
+                AuthorizedRoles = new List<string>{ ApplicationRoles.SuperAdmin, ApplicationRoles.SystemAdmin }
+            },
         };
 
     public IEnumerable<MenuModel> GetSettingsItems() =>

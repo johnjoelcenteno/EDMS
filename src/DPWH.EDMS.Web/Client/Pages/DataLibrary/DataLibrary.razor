@@ -1,6 +1,60 @@
 ﻿@page "/data-library"
-
+@inject NavigationManager Nav
 @inherits DataLibraryBase
 @attribute [Authorize(Policy = "RequireActiveRoles")]
 
-<h3>DataLibrary</h3>
+<EdmsBreadcrumbs Data="@BreadcrumbItems" />
+<h3>Data Library</h3>
+<hr />
+
+<div class="container">
+    <div class="data-library-container">
+        @foreach (var dl in DataLibraryList)
+        {
+            <div class="data-library-card-btn" @onclick="@(()=>Nav.NavigateTo(dl.Url))">
+                <TelerikFontIcon Icon="@dl.Icon"
+                                 ThemeColor="@ThemeConstants.FontIcon.ThemeColor.Light"
+                                 Size="@ThemeConstants.FontIcon.Size.ExtraExtraExtraLarge" />
+                <h5>@dl.Name</h5>
+            </div>
+        }
+    </div>
+</div>
+
+<style>
+    .card {
+        width: 272px;
+        height: 212px;
+        background-color: white;
+        margin-right: 20px;
+    }
+
+    .container {
+        margin-left: 20px;
+    }
+
+    .icons {
+        width: 60px;
+    }
+
+    .description {
+        margin-top: 20px;
+    }
+
+    .sub-header {
+        color: #7f56d9;
+        font-weight: 500;
+        font-size: 16px;
+        margin-bottom: 0 !important;
+        font-weight: bolder;
+    }
+
+    .map-cards {
+        transform: translateX(0);
+        transition: transform 0.3s ease;
+    }
+
+        .map-cards:hover {
+            transform: scale(1.1); /* Adjust the scale factor as needed */
+        }
+</style>

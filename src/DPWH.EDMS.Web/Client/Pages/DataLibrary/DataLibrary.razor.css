@@ -1,1 +1,33 @@
-﻿
+﻿.data-library-container {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    align-items: center;
+    justify-content: start;
+    flex-grow: 1;
+    flex-wrap: wrap;
+}
+
+.data-library-card-btn {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    width: 250px !important;
+    height: 200px !important;
+    background-color: #211d70;
+    color: #FFF;
+    border-radius: 5px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+    .data-library-card-btn:hover {
+        background-color: #eb4a1f; /* Change the background color on hover */
+    }
+
+    .data-library-card-btn:active {
+        background-color: #f2896d; /* Change the background color when the button is clicked */
+        box-shadow: none; /* Optionally, you can remove the box shadow on click */
+    }
