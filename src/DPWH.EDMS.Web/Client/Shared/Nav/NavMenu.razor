@@ -327,11 +327,14 @@
                 </ul>
             </Authorized>
         </AuthorizeView>
-        <div id="sidebar-expander">
-            <TelerikButton OnClick="@ToggleDrawer" FillMode="@(ThemeConstants.Button.FillMode.Flat)">
-                <span class="material-symbols-outlined xl">@(DrawerRef.Expanded ? "chevron_left" : "chevron_right") </span>
-            </TelerikButton>
-        </div>
+        @if (!XSmall)
+        {
+            <div id="sidebar-expander">
+                <TelerikButton OnClick="@ToggleDrawer" FillMode="@(ThemeConstants.Button.FillMode.Flat)">
+                    <span class="material-symbols-outlined xl">@(DrawerRef.Expanded ? "chevron_left" : "chevron_right") </span>
+                </TelerikButton>
+            </div>
+        }
     </div>
 </div>
 
@@ -368,6 +371,7 @@
         z-index: 3 !important;
         width: 100% !important;
         margin-top: 58px !important;
+        max-height: calc(100vh - 58px);
     }
 
     .nav-button {
