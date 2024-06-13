@@ -11,7 +11,6 @@ namespace DPWH.EDMS.Web.Client.Pages.CurrentUser.PendingRequests.AddRequest;
 
 public class AddRequestBase: RxBaseComponent
 {
-    [Inject] public required NavigationManager NavManager { get; set; }
     protected DocumentRequestModel SelectedItem { get; set; } = new();
     
     protected List<DocumentClaimant> DocumentClaimants = Enum.GetValues(typeof(DocumentClaimant)).Cast<DocumentClaimant>().ToList();

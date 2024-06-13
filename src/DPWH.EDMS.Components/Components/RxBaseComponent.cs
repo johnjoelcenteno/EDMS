@@ -6,6 +6,7 @@ namespace DPWH.EDMS.Components;
 
 public class RxBaseComponent : ComponentBase, IDisposable
 {
+    [Inject] public required NavigationManager NavManager { get; set; }
     protected bool XSmall { get; set; }
     protected bool Small { get; set; }
     protected bool Medium { get; set; }

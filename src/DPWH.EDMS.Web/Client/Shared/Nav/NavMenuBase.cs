@@ -18,7 +18,6 @@ public class NavMenuBase: RxBaseComponent
     [Inject] public required ConfigManager ConfigManager { get; set; }
     [Inject] public required IMenuDataService MenuDataService { get; set; }
     [Inject] public required NavRx NavRx { get; set; }
-    [Inject] public required NavigationManager NavManager { get; set; }
 
     protected bool IsNavMenuCollapsed = false;
 

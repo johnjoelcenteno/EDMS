@@ -13,7 +13,6 @@ namespace DPWH.EDMS.Web.Client.Pages.CurrentUser.PendingRequests.RequestForm;
 
 public class RequestFormBase : RxBaseComponent
 {
-    [Inject] public required NavigationManager NavManager { get; set; }
     [Inject] public required IToastService ToastService { get; set; }
     [Inject] public required IDocumentService DocumentService { get; set; }
 
