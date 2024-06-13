@@ -3,6 +3,7 @@ using DPWH.EDMS.Application.Contracts.Persistence;
 using DPWH.EDMS.Domain.Entities;
 using DPWH.EDMS.Domain.Enums;
 using DPWH.EDMS.Domain;
+using DPWH.EDMS.IDP.Core.Entities;
 
 namespace DPWH.EDMS.Infrastructure.Context;
 
@@ -12,8 +13,14 @@ public class AppDataContext : DbContext, IReadRepository, IWriteRepository
     {
 
     }
-    public DbSet<DocumentRequest> DocumentRequests { get; set; }
-    public IQueryable<DocumentRequest> DocumentRequestView => DocumentRequests.AsNoTracking();
+    public DbSet<RecordRequest> RecordRequests { get; set; }
+    public IQueryable<RecordRequest> RecordRequestsView => RecordRequests.Include(r => r.AuthorizedRepresentative).AsNoTracking();
+    public DbSet<RecordRequestDocument> RecordRequestDocuments { get; set; }
+    public IQueryable<RecordRequestDocument> RecordRequestDocumentsView => RecordRequestDocuments.AsNoTracking();
+
+    public DbSet<RequestedRecord> RequestedRecords { get; set; }
+    public IQueryable<RequestedRecord> RequestedRecordsView => RequestedRecords.AsNoTracking();
+
 
     public DbSet<EmployeeRecord> EmployeeRecords { get; set; }
     public IQueryable<EmployeeRecord> EmployeeRecordsView => EmployeeRecords.AsNoTracking();
@@ -103,6 +110,17 @@ public class AppDataContext : DbContext, IReadRepository, IWriteRepository
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<AuthorizedRepresentative>()
+            .ToTable("RecordRequests");
+
+        modelBuilder.Entity<RecordRequest>(b =>
+        {
+            b.HasOne(u => u.AuthorizedRepresentative)
+                .WithOne()
+                .HasForeignKey<AuthorizedRepresentative>(a => a.Id);
+            b.Navigation(u => u.AuthorizedRepresentative).IsRequired();         
+        });
+
         modelBuilder.Entity<AssetDocument>()
                .ToTable("AssetDocuments")
                .HasDiscriminator<string>("Category")

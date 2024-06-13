@@ -4,14 +4,28 @@ public static class ApiEndpoints
 {
     private const string ApiBase = "api";
 
-    public static class DocumentRequestEndpoint
+    public static class RecordRequest
     {
-        private const string Base = $"{ApiBase}/DocumentRequests";
+        private const string Base = $"{ApiBase}/recordrequests";
 
-        public const string Query = $"{Base}/Query";
-        public const string Create = $"{Base}/Create";
-        public const string Update = $"{Base}/Update";
-        public const string Delete = $"{Base}/Delete";
+        public const string Get = $"{Base}/{{id:guid}}";
+        public const string Query = $"{Base}/query";
+        public const string Create = $"{Base}/create";
+        public const string Update = $"{Base}/update";
+        public const string Delete = $"{Base}/delete";
+
+        public static class Documents
+        {
+            public const string DeleteDocument = $"{Base}/{{id:guid}}/documents/delete";            
+            public const string GetImages = $"{Base}/{{id:guid}}/images";
+            public const string GetFiles = $"{Base}/{{id:guid}}/files";
+            public const string SaveImage = $"{Base}/{{id:guid}}/images/save";
+            public const string SaveFile = $"{Base}/{{id:guid}}/files/{{documentType}}";
+            public const string UploadSupportingFile = $"{Base}/supportingfiles/{{documentType}}";
+            public const string UpdateFileProperties = $"{Base}/{{assetId:guid}}/files/{{documentType}}/properties";
+            public const string SaveFinancialFile = $"{Base}/{{assetId:guid}}/funding-history";
+            public const string UpdateFinancialFileProperties = $"{Base}/{{assetId:guid}}/funding-history/properties";
+        }
     }
 
     public static class EmployeeRecordEndpoints
@@ -75,6 +89,9 @@ public static class ApiEndpoints
         public const string ZipCode = $"{Base}/zipcode";
 
         public const string Agencies = $"{Base}/agencies";
+        public const string RecordTypes = $"{Base}/recordtypes";
+        public const string ValidIDs = $"{Base}/validids";
+        public const string SecondaryIDs = $"{Base}/secondaryids";
         public const string RequestingOffices = $"{Base}/requestingoffices";
         public const string BuildingComponents = $"{Base}/buildingcomponents";
     }

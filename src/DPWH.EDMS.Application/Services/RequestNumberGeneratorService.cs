@@ -7,7 +7,7 @@ namespace DPWH.EDMS.Application.Services;
 public class RequestNumberGeneratorService : IRequestNumberGeneratorService
 {
     private readonly IWriteRepository _repository;
-    private const string SequenceName = "MaintenanceRequestNumberSequence";
+    private const string SequenceName = "RecordRequestNumberSequence";
 
     public RequestNumberGeneratorService(IWriteRepository repository)
     {
@@ -19,7 +19,7 @@ public class RequestNumberGeneratorService : IRequestNumberGeneratorService
         var sequence = await GetNext(cancellationToken);
         var year = currentDate.Year;
 
-        return $"MR-{year}-{sequence}";
+        return $"RR-{year}-{sequence}";
     }
 
     private async Task<string?> GetNext(CancellationToken cancellationToken)

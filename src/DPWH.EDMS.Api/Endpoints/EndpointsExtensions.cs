@@ -15,6 +15,7 @@ using DPWH.EDMS.Api.Endpoints.Root;
 using DPWH.EDMS.Api.Endpoints.Users;
 using DPWH.EDMS.Api.Endpoints.Assets;
 using DPWH.EDMS.Api.Endpoints.Reports;
+using DPWH.EDMS.Api.Endpoints.RecordRequests;
 
 namespace DPWH.EDMS.Api.Endpoints;
 
@@ -23,26 +24,26 @@ public static class EndpointsExtensions
     public static IEndpointRouteBuilder MapApiEndpoints(this IEndpointRouteBuilder app)
     {
         // new endpoints
-        app.MapDocumentRequestsEndpoints();
-        app.MapEmployeeRequestEndpointExtensions();
+        app.MapRecordRequestsEndpoints();
+        app.MapEmployeeRequestEndpointExtensions();        
 
         app.MapRootEndpoints();
-        app.MapAssetEndpoints();
+        //app.MapAssetEndpoints();
         app.MapLookupsEndpoints();
         app.MapAddressEndpoints();
         app.MapLicensesEndpoints();
         app.MapUsersEndpoints();
         app.MapRoleEndpoints();
-        app.MapReportsEndpoints();
+        //app.MapReportsEndpoints();
         app.MapAuditLogsEndpoints();
         app.MapSystemLogsEndpoints();
         app.MapDpwhIntegrationsEndpoints();
-        app.MapArcGisIntegrationsEndpoints();
+        //app.MapArcGisIntegrationsEndpoints();
         app.MapDataLibrariesEndpoints();
-        app.MapDataSyncEndpoints();
-        app.MapInspectionsEndpoints();
-        app.MapMaintenanceRequestEndpoints();
-        app.MapProjectMonitoringEndpoints();
+        //app.MapDataSyncEndpoints();
+        //app.MapInspectionsEndpoints();
+        //app.MapMaintenanceRequestEndpoints();
+        //app.MapProjectMonitoringEndpoints();
 
         return app;
     }
