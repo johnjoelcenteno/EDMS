@@ -1,0 +1,49 @@
+﻿@inherits ViewRequestBase
+
+@page "/my-pending-request/view/{ControlNumber}"
+@using DPWH.EDMS.Components.Helpers
+
+<EdmsBreadcrumbs Data="@BreadcrumbItems" />
+
+<h3>My Pending Request</h3>
+
+<div class="d-flex flex-row align-items-center mb-2">
+    <p>Control Number: CA-12349123 </p>
+    <span class="role-chip">Pending</span>
+</div>
+<p>Fullname: Fullname Placeholder &nbsp;&nbsp; / &nbsp;&nbsp; Date Requested: 06/12/2024</p>
+<hr />
+
+<TelerikTabStrip>
+    <TabStripTab>
+        <HeaderTemplate>
+            <span class="bi me-2 material-symbols-outlined">overview</span>
+            Overview
+        </HeaderTemplate>
+        <Content>
+            <div class="d-flex flex-column">
+                <div class="d-flex flex-row mb-2">
+                    <p class="edms-text-header-small">Request Details</p>
+                </div>
+                <div class="detail-flex">
+                    <p><b>Office:</b>&nbsp;PLACEHOLDER</p>
+                    <p><b>Active or Inactive:</b>&nbsp; PLACEHOLDER</p>
+                </div>
+                <div class="detail-flex">
+                    <p><b>Purpose:</b>&nbsp;PLACEHOLDER</p>
+                </div>
+                <hr />
+                <div class="d-flex flex-row mb-2">
+                    <p class="edms-text-header-small">Requested Documents</p>
+                </div>
+                <div class="detail-flex">
+                    <ul>
+                        <li>Doc 1</li>
+                        <li>Doc 2</li>
+                        <li>Doc 3</li>
+                    </ul>
+                </div>
+            </div>
+        </Content>
+    </TabStripTab>
+</TelerikTabStrip>

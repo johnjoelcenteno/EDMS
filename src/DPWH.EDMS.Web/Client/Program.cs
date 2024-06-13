@@ -10,6 +10,7 @@ using DPWH.EDMS.Client.Shared.APIClient.Core;
 using DPWH.EDMS.Components.Helpers;
 using DPWH.EDMS.Web.Client.BFF;
 using Microsoft.AspNetCore.Components.Authorization;
+using DPWH.EDMS.Web.Client.Shared.Services.Core;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
@@ -31,6 +32,9 @@ builder.Services.AddSharedServices();
 
 // add this for adding Toastr Message prompt
 builder.Services.AddBlazoredToast();
+
+// add service for validation
+builder.Services.AddFluentValidatorService();
 
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
 

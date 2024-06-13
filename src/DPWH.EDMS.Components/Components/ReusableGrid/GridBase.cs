@@ -11,7 +11,6 @@ namespace DPWH.EDMS.Components.Components.ReusableGrid;
 public class GridBase<T> : RxBaseComponent
 {
     [Inject] public required IToastService ToastService { get; set; }
-    [Inject] public required NavigationManager NavManager { get; set; }
     protected List<T> GridData { get; set; } = new();
     protected TelerikGrid<T> GridRef { get; set; } = new();
     protected int Page { get; set; } = 1;

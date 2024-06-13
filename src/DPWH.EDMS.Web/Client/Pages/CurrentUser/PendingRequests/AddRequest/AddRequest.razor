@@ -1,0 +1,12 @@
+﻿@page "/my-pending-request/add"
+@using DPWH.EDMS.Web.Client.Pages.CurrentUser.PendingRequests.RequestForm
+
+@inherits AddRequestBase
+@attribute [Authorize(Policy = "RequireActiveRoles")]
+
+<EdmsBreadcrumbs Data="@BreadcrumbItems" />
+
+<h3>Add New Request</h3>
+<hr />
+
+<RequestForm HandleOnCancel="OnCancel" HandleOnSubmit="HandleSubmit" />
