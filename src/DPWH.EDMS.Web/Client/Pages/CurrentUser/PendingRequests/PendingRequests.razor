@@ -1,5 +1,4 @@
-﻿@page "/pending-request"
-@page "/my-pending-request"
+﻿@page "/my-pending-request"
 
 @inherits PendingRequestsBase
 
@@ -22,7 +21,12 @@
             </div>
             <CardSeparator Class="my-2"></CardSeparator>
             <div>
-                <TelerikButton Class="mb-2" Icon="@FontIcon.Plus" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary">Add Request</TelerikButton>
+                <TelerikButton 
+                    Class="mb-2" 
+                    Icon="@FontIcon.Plus" 
+                    ThemeColor="@ThemeConstants.Button.ThemeColor.Primary"
+                               OnClick="GoToAddNewRequest">
+                    Add Request</TelerikButton>
                 @if (GridData != null && !XSmall)
                 {
                     <TelerikGrid TItem="DocumentRequestModel"

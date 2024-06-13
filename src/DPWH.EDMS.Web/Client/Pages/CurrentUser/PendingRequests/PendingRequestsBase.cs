@@ -40,6 +40,11 @@ public class PendingRequestsBase : GridBase<DocumentRequestModel>
         return (user.Identity is not null && user.Identity.IsAuthenticated) && user.IsInRole(ApplicationRoles.EndUser);
     }
 
+    protected void GoToAddNewRequest()
+    {
+        NavManager.NavigateTo("my-pending-request/add");
+    }
+
     private List<DocumentRequestModel> GetMockData()
     {
         return new List<DocumentRequestModel>

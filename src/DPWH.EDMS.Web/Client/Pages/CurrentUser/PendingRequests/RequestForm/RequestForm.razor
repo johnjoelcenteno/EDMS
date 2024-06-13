@@ -1,0 +1,125 @@
+﻿@inherits RequestFormBase
+
+<EditForm Model="SelectedItem" OnSubmit="@HandleOnSubmitCallback">
+    <FluentValidationValidator @ref="FluentValidationValidator" DisableAssemblyScanning="@true"></FluentValidationValidator>
+    <TelerikCard Class="edms-card-form">
+        <CardBody>
+            <div class="d-flex flex-row">
+                <p Class="mb-0 py-1 fw-bold">Request Details</p>
+            </div>
+            <CardSeparator Class="my-2"></CardSeparator>
+            <div class="form-group">
+                <div class="row m-0">
+                    <div class="col-md-6 col-12 p-2">
+                        <label for="controlNumber">Control No.</label>
+                        <InputText id="controlNumber" class="form-control" @bind-Value="SelectedItem.ControlNumber" />
+                        <ValidationMessage For="@(() => SelectedItem.ControlNumber)" class="text-danger" />
+                    </div>
+                    <div class="col-md-6 col-12 p-2">
+                        <label for="dateRequested">Date and Time Requested</label>
+                        <TelerikDateTimePicker @bind-Value="SelectedItem.DateRequested" />
+                        <ValidationMessage For="@(() => SelectedItem.DateRequested)" class="text-danger" />
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="form-group p-2">
+                <label for="employeeNo">Employee No.</label>
+                <InputText id="employeeNo" class="form-control" @bind-Value="SelectedItem.EmployeeNo" />
+                <ValidationMessage For="@(() => SelectedItem.EmployeeNo)" class="text-danger" />
+            </div>
+
+            <div class="form-group p-2">
+                <label>Active or Inactive</label>
+                <div>
+                    <TelerikSwitch Class="float-right" @bind-Value="@SelectedItem.IsActive"></TelerikSwitch>
+                </div>
+                <ValidationMessage For="@(() => SelectedItem.IsActive)" class="text-danger" />
+            </div>
+
+            <div class="form-group p-2">
+                <label>Who will be claiming the document?</label>
+                <div>
+                    <div class="k-form-field-wrap">
+                        <TelerikRadioGroup Layout="@RadioGroupLayout.Horizontal" Data="@documentClaimants"
+                                           @bind-Value="@SelectedItem.DocumentClaimant" Context="radioContext">
+                            <ItemTemplate>
+                                @{
+                                    var ctx = radioContext;
+                                }
+                                @(ctx == DocumentClaimant.AuthorizedRepresentative ? "Authorize Representative" : "Requestor")
+                            </ItemTemplate>
+                        </TelerikRadioGroup>
+                    </div>
+                </div>
+                <ValidationMessage For="@(() => SelectedItem.DocumentClaimant)" class="text-danger" />
+            </div>
+
+            @if (SelectedItem.DocumentClaimant == DocumentClaimant.AuthorizedRepresentative)
+            {
+                <div class="form-group p-2">
+                    <label for="authorizedRepresentative">Authorized Representative</label>
+                    <InputText id="authorizedRepresentative" class="form-control" @bind-Value="SelectedItem.AuthorizedRepresentative" />
+                    <ValidationMessage For="@(() => SelectedItem.AuthorizedRepresentative)" class="text-danger" />
+                </div>
+            }
+
+            <div class="form-group p-2">
+                <label for="validIdType">Valid ID</label>
+                <TelerikDropDownList Data="@validIdTypes" @bind-Value="SelectedItem.ValidIdType" />
+                <ValidationMessage For="@(() => SelectedItem.ValidIdType)" class="text-danger" />
+            </div>
+
+            <div class="form-group p-2">
+                <label for="uploadValidId">Upload Valid ID</label>
+                <TelerikFileSelect AllowedExtensions="@AllowedExtensions"
+                                   OnSelect="@OnSelect"
+                                   OnRemove="@OnRemove"
+                                   MaxFileSize="@MaxFileSize"
+                                   MinFileSize="@MinFileSize"
+                                   Multiple="false">
+                </TelerikFileSelect>
+                <ValidationMessage For="@(() => SelectedItem.IsValidIdAccepted)" class="text-danger" />
+            </div>
+
+            <div class="form-group p-2">
+                <label for="supportingDocumentType">Supporting Document</label>
+                <TelerikDropDownList Data="@supportingDocumentTypes" @bind-Value="SelectedItem.SupportingDocumentType" />
+                <ValidationMessage For="@(() => SelectedItem.SupportingDocumentType)" class="text-danger" />
+            </div>
+
+            @*  <div class="form-group">
+            <label for="uploadDocument">Upload Document</label>
+            <TelerikUpload @bind-Value="SelectedItem.UploadDocument" />
+            <ValidationMessage For="@(() => SelectedItem.UploadDocument)" class="text-danger" />
+            </div> *@
+
+            <div class="form-group p-2">
+                <label for="recordsRequested">Record/s to be Requested</label>
+                <TelerikMultiSelect Data="@allRecords"
+                                    @bind-Value="@SelectedItem.RecordsRequested"
+                                    Placeholder="-">
+                </TelerikMultiSelect>
+                <ValidationMessage For="@(() => SelectedItem.RecordsRequested)" class="text-danger" />
+            </div>
+
+            <div class="form-group p-2">
+                <label for="remarks">Remarks</label>
+                <InputTextArea id="remarks" class="form-control" @bind-Value="SelectedItem.Remarks" placeholder="Placeholder" />
+                <ValidationMessage For="@(() => SelectedItem.Remarks)" class="text-danger" />
+            </div>
+        </CardBody>
+    </TelerikCard>
+    <div class="edms-card-form my-3">
+        <div class="d-flex flex-row justify-content-between">
+            <TelerikButton @onclick="HandleOnCancelCallback"
+                           FillMode="@ThemeConstants.Button.FillMode.Outline" ThemeColor="@ThemeConstants.Button.ThemeColor.Secondary">
+                Cancel
+            </TelerikButton>
+            <TelerikButton ButtonType="ButtonType.Submit" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary">
+                Submit
+            </TelerikButton>
+        </div>
+    </div>
+</EditForm>
