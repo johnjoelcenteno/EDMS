@@ -3,6 +3,7 @@ public static class WellKnownContainers
 {
     public static readonly string WorkOrders = "workorders";
     public static readonly string AssetDocuments = "assetdocuments";
+    public static readonly string RecordRequestSupportingFiles = "recordrequestsupportingfiles";
     public static readonly string FinancialDocuments = "financialdocuments";
     public static readonly string InspectionRequestDocuments = "inspectionrequestdocuments";
     public static readonly string InspectionRequestBuildingComponentImages = "inspectionrequestbuildingcomponentimages";

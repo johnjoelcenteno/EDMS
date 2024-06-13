@@ -5,6 +5,7 @@ using DPWH.EDMS.Api;
 using DPWH.EDMS.Api.Middlewares;
 using DPWH.EDMS.Api.Swagger;
 using DPWH.EDMS.Infrastructure;
+using Microsoft.AspNetCore.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 var configManager = ConfigManager.Instance(builder.Configuration);
@@ -13,6 +14,10 @@ builder.AddLogging();
 builder.Services.AddPresentation(configManager);
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(configManager);
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.AddSingleton<IAuthorizationHandler, DevelopmentModeAuthorizationHandler>();
+}
 
 var app = builder.Build();
 

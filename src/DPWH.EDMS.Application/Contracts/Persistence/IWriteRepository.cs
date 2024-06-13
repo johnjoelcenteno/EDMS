@@ -8,7 +8,9 @@ namespace DPWH.EDMS.Application.Contracts.Persistence;
 public interface IWriteRepository
 {
     DbSet<EmployeeRecord> EmployeeRecords { get; }
-    DbSet<DocumentRequest> DocumentRequests { get; }
+    DbSet<RecordRequest> RecordRequests { get; }
+    DbSet<RecordRequestDocument> RecordRequestDocuments { get; }
+    DbSet<RequestedRecord> RequestedRecords { get; }    
 
     DbSet<Asset> Assets { get; }
     DbSet<InspectionRequest> InspectionRequests { get; }

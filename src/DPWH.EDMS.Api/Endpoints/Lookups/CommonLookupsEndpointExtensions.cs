@@ -10,7 +10,10 @@ public static class CommonLookupsEndpointExtensions
         app.MapGeoLocations();
         app.MapAgencies();
         app.MapRequestingOfficeLookups();
-        app.MapBuildingComponents();
+        //app.MapBuildingComponents();
+        app.MapRecordTypes();
+        app.MapValidIDs();
+        app.MapSecondaryIDs();
 
         return app;
     }

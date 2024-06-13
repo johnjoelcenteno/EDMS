@@ -1,5 +1,5 @@
+using DPWH.EDMS.Domain.Exceptions;
 using System.ComponentModel;
-using System.Runtime.CompilerServices;
 
 namespace DPWH.EDMS.Domain.Extensions;
 
@@ -22,8 +22,7 @@ public static class EnumExtensions
             }
         }
 
-        throw new ArgumentException("Not found.", nameof(description));
-        // Or return default(T);
+        throw new AppException($"Enum not found: '{description}' in {typeof(T).Name}" );        
     }
 
     public static string GetDescriptionFromValue<T>(string value) where T : Enum

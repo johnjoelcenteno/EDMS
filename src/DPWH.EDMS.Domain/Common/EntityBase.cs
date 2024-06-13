@@ -12,12 +12,12 @@ public class EntityBase
     public void SetCreated(string createdBy)
     {
         CreatedBy = createdBy;
-        Created = DateTimeOffset.Now;
+        Created = DateTimeOffset.UtcNow;
     }
 
     public void SetModified(string updatedBy)
     {
         LastModifiedBy = updatedBy;
-        LastModified = DateTimeOffset.Now;
+        LastModified = DateTimeOffset.UtcNow;
     }
 }

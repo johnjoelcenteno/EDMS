@@ -41,3 +41,4 @@ public class UpdateResponse : IdResponse
 {
     public UpdateResponse(Guid id) : base(id) { }
 }
+
