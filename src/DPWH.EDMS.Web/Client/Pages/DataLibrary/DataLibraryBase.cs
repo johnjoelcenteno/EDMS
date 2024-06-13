@@ -17,28 +17,16 @@ public class DataLibraryBase : RxBaseComponent
         {
             new DataLibraryModel
             {
-                Icon = FontIcon.Dimensions,
-                Name = "Data 1",
-                Url = "/"
-            },
-            new DataLibraryModel
-            {
-                Icon = FontIcon.Sliders,
-                Name = "Data 2",
-                Url = "/"
-            },
-            new DataLibraryModel
-            {
-                Icon = FontIcon.Calendar,
-                Name = "Data 3",
-                Url = "/"
+                Icon = FontIcon.FileConfig,
+                Name = "Document Type",
+                Url = "/data-library/document-type"
             },
             new DataLibraryModel
             {
                 Icon = FontIcon.Gear,
-                Name = "Data 4",
-                Url = "/"
-            }
+                Name = "Purpose",
+                Url = "/data-library/purpose"
+            },
         };
 
         BreadcrumbItems.Add(new BreadcrumbModel

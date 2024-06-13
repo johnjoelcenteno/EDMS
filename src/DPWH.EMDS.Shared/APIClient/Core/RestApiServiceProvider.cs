@@ -1,4 +1,5 @@
 using DPWH.EDMS.Api.Contracts;
+using DPWH.EDMS.Client.Shared.APIClient.Services.DataLibrary;
 using DPWH.EDMS.Client.Shared.APIClient.Services.Licenses;
 using DPWH.EDMS.Client.Shared.APIClient.Services.Lookups;
 using DPWH.NGOBIA.Client.Shared.APIClient.Services.Users;
@@ -13,6 +14,7 @@ public static class RestApiServiceProvider
         services.AddScoped<IUsersService, UsersService>();
         services.AddScoped<ILookupsService, LookupsService>();
         services.AddScoped<ILicensesService, LicensesService>();
+        services.AddScoped<IDataLibraryService, DataLibraryService>();
         return services;
     }
 }
