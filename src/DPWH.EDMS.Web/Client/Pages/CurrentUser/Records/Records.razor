@@ -1,7 +1,65 @@
 ﻿@page "/my-Records"
 
 @inherits RecordsBase
-
+@inject NavigationManager Navigation
 @attribute [Authorize(Policy = "RequireActiveRoles")]
 
+<EdmsBreadcrumbs Data="@BreadcrumbItems" />
+
 <h3>My Records</h3>
+<hr />
+<div class="d-flex flex-row mt-3">
+    <TelerikCard Width="100%">
+        <CardBody>
+            <div class="d-flex flex-row justify-content-between">
+                <CardTitle Class="mb-0">Record Lists</CardTitle>
+            </div>
+            <CardSeparator Class="my-2"></CardSeparator>
+            <div class="mobile-property-grid">
+
+                @if (EmployeeList != null && !XSmall)
+                {
+                    <TelerikGrid TItem="EmployeeSamp"
+                                 @bind-PageSize="@PageSize"
+                                 Height="@GridHeight"
+                                 FilterMode="GridFilterMode.FilterRow"
+                                 Sortable=true
+                                 Data="EmployeeList"
+                                 OnStateChanged="@OnStateChanged"
+                                 @ref="GridRef"
+                                 Context="employee">
+                        <GridSettings>
+                            <GridPagerSettings PageSizes="@PageSizes">
+                            </GridPagerSettings>
+                        </GridSettings>
+                        <GridColumns>
+                            <GridColumn Field=@nameof(EmployeeSamp.DocumentName) Title="Document Name" />
+                            <GridCommandColumn Width="10%">
+                                <GridCommandButton Class="exportButton" Command="ExportData" OnClick="@exportData">Export</GridCommandButton>
+                            </GridCommandColumn>
+                        </GridColumns>
+                    </TelerikGrid>
+                }
+                else
+                {
+                    <span>No Data to display.</span>
+                }
+            </div>
+            <TelerikPager PageChanged="@PageChangedHandler"
+                          Total="TotalItems"
+                          ButtonCount="6"
+                          PageSize="@PageSize"
+                          PageSizeChanged="@PageSizeChangedHandler"
+                          PageSizes="@(new List<int?> {5, 10, 20})"
+                          Page="@Page">
+            </TelerikPager>
+        </CardBody>
+    </TelerikCard>
+</div>
+<style>
+    .exportButton{
+            font-weight: 500;
+            width: 100%;
+
+    }
+</style>
