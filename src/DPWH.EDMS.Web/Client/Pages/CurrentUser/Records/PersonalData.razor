@@ -1,0 +1,48 @@
+﻿@page "/personal-Data/{Id:int}"
+@using DPWH.EDMS.Components.Helpers
+@inherits RecordsPersonalData
+
+<EdmsBreadcrumbs Data="@BreadcrumbItems" />
+
+<h3>My Records</h3>
+<span>Personal Data Sheet</span><br />
+<span>To view associated request </span> <NavLink href="/Personal-Data">Click here</NavLink>
+<span>
+    (Control Number: <span style="color: #38339B;">@EmployeeList[Id-1].ControlNumber</span>
+    / Date Requested: <span style="color: #38339B;">@(GenericHelper.GetDateDisplay(EmployeeList[Id-1].DateRequested, "MM/dd/yyyy")))</span>
+</span>
+<hr />
+<TelerikCard Width="100%">
+    <CardBody>
+        <div class="d-flex flex-row justify-content-between">
+            <CardTitle Class="headName">Personal Data Sheet</CardTitle>
+        </div>
+        <CardSeparator Class="my-2"></CardSeparator>
+        <div class="container">
+            <div class="d-flex justify-content-end mb-2">
+                <TelerikButton Class="dlButton">Download</TelerikButton>
+            </div>
+            <CardImage Width="100%" Src="_content/DPWH.EDMS.Components/images/image-default.svg"></CardImage>
+        </div>
+            
+        
+    </CardBody>
+</TelerikCard>
+
+@code{
+    
+}
+<style>
+    .container{
+        width: 50%;
+    }
+    .dlButton{
+        background-color: #38339B;
+        color: white;
+    }
+
+    .headName{
+        color: #38339B;
+        margin-bottom:0;
+    }
+</style>
