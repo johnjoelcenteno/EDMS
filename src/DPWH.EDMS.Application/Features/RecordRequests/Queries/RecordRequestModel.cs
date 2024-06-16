@@ -18,9 +18,9 @@ public record RecordRequestModel
 public record AuthorizedRepresentativeModel
 {    
     public string? RepresentativeName { get; set; }
-    public string? ValidId { get; set; }
+    public Guid? ValidId { get; set; }
     public string? ValidIdUri { get; set; }
-    public string? SupportingDocument { get; set; }
+    public Guid? SupportingDocument { get; set; }
     public string? SupportingDocumentUri { get; set; }
 }
 

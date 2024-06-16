@@ -26,6 +26,12 @@ public sealed class CreateRecordRequestValidator : AbstractValidator<CreateRecor
                 v.RuleFor(param => param.RequestedRecords)
                     .NotEmpty()
                     .WithMessage("RequestedRecords must not be empty or null.");
+
+                v.RuleFor(param => param.ValidId)                    
+                    .NotEmpty()
+                    .When(x => x.Claimant == ClaimantTypes.AuthorizedRepresentative.ToString())
+                    .WithMessage("ValidId must not be empty or null when claimant is representative.");
+
             });
     }
 }
