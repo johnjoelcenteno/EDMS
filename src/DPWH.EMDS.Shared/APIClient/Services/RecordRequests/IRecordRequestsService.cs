@@ -10,4 +10,5 @@ namespace DPWH.EDMS.Client.Shared.APIClient.Services.RecordRequests;
 public interface IRecordRequestsService
 {
     Task<CreateResponse> CreateRecordRequest(CreateRecordRequest request);
+    Task<DataSourceResult> Query(DataSourceRequest body);
 }

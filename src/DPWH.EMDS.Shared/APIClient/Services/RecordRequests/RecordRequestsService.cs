@@ -1,10 +1,5 @@
 ﻿using DPWH.EDMS.Api.Contracts;
 using DPWH.EDMS.Client.Shared.Configurations;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DPWH.EDMS.Client.Shared.APIClient.Services.RecordRequests;
 
@@ -21,5 +16,10 @@ public class RecordRequestsService : IRecordRequestsService
     public async Task<CreateResponse> CreateRecordRequest(CreateRecordRequest request)
     {
         return await _client.CreateRecordRequestAsync(request);
+    }
+
+    public async Task<DataSourceResult> Query(DataSourceRequest body)
+    {
+        return await _client.QueryRecordRequestsAsync(body);
     }
 }
