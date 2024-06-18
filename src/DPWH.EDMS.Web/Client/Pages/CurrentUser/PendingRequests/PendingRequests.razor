@@ -1,4 +1,5 @@
 ﻿@page "/my-pending-request"
+@using DPWH.EDMS.Api.Contracts
 
 @inherits PendingRequestsBase
 
@@ -8,6 +9,8 @@
 {
     <EdmsBreadcrumbs Data="@BreadcrumbItems" />
 }
+
+<EdmsLoader Visible="@IsLoading" />
 
 <h3>My Pending Request</h3>
 
@@ -29,7 +32,7 @@
                     Add Request</TelerikButton>
                 @if (GridData != null && !XSmall)
                 {
-                    <TelerikGrid TItem="DocumentRequestModel"
+                    <TelerikGrid TItem="RecordRequestModel"
                                  @bind-PageSize="@PageSize"
                                  Height="@GridHeight"
                                  FilterMode="GridFilterMode.FilterRow"
@@ -43,19 +46,19 @@
                             </GridPagerSettings>
                         </GridSettings>
                         <GridColumns>
-                            <GridColumn Field=@nameof(DocumentRequestModel.ControlNumber) Title="Control No." Filterable="false" />
-                            <GridColumn Field=@nameof(DocumentRequestModel.ControlNumber) Title="Records Requested" Filterable="false">
+                            <GridColumn Field=@nameof(RecordRequestModel.ControlNumber) Title="Control No." Filterable="false" />
+                            @* <GridColumn Field=@nameof(RecordRequestModel.RequestedRecords) Title="Records Requested" Filterable="false">
                                 <Template>
                                     @{
-                                        var req = context as DocumentRequestModel;
+                                        var req = context as RecordRequestModel;
                                         string recs = req!.RecordsRequested.Count > 0 ? String.Join(", ", req.RecordsRequested) : "-";
                                     }
                                     <p class="mb-0">@recs</p>
                                 </Template>
-                            </GridColumn>
-                            <GridColumn Field=@nameof(DocumentRequestModel.DateRequested) Title="Date Requested" />
-                            <GridColumn Field=@nameof(DocumentRequestModel.Purpose) Title="Purpose" />
-                            <GridColumn Field=@nameof(DocumentRequestModel.Status) Title="Status" />
+                            </GridColumn> *@
+                            <GridColumn Field=@nameof(RecordRequestModel.DateRequested) Title="Date Requested" />
+                            <GridColumn Field=@nameof(RecordRequestModel.Purpose) Title="Purpose" />
+                            <GridColumn Field=@nameof(RecordRequestModel.Status) Title="Status" />
                         </GridColumns>
                     </TelerikGrid>
                 }

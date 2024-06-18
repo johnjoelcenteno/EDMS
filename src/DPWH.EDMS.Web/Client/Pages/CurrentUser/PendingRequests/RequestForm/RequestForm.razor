@@ -1,4 +1,5 @@
-﻿@inherits RequestFormBase
+﻿@using DPWH.EDMS.Api.Contracts
+@inherits RequestFormBase
 
 <EditForm Model="SelectedItem" OnSubmit="@HandleOnSubmitCallback">
     <FluentValidationValidator @ref="FluentValidationValidator" DisableAssemblyScanning="@true"></FluentValidationValidator>
@@ -67,7 +68,11 @@
 
             <div class="form-group p-2">
                 <label for="validIdType">Valid ID</label>
-                <TelerikDropDownList Data="@validIdTypes" @bind-Value="SelectedItem.ValidIdType" />
+                <TelerikDropDownList Data="@ValidIDsList"
+                                     @bind-Value="SelectedItem.ValidIdType"
+                                     ValueField="@nameof(GetValidIDsResult.Name)"
+                                     TextField="@nameof(GetValidIDsResult.Name)"
+                                     DefaultText="Select" />
                 <ValidationMessage For="@(() => SelectedItem.ValidIdType)" class="text-danger" />
             </div>
 
@@ -78,14 +83,19 @@
                                    OnRemove="@OnRemove"
                                    MaxFileSize="@MaxFileSize"
                                    MinFileSize="@MinFileSize"
-                                   Multiple="false">
+                                   Multiple="false"
+                                   Enabled="@(SelectedItem.ValidIdType != null ? true : false)">
                 </TelerikFileSelect>
                 <ValidationMessage For="@(() => SelectedItem.IsValidIdAccepted)" class="text-danger" />
             </div>
 
             <div class="form-group p-2">
                 <label for="supportingDocumentType">Supporting Document</label>
-                <TelerikDropDownList Data="@supportingDocumentTypes" @bind-Value="SelectedItem.SupportingDocumentType" />
+                <TelerikDropDownList Data="@SecondaryIDsList"
+                                     @bind-Value="SelectedItem.SupportingDocumentType"
+                                     ValueField="@nameof(GetSecondaryIDsResult.Name)"
+                                     TextField="@nameof(GetSecondaryIDsResult.Name)"
+                                     DefaultText="Select" />
                 <ValidationMessage For="@(() => SelectedItem.SupportingDocumentType)" class="text-danger" />
             </div>
 
@@ -97,8 +107,10 @@
 
             <div class="form-group p-2">
                 <label for="recordsRequested">Record/s to be Requested</label>
-                <TelerikMultiSelect Data="@allRecords"
+                <TelerikMultiSelect Data="@RecordTypesList"
                                     @bind-Value="@SelectedItem.RecordsRequested"
+                                    ValueField="@nameof(GetRecordTypesResult.Name)"
+                                    TextField="@nameof(GetRecordTypesResult.Name)"
                                     Placeholder="-">
                 </TelerikMultiSelect>
                 <ValidationMessage For="@(() => SelectedItem.RecordsRequested)" class="text-danger" />

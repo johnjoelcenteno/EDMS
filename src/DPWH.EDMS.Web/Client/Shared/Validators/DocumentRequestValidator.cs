@@ -52,8 +52,8 @@ public class DocumentRequestModelValidator : AbstractValidator<DocumentRequestMo
             .Equal(true)
             .WithMessage("Please upload a valid ID - PDF or DOCX files only");
 
-        RuleFor(x => x.IsSupportedDocumentAccepted)
-            .Equal(true)
-            .WithMessage("Please upload a valid supporting document - PDF or DOCX files only");
+        //RuleFor(x => x.IsSupportedDocumentAccepted)
+        //    .Equal(true)
+        //    .WithMessage("Please upload a valid supporting document - PDF or DOCX files only");
     }
 }
