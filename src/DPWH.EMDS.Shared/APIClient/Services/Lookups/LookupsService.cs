@@ -4,7 +4,7 @@ using DPWH.EDMS.Client.Shared.Configurations;
 
 namespace DPWH.EDMS.Client.Shared.APIClient.Services.Lookups;
 
-internal class LookupsService : ILookupsService
+public class LookupsService : ILookupsService
 {
     private readonly LookupsClient _client;
 
@@ -18,17 +18,32 @@ internal class LookupsService : ILookupsService
     {
         return await _client.LookupsAsync();
     }
-    
+
+    public async Task<GetValidIDsResultIEnumerableBaseApiResponse> GetValidIdTypes()
+    {
+        return await _client.GetValidIDsAsync();
+    }
+
+    public async Task<GetSecondaryIDsResultIEnumerableBaseApiResponse> GetSecondaryIdTypes()
+    {
+        return await _client.GetSecondaryIDsAsync();
+    }
+
+    public async Task<GetRecordTypesResultIEnumerableBaseApiResponse> GetRecordTypes()
+    {
+        return await _client.GetRecordTypesAsync();
+    }
+
     ////public async Task<AddressLookup> GetRegions()
     ////{
     ////    return await _client.GetRegionsAsync();
     ////}
-    
+
     ////public async Task<AddressLookup> GetProvinces(string regionCode)
     ////{
     ////    return await _client.GetProvincesAsync(regionCode);
     ////}
-    
+
     //////public async Task<AddressLookup> GetCitiesWithoutProvince(string regionCode)
     //////{
     //////    return await _client.GetCityOrMunicipalitiesWithoutProvinceAsync(regionCode);
@@ -38,7 +53,7 @@ internal class LookupsService : ILookupsService
     ////{
     ////    return await _client.GetCityOrMunicipalitiesAsync(provinceCode);
     ////}
-    
+
     ////public async Task<AddressLookup> GetBarangays(string cityCode)
     ////{
     ////    return await _client.GetBarangaysAsync(cityCode);
@@ -53,7 +68,7 @@ internal class LookupsService : ILookupsService
     ////{
     ////    return await _client.GetAgencyListAsync();
     ////}
-    
+
     ////public async Task<GetBuildingComponentsResultIEnumerableBaseApiResponse> GetBuildingComponents()
     ////{
     ////    return await _client.GetBuildingComponentsAsync();
