@@ -1,5 +1,6 @@
 ﻿@page "/my-pending-request"
 @using DPWH.EDMS.Api.Contracts
+@using DPWH.EDMS.Components.Helpers
 
 @inherits PendingRequestsBase
 
@@ -35,7 +36,7 @@
                     <TelerikGrid TItem="RecordRequestModel"
                                  @bind-PageSize="@PageSize"
                                  Height="@GridHeight"
-                                 FilterMode="GridFilterMode.FilterRow"
+                                 FilterMode="GridFilterMode.None"
                                  Sortable=true
                                  Data="GridData"
                                  OnStateChanged="@OnStateChanged"
@@ -48,16 +49,26 @@
                         </GridSettings>
                         <GridColumns>
                             <GridColumn Field=@nameof(RecordRequestModel.ControlNumber) Title="Control No." Filterable="false" />
-                            @* <GridColumn Field=@nameof(RecordRequestModel.RequestedRecords) Title="Records Requested" Filterable="false">
-                        <Template>
-                        @{
-                        var req = context as RecordRequestModel;
-                        string recs = req!.RecordsRequested.Count > 0 ? String.Join(", ", req.RecordsRequested) : "-";
-                        }
-                        <p class="mb-0">@recs</p>
-                        </Template>
-                        </GridColumn> *@
-                            <GridColumn Field=@nameof(RecordRequestModel.DateRequested) Title="Date Requested" />
+                            <GridColumn Field=@nameof(RecordRequestModel.RequestedRecords) Title="Records Requested" Filterable="false">
+                                <Template>
+                                    @{
+                                        var req = context as RecordRequestModel;
+                                        string recs = req.RequestedRecords != null && req!.RequestedRecords.Count > 0
+                                        ? String.Join(", ", req.RequestedRecords.Select(r => r.RecordType))
+                                        : "-";
+                                    }
+                                    <p class="mb-0">@recs</p>
+                                </Template>
+                            </GridColumn>
+                            <GridColumn Field=@nameof(RecordRequestModel.DateRequested) Title="Date Requested">
+                                <Template>
+                                    @{
+                                        var req = context as RecordRequestModel;
+                                        string dt = GenericHelper.GetDateTimeDisplay(req.DateRequested);
+                                    }
+                                    <p class="mb-0">@dt</p>
+                                </Template>
+                            </GridColumn>
                             <GridColumn Field=@nameof(RecordRequestModel.Purpose) Title="Purpose" />
                             <GridColumn Field=@nameof(RecordRequestModel.Status) Title="Status" />
                         </GridColumns>
