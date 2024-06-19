@@ -5,6 +5,7 @@ using DPWH.EDMS.Components.Components.ReusableGrid;
 using DPWH.EDMS.IDP.Core.Constants;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using Telerik.Blazor.Components;
 
 namespace DPWH.EDMS.Web.Client.Pages.CurrentUser.PendingRequests;
 
@@ -31,7 +32,6 @@ public class PendingRequestsBase : GridBase<RecordRequestModel>
         ServiceCb = RecordRequestsService.Query;
         await LoadData();
     }
-
     protected async Task<bool> CheckIfEndUser()
     {
 
@@ -40,9 +40,21 @@ public class PendingRequestsBase : GridBase<RecordRequestModel>
 
         return (user.Identity is not null && user.Identity.IsAuthenticated) && user.IsInRole(ApplicationRoles.EndUser);
     }
-
     protected void GoToAddNewRequest()
     {
         NavManager.NavigateTo("my-pending-request/add");
+    }
+    protected void GoToSelectedItemOverview(GridRowClickEventArgs args)
+    {
+        IsLoading = true;
+
+        var selectedItem = args.Item as RecordRequestModel;
+        
+        if (selectedItem != null)
+        {
+            NavManager.NavigateTo("my-pending-request/view/" + selectedItem.Id.ToString());
+        }
+
+        IsLoading = false;
     }
 }

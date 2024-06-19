@@ -11,4 +11,5 @@ public interface IRecordRequestsService
 {
     Task<CreateResponse> CreateRecordRequest(CreateRecordRequest request);
     Task<DataSourceResult> Query(DataSourceRequest body);
+    Task<RecordRequestModelBaseApiResponse> GetById(Guid id);
 }

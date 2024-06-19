@@ -1,4 +1,5 @@
 ﻿@using DPWH.EDMS.Api.Contracts
+@using DPWH.EDMS.Shared.Enums
 @inherits RequestFormBase
 
 <EditForm Model="SelectedItem" OnSubmit="@HandleOnSubmitCallback">
@@ -27,56 +28,68 @@
 
             <div class="form-group p-2">
                 <label for="employeeNo">Employee No.</label>
-                <InputText id="employeeNo" class="form-control" @bind-Value="SelectedItem.EmployeeNo" />
-                <ValidationMessage For="@(() => SelectedItem.EmployeeNo)" class="text-danger" />
+                <InputText id="employeeNo" class="form-control" @bind-Value="SelectedItem.EmployeeNumber" />
+                <ValidationMessage For="@(() => SelectedItem.EmployeeNumber)" class="text-danger" />
             </div>
 
             <div class="form-group p-2">
                 <label>Active or Inactive</label>
                 <div>
-                    <TelerikSwitch Class="float-right" @bind-Value="@SelectedItem.IsActive"></TelerikSwitch>
+                    <TelerikSwitch Class="float-right" @bind-Value="@SelectedItem.IsActiveEmployee"></TelerikSwitch>
                 </div>
-                <ValidationMessage For="@(() => SelectedItem.IsActive)" class="text-danger" />
+                <ValidationMessage For="@(() => SelectedItem.IsActiveEmployee)" class="text-danger" />
             </div>
 
             <div class="form-group p-2">
                 <label>Who will be claiming the document?</label>
                 <div>
                     <div class="k-form-field-wrap">
-                        <TelerikRadioGroup Layout="@RadioGroupLayout.Horizontal" Data="@documentClaimants"
-                                           @bind-Value="@SelectedItem.DocumentClaimant" Context="radioContext">
+                        <TelerikRadioGroup Layout="@RadioGroupLayout.Horizontal" Data="@DocumentClaimants"
+                                           @bind-Value="@SelectedItem.Claimant" Context="radioContext">
                             <ItemTemplate>
                                 @{
                                     var ctx = radioContext;
                                 }
-                                @(ctx == DocumentClaimant.AuthorizedRepresentative ? "Authorize Representative" : "Requestor")
+                                @(ctx == ClaimantTypes.AuthorizedRepresentative.ToString() ? "Authorize Representative" : "Requestor")
                             </ItemTemplate>
                         </TelerikRadioGroup>
                     </div>
                 </div>
-                <ValidationMessage For="@(() => SelectedItem.DocumentClaimant)" class="text-danger" />
+                <ValidationMessage For="@(() => SelectedItem.Claimant)" class="text-danger" />
             </div>
 
-            @if (SelectedItem.DocumentClaimant == DocumentClaimant.AuthorizedRepresentative)
+            @if (SelectedItem.Claimant == DocumentClaimant.AuthorizedRepresentative.ToString())
             {
                 <div class="form-group p-2">
                     <label for="authorizedRepresentative">Authorized Representative</label>
                     <InputText id="authorizedRepresentative" class="form-control" @bind-Value="SelectedItem.AuthorizedRepresentative" />
                     <ValidationMessage For="@(() => SelectedItem.AuthorizedRepresentative)" class="text-danger" />
                 </div>
+
+                <div class="form-group p-2">
+                    <label for="validIdType">Valid ID</label>
+                    <TelerikDropDownList Data="@ValidIDsList"
+                                         @bind-Value="SelectedItem.ValidId"
+                                         ValueField="@nameof(GetValidIDsResult.Id)"
+                                         TextField="@nameof(GetValidIDsResult.Name)"
+                                         DefaultText="Select" />
+                    <ValidationMessage For="@(() => SelectedItem.ValidId)" class="text-danger" />
+                </div>
+
+                <div class="form-group p-2">
+                    <label for="supportingDocumentType">Supporting Document</label>
+                    <TelerikDropDownList Data="@SecondaryIDsList"
+                                         @bind-Value="SelectedItem.SupportingDocument"
+                                         ValueField="@nameof(GetSecondaryIDsResult.Id)"
+                                         TextField="@nameof(GetSecondaryIDsResult.Name)"
+                                         DefaultText="Select" />
+                    <ValidationMessage For="@(() => SelectedItem.SupportingDocument)" class="text-danger" />
+                </div>
             }
 
-            <div class="form-group p-2">
-                <label for="validIdType">Valid ID</label>
-                <TelerikDropDownList Data="@ValidIDsList"
-                                     @bind-Value="SelectedItem.ValidIdType"
-                                     ValueField="@nameof(GetValidIDsResult.Name)"
-                                     TextField="@nameof(GetValidIDsResult.Name)"
-                                     DefaultText="Select" />
-                <ValidationMessage For="@(() => SelectedItem.ValidIdType)" class="text-danger" />
-            </div>
+          
 
-            <div class="form-group p-2">
+           @*  <div class="form-group p-2">
                 <label for="uploadValidId">Upload Valid ID</label>
                 <TelerikFileSelect AllowedExtensions="@AllowedExtensions"
                                    OnSelect="@OnSelect"
@@ -87,17 +100,9 @@
                                    Enabled="@(SelectedItem.ValidIdType != null ? true : false)">
                 </TelerikFileSelect>
                 <ValidationMessage For="@(() => SelectedItem.IsValidIdAccepted)" class="text-danger" />
-            </div>
+            </div> *@
 
-            <div class="form-group p-2">
-                <label for="supportingDocumentType">Supporting Document</label>
-                <TelerikDropDownList Data="@SecondaryIDsList"
-                                     @bind-Value="SelectedItem.SupportingDocumentType"
-                                     ValueField="@nameof(GetSecondaryIDsResult.Name)"
-                                     TextField="@nameof(GetSecondaryIDsResult.Name)"
-                                     DefaultText="Select" />
-                <ValidationMessage For="@(() => SelectedItem.SupportingDocumentType)" class="text-danger" />
-            </div>
+           
 
             @*  <div class="form-group">
             <label for="uploadDocument">Upload Document</label>
@@ -108,18 +113,19 @@
             <div class="form-group p-2">
                 <label for="recordsRequested">Record/s to be Requested</label>
                 <TelerikMultiSelect Data="@RecordTypesList"
-                                    @bind-Value="@SelectedItem.RecordsRequested"
-                                    ValueField="@nameof(GetRecordTypesResult.Name)"
+                                    @bind-Value="@SelectedRecordTypesIdList"
+                                    ValueField="@nameof(GetRecordTypesResult.Id)"                                    
                                     TextField="@nameof(GetRecordTypesResult.Name)"
+                                    OnChange="() => SelectedItem.RequestedRecords = SelectedRecordTypesIdList"
                                     Placeholder="-">
                 </TelerikMultiSelect>
-                <ValidationMessage For="@(() => SelectedItem.RecordsRequested)" class="text-danger" />
+                <ValidationMessage For="@(() => SelectedItem.RequestedRecords)" class="text-danger" />
             </div>
 
             <div class="form-group p-2">
                 <label for="remarks">Remarks</label>
-                <InputTextArea id="remarks" class="form-control" @bind-Value="SelectedItem.Remarks" placeholder="Placeholder" />
-                <ValidationMessage For="@(() => SelectedItem.Remarks)" class="text-danger" />
+                <InputTextArea id="remarks" class="form-control" @bind-Value="SelectedItem.Purpose" placeholder="Placeholder" />
+                <ValidationMessage For="@(() => SelectedItem.Purpose)" class="text-danger" />
             </div>
         </CardBody>
     </TelerikCard>

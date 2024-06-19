@@ -5,8 +5,9 @@
 @attribute [Authorize(Policy = "RequireActiveRoles")]
 
 <EdmsBreadcrumbs Data="@BreadcrumbItems" />
+<EdmsLoader Visible="IsLoading" />
 
 <h3>Add New Request</h3>
 <hr />
 
-<RequestForm HandleOnCancel="OnCancel" HandleOnSubmit="HandleSubmit" />
+<RequestForm HandleOnCancel="OnCancel" HandleCreateOnSubmit="HandleSubmit" />
