@@ -10,7 +10,7 @@
 <h3>Profile</h3>
     <div class="d-flex flex-row align-items-center mb-2">
     <p>@(GenericHelper.GetDisplayValue(CurrentUser.UserName)) (@(GenericHelper.GetDisplayValue(CurrentUser.EmployeeId)))</p>
-    <span class="role-chip">@(GenericHelper.GetDisplayValue(CurrentUser.Role))</span>
+    <span class="role-chip">@(GenericHelper.GetDisplayValue(Role))</span>
 </div>
     <p>Email: @(GenericHelper.GetDisplayValue(CurrentUser.Email)) / Contact: @(GenericHelper.GetDisplayValue(CurrentUser.MobileNumber))</p>
 <hr />
