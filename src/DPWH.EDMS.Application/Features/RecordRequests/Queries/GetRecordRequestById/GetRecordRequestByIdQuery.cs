@@ -15,6 +15,7 @@ internal sealed class GetRecordRequestByIdQueryHandler(IReadRepository repositor
     {
         var entity = await _repository.RecordRequestsView            
             .Include(r => r.Files)
+            .Include(r => r.RequestedRecords)
             .AsSplitQuery()
             .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
 

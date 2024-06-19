@@ -17,22 +17,23 @@ public static class RecordRequestMappers
             ClaimantType = entity.ClaimantType,
             DateRequested = entity.DateRequested,
             AuthorizedRepresentative = entity.AuthorizedRepresentative != null ? new AuthorizedRepresentativeModel
-            {                
+            {
                 RepresentativeName = entity.AuthorizedRepresentative.RepresentativeName,
                 ValidId = entity.AuthorizedRepresentative.ValidId,
                 ValidIdUri = (entity.Files?.FirstOrDefault(f => f.Type == RecordRequestProvidedDocumentTypes.ValidId.ToString())) == null ? null : entity.Files?.FirstOrDefault(predicate: f => f.Type == RecordRequestProvidedDocumentTypes.ValidId.ToString()).Uri,
                 SupportingDocument = entity.AuthorizedRepresentative.SupportingDocument,
                 SupportingDocumentUri = (entity.Files?.FirstOrDefault(f => f.Type == RecordRequestProvidedDocumentTypes.SupportingDocument.ToString())) == null ? null : entity.Files?.FirstOrDefault(predicate: f => f.Type == RecordRequestProvidedDocumentTypes.SupportingDocument.ToString()).Uri
             } : null,
-            //RequestedRecord = entity.RequestedRecord,
+            RequestedRecords = entity.RequestedRecords.Select(rr => new RequestedRecordModel(rr.RecordTypeId, rr.RecordType)).ToList(),
             Purpose = entity.Purpose,
             Status = entity.Status,
             Files = entity.Files?.Select(entityFile => new RecordRequestDocumentModel
             {
-                Id = entityFile.Id,                
+                Id = entityFile.Id,
                 Name = entityFile.Name,
                 Filename = entityFile.Filename,
                 Type = entityFile.Type,
+                DocumentTypeId = entityFile.DocumentTypeId,
                 FileSize = entityFile.FileSize,
                 Uri = entityFile.Uri
             }).ToList() ?? new List<RecordRequestDocumentModel>()

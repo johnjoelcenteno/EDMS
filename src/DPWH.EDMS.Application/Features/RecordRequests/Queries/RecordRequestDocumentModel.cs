@@ -8,6 +8,7 @@ public class RecordRequestDocumentModel
     /// Either ValidId or SupportingDocument
     /// </summary>
     public string Type { get; set; }
+    public Guid DocumentTypeId { get; set; }
     public long? FileSize { get; set; }
     public string? Uri { get; set; }
 }

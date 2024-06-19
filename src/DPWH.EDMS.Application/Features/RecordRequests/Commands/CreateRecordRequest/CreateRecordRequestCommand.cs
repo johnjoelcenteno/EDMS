@@ -58,8 +58,7 @@ internal sealed class CreateRecordRequestCommandHandler(IWriteRepository writeRe
 
         if (isAuthorizedRep)
         {
-            //If Claimant is Representative, we need atleast valid ID            
-
+            //If Claimant is Representative, we need atleast valid ID
             
             if (model.ValidId is not null && model.ValidId != default)
             {

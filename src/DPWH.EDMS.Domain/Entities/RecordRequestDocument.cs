@@ -9,20 +9,21 @@ namespace DPWH.EDMS.Domain.Entities;
 
 public class RecordRequestDocument : EntityBase
 {
-    private RecordRequestDocument(string name, string filename, string type, long? fileSize, string uri, string createdBy)
+    private RecordRequestDocument(string name, string filename, string type, Guid documentTypeId, long? fileSize, string uri, string createdBy)
     {            
         Name = name;        
         Filename = filename;
         Type = type;
+        DocumentTypeId = documentTypeId;
         FileSize = fileSize;
         Uri = uri;
 
         SetCreated(createdBy);
     }
 
-    public static RecordRequestDocument Create(string name, string filename, string type, long? fileSize, string uri, string createdBy)
+    public static RecordRequestDocument Create(string name, string filename, string type, Guid documentTypeId, long? fileSize, string uri, string createdBy)
     {
-        return new RecordRequestDocument(name, filename, type, fileSize, uri, createdBy);
+        return new RecordRequestDocument(name, filename, type, documentTypeId, fileSize, uri, createdBy);
     }
     public void Update(string name, string filename, string type, long? fileSize, string uri, string modifiedBy)
     {
@@ -49,6 +50,7 @@ public class RecordRequestDocument : EntityBase
     /// Either ValidId or SupportingDocument
     /// </summary>
     public string Type { get; set; }
+    public Guid DocumentTypeId { get; set; }
     public long? FileSize { get; set; }
     public string? Uri { get; set; }
 }
