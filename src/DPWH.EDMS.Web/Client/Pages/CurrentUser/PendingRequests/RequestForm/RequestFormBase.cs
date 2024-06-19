@@ -5,12 +5,15 @@ using DPWH.EDMS.Client.Shared.APIClient.Services.RecordRequests;
 using DPWH.EDMS.Client.Shared.MockModels;
 using DPWH.EDMS.Client.Shared.Models;
 using DPWH.EDMS.Components;
+using DPWH.EDMS.Shared.Enums;
 using DPWH.EDMS.Web.Client.Shared.BlazoredFluentValidator;
 using DPWH.EDMS.Web.Client.Shared.Services.Document;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.Extensions.Logging;
 using System.ComponentModel.DataAnnotations;
 using Telerik.Blazor.Components;
+using System.Linq;
 
 namespace DPWH.EDMS.Web.Client.Pages.CurrentUser.PendingRequests.RequestForm;
 
@@ -22,17 +25,20 @@ public class RequestFormBase : RxBaseComponent
     [Inject] public required IRecordRequestsService RecordRequestsService { get; set; }
 
     [Parameter] public bool IsEditMode { get; set; } = false;
-    [Parameter] public EventCallback<DocumentRequestModel> HandleOnSubmit { get; set; }
+    [Parameter] public EventCallback<CreateRecordRequest> HandleCreateOnSubmit { get; set; }
+    [Parameter] public EventCallback<CreateRecordRequest> HandleEditOnSubmit { get; set; }
     [Parameter] public EventCallback HandleOnCancel { get; set; }
-    protected DocumentRequestModel SelectedItem { get; set; } = new();
+    protected CreateRecordRequest SelectedItem { get; set; } = new();
 
-    protected List<DocumentClaimant> documentClaimants = Enum.GetValues(typeof(DocumentClaimant)).Cast<DocumentClaimant>().ToList();
+    protected List<string> DocumentClaimants { get; set; } = new();
     //protected List<string> allRecords = new List<string> { "Record 1", "Record 2", "Record 3" };
     //protected List<string> validIdTypes = new List<string> { "ID Type 1", "ID Type 2", "ID Type 3" };
     //protected List<string> supportingDocumentTypes = new List<string> { "Document Type 1", "Document Type 2", "Document Type 3" };
     protected List<GetValidIDsResult> ValidIDsList = new();
     protected List<GetSecondaryIDsResult> SecondaryIDsList = new();
     protected List<GetRecordTypesResult> RecordTypesList = new();
+    
+    protected List<Guid> SelectedRecordTypesIdList = new();
     protected List<ValidationResult> ValidationErrors { get; set; } = new();
     protected TelerikDropDownList<GetValidIDsResult, string> ValidIDDropRef = new();
     protected TelerikDropDownList<GetSecondaryIDsResult, string> SecondaryIDDropRef = new();
@@ -40,8 +46,9 @@ public class RequestFormBase : RxBaseComponent
 
     protected FluentValidationValidator? FluentValidationValidator;
 
-    protected TelerikUpload ValidIdUploadRef { get; set; }
-    protected TelerikUpload SupportedDocumentUploadRef { get; set; }
+    //protected TelerikUpload ValidIdUploadRef { get; set; }
+    //protected TelerikUpload SupportedDocumentUploadRef { get; set; }
+
     public int MinFileSize { get; set; } = 1024;
     public int MaxFileSize { get; set; } = 4 * 1024 * 1024;
     public List<string> AllowedExtensions { get; set; } = new List<string>() { ".docx", ".pdf" };
@@ -49,104 +56,89 @@ public class RequestFormBase : RxBaseComponent
 
     protected override void OnInitialized()
     {
-
+        LoadClaimantTypes();
+        _SetDefaultRequestDate();
     }
 
     protected override async Task OnInitializedAsync()
     {
-        await GetValidIDTypes();
-        await GetSecondaryIDTypes();
-        await GetRecordTypes();
+        await LoadValidIDTypes();
+        await LoadSecondaryIDTypes();
+        await LoadRecordTypes();        
     }
 
-    protected async Task GetValidIDTypes()
+    #region Load Events
+    private void _SetDefaultRequestDate()
+    {
+        if (SelectedItem.DateRequested == default)
+        {
+            SelectedItem.DateRequested = DateTime.Now;
+        }
+    }
+    protected async Task LoadValidIDTypes()
     {
         var validIdResult = await LookupsService.GetValidIdTypes();
-        if (validIdResult != null)
+
+        if (validIdResult.Success)
         {
-            ValidIDsList = validIdResult.Data.Select(item => new GetValidIDsResult
-            {
-                Id = item.Id,
-                Name = item.Name
-            }).ToList();
+            ValidIDsList = validIdResult.Data.ToList();
+        }
+        else
+        {
+            ToastService.ShowError("Something went wrong on loading valid ids");
         }
     }
-
-    protected async Task GetSecondaryIDTypes()
+    protected async Task LoadSecondaryIDTypes()
     {
         var secondaryIdResult = await LookupsService.GetSecondaryIdTypes();
-        if (secondaryIdResult != null)
+       
+        if (secondaryIdResult.Success)
         {
-            SecondaryIDsList = secondaryIdResult.Data.Select(item => new GetSecondaryIDsResult
-            {
-                Id = item.Id,
-                Name = item.Name
-            }).ToList();
+            SecondaryIDsList = secondaryIdResult.Data.ToList();
+        }
+        else
+        {
+            ToastService.ShowError("Something went wrong on loading secondary ids");
         }
     }
-
-    protected async Task GetRecordTypes()
+    protected async Task LoadRecordTypes()
     {
         var recordTypesResult = await LookupsService.GetRecordTypes();
-        if (recordTypesResult != null)
+        
+        if (recordTypesResult.Success)
         {
-            RecordTypesList = recordTypesResult.Data.Select(item => new GetRecordTypesResult
-            {
-                Id = item.Id,
-                Name = item.Name
-            }).ToList();
+            RecordTypesList = recordTypesResult.Data.ToList();
+        }
+        else
+        {
+            ToastService.ShowError("Something went wrong on loading record types");
         }
     }
+    protected void LoadClaimantTypes()
+    {
+        DocumentClaimants = Enum.GetValues(typeof(ClaimantTypes))
+               .Cast<ClaimantTypes>()
+               .Select(e => e.ToString())
+               .ToList();
+    }
+    #endregion
 
-
+    #region Submit Events
     protected async Task HandleOnSubmitCallback()
     {
         if (await FluentValidationValidator!.ValidateAsync())
         {
-            var createRecordRequest = await FetchDocumentRequestValue();
-
-            if (createRecordRequest != null)
+            if (HandleCreateOnSubmit.HasDelegate)
             {
-                var createRes = await RecordRequestsService!.CreateRecordRequest(createRecordRequest);
-
-                if (createRes.Success)
-                {
-                    ToastService!.ShowSuccess("Successfully created address!");
-                }
-                else
-                {
-                    ToastService!.ShowError($"Something went wrong on creating address! {createRes.Error}");
-                }
-                if (HandleOnSubmit.HasDelegate)
-                {
-                    await HandleOnSubmit.InvokeAsync(SelectedItem);
-                    ToastService!.ShowSuccess("Successfully created request!");
-                }
+                await HandleCreateOnSubmit.InvokeAsync(SelectedItem);
             }
-
-            //var createRes = await RecordRequestsService!.CreateRecordRequest(SelectedItem);
-
-            //if (createRes.Success)
-            //{
-            //    ToastService!.ShowSuccess("Successfully created address!");
-            //}
-            //else
-            //{
-            //    ToastService!.ShowError($"Something went wrong on creating address! {createRes.Error}");
-            //}
-            //if (HandleOnSubmit.HasDelegate)
-            //{
-            //    await HandleOnSubmit.InvokeAsync(SelectedItem);
-            //    ToastService!.ShowSuccess("Successfully created request!");
-            //}
         }
         else
         {
-            ToastService!.ShowError("Something went wrong!");
-            await HandleOnSubmit.InvokeAsync(null);
+            ToastService!.ShowError("Something went wrong, on submitting form. Please contact administrator.");
+            await HandleCreateOnSubmit.InvokeAsync(null);
         }       
     }
-    
     protected async Task HandleOnCancelCallback()
     {
         if (HandleOnCancel.HasDelegate)
@@ -154,75 +146,78 @@ public class RequestFormBase : RxBaseComponent
             await HandleOnCancel.InvokeAsync();
         }
     }
+    #endregion
 
-    protected async void OnSelect(FileSelectEventArgs args)
-    {
-        foreach (var file in args.Files)
-        {
-            SelectedItem.IsValidIdAccepted = IsSelectedFileValid(file);
+    #region TODO
+    //protected async void OnSelect(FileSelectEventArgs args)
+    //{
+    //    foreach (var file in args.Files)
+    //    {
+    //        SelectedItem.IsValidIdAccepted = IsSelectedFileValid(file);
 
-            if (SelectedItem.IsValidIdAccepted)
-            {
-                //FileParameter item = await DocumentService.GetFileToUpload(args);
-            }
-        }
-    }
+    //        if (SelectedItem.IsValidIdAccepted)
+    //        {
+    //            //FileParameter item = await DocumentService.GetFileToUpload(args);
+    //        }
+    //    }
+    //}
 
-    protected void OnRemove(FileSelectEventArgs args)
-    {
-        foreach (var file in args.Files)
-        {
-            SelectedItem.IsValidIdAccepted = IsSelectedFileValid(file);
-        }
-    }
-    protected bool IsSelectedFileValid(FileSelectFileInfo file)
-    {
-        return !(file.InvalidExtension || file.InvalidMaxFileSize || file.InvalidMinFileSize);
-    }
+    //protected void OnRemove(FileSelectEventArgs args)
+    //{
+    //    foreach (var file in args.Files)
+    //    {
+    //        SelectedItem.IsValidIdAccepted = IsSelectedFileValid(file);
+    //    }
+    //}
+    //protected bool IsSelectedFileValid(FileSelectFileInfo file)
+    //{
+    //    return !(file.InvalidExtension || file.InvalidMaxFileSize || file.InvalidMinFileSize);
+    //}
 
-    protected void UpdateValidationModel()
-    {
-        bool areAllUploadedFilesValid = false;
+    //protected void UpdateValidationModel()
+    //{
+    //    bool areAllUploadedFilesValid = false;
 
-        if (FilesValidationInfo.Keys.Count > 0 &&
-            !FilesValidationInfo.Values.Contains(false))
-        {
-            areAllUploadedFilesValid = true;
-        }
+    //    if (FilesValidationInfo.Keys.Count > 0 &&
+    //        !FilesValidationInfo.Values.Contains(false))
+    //    {
+    //        areAllUploadedFilesValid = true;
+    //    }
 
-        SelectedItem.IsValidIdAccepted = areAllUploadedFilesValid;
+    //    SelectedItem.IsValidIdAccepted = areAllUploadedFilesValid;
 
-        StateHasChanged();
-    }
+    //    StateHasChanged();
+    //}
 
-    protected async Task<CreateRecordRequest> FetchDocumentRequestValue()
-    {
-        List<Guid> parsedGuids = new List<Guid>();
-        foreach (var record in SelectedItem.RecordsRequested)
-        {
-            if (Guid.TryParse(record, out var guid))
-            {
-                parsedGuids.Add(guid);
-            }
-            else
-            {
-                ToastService!.ShowError($"Warning: Invalid GUID format for record: {record}");
-            }
-        }
+    #endregion
+    //protected async Task<CreateRecordRequest> FetchDocumentRequestValue()
+    //{
+    //    List<Guid> parsedGuids = new List<Guid>();
+    //    foreach (var record in SelectedItem.RecordsRequested)
+    //    {
+    //        if (Guid.TryParse(record, out var guid))
+    //        {
+    //            parsedGuids.Add(guid);
+    //        }
+    //        else
+    //        {
+    //            ToastService!.ShowError($"Warning: Invalid GUID format for record: {record}");
+    //        }
+    //    }
 
-        return new CreateRecordRequest
-        {
-            EmployeeNumber = SelectedItem.EmployeeNo,
-            ControlNumber = SelectedItem.ControlNumber,
-            IsActiveEmployee = SelectedItem.IsActive,
-            Claimant = SelectedItem.DocumentClaimant.ToString(),
-            DateRequested = SelectedItem.DateRequested,
-            AuthorizedRepresentative = SelectedItem.AuthorizedRepresentative,
-            //ValidId = SelectedItem.ValidId, // TODO
-            //SupportingDocument = SelectedItem,
-            //RequestedRecords = SelectedItem.RecordsRequested?.Select(Guid.Parse).ToList(), // TODO
-            RequestedRecords = parsedGuids,
-            Purpose = "Visa Application"
-        };
-    }
+    //    return new CreateRecordRequest
+    //    {
+    //        EmployeeNumber = SelectedItem.EmployeeNo,
+    //        ControlNumber = SelectedItem.ControlNumber,
+    //        IsActiveEmployee = SelectedItem.IsActive,
+    //        Claimant = SelectedItem.DocumentClaimant.ToString(),
+    //        DateRequested = SelectedItem.DateRequested,
+    //        AuthorizedRepresentative = SelectedItem.AuthorizedRepresentative,
+    //        //ValidId = SelectedItem.ValidId, // TODO
+    //        //SupportingDocument = SelectedItem,
+    //        //RequestedRecords = SelectedItem.RecordsRequested?.Select(Guid.Parse).ToList(), // TODO
+    //        RequestedRecords = parsedGuids,
+    //        Purpose = "Visa Application"
+    //    };
+    //}
 }

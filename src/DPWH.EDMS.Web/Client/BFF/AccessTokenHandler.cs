@@ -34,10 +34,10 @@ public class AccessTokenHandler : DelegatingHandler
                 request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", tokenRes);
             }            
         }
-        else
-        {
-            _navManager.NavigateTo("/bff/login", true);
-        }
+        //else
+        //{
+        //    _navManager.NavigateTo("/bff/login", true);
+        //}
 
         return await base.SendAsync(request, cancellationToken);
     }

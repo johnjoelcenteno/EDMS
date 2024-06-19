@@ -22,4 +22,9 @@ public class RecordRequestsService : IRecordRequestsService
     {
         return await _client.QueryRecordRequestsAsync(body);
     }
+
+    public async Task<RecordRequestModelBaseApiResponse> GetById(Guid id)
+    {
+        return await _client.GetRecordRequestAsync(id);
+    }
 }

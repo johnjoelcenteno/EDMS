@@ -20,6 +20,7 @@
 		  <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
 	  </ProjectReference>
 	  <ProjectReference Include="..\..\DPWH.EDMS.IDP.Core\DPWH.EDMS.IDP.Core.csproj" />
+	  <ProjectReference Include="..\..\DPWH.EDMS.Shared\DPWH.EDMS.Shared.csproj" />
 	  <ProjectReference Include="..\..\DPWH.EMDS.Shared\DPWH.EDMS.Client.Shared.csproj" />
   </ItemGroup>
 

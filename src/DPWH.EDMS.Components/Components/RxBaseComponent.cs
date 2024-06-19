@@ -11,6 +11,9 @@ public class RxBaseComponent : ComponentBase, IDisposable
     protected bool Small { get; set; }
     protected bool Medium { get; set; }
     protected bool Large { get; set; }
+
+    protected bool IsLoading { get; set; } = false;
+
     public List<BreadcrumbModel> BreadcrumbItems { get; set; } = new()
     {
          new() { Icon = "home", Url = "/"},

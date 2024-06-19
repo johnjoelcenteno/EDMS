@@ -24,12 +24,12 @@
             </div>
             <CardSeparator Class="my-2"></CardSeparator>
             <div>
-                <TelerikButton 
-                    Class="mb-2" 
-                    Icon="@FontIcon.Plus" 
-                    ThemeColor="@ThemeConstants.Button.ThemeColor.Primary"
+                <TelerikButton Class="mb-2"
+                               Icon="@FontIcon.Plus"
+                               ThemeColor="@ThemeConstants.Button.ThemeColor.Primary"
                                OnClick="GoToAddNewRequest">
-                    Add Request</TelerikButton>
+                    Add Request
+                </TelerikButton>
                 @if (GridData != null && !XSmall)
                 {
                     <TelerikGrid TItem="RecordRequestModel"
@@ -40,7 +40,8 @@
                                  Data="GridData"
                                  OnStateChanged="@OnStateChanged"
                                  @ref="GridRef"
-                                 Context="item">
+                                 Context="item"
+                                 OnRowClick="GoToSelectedItemOverview">
                         <GridSettings>
                             <GridPagerSettings PageSizes="@PageSizes">
                             </GridPagerSettings>
@@ -48,14 +49,14 @@
                         <GridColumns>
                             <GridColumn Field=@nameof(RecordRequestModel.ControlNumber) Title="Control No." Filterable="false" />
                             @* <GridColumn Field=@nameof(RecordRequestModel.RequestedRecords) Title="Records Requested" Filterable="false">
-                                <Template>
-                                    @{
-                                        var req = context as RecordRequestModel;
-                                        string recs = req!.RecordsRequested.Count > 0 ? String.Join(", ", req.RecordsRequested) : "-";
-                                    }
-                                    <p class="mb-0">@recs</p>
-                                </Template>
-                            </GridColumn> *@
+                        <Template>
+                        @{
+                        var req = context as RecordRequestModel;
+                        string recs = req!.RecordsRequested.Count > 0 ? String.Join(", ", req.RecordsRequested) : "-";
+                        }
+                        <p class="mb-0">@recs</p>
+                        </Template>
+                        </GridColumn> *@
                             <GridColumn Field=@nameof(RecordRequestModel.DateRequested) Title="Date Requested" />
                             <GridColumn Field=@nameof(RecordRequestModel.Purpose) Title="Purpose" />
                             <GridColumn Field=@nameof(RecordRequestModel.Status) Title="Status" />
@@ -78,3 +79,9 @@
         </CardBody>
     </TelerikCard>
 </div>
+
+<style>
+    .k-grid .k-table-row {
+        cursor: pointer;
+    }
+</style>

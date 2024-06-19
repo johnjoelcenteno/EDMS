@@ -1,4 +1,5 @@
-﻿using DPWH.EDMS.Client.Shared.MockModels;
+﻿using DPWH.EDMS.Api.Contracts;
+using DPWH.EDMS.Client.Shared.MockModels;
 using DPWH.EDMS.Web.Client.Shared.Validators;
 using FluentValidation;
 
@@ -9,7 +10,7 @@ public static class FluentValidatorServiceProvider
     public static IServiceCollection AddFluentValidatorService(this IServiceCollection services)
     {
         // Validators
-        services.AddTransient<IValidator<DocumentRequestModel>, DocumentRequestModelValidator>();
+        services.AddTransient<IValidator<CreateRecordRequest>, CreateDocumentRequestModelValidator>();
 
         return services;
     }
