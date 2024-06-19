@@ -48,11 +48,11 @@ public class AddRequestBase : RxBaseComponent
 
                 if (createRes.Success)
                 {
-                    ToastService.ShowSuccess("Successfully created request!");
-                    IsLoading = false;
+                    ToastService.ShowSuccess("Successfully created request!");                    
                     NavManager.NavigateTo("/my-pending-request");
                 }
             }
+            IsLoading = false;
         });
     }
 
