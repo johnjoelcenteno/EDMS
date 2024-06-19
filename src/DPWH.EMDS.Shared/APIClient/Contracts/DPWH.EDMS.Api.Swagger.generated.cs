@@ -4522,18 +4522,18 @@ namespace DPWH.EDMS.Api.Contracts
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<EmployeeBaseApiResponse> Delete_document_requestAsync(string employeeId)
+        public virtual System.Threading.Tasks.Task<DeleteResponse> DeleteRecordRequestAsync(System.Guid id)
         {
-            return Delete_document_requestAsync(employeeId, System.Threading.CancellationToken.None);
+            return DeleteRecordRequestAsync(id, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<EmployeeBaseApiResponse> Delete_document_requestAsync(string employeeId, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<DeleteResponse> DeleteRecordRequestAsync(System.Guid id, System.Threading.CancellationToken cancellationToken)
         {
-            if (employeeId == null)
-                throw new System.ArgumentNullException("employeeId");
+            if (id == null)
+                throw new System.ArgumentNullException("id");
 
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -4549,7 +4549,7 @@ namespace DPWH.EDMS.Api.Contracts
                     // Operation Path: "api/recordrequests/delete"
                     urlBuilder_.Append("api/recordrequests/delete");
                     urlBuilder_.Append('?');
-                    urlBuilder_.Append(System.Uri.EscapeDataString("employeeId")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(employeeId, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    urlBuilder_.Append(System.Uri.EscapeDataString("id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
                     urlBuilder_.Length--;
 
                     PrepareRequest(client_, request_, urlBuilder_);
@@ -4577,7 +4577,7 @@ namespace DPWH.EDMS.Api.Contracts
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<EmployeeBaseApiResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<DeleteResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -4593,16 +4593,6 @@ namespace DPWH.EDMS.Api.Contracts
                                 throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
                             throw new ApiException<string>("Not Found", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-                        }
-                        else
-                        if (status_ == 400)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            throw new ApiException<ProblemDetails>("Bad Request", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
                         }
                         else
                         if (status_ == 500)
@@ -4776,19 +4766,16 @@ namespace DPWH.EDMS.Api.Contracts
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<CreateResponse> UploadSupportingFileAsync(string documentType, FileParameter document)
+        public virtual System.Threading.Tasks.Task<CreateResponse> UploadSupportingFileAsync(FileParameter document, RecordRequestProvidedDocumentTypes? documentType, System.Guid? documentTypeId)
         {
-            return UploadSupportingFileAsync(documentType, document, System.Threading.CancellationToken.None);
+            return UploadSupportingFileAsync(document, documentType, documentTypeId, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<CreateResponse> UploadSupportingFileAsync(string documentType, FileParameter document, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<CreateResponse> UploadSupportingFileAsync(FileParameter document, RecordRequestProvidedDocumentTypes? documentType, System.Guid? documentTypeId, System.Threading.CancellationToken cancellationToken)
         {
-            if (documentType == null)
-                throw new System.ArgumentNullException("documentType");
-
             var client_ = _httpClient;
             var disposeClient_ = false;
             try
@@ -4807,7 +4794,21 @@ namespace DPWH.EDMS.Api.Contracts
                         var content_document_ = new System.Net.Http.StreamContent(document.Data);
                         if (!string.IsNullOrEmpty(document.ContentType))
                             content_document_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse(document.ContentType);
-                        content_.Add(content_document_, "document", document.FileName ?? "document");
+                        content_.Add(content_document_, "Document", document.FileName ?? "Document");
+                    }
+
+                    if (documentType == null)
+                        throw new System.ArgumentNullException("documentType");
+                    else
+                    {
+                        content_.Add(new System.Net.Http.StringContent(ConvertToString(documentType, System.Globalization.CultureInfo.InvariantCulture)), "DocumentType");
+                    }
+
+                    if (documentTypeId == null)
+                        throw new System.ArgumentNullException("documentTypeId");
+                    else
+                    {
+                        content_.Add(new System.Net.Http.StringContent(ConvertToString(documentTypeId, System.Globalization.CultureInfo.InvariantCulture)), "DocumentTypeId");
                     }
                     request_.Content = content_;
                     request_.Method = new System.Net.Http.HttpMethod("POST");
@@ -4817,7 +4818,6 @@ namespace DPWH.EDMS.Api.Contracts
                 
                     // Operation Path: "api/recordrequests/supportingfiles/{documentType}"
                     urlBuilder_.Append("api/recordrequests/supportingfiles/");
-                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(documentType, System.Globalization.CultureInfo.InvariantCulture)));
 
                     PrepareRequest(client_, request_, urlBuilder_);
 

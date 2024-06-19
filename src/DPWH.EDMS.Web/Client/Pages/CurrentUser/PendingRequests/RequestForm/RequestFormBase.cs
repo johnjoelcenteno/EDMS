@@ -218,9 +218,9 @@ public class RequestFormBase : RxBaseComponent
             Claimant = SelectedItem.DocumentClaimant.ToString(),
             DateRequested = SelectedItem.DateRequested,
             AuthorizedRepresentative = SelectedItem.AuthorizedRepresentative,
-            ValidId = SelectedItem.ValidId?.ToString(),
-            SupportingDocument = SelectedItem.SupportingDocumentType,
-            //RequestedRecords = SelectedItem.RecordsRequested?.Select(Guid.Parse).ToList(),
+            //ValidId = SelectedItem.ValidId, // TODO
+            //SupportingDocument = SelectedItem,
+            //RequestedRecords = SelectedItem.RecordsRequested?.Select(Guid.Parse).ToList(), // TODO
             RequestedRecords = parsedGuids,
             Purpose = "Visa Application"
         };

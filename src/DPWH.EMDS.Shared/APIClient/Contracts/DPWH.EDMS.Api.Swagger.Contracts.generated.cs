@@ -376,12 +376,12 @@ namespace DPWH.EDMS.Api.Contracts
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<EmployeeBaseApiResponse> Delete_document_requestAsync(string employeeId);
+        System.Threading.Tasks.Task<DeleteResponse> DeleteRecordRequestAsync(System.Guid id);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<EmployeeBaseApiResponse> Delete_document_requestAsync(string employeeId, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<DeleteResponse> DeleteRecordRequestAsync(System.Guid id, System.Threading.CancellationToken cancellationToken);
 
     }
 
@@ -390,12 +390,12 @@ namespace DPWH.EDMS.Api.Contracts
     {
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<CreateResponse> UploadSupportingFileAsync(string documentType, FileParameter document);
+        System.Threading.Tasks.Task<CreateResponse> UploadSupportingFileAsync(FileParameter document, RecordRequestProvidedDocumentTypes? documentType, System.Guid? documentTypeId);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<CreateResponse> UploadSupportingFileAsync(string documentType, FileParameter document, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<CreateResponse> UploadSupportingFileAsync(FileParameter document, RecordRequestProvidedDocumentTypes? documentType, System.Guid? documentTypeId, System.Threading.CancellationToken cancellationToken);
 
     }
 
@@ -606,13 +606,13 @@ namespace DPWH.EDMS.Api.Contracts
         public string RepresentativeName { get; set; }
 
         [Newtonsoft.Json.JsonProperty("validId", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string ValidId { get; set; }
+        public System.Guid? ValidId { get; set; }
 
         [Newtonsoft.Json.JsonProperty("validIdUri", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string ValidIdUri { get; set; }
 
         [Newtonsoft.Json.JsonProperty("supportingDocument", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string SupportingDocument { get; set; }
+        public System.Guid? SupportingDocument { get; set; }
 
         [Newtonsoft.Json.JsonProperty("supportingDocumentUri", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string SupportingDocumentUri { get; set; }
@@ -698,10 +698,10 @@ namespace DPWH.EDMS.Api.Contracts
         public string AuthorizedRepresentative { get; set; }
 
         [Newtonsoft.Json.JsonProperty("validId", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string ValidId { get; set; }
+        public System.Guid? ValidId { get; set; }
 
         [Newtonsoft.Json.JsonProperty("supportingDocument", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string SupportingDocument { get; set; }
+        public System.Guid? SupportingDocument { get; set; }
 
         [Newtonsoft.Json.JsonProperty("requestedRecords", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public System.Collections.Generic.ICollection<System.Guid> RequestedRecords { get; set; }
@@ -1818,6 +1818,9 @@ namespace DPWH.EDMS.Api.Contracts
         [Newtonsoft.Json.JsonProperty("type", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string Type { get; set; }
 
+        [Newtonsoft.Json.JsonProperty("documentTypeId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Guid DocumentTypeId { get; set; }
+
         [Newtonsoft.Json.JsonProperty("fileSize", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public long? FileSize { get; set; }
 
@@ -1850,9 +1853,6 @@ namespace DPWH.EDMS.Api.Contracts
         [Newtonsoft.Json.JsonProperty("authorizedRepresentative", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public AuthorizedRepresentativeModel AuthorizedRepresentative { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("requestedRecord", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string RequestedRecord { get; set; }
-
         [Newtonsoft.Json.JsonProperty("purpose", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string Purpose { get; set; }
 
@@ -1875,6 +1875,18 @@ namespace DPWH.EDMS.Api.Contracts
 
         [Newtonsoft.Json.JsonProperty("data", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public RecordRequestModel Data { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.0.7.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
+    public enum RecordRequestProvidedDocumentTypes
+    {
+
+        [System.Runtime.Serialization.EnumMember(Value = @"ValidId")]
+        ValidId = 0,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"SupportingDocument")]
+        SupportingDocument = 1,
 
     }
 
