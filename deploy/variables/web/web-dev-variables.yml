@@ -13,7 +13,7 @@ variables:
   # This is our Azure Development subscription ID. Azure subscription 1
   AzureSubscriptionId: 'c98075bb-7436-4c42-b5aa-f0513533bda4'  
   
-  BaseApiUrl: 'https://app-api-ngobia-dpwh-dev.azurewebsites.net'
+  BaseApiUrl: 'https://dpwhedmsapi-dev.movementsoft.com'
   PublicPortalUrl: 'https://app-publicweb-ngobia-dpwh-dev.azurewebsites.net'
 
   # Configure OpenIdc
