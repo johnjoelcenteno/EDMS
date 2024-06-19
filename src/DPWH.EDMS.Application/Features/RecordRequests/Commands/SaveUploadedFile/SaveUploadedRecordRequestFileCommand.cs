@@ -8,7 +8,7 @@ using System.Security.Claims;
 
 namespace DPWH.EDMS.Application.Features.RecordRequests.Commands.SaveUploadedFile;
 
-public record class SaveUploadedRecordRequestFileCommand(string Name, string Filename, string Category,
+public record class SaveUploadedRecordRequestFileCommand(string Name, string Filename, string DocumentType, Guid DocumentTypeId,
     long FileSize, string Uri): IRequest<CreateResponse>;
 internal sealed class UploadRecordRequestFileCommandHandler(IWriteRepository writeRepository, ClaimsPrincipal principal) : IRequestHandler<SaveUploadedRecordRequestFileCommand, CreateResponse>
 {
@@ -16,8 +16,8 @@ internal sealed class UploadRecordRequestFileCommandHandler(IWriteRepository wri
     {
         var model = request;
 
-        var recordRequestDocument = RecordRequestDocument.Create(model.Name, model.Filename, model.Category, model.FileSize,
-            model.Uri, principal.GetUserName());
+        var recordRequestDocument = RecordRequestDocument.Create(model.Name, model.Filename, model.DocumentType, model.DocumentTypeId,
+            model.FileSize, model.Uri, principal.GetUserName());
 
         writeRepository.RecordRequestDocuments.Add(recordRequestDocument);
         await writeRepository.SaveChangesAsync(cancellationToken);

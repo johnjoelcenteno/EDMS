@@ -1570,14 +1570,15 @@
         "tags": [
           "RecordRequests"
         ],
-        "operationId": "Delete document request",
+        "operationId": "DeleteRecordRequest",
         "parameters": [
           {
-            "name": "employeeId",
+            "name": "id",
             "in": "query",
             "required": true,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "format": "uuid"
             }
           }
         ],
@@ -1587,7 +1588,7 @@
             "content": {
               "application/json; api-version=1.0": {
                 "schema": {
-                  "$ref": "#/components/schemas/EmployeeBaseApiResponse"
+                  "$ref": "#/components/schemas/DeleteResponse"
                 }
               }
             }
@@ -1598,16 +1599,6 @@
               "text/plain; api-version=1.0": {
                 "schema": {
                   "type": "string"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json; api-version=1.0": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -1631,30 +1622,37 @@
           "RecordRequestSupportingFiles"
         ],
         "operationId": "UploadSupportingFile",
-        "parameters": [
-          {
-            "name": "documentType",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
         "requestBody": {
           "content": {
             "multipart/form-data": {
               "schema": {
+                "required": [
+                  "DocumentType",
+                  "DocumentTypeId"
+                ],
                 "type": "object",
                 "properties": {
-                  "document": {
+                  "Document": {
                     "type": "string",
                     "format": "binary"
+                  },
+                  "DocumentType": {
+                    "$ref": "#/components/schemas/RecordRequestProvidedDocumentTypes"
+                  },
+                  "DocumentTypeId": {
+                    "type": "string",
+                    "format": "uuid"
                   }
                 }
               },
               "encoding": {
-                "document": {
+                "Document": {
+                  "style": "form"
+                },
+                "DocumentType": {
+                  "style": "form"
+                },
+                "DocumentTypeId": {
                   "style": "form"
                 }
               }
@@ -2429,6 +2427,7 @@
           },
           "validId": {
             "type": "string",
+            "format": "uuid",
             "nullable": true
           },
           "validIdUri": {
@@ -2437,6 +2436,7 @@
           },
           "supportingDocument": {
             "type": "string",
+            "format": "uuid",
             "nullable": true
           },
           "supportingDocumentUri": {
@@ -2549,10 +2549,12 @@
           },
           "validId": {
             "type": "string",
+            "format": "uuid",
             "nullable": true
           },
           "supportingDocument": {
             "type": "string",
+            "format": "uuid",
             "nullable": true
           },
           "requestedRecords": {
@@ -3973,6 +3975,10 @@
             "type": "string",
             "nullable": true
           },
+          "documentTypeId": {
+            "type": "string",
+            "format": "uuid"
+          },
           "fileSize": {
             "type": "integer",
             "format": "int64",
@@ -4014,10 +4020,6 @@
           "authorizedRepresentative": {
             "$ref": "#/components/schemas/AuthorizedRepresentativeModel"
           },
-          "requestedRecord": {
-            "type": "string",
-            "nullable": true
-          },
           "purpose": {
             "type": "string",
             "nullable": true
@@ -4054,6 +4056,13 @@
           }
         },
         "additionalProperties": false
+      },
+      "RecordRequestProvidedDocumentTypes": {
+        "enum": [
+          "ValidId",
+          "SupportingDocument"
+        ],
+        "type": "string"
       },
       "RecoverDataLibraryResult": {
         "type": "object",

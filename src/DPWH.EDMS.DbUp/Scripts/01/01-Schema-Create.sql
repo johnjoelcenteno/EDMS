@@ -37,10 +37,8 @@ BEGIN CREATE TABLE RecordRequests (
 	ClaimantType NVARCHAR(50),
 	DateRequested [DATETIMEOFFSET](7) NOT NULL,
 	RepresentativeName NVARCHAR(150) NULL,
-	ValidId NVARCHAR(150) NULL,
-	ValidIdUri NVARCHAR(250) NULL,
-	SupportingDocument NVARCHAR(150) NULL,	
-	SupportingDocumentUri NVARCHAR(250) NULL,	
+	ValidId [uniqueidentifier] NULL,
+	SupportingDocument [uniqueidentifier] NULL,	
 	Purpose NVARCHAR(100),
 	Status NVARCHAR(50),
 	Created [DATETIMEOFFSET](7) NOT NULL,
@@ -57,7 +55,8 @@ BEGIN CREATE TABLE RecordRequestDocuments (
 	RecordRequestId [uniqueidentifier] NULL,
 	[Name] NVARCHAR(250) NOT NULL,
 	[Filename] NVARCHAR(250) NOT NULL,	
-	[Type] NVARCHAR(100),	
+	[Type] NVARCHAR(100) NOT NULL,
+	[DocumentTypeId] [uniqueidentifier] NOT NULL,
 	[FileSize] [bigint] NULL,
 	Uri NVARCHAR(350) NULL,	
 	Created [DATETIMEOFFSET](7) NOT NULL,
@@ -96,4 +95,12 @@ ON DELETE CASCADE
 GO
 
 ALTER TABLE [dbo].[RequestedRecords] CHECK CONSTRAINT [FK_RequestedRecords_DataLibraries_Id]
+GO
+
+ALTER TABLE [dbo].[RecordRequestDocuments]  WITH NOCHECK ADD CONSTRAINT [FK_RecordRequestDocuments_RecordRequests_Id] FOREIGN KEY([RecordRequestId])
+REFERENCES [dbo].[RecordRequests] ([Id])
+ON DELETE CASCADE
+GO
+
+ALTER TABLE [dbo].[RecordRequestDocuments] CHECK CONSTRAINT [FK_RecordRequestDocuments_RecordRequests_Id]
 GO

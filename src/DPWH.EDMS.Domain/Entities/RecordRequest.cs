@@ -20,6 +20,7 @@ public class RecordRequest : EntityBase
     {
         var entity = new RecordRequest
         {
+            Id = Guid.NewGuid(),
             ControlNumber = controlNumber,
             EmployeeNumber = employeeNumber,
             ClaimantType = claimantType.ToString(),

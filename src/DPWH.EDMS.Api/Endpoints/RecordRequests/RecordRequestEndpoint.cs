@@ -75,18 +75,17 @@ public static class RecordRequestEndpoint
             .Produces<ProblemDetails>(StatusCodes.Status400BadRequest)
             .Produces<ProblemDetails>(StatusCodes.Status500InternalServerError);
 
-        app.MapDelete(ApiEndpoints.RecordRequest.Delete, async (string employeeId, IMediator mediator) =>
+        app.MapDelete(ApiEndpoints.RecordRequest.Delete, async (Guid id, IMediator mediator) =>
         {
             return "Ok";
         })
-        .WithName("Delete document request")
+        .WithName("DeleteRecordRequest")
         .WithTags(TagName)
-        .WithDescription("Delete document requests")
+        .WithDescription("Delete record requests")
         .WithApiVersionSet(ApiVersioning.VersionSet)
         .HasApiVersion(1.0)
-        .Produces<BaseApiResponse<Employee>>()
-        .Produces(StatusCodes.Status404NotFound)
-        .Produces<ProblemDetails>(StatusCodes.Status400BadRequest)
+        .Produces<DeleteResponse>(StatusCodes.Status200OK)
+        .Produces(StatusCodes.Status404NotFound)        
         .Produces<ProblemDetails>(StatusCodes.Status500InternalServerError);
 
         return app;

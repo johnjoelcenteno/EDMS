@@ -19,14 +19,16 @@ internal sealed class CreateRecordRequestCommandHandler(IWriteRepository writeRe
     public async Task<CreateResponse> Handle(CreateRecordRequestCommand request, CancellationToken cancellationToken)
     {
         var model = request.Model;
+        var isAuthorizedRep = false;
 
         var claimantType = EnumExtensions.GetValueFromDescription<ClaimantTypes>(model.Claimant);
 
         AuthorizedRepresentative? representative = null;
         if(claimantType == ClaimantTypes.AuthorizedRepresentative)
         {
-            representative = AuthorizedRepresentative.Create(model.AuthorizedRepresentative, 
-                model.ValidId, model.SupportingDocument, model.SupportingDocument, model.SupportingDocument);
+            representative = AuthorizedRepresentative.Create(model.AuthorizedRepresentative, model.ValidId, model.SupportingDocument);
+
+            isAuthorizedRep = true;            
         }
 
         //Optional for now: Make sure requested record type is valid
@@ -52,6 +54,33 @@ internal sealed class CreateRecordRequestCommandHandler(IWriteRepository writeRe
         {
             var requestedRecord = RequestedRecord.Create(recordRequest.Id, providedRequestedRecord, recordTypes.FirstOrDefault(x => x.Id == providedRequestedRecord).Name);
             recordRequest.RequestedRecords.Add(requestedRecord);
+        }
+
+        if (isAuthorizedRep)
+        {
+            //If Claimant is Representative, we need atleast valid ID
+            
+            if (model.ValidId is not null && model.ValidId != default)
+            {
+                //get ValidId and update reference
+                var validId = writeRepository.RecordRequestDocuments.FirstOrDefault(d => d.Id == model.ValidId);
+
+                if (validId is not null)
+                {
+                    validId.RecordRequestId = recordRequest.Id;
+                }
+            }
+
+            if (model.SupportingDocument is not null && model.SupportingDocument != default)
+            {
+                //get SupportingDocument and update reference
+                var supportingDocument = writeRepository.RecordRequestDocuments.FirstOrDefault(d => d.Id == model.SupportingDocument);
+
+                if (supportingDocument is not null)
+                {
+                    supportingDocument.RecordRequestId = recordRequest.Id;
+                }
+            }
         }
 
         writeRepository.RecordRequests.Add(recordRequest);

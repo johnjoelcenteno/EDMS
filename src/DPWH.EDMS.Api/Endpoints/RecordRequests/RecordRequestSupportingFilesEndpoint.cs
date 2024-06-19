@@ -1,13 +1,7 @@
 ﻿using DPWH.EDMS.Application.Contracts.Services;
-using DPWH.EDMS.Application.Features.Assets.Queries;
 using DPWH.EDMS.Application.Models;
 using MediatR;
-using DPWH.EDMS.Application.Features.Assets.Commands;
-using DPWH.EDMS.Application.Features.Assets.Queries.GetAssetById;
-using DPWH.EDMS.Domain.Enums;
-using Microsoft.AspNetCore.Mvc;
 using DPWH.EDMS.Infrastructure.Storage;
-using DPWH.EDMS.Shared.Enums;
 using DPWH.EDMS.Application.Features.RecordRequests.Commands.SaveUploadedFile;
 
 namespace DPWH.EDMS.Api.Endpoints.RecordRequests;
@@ -24,9 +18,8 @@ public static class RecordRequestSupportingFilesEndpoint
 
         #region "POSTs"
 
-        app.MapPost(ApiEndpoints.RecordRequest.Documents.UploadSupportingFile, async (                
-                RecordRequestProvidedDocumentTypes documentType,
-                IFormFile? document,
+        app.MapPost(ApiEndpoints.RecordRequest.Documents.UploadSupportingFile, async (
+                [AsParameters] UploadRecordRequestFile model,
                 IMediator mediator,
                 IBlobService blobService,
                 CancellationToken token,
@@ -36,8 +29,8 @@ public static class RecordRequestSupportingFilesEndpoint
                 var request = new 
                 {
                     Id = Guid.NewGuid(),                    
-                    File = document,
-                    Filename = document?.FileName                    
+                    File = model.Document,
+                    Filename = model.Document?.FileName                    
                 };
 
                 var metadata = new Dictionary<string, string>();
@@ -45,15 +38,17 @@ public static class RecordRequestSupportingFilesEndpoint
                 byte[] data;
                 using (var memoryStream = new MemoryStream())
                 {
-                    await document.CopyToAsync(memoryStream);
+                    await model.Document.CopyToAsync(memoryStream);
                     data = memoryStream.ToArray();
                 }
 
-                metadata.Add("DocumentType", documentType.ToString());
+                metadata.Add("DocumentType", model.DocumentType.ToString());
+                metadata.Add("DocumentTypeId", model.DocumentTypeId.ToString());
 
                 var uri = await blobService.Put(WellKnownContainers.RecordRequestSupportingFiles, request.Id.ToString(), data, request.File.ContentType, metadata);
 
-                var command = new SaveUploadedRecordRequestFileCommand(request.Filename, request.Filename, documentType.ToString(), document.Length, uri);
+                var command = new SaveUploadedRecordRequestFileCommand(request.Filename, request.Filename, model.DocumentType.ToString(),
+                    model.DocumentTypeId, model.Document.Length, uri);
 
                 var response = await mediator.Send(command, token);
 
@@ -63,7 +58,7 @@ public static class RecordRequestSupportingFilesEndpoint
             .WithTags(TagName)
             .WithDescription("Upload file and save it as record.")
             .DisableAntiforgery()
-            .Accepts<IFormFile>("multipart/form-data")
+            //.Accepts<IFormFile>("multipart/form-data")
             .Produces<CreateResponse>(StatusCodes.Status200OK)
             .Produces<ValidationFailureResponse>(StatusCodes.Status400BadRequest);
 
