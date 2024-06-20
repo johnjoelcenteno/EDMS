@@ -16,7 +16,7 @@ public class RecordsManagementBase : GridBase<RecordModel>
     {
         BreadcrumbItems.Add(new BreadcrumbModel
         {
-            Icon = "group",
+            Icon = "menu",
             Text = "Record Management",
             Url = "/records-management"
         });
