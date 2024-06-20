@@ -40,23 +40,23 @@ public class HomeBase : GridBase<EmployeeModel>
         OverviewStatusList = new List<SimpleKeyValue> {
             new SimpleKeyValue()
             {
-                Id = "FOR REVIEW",
-                Name = "02",
+                Id = "For Review",
+                Name = "100",
             },
             new SimpleKeyValue()
             {
-                Id = "APPROVED",
-                Name = "02",
+                Id = "Approved",
+                Name = "144",
             },
              new SimpleKeyValue()
             {
-                Id = "For Release",
-                Name = "02",
+                Id = "Processing",
+                Name = "300",
             },
             new SimpleKeyValue()
             {
                 Id = "Received",
-                Name = "05",
+                Name = "300",
             },
         };
 
@@ -64,17 +64,17 @@ public class HomeBase : GridBase<EmployeeModel>
             new SimpleKeyValue()
             {
                 Id = "Priority List Inspection",
-                Name = "02",
+                Name = "102",
             },
             new SimpleKeyValue()
             {
                 Id = "Project Monitoring",
-                Name = "02",
+                Name = "40",
             },
              new SimpleKeyValue()
             {
                 Id = "Rental Rates",
-                Name = "02",
+                Name = "25",
             },
             new SimpleKeyValue()
             {
@@ -121,27 +121,27 @@ public class HomeBase : GridBase<EmployeeModel>
         },
         new MyPieChartModel
         {
-            SegmentName = "Series A",
+            SegmentName = "Series B",
             SegmentValue = 60
         },
         new MyPieChartModel
         {
-            SegmentName = "Series A",
+            SegmentName = "Series C",
             SegmentValue = 60
         },
         new MyPieChartModel
         {
-            SegmentName = "Series A",
+            SegmentName = "Series D",
             SegmentValue = 60
         },
         new MyPieChartModel
         {
-            SegmentName = "Series A",
+            SegmentName = "Series E",
             SegmentValue = 60
         },
         new MyPieChartModel
         {
-            SegmentName = "Series A",
+            SegmentName = "Series F",
             SegmentValue = 60
         }
     };
