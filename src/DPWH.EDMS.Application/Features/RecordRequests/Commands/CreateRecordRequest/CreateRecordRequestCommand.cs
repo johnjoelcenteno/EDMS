@@ -46,7 +46,7 @@ internal sealed class CreateRecordRequestCommandHandler(IWriteRepository writeRe
             throw new AppException($"Provided RequestedRecords contains invalid data.");
         }
 
-        var recordRequest = RecordRequest.Create(model.EmployeeNumber, model.ControlNumber, claimantType,
+        var recordRequest = RecordRequest.Create(model.ControlNumber, model.EmployeeNumber, claimantType,
             model.IsActiveEmployee, model.DateRequested, representative, model.Purpose, principal.GetUserName());
 
         
