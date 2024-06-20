@@ -14,6 +14,7 @@ using Microsoft.Extensions.Logging;
 using System.ComponentModel.DataAnnotations;
 using Telerik.Blazor.Components;
 using System.Linq;
+using DPWH.EDMS.Components.Helpers;
 
 namespace DPWH.EDMS.Web.Client.Pages.CurrentUser.PendingRequests.RequestForm;
 
@@ -25,8 +26,8 @@ public class RequestFormBase : RxBaseComponent
     [Inject] public required IRecordRequestsService RecordRequestsService { get; set; }
 
     [Parameter] public bool IsEditMode { get; set; } = false;
-    [Parameter] public EventCallback<CreateRecordRequest> HandleCreateOnSubmit { get; set; }
-    [Parameter] public EventCallback<CreateRecordRequest> HandleEditOnSubmit { get; set; }
+    [Parameter] public EventCallback<(CreateRecordRequest, UploadSupportingFileRequestModel)> HandleCreateOnSubmit { get; set; }
+    //[Parameter] public EventCallback<CreateRecordRequest> HandleEditOnSubmit { get; set; }
     [Parameter] public EventCallback HandleOnCancel { get; set; }
     protected CreateRecordRequest SelectedItem { get; set; } = new();
 
@@ -37,7 +38,7 @@ public class RequestFormBase : RxBaseComponent
     protected List<GetValidIDsResult> ValidIDsList = new();
     protected List<GetSecondaryIDsResult> SecondaryIDsList = new();
     protected List<GetRecordTypesResult> RecordTypesList = new();
-    
+
     protected List<Guid> SelectedRecordTypesIdList = new();
     protected List<ValidationResult> ValidationErrors { get; set; } = new();
     protected TelerikDropDownList<GetValidIDsResult, string> ValidIDDropRef = new();
@@ -46,7 +47,8 @@ public class RequestFormBase : RxBaseComponent
 
     protected FluentValidationValidator? FluentValidationValidator;
 
-    //protected TelerikUpload ValidIdUploadRef { get; set; }
+    protected Guid? SelectedValidIdTypeId { get; set; }
+    protected UploadSupportingFileRequestModel? SelectedValidId { get; set; }
     //protected TelerikUpload SupportedDocumentUploadRef { get; set; }
 
     public int MinFileSize { get; set; } = 1024;
@@ -64,7 +66,7 @@ public class RequestFormBase : RxBaseComponent
     {
         await LoadValidIDTypes();
         await LoadSecondaryIDTypes();
-        await LoadRecordTypes();        
+        await LoadRecordTypes();
     }
 
     #region Load Events
@@ -91,7 +93,7 @@ public class RequestFormBase : RxBaseComponent
     protected async Task LoadSecondaryIDTypes()
     {
         var secondaryIdResult = await LookupsService.GetSecondaryIdTypes();
-       
+
         if (secondaryIdResult.Success)
         {
             SecondaryIDsList = secondaryIdResult.Data.ToList();
@@ -104,7 +106,7 @@ public class RequestFormBase : RxBaseComponent
     protected async Task LoadRecordTypes()
     {
         var recordTypesResult = await LookupsService.GetRecordTypes();
-        
+
         if (recordTypesResult.Success)
         {
             RecordTypesList = recordTypesResult.Data.ToList();
@@ -130,14 +132,14 @@ public class RequestFormBase : RxBaseComponent
         {
             if (HandleCreateOnSubmit.HasDelegate)
             {
-                await HandleCreateOnSubmit.InvokeAsync(SelectedItem);
+                await HandleCreateOnSubmit.InvokeAsync((SelectedItem, SelectedValidId)!);
             }
         }
         else
         {
             //ToastService!.ShowError("Something went wrong, on submitting form. Please contact administrator.");
-            await HandleCreateOnSubmit.InvokeAsync(null);
-        }       
+            await HandleCreateOnSubmit.InvokeAsync((null, null)!);
+        }
     }
     protected async Task HandleOnCancelCallback()
     {
@@ -149,26 +151,26 @@ public class RequestFormBase : RxBaseComponent
     #endregion
 
     #region TODO
-    //protected async void OnSelect(FileSelectEventArgs args)
-    //{
-    //    foreach (var file in args.Files)
-    //    {
-    //        SelectedItem.IsValidIdAccepted = IsSelectedFileValid(file);
+    protected async void OnSelectValidId(FileSelectEventArgs args)
+    {
+        if (SelectedItem != null && GenericHelper.IsGuidHasValue(SelectedValidIdTypeId))
+        {
+            SelectedValidId = new UploadSupportingFileRequestModel()
+            {
+                document = null!,
+                documentType = Api.Contracts.RecordRequestProvidedDocumentTypes.ValidId,
+                documentTypeId = SelectedValidIdTypeId
+            };
 
-    //        if (SelectedItem.IsValidIdAccepted)
-    //        {
-    //            //FileParameter item = await DocumentService.GetFileToUpload(args);
-    //        }
-    //    }
-    //}
+            SelectedValidId.document = await DocumentService.GetFileToUpload(args);
+        }
+    }
 
-    //protected void OnRemove(FileSelectEventArgs args)
-    //{
-    //    foreach (var file in args.Files)
-    //    {
-    //        SelectedItem.IsValidIdAccepted = IsSelectedFileValid(file);
-    //    }
-    //}
+    protected void OnRemoveValidId(FileSelectEventArgs args)
+    {
+        SelectedValidId = null;
+    }
+
     //protected bool IsSelectedFileValid(FileSelectFileInfo file)
     //{
     //    return !(file.InvalidExtension || file.InvalidMaxFileSize || file.InvalidMinFileSize);

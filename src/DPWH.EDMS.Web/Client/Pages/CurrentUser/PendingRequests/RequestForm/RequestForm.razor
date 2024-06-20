@@ -1,4 +1,5 @@
 ﻿@using DPWH.EDMS.Api.Contracts
+@using DPWH.EDMS.Components.Helpers
 @using DPWH.EDMS.Shared.Enums
 @inherits RequestFormBase
 
@@ -69,11 +70,11 @@
                 <div class="form-group p-2">
                     <label for="validIdType">Valid ID</label>
                     <TelerikDropDownList Data="@ValidIDsList"
-                                         @bind-Value="SelectedItem.ValidId"
+                                         @bind-Value="SelectedValidIdTypeId"
                                          ValueField="@nameof(GetValidIDsResult.Id)"
                                          TextField="@nameof(GetValidIDsResult.Name)"
                                          DefaultText="Select" />
-                    <ValidationMessage For="@(() => SelectedItem.ValidId)" class="text-danger" />
+                    @* <ValidationMessage For="@(() => SelectedItem.ValidId)" class="text-danger" /> *@
                 </div>
 
                 <div class="form-group p-2">
@@ -89,18 +90,18 @@
 
           
 
-           @*  <div class="form-group p-2">
+            <div class="form-group p-2">
                 <label for="uploadValidId">Upload Valid ID</label>
                 <TelerikFileSelect AllowedExtensions="@AllowedExtensions"
-                                   OnSelect="@OnSelect"
-                                   OnRemove="@OnRemove"
+                                   OnSelect="@OnSelectValidId"
+                                   OnRemove="@OnRemoveValidId"
                                    MaxFileSize="@MaxFileSize"
                                    MinFileSize="@MinFileSize"
                                    Multiple="false"
-                                   Enabled="@(SelectedItem.ValidIdType != null ? true : false)">
+                                   Enabled="GenericHelper.IsGuidHasValue(SelectedValidIdTypeId)">
                 </TelerikFileSelect>
-                <ValidationMessage For="@(() => SelectedItem.IsValidIdAccepted)" class="text-danger" />
-            </div> *@
+                @* <ValidationMessage For="@(() => SelectedItem.IsValidIdAccepted)" class="text-danger" /> *@
+            </div>
 
            
 

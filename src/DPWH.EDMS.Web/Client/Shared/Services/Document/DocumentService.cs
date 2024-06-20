@@ -23,19 +23,16 @@ namespace DPWH.EDMS.Web.Client.Shared.Services.Document
         //    return filesToUpload;
         //}
 
-        public async Task<FileParameter> GetFileToUpload(FileSelectEventArgs args, FileParameter fileParameter)
+        public async Task<FileParameter> GetFileToUpload(FileSelectEventArgs args)
         {
-            var fileParam = new FileParameter(null);
-
-            foreach (var file in args.Files)
+            var file = args.Files.FirstOrDefault();
+            if (file == null)
             {
-
-                var clonedStream = await ConvertToStream(file);
-
-                fileParam = new FileParameter(clonedStream, file.Name, GetContentTypeFromFileName(file.Extension));
+                return new FileParameter(null);
             }
 
-            return fileParam;
+            var clonedStream = await ConvertToStream(file);
+            return new FileParameter(clonedStream, file.Name, GetContentTypeFromFileName(file.Extension));
         }
 
         public async Task<Stream> ConvertToStream(FileSelectFileInfo file)
