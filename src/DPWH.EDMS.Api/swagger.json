@@ -1616,7 +1616,7 @@
         }
       }
     },
-    "/api/recordrequests/supportingfiles/{documentType}": {
+    "/api/recordrequests/supportingfiles": {
       "post": {
         "tags": [
           "RecordRequestSupportingFiles"

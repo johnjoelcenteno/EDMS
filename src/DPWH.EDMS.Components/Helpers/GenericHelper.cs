@@ -189,6 +189,11 @@ namespace DPWH.EDMS.Components.Helpers
             return char.ToUpper(str[0]) + str.Substring(1);
         }
 
+        public static bool IsGuidHasValue(Guid? id)
+        {
+            return id != Guid.Empty && id != null;
+        }
+
         //public static async Task<List<T>> GetListByQuery<T>(
         //    DataSourceRequest dReq, 
         //    Func<DataSourceRequest, Task<DataSourceResult>> ServiceCb, 

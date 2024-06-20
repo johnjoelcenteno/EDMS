@@ -10,6 +10,6 @@ namespace DPWH.EDMS.Web.Client.Shared.Services.Document
         //Task<List<AssetDocumentModelFileParameterable>> GetFilesToUpload(FileSelectEventArgs args, List<AssetDocumentModelFileParameterable> filesToUpload);
         //Task UploadFiles(Func<AssetDocumentModelFileParameterable, Task> cb, List<AssetDocumentModelFileParameterable> filesToUpload);
         Task<Stream> ConvertToStream(FileSelectFileInfo file);
-        Task<FileParameter> GetFileToUpload(FileSelectEventArgs args, FileParameter fileParameter);
+        Task<FileParameter> GetFileToUpload(FileSelectEventArgs args);
     }
 }

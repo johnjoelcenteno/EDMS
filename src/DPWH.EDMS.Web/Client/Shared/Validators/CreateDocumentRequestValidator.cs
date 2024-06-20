@@ -38,9 +38,9 @@ public class CreateDocumentRequestModelValidator : AbstractValidator<CreateRecor
             .MaximumLength(100).WithMessage("Authorized Representative Name must not exceed 100 characters.")
             .When(x => !string.IsNullOrEmpty(x.AuthorizedRepresentative));
 
-        RuleFor(x => x.ValidId)
-            .NotEmpty().WithMessage("Valid ID is required.")
-            .When(x => x.Claimant == ClaimantTypes.AuthorizedRepresentative.ToString());
+        //RuleFor(x => x.ValidId)
+        //    .NotEmpty().WithMessage("Valid ID is required.")
+        //    .When(x => x.Claimant == ClaimantTypes.AuthorizedRepresentative.ToString());
         //.MaximumLength(50).WithMessage("Valid ID Type must not exceed 50 characters.");
 
         RuleFor(x => x.SupportingDocument);

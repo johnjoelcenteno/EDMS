@@ -21,7 +21,7 @@ public static class ApiEndpoints
             public const string GetFiles = $"{Base}/{{id:guid}}/files";
             public const string SaveImage = $"{Base}/{{id:guid}}/images/save";
             public const string SaveFile = $"{Base}/{{id:guid}}/files/{{documentType}}";
-            public const string UploadSupportingFile = $"{Base}/supportingfiles/{{documentType}}";
+            public const string UploadSupportingFile = $"{Base}/supportingfiles";
             public const string UpdateFileProperties = $"{Base}/{{assetId:guid}}/files/{{documentType}}/properties";
             public const string SaveFinancialFile = $"{Base}/{{assetId:guid}}/funding-history";
             public const string UpdateFinancialFileProperties = $"{Base}/{{assetId:guid}}/funding-history/properties";
