@@ -1,7 +1,91 @@
 ﻿@page "/my-request-history"
-
 @inherits RequestHistoryBase
-
 @attribute [Authorize(Policy = "RequireActiveRoles")]
 
+<TelerikMediaQuery Media="(max-width: 480px)" OnChange="((changed) => XSmall = changed)"></TelerikMediaQuery>
+
+<EdmsBreadcrumbs Data="@BreadcrumbItems" />
 <h3>My Request History</h3>
+<hr />
+
+<div class="d-flex flex-row mt-3">
+    <TelerikCard Width="100%">
+        <CardBody>
+            <div class="d-flex flex-row justify-content-between">
+                <CardTitle Class="mb-0">My Request History</CardTitle>
+            </div>
+            <CardSeparator Class="my-2"></CardSeparator>
+            <div>
+                @if (RecordList != null && !XSmall)
+                {
+                    <TelerikGrid TItem="EmployeeModel"
+                                 @bind-PageSize="@PageSize"
+                                 Height="@GridHeight"
+                                 FilterMode="GridFilterMode.FilterRow"
+                                 Sortable=true
+                                 Data="RecordList"
+                                 OnStateChanged="@OnStateChanged"
+                                 @ref="GridRef"
+                                 Context="record">
+                        <GridSettings>
+                            <GridPagerSettings PageSizes="@PageSizes">
+                            </GridPagerSettings>
+                        </GridSettings>
+                        <GridColumns>
+                            <GridColumn Field=@nameof(EmployeeModel.ControlNumber) Title="Control No." />
+                            <GridColumn Field=@nameof(EmployeeModel.RecordRequested) Title="Records Requested">
+                                <FilterCellTemplate>
+                                    <TelerikDropDownList Class="col-6"
+                                                         ValueField="@nameof(EmployeeModel.RecordRequested)"
+                                                         TextField="@nameof(EmployeeModel.RecordRequested)"
+                                                         DefaultText="All"
+                                                         @bind-Value="DropDownListValue"
+                                                         Data="RecordList">
+                                    </TelerikDropDownList>
+                                    <TelerikButton ButtonType="ButtonType.Button"
+                                                   Class="k-clear-button-visible ml-2"
+                                                   Icon="@SvgIcon.Filter"
+                                                   OnClick="@(async () =>
+                                          {
+                                              // clear filter through the method the context provides
+                                              await context.FilterAsync();
+                                          })">
+                                    </TelerikButton>
+                                    <TelerikButton ButtonType="ButtonType.Button"
+                                                   Class="k-clear-button-visible ml-2"
+                                                   Icon="@SvgIcon.FilterClear"
+                                                   Enabled="@( DropDownListValue != null )"
+                                                   OnClick="@(async () =>
+                                          {
+                                              DropDownListValue = null;
+                                              // clear filter through the method the context provides
+                                              await context.ClearFilterAsync();
+                                          })">
+                                    </TelerikButton>
+                                </FilterCellTemplate>
+                            </GridColumn>
+                            <GridColumn Field=@nameof(EmployeeModel.DateRequested) Title="Date Requested" />
+                            <GridColumn Field=@nameof(EmployeeModel.Purpose) Title="Purpose" />
+                            <GridColumn Field=@nameof(EmployeeModel.Status) Title="Status" />
+                            <GridCommandColumn Width="50px">
+                                <TelerikButton Icon="@FontIcon.MoreVertical"></TelerikButton>
+                            </GridCommandColumn>
+                        </GridColumns>
+                    </TelerikGrid>
+                }
+                else
+                {
+                    <span>No data to display</span>
+                }
+            </div>
+            <TelerikPager PageChanged="@PageChangedHandler"
+                          Total="TotalItems"
+                          ButtonCount="6"
+                          PageSize="@PageSize"
+                          PageSizeChanged="@PageSizeChangedHandler"
+                          PageSizes="@(new List<int?> {5, 10, 20})"
+                          Page="@Page">
+            </TelerikPager>
+        </CardBody>
+    </TelerikCard>
+</div>
