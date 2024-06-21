@@ -92,6 +92,8 @@ public static class ApiEndpoints
         public const string RecordTypes = $"{Base}/recordtypes";
         public const string ValidIDs = $"{Base}/validids";
         public const string SecondaryIDs = $"{Base}/secondaryids";
+        public const string AuthorizationDocuments = $"{Base}/authorizationdocuments";
+        
         public const string RequestingOffices = $"{Base}/requestingoffices";
         public const string BuildingComponents = $"{Base}/buildingcomponents";
     }

@@ -51,3 +51,8 @@ INSERT INTO [dbo].[DataLibraries] (Id, [Type], [Value], IsDeleted, CreatedBy, Cr
 INSERT INTO [dbo].[DataLibraries] (Id, [Type], [Value], IsDeleted, CreatedBy, Created) VALUES (NEWID(), 'SecondaryIDs', 'PSA Marriage Contract', 0, 'system', GETDATE());
 INSERT INTO [dbo].[DataLibraries] (Id, [Type], [Value], IsDeleted, CreatedBy, Created) VALUES (NEWID(), 'SecondaryIDs', 'PSA Birth Certificate', 0, 'system', GETDATE());
 
+
+--Secondary IDs
+INSERT INTO [dbo].[DataLibraries] (Id, [Type], [Value], IsDeleted, CreatedBy, Created) VALUES (NEWID(), 'AuthorizationDocuments', 'Authorization Letter', 0, 'system', GETDATE());
+INSERT INTO [dbo].[DataLibraries] (Id, [Type], [Value], IsDeleted, CreatedBy, Created) VALUES (NEWID(), 'AuthorizationDocuments', 'Special Power of Attorney', 0, 'system', GETDATE());
+

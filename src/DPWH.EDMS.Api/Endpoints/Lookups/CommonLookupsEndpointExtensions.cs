@@ -14,6 +14,7 @@ public static class CommonLookupsEndpointExtensions
         app.MapRecordTypes();
         app.MapValidIDs();
         app.MapSecondaryIDs();
+        app.MapAuthorizationDocuments();
 
         return app;
     }
