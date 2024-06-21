@@ -22,7 +22,7 @@ public static class RecordRequestMappers
                 ValidId = entity.AuthorizedRepresentative.ValidId,
                 ValidIdUri = (entity.Files?.FirstOrDefault(f => f.Type == RecordRequestProvidedDocumentTypes.ValidId.ToString())) == null ? null : entity.Files?.FirstOrDefault(predicate: f => f.Type == RecordRequestProvidedDocumentTypes.ValidId.ToString()).Uri,
                 SupportingDocument = entity.AuthorizedRepresentative.SupportingDocument,
-                SupportingDocumentUri = (entity.Files?.FirstOrDefault(f => f.Type == RecordRequestProvidedDocumentTypes.SupportingDocument.ToString())) == null ? null : entity.Files?.FirstOrDefault(predicate: f => f.Type == RecordRequestProvidedDocumentTypes.SupportingDocument.ToString()).Uri
+                SupportingDocumentUri = (entity.Files?.FirstOrDefault(f => f.Type == RecordRequestProvidedDocumentTypes.AuthorizationDocument.ToString())) == null ? null : entity.Files?.FirstOrDefault(predicate: f => f.Type == RecordRequestProvidedDocumentTypes.AuthorizationDocument.ToString()).Uri
             } : null,
             RequestedRecords = entity.RequestedRecords.Select(rr => new RequestedRecordModel(rr.RecordTypeId, rr.RecordType)).ToList(),
             Purpose = entity.Purpose,

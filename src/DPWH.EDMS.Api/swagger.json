@@ -2978,7 +2978,7 @@
           "RentalRates",
           "RecordTypes",
           "ValidIDs",
-          "SupportingDocuments"
+          "AuthorizationDocuments"
         ],
         "type": "string"
       },

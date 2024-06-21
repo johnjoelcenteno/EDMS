@@ -2,5 +2,5 @@
 public enum RecordRequestProvidedDocumentTypes
 {
     ValidId,
-    SupportingDocument
+    AuthorizationDocument
 }
