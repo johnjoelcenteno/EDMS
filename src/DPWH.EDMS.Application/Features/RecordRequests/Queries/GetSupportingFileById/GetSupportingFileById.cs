@@ -20,7 +20,7 @@ public class GetSupportingFileById : IRequestHandler<GetSupportingFileByIdReques
         RecordRequestDocument? recordRequestDocument = _readRepository.RecordRequestDocumentsView.FirstOrDefault(x => x.Id == request.Id);
         if (recordRequestDocument is null)
         {
-            throw new Exception("Record not found");
+            return null;
         }
 
         return RecordRequestDocumentMapper.Map(recordRequestDocument);

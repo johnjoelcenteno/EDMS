@@ -4,6 +4,7 @@ using MediatR;
 using DPWH.EDMS.Infrastructure.Storage;
 using DPWH.EDMS.Application.Features.RecordRequests.Commands.SaveUploadedFile;
 using DPWH.EDMS.Application;
+using DPWH.EDMS.Application.Features.RecordRequests.Queries;
 
 namespace DPWH.EDMS.Api.Endpoints.RecordRequests;
 
@@ -67,7 +68,10 @@ public static class RecordRequestSupportingFilesEndpoint
         app.MapGet(ApiEndpoints.RecordRequest.Documents.GetSupportingFileById, async (Guid id, IMediator mediator) =>
         {
             var result = await mediator.Send(new GetSupportingFileByIdRequest(id));
-            return result;
+            var data = new BaseApiResponse<RecordRequestDocumentModel>(result);
+
+            return result is null ? Results.NotFound() : Results.Ok(data);
+
         })
         .WithName("GetSupportingFileById")
         .WithTags(TagName)
