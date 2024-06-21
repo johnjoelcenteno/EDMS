@@ -1,4 +1,3 @@
-using DPWH.EDMS.Application.Features.Lookups.Queries.GetRecordTypes;
 using DPWH.EDMS.Application.Features.Lookups.Queries.GetSecondaryIDs;
 using DPWH.EDMS.Application.Models;
 using MediatR;

@@ -1371,6 +1371,36 @@
         }
       }
     },
+    "/api/lookups/authorizationdocuments": {
+      "get": {
+        "tags": [
+          "Lookups"
+        ],
+        "operationId": "GetAuthorizationDocuments",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAuthorizationDocumentsResultIEnumerableBaseApiResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/recordrequests/{id}": {
       "get": {
         "tags": [
@@ -3501,6 +3531,36 @@
         },
         "additionalProperties": false
       },
+      "GetAuthorizationDocumentsResult": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetAuthorizationDocumentsResultIEnumerableBaseApiResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GetAuthorizationDocumentsResult"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "GetDataLibraryResult": {
         "type": "object",
         "properties": {
@@ -4059,7 +4119,7 @@
       "RecordRequestProvidedDocumentTypes": {
         "enum": [
           "ValidId",
-          "SupportingDocument"
+          "AuthorizationDocument"
         ],
         "type": "string"
       },
