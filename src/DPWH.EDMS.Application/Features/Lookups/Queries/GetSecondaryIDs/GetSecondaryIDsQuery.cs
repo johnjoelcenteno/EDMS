@@ -11,7 +11,7 @@ internal sealed class GetSecondaryIDsQueryHandler(IReadRepository repository) : 
     public async Task<IEnumerable<GetSecondaryIDsResult>> Handle(GetSecondaryIDsQuery request, CancellationToken cancellationToken)
     {
         var recordTypes = await repository.DataLibrariesView
-            .Where(d => d.Type == DataLibraryTypes.SupportingDocuments.ToString())
+            .Where(d => d.Type == DataLibraryTypes.AuthorizationDocuments.ToString())
             .Select(d => new GetSecondaryIDsResult(d.Id, d.Value))
             .ToListAsync(cancellationToken);
 

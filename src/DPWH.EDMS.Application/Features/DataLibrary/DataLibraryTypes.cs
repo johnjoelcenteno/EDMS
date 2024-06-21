@@ -12,6 +12,6 @@ public enum DataLibraryTypes
     PropertyCondition,
     RentalRates,
     RecordTypes,
-    ValidIDs,
-    SupportingDocuments
+    ValidIDs,    
+    AuthorizationDocuments
 }
