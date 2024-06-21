@@ -8,7 +8,7 @@ public class RecordRequest : EntityBase
     private RecordRequest() { }
 
     public static RecordRequest Create(       
-       string controlNumber,
+       int controlNumber,
        string employeeNumber,
        ClaimantTypes claimantType,
        bool isActiveEmployee,
@@ -34,7 +34,7 @@ public class RecordRequest : EntityBase
         entity.SetCreated(createdBy);
         return entity;
     }    
-    public string ControlNumber { get; private set; }
+    public int ControlNumber { get; private set; }
     public string EmployeeNumber { get; private set; }
     public bool IsActiveEmployee { get; private set; }
     public string ClaimantType { get; private set; }

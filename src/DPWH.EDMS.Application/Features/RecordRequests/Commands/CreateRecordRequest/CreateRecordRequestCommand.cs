@@ -1,4 +1,5 @@
 ﻿using DPWH.EDMS.Application.Contracts.Persistence;
+using DPWH.EDMS.Application.Contracts.Services;
 using DPWH.EDMS.Application.Features.Lookups.Queries.GetRecordTypes;
 using DPWH.EDMS.Application.Models;
 using DPWH.EDMS.Domain.Entities;
@@ -14,7 +15,8 @@ using System.Security.Claims;
 namespace DPWH.EDMS.Application.Features.RecordRequests.Commands.CreateRecordRequest;
 
 public record class CreateRecordRequestCommand(CreateRecordRequest Model) : IRequest<CreateResponse>;
-internal sealed class CreateRecordRequestCommandHandler(IWriteRepository writeRepository, IReadRepository readRepository, ClaimsPrincipal principal) : IRequestHandler<CreateRecordRequestCommand, CreateResponse>
+internal sealed class CreateRecordRequestCommandHandler(IWriteRepository writeRepository, IReadRepository readRepository, 
+    ClaimsPrincipal principal, IControlNumberGeneratorService _generatorService) : IRequestHandler<CreateRecordRequestCommand, CreateResponse>
 {
     public async Task<CreateResponse> Handle(CreateRecordRequestCommand request, CancellationToken cancellationToken)
     {
@@ -46,7 +48,9 @@ internal sealed class CreateRecordRequestCommandHandler(IWriteRepository writeRe
             throw new AppException($"Provided RequestedRecords contains invalid data.");
         }
 
-        var recordRequest = RecordRequest.Create(model.ControlNumber, model.EmployeeNumber, claimantType,
+        var requestNumber = await _generatorService.Generate(DateTimeOffset.Now, cancellationToken);
+
+        var recordRequest = RecordRequest.Create(requestNumber, model.EmployeeNumber, claimantType,
             model.IsActiveEmployee, model.DateRequested, representative, model.Purpose, principal.GetUserName());
 
         

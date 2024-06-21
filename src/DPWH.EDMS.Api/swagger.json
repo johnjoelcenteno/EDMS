@@ -3999,8 +3999,8 @@
             "format": "uuid"
           },
           "controlNumber": {
-            "type": "string",
-            "nullable": true
+            "type": "integer",
+            "format": "int32"
           },
           "employeeNumber": {
             "type": "string",
