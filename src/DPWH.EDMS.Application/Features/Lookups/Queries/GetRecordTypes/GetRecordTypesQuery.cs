@@ -1,5 +1,5 @@
 using DPWH.EDMS.Application.Contracts.Persistence;
-using DPWH.EDMS.Shared;
+using DPWH.EDMS.Application.Features.DataLibrary;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,7 +12,7 @@ internal sealed class GetRecordTypesQueryHandler(IReadRepository repository) : I
     public async Task<IEnumerable<GetRecordTypesResult>> Handle(GetRecordTypesQuery request, CancellationToken cancellationToken)
     {
         var recordTypes = await repository.DataLibrariesView
-            .Where(d => d.Type == WellKnownDataLibraryTypes.RecordTypes)
+            .Where(d => d.Type == DataLibraryTypes.RecordTypes.ToString())
             .Select(d => new GetRecordTypesResult(d.Id, d.Value))            
             .ToListAsync(cancellationToken);
 

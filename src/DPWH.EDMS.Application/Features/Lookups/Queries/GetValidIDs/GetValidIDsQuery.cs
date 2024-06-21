@@ -1,5 +1,5 @@
 using DPWH.EDMS.Application.Contracts.Persistence;
-using DPWH.EDMS.Shared;
+using DPWH.EDMS.Application.Features.DataLibrary;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,7 +11,7 @@ internal sealed class GetValidIDsQueryHandler(IReadRepository repository) : IReq
     public async Task<IEnumerable<GetValidIDsResult>> Handle(GetValidIDsQuery request, CancellationToken cancellationToken)
     {
         var validIDs = await repository.DataLibrariesView
-            .Where(d => d.Type == WellKnownDataLibraryTypes.ValidIDs)
+            .Where(d => d.Type == DataLibraryTypes.ValidIDs.ToString())
             .Select(d => new GetValidIDsResult(d.Id, d.Value))
             .ToListAsync(cancellationToken);
 

@@ -1,5 +1,5 @@
 using DPWH.EDMS.Application.Contracts.Persistence;
-using DPWH.EDMS.Shared;
+using DPWH.EDMS.Application.Features.DataLibrary;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,7 +11,7 @@ internal sealed class GetSecondaryIDsQueryHandler(IReadRepository repository) : 
     public async Task<IEnumerable<GetSecondaryIDsResult>> Handle(GetSecondaryIDsQuery request, CancellationToken cancellationToken)
     {
         var recordTypes = await repository.DataLibrariesView
-            .Where(d => d.Type == WellKnownDataLibraryTypes.SecondaryIDs)
+            .Where(d => d.Type == DataLibraryTypes.SupportingDocuments.ToString())
             .Select(d => new GetSecondaryIDsResult(d.Id, d.Value))
             .ToListAsync(cancellationToken);
 

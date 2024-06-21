@@ -2975,7 +2975,10 @@
           "PolicyCoverage",
           "ProofOfOwnership",
           "PropertyCondition",
-          "RentalRates"
+          "RentalRates",
+          "RecordTypes",
+          "ValidIDs",
+          "SupportingDocuments"
         ],
         "type": "string"
       },
