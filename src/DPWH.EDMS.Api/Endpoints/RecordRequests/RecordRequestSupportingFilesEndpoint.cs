@@ -3,6 +3,7 @@ using DPWH.EDMS.Application.Models;
 using MediatR;
 using DPWH.EDMS.Infrastructure.Storage;
 using DPWH.EDMS.Application.Features.RecordRequests.Commands.SaveUploadedFile;
+using DPWH.EDMS.Application;
 
 namespace DPWH.EDMS.Api.Endpoints.RecordRequests;
 
@@ -25,12 +26,12 @@ public static class RecordRequestSupportingFilesEndpoint
                 CancellationToken token,
                 ILogger<Program> logger) =>
             {
-                
-                var request = new 
+
+                var request = new
                 {
-                    Id = Guid.NewGuid(),                    
+                    Id = Guid.NewGuid(),
                     File = model.Document,
-                    Filename = model.Document?.FileName                    
+                    Filename = model.Document?.FileName
                 };
 
                 var metadata = new Dictionary<string, string>();
@@ -62,6 +63,19 @@ public static class RecordRequestSupportingFilesEndpoint
             .Produces<CreateResponse>(StatusCodes.Status200OK)
             .Produces<ValidationFailureResponse>(StatusCodes.Status400BadRequest);
 
+
+        app.MapGet(ApiEndpoints.RecordRequest.Documents.GetSupportingFileById, async (Guid id, IMediator mediator) =>
+        {
+            var result = await mediator.Send(new GetSupportingFileByIdRequest(id));
+            return result;
+        })
+        .WithName("GetSupportingFileById")
+        .WithTags(TagName)
+        .WithDescription("Get supporting file by id")
+        .DisableAntiforgery()
+        //.Accepts<IFormFile>("multipart/form-data")
+        .Produces<CreateResponse>(StatusCodes.Status200OK)
+        .Produces<ValidationFailureResponse>(StatusCodes.Status400BadRequest); ;
 
         //app.MapDelete(ApiEndpoints.Assets.AssetDocuments.DeleteDocument, async (
         //        Guid assetId,

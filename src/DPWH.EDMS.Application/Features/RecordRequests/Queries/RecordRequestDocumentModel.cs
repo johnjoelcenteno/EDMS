@@ -1,7 +1,7 @@
 ﻿namespace DPWH.EDMS.Application.Features.RecordRequests.Queries;
 public class RecordRequestDocumentModel
 {
-    public Guid? Id { get; set; }    
+    public Guid? Id { get; set; }
     public string? Name { get; set; }
     public string? Filename { get; set; }
     /// <summary>
