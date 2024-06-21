@@ -2,7 +2,7 @@
 public record RecordRequestModel
 {
     public Guid Id { get; set; }
-    public string ControlNumber { get; set; }
+    public int ControlNumber { get; set; }
     public string EmployeeNumber { get; set; }
     public bool IsActiveEmployee { get; set; }
     public string ClaimantType { get; set; }

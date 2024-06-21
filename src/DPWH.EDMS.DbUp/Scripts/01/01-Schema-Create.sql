@@ -31,7 +31,7 @@ END
 IF NOT EXISTS (SELECT *	FROM sysobjects	WHERE name = N'RecordRequests' AND xtype = 'U')
 BEGIN CREATE TABLE RecordRequests (
 	Id UNIQUEIDENTIFIER PRIMARY KEY,
-	ControlNumber NVARCHAR(50) NOT NULL,
+	ControlNumber [int] NOT NULL,	
 	EmployeeNumber NVARCHAR(50) NOT NULL,
 	IsActiveEmployee [bit] NOT NULL,
 	ClaimantType NVARCHAR(50),

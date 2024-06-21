@@ -13,6 +13,7 @@
     <None Remove="Scripts\01\01-Schema-Create.sql" />
     <None Remove="Scripts\01\01-Seed.sql" />
     <None Remove="Scripts\01\03-Schema-AddChangeLogs.sql" />
+    <None Remove="Scripts\01\04-Sequence-ControlNo.sql" />
   </ItemGroup>
 
   <ItemGroup>
@@ -25,6 +26,7 @@
     <EmbeddedResource Include="Scripts\01\01-Schema-Configs.sql" />
     <EmbeddedResource Include="Scripts\01\01-Seed.sql" />
     <EmbeddedResource Include="Scripts\01\01-Schema-Create.sql" />
+    <EmbeddedResource Include="Scripts\01\04-Sequence-ControlNo.sql" />
     <EmbeddedResource Include="Scripts\01\03-Schema-AddChangeLogs.sql" />
   </ItemGroup>
   

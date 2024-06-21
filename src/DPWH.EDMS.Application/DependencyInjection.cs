@@ -26,7 +26,7 @@ public static class DependencyInjection
 
         services.AddScoped<IArcGisTokenProvider, ArcGisTokenProvider>();
         services.AddScoped<IBuildingIdSequenceGeneratorService, BuildingIdSequenceGeneratorService>();
-        services.AddScoped<IRequestNumberGeneratorService, RequestNumberGeneratorService>();
+        services.AddScoped<IControlNumberGeneratorService, ControlNumberGeneratorService>();
         services.AddScoped<IRentalRateNumberGeneratorService, RentalRateNumberGeneratorService>();
 
         return services;
