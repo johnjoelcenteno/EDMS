@@ -682,9 +682,6 @@ namespace DPWH.EDMS.Api.Contracts
         [Newtonsoft.Json.JsonProperty("employeeNumber", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string EmployeeNumber { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("controlNumber", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string ControlNumber { get; set; }
-
         [Newtonsoft.Json.JsonProperty("isActiveEmployee", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public bool IsActiveEmployee { get; set; }
 
@@ -1047,6 +1044,15 @@ namespace DPWH.EDMS.Api.Contracts
 
         [System.Runtime.Serialization.EnumMember(Value = @"RentalRates")]
         RentalRates = 8,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"RecordTypes")]
+        RecordTypes = 9,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"ValidIDs")]
+        ValidIDs = 10,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"SupportingDocuments")]
+        SupportingDocuments = 11,
 
     }
 
@@ -1835,8 +1841,8 @@ namespace DPWH.EDMS.Api.Contracts
         [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public System.Guid Id { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("controlNumber", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string ControlNumber { get; set; }
+        [Newtonsoft.Json.JsonProperty("controlNumber", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int ControlNumber { get; set; }
 
         [Newtonsoft.Json.JsonProperty("employeeNumber", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string EmployeeNumber { get; set; }

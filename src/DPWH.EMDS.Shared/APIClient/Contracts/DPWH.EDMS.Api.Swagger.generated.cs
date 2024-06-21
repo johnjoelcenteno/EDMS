@@ -4816,8 +4816,8 @@ namespace DPWH.EDMS.Api.Contracts
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                 
-                    // Operation Path: "api/recordrequests/supportingfiles/{documentType}"
-                    urlBuilder_.Append("api/recordrequests/supportingfiles/");
+                    // Operation Path: "api/recordrequests/supportingfiles"
+                    urlBuilder_.Append("api/recordrequests/supportingfiles");
 
                     PrepareRequest(client_, request_, urlBuilder_);
 

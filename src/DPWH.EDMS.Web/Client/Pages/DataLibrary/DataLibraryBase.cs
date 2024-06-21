@@ -17,21 +17,27 @@ public class DataLibraryBase : RxBaseComponent
         {
             new DataLibraryModel
             {
-                Icon = FontIcon.FileConfig,
-                Name = "Document Type",
-                Url = "/data-library/document-type"
+                Icon = FontIcon.Gear,
+                Name = "Record Types",
+                Url = "/data-library/record-types"
             },
             new DataLibraryModel
             {
                 Icon = FontIcon.Gear,
-                Name = "Purpose",
-                Url = "/data-library/purpose"
+                Name = "Valid IDs",
+                Url = "/data-library/valid-ids"
             },
+            new DataLibraryModel
+            {
+                Icon = FontIcon.Gear,
+                Name = "Authorization Documents",
+                Url = "/data-library/authorization-documents"
+            }
         };
 
         BreadcrumbItems.Add(new BreadcrumbModel
         {
-            Icon = "group",
+            Icon = "menu",
             Text = "Data Library",
             Url = "/data-library"
         });
