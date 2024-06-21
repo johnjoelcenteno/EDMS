@@ -2528,10 +2528,6 @@
             "type": "string",
             "nullable": true
           },
-          "controlNumber": {
-            "type": "string",
-            "nullable": true
-          },
           "isActiveEmployee": {
             "type": "boolean"
           },
