@@ -71,14 +71,13 @@ public static class RecordRequestSupportingFilesEndpoint
             var data = new BaseApiResponse<RecordRequestDocumentModel>(result);
 
             return result is null ? Results.NotFound() : Results.Ok(data);
-
         })
         .WithName("GetSupportingFileById")
         .WithTags(TagName)
         .WithDescription("Get supporting file by id")
         .DisableAntiforgery()
         //.Accepts<IFormFile>("multipart/form-data")
-        .Produces<CreateResponse>(StatusCodes.Status200OK)
+        .Produces<RecordRequestDocumentModel>(StatusCodes.Status200OK)
         .Produces<ValidationFailureResponse>(StatusCodes.Status400BadRequest); ;
 
         //app.MapDelete(ApiEndpoints.Assets.AssetDocuments.DeleteDocument, async (
