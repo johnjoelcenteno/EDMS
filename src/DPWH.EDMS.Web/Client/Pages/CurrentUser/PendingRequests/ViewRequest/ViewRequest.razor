@@ -27,6 +27,11 @@
                     <p class="edms-text-header-small">Request Details</p>
                 </div>
                 <div class="detail-flex">
+                    <p><b>Control Number:</b>&nbsp; @SelectedRecordRequest.ControlNumber</p>
+                    <p><b>Employee No:</b>&nbsp; @SelectedRecordRequest.EmployeeNumber</p>
+
+                </div>
+                <div class="detail-flex">
                     <p><b>Claimant Type:</b>&nbsp; @(SelectedRecordRequest.ClaimantType == ClaimantTypes.AuthorizedRepresentative.ToString() ? "Authorized Representative" : "Requestor")</p>
                     @if (SelectedRecordRequest.ClaimantType == ClaimantTypes.AuthorizedRepresentative.ToString())
                     {
@@ -35,6 +40,7 @@
                 </div>
                 <div class="detail-flex">
                     <p><b>Active or Inactive Employee:</b>&nbsp; @(SelectedRecordRequest.IsActiveEmployee ? "Yes" : "No") </p>
+                    <p>Date Requested: @GenericHelper.GetDateTimeDisplay(SelectedRecordRequest.DateRequested)</p>
                 </div>
                 <div class="detail-flex">
                     <p><b>Purpose:</b>&nbsp;@SelectedRecordRequest.Purpose</p>
@@ -50,6 +56,21 @@
                             @foreach (var record in SelectedRecordRequest.RequestedRecords)
                             {
                                 <li>@record.RecordType</li>
+                            }
+                        }
+                    </ul>
+                </div>
+                <hr />
+                <div class="d-flex flex-row mb-2">
+                    <p class="edms-text-header-small">Uploaded Documents</p>
+                </div>
+                <div class="detail-flex">
+                    <ul>
+                        @if (SelectedRecordRequest.Files != null && SelectedRecordRequest.Files.Any())
+                        {
+                            @foreach (var uploadedDoc in SelectedRecordRequest.Files)
+                            {
+                                <li><a href="@uploadedDoc.Uri" target="_blank">@(uploadedDoc.Type == "ValidId" ? "Valid ID" : "Authorization Document")</a></li>
                             }
                         }
                     </ul>
