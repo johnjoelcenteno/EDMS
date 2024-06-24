@@ -41,22 +41,22 @@ public class HomeBase : GridBase<EmployeeModel>
             new SimpleKeyValue()
             {
                 Id = "For Review",
-                Name = "100",
+                Name = "",
             },
             new SimpleKeyValue()
             {
                 Id = "Approved",
-                Name = "144",
+                Name = "",
             },
              new SimpleKeyValue()
             {
                 Id = "Processing",
-                Name = "300",
+                Name = "",
             },
             new SimpleKeyValue()
             {
                 Id = "Received",
-                Name = "300",
+                Name = "",
             },
         };
 
@@ -64,22 +64,22 @@ public class HomeBase : GridBase<EmployeeModel>
             new SimpleKeyValue()
             {
                 Id = "Priority List Inspection",
-                Name = "102",
+                Name = "",
             },
             new SimpleKeyValue()
             {
                 Id = "Project Monitoring",
-                Name = "40",
+                Name = "",
             },
              new SimpleKeyValue()
             {
                 Id = "Rental Rates",
-                Name = "25",
+                Name = "",
             },
             new SimpleKeyValue()
             {
                 Id = "Placeholder",
-                Name = "05",
+                Name = "",
             },
         };
         DropDownListValue = "All";
