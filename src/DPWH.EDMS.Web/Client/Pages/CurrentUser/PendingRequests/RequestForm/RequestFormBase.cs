@@ -156,8 +156,8 @@ public class RequestFormBase : RxBaseComponent
             if (userRes.Success)
             {
                 CurrentUser = Mapper.Map<UserModel>(userRes.Data);
-                //SelectedItem.EmployeeNumber = CurrentUser.EmployeeId;
-                SelectedItem.EmployeeNumber = "TEST-ID-00001"; // FOR TESTING ONLY
+                SelectedItem.EmployeeNumber = CurrentUser.EmployeeId;
+                //SelectedItem.EmployeeNumber = "TEST-ID-00001"; // FOR TESTING ONLY
                 UserFullname = GetUserFullname();
             }
         }
