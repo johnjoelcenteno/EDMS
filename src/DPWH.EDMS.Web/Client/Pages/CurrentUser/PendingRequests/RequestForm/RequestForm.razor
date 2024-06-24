@@ -13,11 +13,11 @@
             <CardSeparator Class="my-2"></CardSeparator>
             <div class="form-group">
                 <div class="row m-0">
-                    @* <div class="col-md-6 col-12 p-2">
+                    <div class="col-md-6 col-12 p-2">
                         <label for="controlNumber">Control No.</label>
                         <InputText id="controlNumber" class="form-control" @bind-Value="SelectedItem.ControlNumber" />
                         <ValidationMessage For="@(() => SelectedItem.ControlNumber)" class="text-danger" />
-                    </div> *@
+                    </div>
                     <div class="col-md-6 col-12 p-2">
                         <label for="dateRequested">Date and Time Requested</label>
                         <TelerikDateTimePicker @bind-Value="SelectedItem.DateRequested" />
@@ -51,7 +51,7 @@
                                 @{
                                     var ctx = radioContext;
                                 }
-                                @(ctx == ClaimantTypes.AuthorizedRepresentative.ToString() ? "Authorized Representative" : "Requestor")
+                                @(ctx == ClaimantTypes.AuthorizedRepresentative.ToString() ? "Authorize Representative" : "Requestor")
                             </ItemTemplate>
                         </TelerikRadioGroup>
                     </div>
@@ -112,7 +112,7 @@
             </div> *@
 
             <div class="form-group p-2">
-                <label for="recordsRequested">Document/s to be Requested</label>
+                <label for="recordsRequested">Record/s to be Requested</label>
                 <TelerikMultiSelect Data="@RecordTypesList"
                                     @bind-Value="@SelectedRecordTypesIdList"
                                     ValueField="@nameof(GetRecordTypesResult.Id)"                                    

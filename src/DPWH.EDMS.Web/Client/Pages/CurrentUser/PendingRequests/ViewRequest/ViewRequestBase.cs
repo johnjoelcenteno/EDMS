@@ -36,7 +36,7 @@ public class ViewRequestBase : RxBaseComponent
                 new BreadcrumbModel
                 {
                     Icon = "create_new_folder",
-                    Text = SelectedRecordRequest.ControlNumber.ToString(),
+                    Text = GenericHelper.GetDisplayValue(SelectedRecordRequest.ControlNumber),
                     Url = NavManager.Uri.ToString(),
                 },
             });

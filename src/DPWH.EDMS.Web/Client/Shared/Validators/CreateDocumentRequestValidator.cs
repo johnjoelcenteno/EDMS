@@ -9,9 +9,9 @@ public class CreateDocumentRequestModelValidator : AbstractValidator<CreateRecor
 {
     public CreateDocumentRequestModelValidator()
     {
-        //RuleFor(x => x.ControlNumber)
-        //    .NotEmpty().WithMessage("Control Number is required.")
-        //    .MaximumLength(50).WithMessage("Control Number must not exceed 50 characters.");
+        RuleFor(x => x.ControlNumber)
+            .NotEmpty().WithMessage("Control Number is required.")
+            .MaximumLength(50).WithMessage("Control Number must not exceed 50 characters.");
 
         RuleFor(x => x.RequestedRecords)
             .NotEmpty().WithMessage("At least one record must be requested.");
