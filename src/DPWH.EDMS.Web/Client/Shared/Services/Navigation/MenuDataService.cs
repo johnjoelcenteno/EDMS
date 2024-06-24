@@ -23,7 +23,7 @@ public class MenuDataService : IMenuDataService
             {
                 Text = "Request Management",
                 Url = "/request-management",
-                Icon = "description",
+                Icon = "folder_open",
                 Children = new List<MenuModel>()
                 {
                     new ()
@@ -62,6 +62,16 @@ public class MenuDataService : IMenuDataService
                 SortOrder = 2,
                 AuthorizedRoles = new List<string>{ ApplicationRoles.SuperAdmin, ApplicationRoles.SystemAdmin }
             },
+             new ()
+            {
+                Text = "Data Library",
+                Url = "/data-library",
+                Icon = "description",
+                Children = default,
+                Level = 0,
+                SortOrder = 3,
+                AuthorizedRoles = new List<string>{ ApplicationRoles.SuperAdmin, ApplicationRoles.SystemAdmin }
+            },
               new ()
             {
                 Text = "User Management",
@@ -96,16 +106,6 @@ public class MenuDataService : IMenuDataService
                 Level = 0,
                 SortOrder = 2,
                 AuthorizedRoles = new List<string>{ ApplicationRoles.SuperAdmin, ApplicationRoles.SystemAdmin, ApplicationRoles.EndUser }
-            },
-            new ()
-            {
-                Text = "Data Library",
-                Url = "/data-library",
-                Icon = "description",
-                Children = default,
-                Level = 0,
-                SortOrder = 3,
-                AuthorizedRoles = new List<string>{ ApplicationRoles.SuperAdmin, ApplicationRoles.SystemAdmin }
             },
         };
 
