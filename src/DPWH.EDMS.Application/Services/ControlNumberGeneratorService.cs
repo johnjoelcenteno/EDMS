@@ -28,10 +28,10 @@ public class ControlNumberGeneratorService : IControlNumberGeneratorService
         await using var command = connection.CreateCommand();
 
         command.CommandText = $"SELECT NEXT VALUE FOR {SequenceName}";
-        var sequence = (long?)await command.ExecuteScalarAsync(cancellationToken);
+        var sequence = (int)await command.ExecuteScalarAsync(cancellationToken);
         await connection.CloseAsync();
 
-        return sequence?.ToString("D6");
+        return sequence.ToString("D6");
     }
 
     private async Task<string?> ResetSequence(CancellationToken cancellationToken)
