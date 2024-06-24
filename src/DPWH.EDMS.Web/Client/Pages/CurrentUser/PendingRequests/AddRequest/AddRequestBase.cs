@@ -5,6 +5,7 @@ using DPWH.EDMS.Client.Shared.APIClient.Services.RecordRequestSupportingFiles;
 using DPWH.EDMS.Client.Shared.MockModels;
 using DPWH.EDMS.Client.Shared.Models;
 using DPWH.EDMS.Components;
+using DPWH.EDMS.Shared.Enums;
 using DPWH.EDMS.Web.Client.Shared.BlazoredFluentValidator;
 using DPWH.EDMS.Web.Client.Shared.Services.ExceptionHandler;
 using Microsoft.AspNetCore.Components;
@@ -37,36 +38,76 @@ public class AddRequestBase : RxBaseComponent
         NavManager.NavigateTo("/my-pending-request");
     }
 
-    protected async Task HandleSubmit((CreateRecordRequest, UploadSupportingFileRequestModel) parameters)
+    protected async Task HandleSubmit((CreateRecordRequest, UploadSupportingFileRequestModel, UploadSupportingFileRequestModel) parameters)
     {
-        var (currentDocRequest, validId) = parameters;
+        var (currentDocRequest, validId, suppDoc) = parameters;
 
         await ExceptionHandlerService.HandleApiException(
         async () =>
         {
             IsLoading = true;
-            if (currentDocRequest != null && validId != null)
+            if(currentDocRequest.Claimant == ClaimantTypes.AuthorizedRepresentative.ToString())
             {
-                CreateResponse uploadValidIdRes = new();
-
-                await ExceptionHandlerService.HandleApiException(async () =>
+                if ((currentDocRequest != null && validId != null))
                 {
-                    uploadValidIdRes = await RecordRequestSupportingFilesService.Upload(validId.document, validId.documentType, validId.documentTypeId);
-                });
+                    CreateResponse uploadValidIdRes = new();
 
-                if (uploadValidIdRes.Success) {
-                    
-                    // set values
-                    SelectedItem = currentDocRequest;
-                    SelectedItem.ValidId = uploadValidIdRes.Id;
-
-                    var createRes = await RecordRequestsService.CreateRecordRequest(currentDocRequest);
-
-                    if (createRes.Success)
+                    await ExceptionHandlerService.HandleApiException(async () =>
                     {
-                        ToastService.ShowSuccess("Successfully created request!");
-                        NavManager.NavigateTo("/my-pending-request");
+                        uploadValidIdRes = await RecordRequestSupportingFilesService.Upload(validId.document, validId.documentType, validId.documentTypeId);
+                    });
+
+                    if (uploadValidIdRes.Success)
+                    {
+
+                        CreateResponse uploadSupportingDocRes = new();
+
+                        await ExceptionHandlerService.HandleApiException(async () =>
+                        {
+                            uploadSupportingDocRes = await RecordRequestSupportingFilesService.Upload(suppDoc.document, suppDoc.documentType, suppDoc.documentTypeId);
+                        });
+
+                        if (uploadSupportingDocRes.Success)
+                        {
+                            // set values
+                            SelectedItem = currentDocRequest;
+                            SelectedItem.ValidId = uploadValidIdRes.Id;
+
+                            var createRes = await RecordRequestsService.CreateRecordRequest(currentDocRequest);
+
+                            if (createRes.Success)
+                            {
+                                ToastService.ShowSuccess("Successfully created request!");
+                                NavManager.NavigateTo("/my-pending-request");
+                            }
+                            else
+                            {
+                                ToastService.ShowError("Something went wrong on creating request.");
+                            }
+                        }
+                        else
+                        {
+                            ToastService.ShowError("Something went wrong uploading supporting document.");
+                        }
                     }
+                    else
+                    {
+                        ToastService.ShowError("Something went wrong uploading valid id.");
+                    }
+                }
+            }            
+            else
+            {
+                var createRes = await RecordRequestsService.CreateRecordRequest(currentDocRequest);
+
+                if (createRes.Success)
+                {
+                    ToastService.ShowSuccess("Successfully created request!");
+                    NavManager.NavigateTo("/my-pending-request");
+                }
+                else
+                {
+                    ToastService.ShowError("Something went wrong on creating request.");
                 }
             }
             IsLoading = false;
