@@ -66,7 +66,7 @@ public class MenuDataService : IMenuDataService
             {
                 Text = "Data Library",
                 Url = "/data-library",
-                Icon = "description",
+                Icon = "settings_applications",
                 Children = default,
                 Level = 0,
                 SortOrder = 3,
