@@ -77,7 +77,7 @@ public static class RecordRequestSupportingFilesEndpoint
         .WithDescription("Get supporting file by id")
         .DisableAntiforgery()
         //.Accepts<IFormFile>("multipart/form-data")
-        .Produces<RecordRequestDocumentModel>(StatusCodes.Status200OK)
+        .Produces<BaseApiResponse<RecordRequestDocumentModel>>(StatusCodes.Status200OK)
         .Produces<ValidationFailureResponse>(StatusCodes.Status400BadRequest); ;
 
         //app.MapDelete(ApiEndpoints.Assets.AssetDocuments.DeleteDocument, async (
