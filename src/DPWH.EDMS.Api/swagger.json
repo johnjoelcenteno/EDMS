@@ -3772,6 +3772,10 @@
             "type": "string",
             "nullable": true
           },
+          "employeeId": {
+            "type": "string",
+            "nullable": true
+          },
           "email": {
             "type": "string",
             "nullable": true

@@ -36,6 +36,7 @@ internal sealed class GetUserByIdHandler(
             Id = user.Id,
             UserName = user.UserName,
             Email = user.Email,
+            EmployeeId = user.EmployeeInfo?.EmployeeId,
             FirstName = user.UserBasicInfo?.FirstName,
             MiddleInitial = user.UserBasicInfo?.MiddleInitial,
             LastName = user.UserBasicInfo?.LastName,
