@@ -55,14 +55,19 @@ public class CommonDataBase : GridBase<DataManagementModel>
     {
         switch (Id)
         {
-            case "document-type":
-                UriName = "Document Type";
-                DataType = "Agency";
+            case "record-types":
+                UriName = "Record Types";
+                DataType = "RecordTypes";
                 break;
 
-            case "purpose":
-                UriName = "Purpose";
-                DataType = "BuildingStatus";
+            case "valid-ids":
+                UriName = "Valid IDs";
+                DataType = "ValidIDs";
+                break;
+
+            case "authorization-documents":
+                UriName = "Authorization Documents";
+                DataType = "AuthorizationDocuments";
                 break;
 
             default:

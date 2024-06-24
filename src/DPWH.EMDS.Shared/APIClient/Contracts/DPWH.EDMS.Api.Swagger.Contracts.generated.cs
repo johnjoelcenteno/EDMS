@@ -333,6 +333,15 @@ namespace DPWH.EDMS.Api.Contracts
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<GetSecondaryIDsResultIEnumerableBaseApiResponse> GetSecondaryIDsAsync(System.Threading.CancellationToken cancellationToken);
 
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<GetAuthorizationDocumentsResultIEnumerableBaseApiResponse> GetAuthorizationDocumentsAsync();
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<GetAuthorizationDocumentsResultIEnumerableBaseApiResponse> GetAuthorizationDocumentsAsync(System.Threading.CancellationToken cancellationToken);
+
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "14.0.7.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
@@ -681,9 +690,6 @@ namespace DPWH.EDMS.Api.Contracts
     {
         [Newtonsoft.Json.JsonProperty("employeeNumber", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string EmployeeNumber { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("controlNumber", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string ControlNumber { get; set; }
 
         [Newtonsoft.Json.JsonProperty("isActiveEmployee", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public bool IsActiveEmployee { get; set; }
@@ -1047,6 +1053,15 @@ namespace DPWH.EDMS.Api.Contracts
 
         [System.Runtime.Serialization.EnumMember(Value = @"RentalRates")]
         RentalRates = 8,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"RecordTypes")]
+        RecordTypes = 9,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"ValidIDs")]
+        ValidIDs = 10,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"AuthorizationDocuments")]
+        AuthorizationDocuments = 11,
 
     }
 
@@ -1461,6 +1476,28 @@ namespace DPWH.EDMS.Api.Contracts
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.0.7.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class GetAuthorizationDocumentsResult
+    {
+        [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Guid Id { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("name", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Name { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.0.7.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class GetAuthorizationDocumentsResultIEnumerableBaseApiResponse
+    {
+        [Newtonsoft.Json.JsonProperty("success", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public bool Success { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("data", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<GetAuthorizationDocumentsResult> Data { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.0.7.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial class GetDataLibraryResult
     {
         [Newtonsoft.Json.JsonProperty("type", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
@@ -1835,8 +1872,8 @@ namespace DPWH.EDMS.Api.Contracts
         [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public System.Guid Id { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("controlNumber", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string ControlNumber { get; set; }
+        [Newtonsoft.Json.JsonProperty("controlNumber", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int ControlNumber { get; set; }
 
         [Newtonsoft.Json.JsonProperty("employeeNumber", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string EmployeeNumber { get; set; }
@@ -1885,8 +1922,8 @@ namespace DPWH.EDMS.Api.Contracts
         [System.Runtime.Serialization.EnumMember(Value = @"ValidId")]
         ValidId = 0,
 
-        [System.Runtime.Serialization.EnumMember(Value = @"SupportingDocument")]
-        SupportingDocument = 1,
+        [System.Runtime.Serialization.EnumMember(Value = @"AuthorizationDocument")]
+        AuthorizationDocument = 1,
 
     }
 
