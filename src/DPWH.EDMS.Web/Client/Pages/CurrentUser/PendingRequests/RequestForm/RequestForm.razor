@@ -3,6 +3,8 @@
 @using DPWH.EDMS.Shared.Enums
 @inherits RequestFormBase
 
+<EdmsLoader Visible="@IsLoading" />
+
 <EditForm Model="SelectedItem" OnSubmit="@HandleOnSubmitCallback">
     <FluentValidationValidator @ref="FluentValidationValidator" DisableAssemblyScanning="@true"></FluentValidationValidator>
     <TelerikCard Class="edms-card-form">
@@ -14,9 +16,8 @@
             <div class="form-group">
                 <div class="row m-0">
                     <div class="col-md-6 col-12 p-2">
-                        <label for="controlNumber">Control No.</label>
-                        <InputText id="controlNumber" class="form-control" @bind-Value="SelectedItem.ControlNumber" />
-                        <ValidationMessage For="@(() => SelectedItem.ControlNumber)" class="text-danger" />
+                        <label for="controlNumber">Control Number</label>
+                        <input id="controlNumber" class="form-control text-muted" value="Auto Generated" disabled/>                        
                     </div>
                     <div class="col-md-6 col-12 p-2">
                         <label for="dateRequested">Date and Time Requested</label>
@@ -24,14 +25,28 @@
                         <ValidationMessage For="@(() => SelectedItem.DateRequested)" class="text-danger" />
                     </div>
                 </div>
-
             </div>
 
-            <div class="form-group p-2">
+            <div class="form-group">
+                <div class="row m-0">
+                    <div class="col-md-6 col-12 p-2">
+                        <label for="employeeNo">Employee No.</label>
+                        <InputText id="employeeNo" class="form-control" @bind-Value="SelectedItem.EmployeeNumber" disabled/>
+                        <ValidationMessage For="@(() => SelectedItem.EmployeeNumber)" class="text-danger" />
+                    </div>
+                    <div class="col-md-6 col-12 p-2">
+                        <label for="employeeNo">Employee Name</label>
+                        <input id="employeeName" class="form-control" value="@UserFullname" disabled />
+                        @* <ValidationMessage For="@(() => SelectedItem.EmployeeNumber)" class="text-danger" /> *@
+                    </div>
+                </div>
+            </div>
+
+            @* <div class="form-group p-2">
                 <label for="employeeNo">Employee No.</label>
                 <InputText id="employeeNo" class="form-control" @bind-Value="SelectedItem.EmployeeNumber" />
                 <ValidationMessage For="@(() => SelectedItem.EmployeeNumber)" class="text-danger" />
-            </div>
+            </div> *@
 
             <div class="form-group p-2">
                 <label>Active or Inactive</label>
@@ -66,7 +81,6 @@
                     <InputText id="authorizedRepresentative" class="form-control" @bind-Value="SelectedItem.AuthorizedRepresentative" />
                     <ValidationMessage For="@(() => SelectedItem.AuthorizedRepresentative)" class="text-danger" />
                 </div>
-
                 <div class="form-group p-2">
                     <label for="validIdType">Valid ID</label>
                     <TelerikDropDownList Data="@ValidIDsList"
@@ -74,42 +88,44 @@
                                          ValueField="@nameof(GetValidIDsResult.Id)"
                                          TextField="@nameof(GetValidIDsResult.Name)"
                                          DefaultText="Select" />
-                    @* <ValidationMessage For="@(() => SelectedItem.ValidId)" class="text-danger" /> *@
+                    <TelerikFileSelect AllowedExtensions="@AllowedExtensions"
+                                       OnSelect="@OnSelectValidId"
+                                       OnRemove="@OnRemoveValidId"
+                                       MaxFileSize="@MaxFileSize"
+                                       MinFileSize="@MinFileSize"
+                                       Multiple="false"
+                                       Class="mt-2"
+                                       Enabled="GenericHelper.IsGuidHasValue(SelectedValidIdTypeId)">
+                        <SelectFilesButtonTemplate>
+                            <TelerikSvgIcon Icon="@SvgIcon.Upload" />
+                            Upload Valid ID
+                        </SelectFilesButtonTemplate>
+                    </TelerikFileSelect>
+                    @* <ValidationMessage For="@(() => SelectedItem.IsValidIdAccepted)" class="text-danger" /> *@
                 </div>
-
                 <div class="form-group p-2">
-                    <label for="supportingDocumentType">Supporting Document</label>
-                    <TelerikDropDownList Data="@SecondaryIDsList"
-                                         @bind-Value="SelectedItem.SupportingDocument"
+                    <label for="suppDocType">Supporting Document</label>
+                    <TelerikDropDownList Data="@SupportingDocTypeList"
+                                         @bind-Value="SelectedSupportDocTypeId"
                                          ValueField="@nameof(GetSecondaryIDsResult.Id)"
                                          TextField="@nameof(GetSecondaryIDsResult.Name)"
                                          DefaultText="Select" />
-                    <ValidationMessage For="@(() => SelectedItem.SupportingDocument)" class="text-danger" />
+                    <TelerikFileSelect AllowedExtensions="@AllowedExtensions"
+                                       OnSelect="@OnSelectSuppDoc"
+                                       OnRemove="@OnRemoveSuppDoc"
+                                       MaxFileSize="@MaxFileSize"
+                                       MinFileSize="@MinFileSize"
+                                       Multiple="false"
+                                       Class="mt-2"
+                                       Enabled="GenericHelper.IsGuidHasValue(SelectedSupportDocTypeId)">
+                        <SelectFilesButtonTemplate>
+                            <TelerikSvgIcon Icon="@SvgIcon.Upload" />
+                            Upload Supporting Document
+                        </SelectFilesButtonTemplate>
+                    </TelerikFileSelect>
+                    @* <ValidationMessage For="@(() => SelectedItem.IsValidIdAccepted)" class="text-danger" /> *@
                 </div>
             }
-
-          
-
-            <div class="form-group p-2">
-                <label for="uploadValidId">Upload Valid ID</label>
-                <TelerikFileSelect AllowedExtensions="@AllowedExtensions"
-                                   OnSelect="@OnSelectValidId"
-                                   OnRemove="@OnRemoveValidId"
-                                   MaxFileSize="@MaxFileSize"
-                                   MinFileSize="@MinFileSize"
-                                   Multiple="false"
-                                   Enabled="GenericHelper.IsGuidHasValue(SelectedValidIdTypeId)">
-                </TelerikFileSelect>
-                @* <ValidationMessage For="@(() => SelectedItem.IsValidIdAccepted)" class="text-danger" /> *@
-            </div>
-
-           
-
-            @*  <div class="form-group">
-            <label for="uploadDocument">Upload Document</label>
-            <TelerikUpload @bind-Value="SelectedItem.UploadDocument" />
-            <ValidationMessage For="@(() => SelectedItem.UploadDocument)" class="text-danger" />
-            </div> *@
 
             <div class="form-group p-2">
                 <label for="recordsRequested">Record/s to be Requested</label>
@@ -124,7 +140,7 @@
             </div>
 
             <div class="form-group p-2">
-                <label for="remarks">Remarks</label>
+                <label for="remarks">Purpose/Remarks</label>
                 <InputTextArea id="remarks" class="form-control" @bind-Value="SelectedItem.Purpose" placeholder="Placeholder" />
                 <ValidationMessage For="@(() => SelectedItem.Purpose)" class="text-danger" />
             </div>

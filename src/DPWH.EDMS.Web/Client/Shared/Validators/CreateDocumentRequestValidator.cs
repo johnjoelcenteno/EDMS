@@ -9,9 +9,9 @@ public class CreateDocumentRequestModelValidator : AbstractValidator<CreateRecor
 {
     public CreateDocumentRequestModelValidator()
     {
-        RuleFor(x => x.ControlNumber)
-            .NotEmpty().WithMessage("Control Number is required.")
-            .MaximumLength(50).WithMessage("Control Number must not exceed 50 characters.");
+        //RuleFor(x => x.ControlNumber)
+        //    .NotEmpty().WithMessage("Control Number is required.")
+        //    .MaximumLength(50).WithMessage("Control Number must not exceed 50 characters.");
 
         RuleFor(x => x.RequestedRecords)
             .NotEmpty().WithMessage("At least one record must be requested.");
@@ -27,9 +27,9 @@ public class CreateDocumentRequestModelValidator : AbstractValidator<CreateRecor
         //    .NotEmpty().WithMessage("Status is required.")
         //    .MaximumLength(50).WithMessage("Status must not exceed 50 characters.");
 
-        RuleFor(x => x.EmployeeNumber)
-            .NotEmpty().WithMessage("Employee Number is required.")
-            .MaximumLength(20).WithMessage("Employee Number must not exceed 20 characters.");
+        //RuleFor(x => x.EmployeeNumber)
+        //    .NotEmpty().WithMessage("Employee Number is required.")
+        //    .MaximumLength(20).WithMessage("Employee Number must not exceed 20 characters.");
 
         RuleFor(x => x.Claimant)
             .NotEmpty().WithMessage("Document Claimant is invalid.");
@@ -43,15 +43,13 @@ public class CreateDocumentRequestModelValidator : AbstractValidator<CreateRecor
         //    .When(x => x.Claimant == ClaimantTypes.AuthorizedRepresentative.ToString());
         //.MaximumLength(50).WithMessage("Valid ID Type must not exceed 50 characters.");
 
-        RuleFor(x => x.SupportingDocument);
-            //.NotEmpty().WithMessage("Supporting Document Type is required.")
-            //.MaximumLength(50).WithMessage("Supporting Document Type must not exceed 50 characters.");
+        //RuleFor(x => x.SupportingDocument)
+        //.NotEmpty().WithMessage("Supporting Document Type is required.")
+        //.MaximumLength(50).WithMessage("Supporting Document Type must not exceed 50 characters.");
 
         RuleFor(x => x.Purpose)
-            .MaximumLength(500).WithMessage("Remarks must not exceed 500 characters.")
-            .When(x => !string.IsNullOrEmpty(x.Purpose));
+            .NotEmpty().WithMessage("Purpose/Remarks is required.");
 
-        
         //RuleFor(x => x.IsValidIdAccepted)
         //    .Equal(true)
         //    .WithMessage("Please upload a valid ID - PDF or DOCX files only");
