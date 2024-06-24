@@ -8,7 +8,7 @@ public interface ILookupsService
     Task<GetValidIDsResultIEnumerableBaseApiResponse> GetValidIdTypes();
     Task<GetSecondaryIDsResultIEnumerableBaseApiResponse> GetSecondaryIdTypes();
     Task<GetRecordTypesResultIEnumerableBaseApiResponse> GetRecordTypes();
-
+    Task<GetAuthorizationDocumentsResultIEnumerableBaseApiResponse> GetAuthorizeDocuments();
     //Task<AddressLookup> GetRegions();
     //Task<AddressLookup> GetProvinces(string regionCode);
     ////Task<AddressLookup> GetCitiesWithoutProvince(string regionCode);
