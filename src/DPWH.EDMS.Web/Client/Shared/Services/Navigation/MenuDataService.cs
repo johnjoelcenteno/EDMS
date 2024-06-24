@@ -24,7 +24,29 @@ public class MenuDataService : IMenuDataService
                 Text = "Request Management",
                 Url = "/request-management",
                 Icon = "description",
-                Children = default,
+                Children = new List<MenuModel>()
+                {
+                    new ()
+                    {
+                        Text = "Pending Request",
+                        Url = "/my-pending-request",
+                        Icon = "description",
+                        Children = default,
+                        Level = 0,
+                        SortOrder = 0,
+                        AuthorizedRoles = new List<string>{ApplicationRoles.SuperAdmin, ApplicationRoles.SystemAdmin, ApplicationRoles.EndUser }
+                    },
+                    new ()
+                    {
+                        Text = "Request Management",
+                        Url = "/request-management",
+                        Icon = "description",
+                        Children = default,
+                        Level = 0,
+                        SortOrder = 1,
+                        AuthorizedRoles = new List<string>{ ApplicationRoles.SuperAdmin, ApplicationRoles.SystemAdmin }
+                    },
+                },
                 Level = 0,
                 SortOrder = 1,
                 AuthorizedRoles = new List<string>{ ApplicationRoles.SuperAdmin, ApplicationRoles.SystemAdmin }
@@ -55,16 +77,6 @@ public class MenuDataService : IMenuDataService
     public IEnumerable<MenuModel> GetMenuItems2() =>
         new List<MenuModel>
         {
-            new ()
-            {
-                Text = "Pending Request",
-                Url = "/my-pending-request",
-                Icon = "description",
-                Children = default,
-                Level = 0,
-                SortOrder = 0,
-                AuthorizedRoles = new List<string>{ApplicationRoles.SuperAdmin, ApplicationRoles.SystemAdmin, ApplicationRoles.EndUser }
-            },
             new ()
             {
                 Text = "My Request History",

@@ -33,7 +33,11 @@
                     <TelerikCard Class="ch-card-flex flex-grow-1">
                         <CardHeader Class="ch-card-flex d-inline-flex">
                             <strong style="font-size: 12px; align-content:center;" class="mb-0">@status.Id</strong>
-                            <span class="ov-circle">@status.Name</span>
+                            @if(status.Name != "")
+                            {
+                                <span class="ov-circle">@status.Name</span>
+                            }
+                            
                         </CardHeader>
                     </TelerikCard>
                 }
