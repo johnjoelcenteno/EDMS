@@ -10,6 +10,7 @@ public static class ApiEndpoints
 
         public const string Get = $"{Base}/{{id:guid}}";
         public const string Query = $"{Base}/query";
+        public const string QueryByEmployeeId = $"{Base}/query/{{employeeId}}";
         public const string Create = $"{Base}/create";
         public const string Update = $"{Base}/update";
         public const string Delete = $"{Base}/delete";
