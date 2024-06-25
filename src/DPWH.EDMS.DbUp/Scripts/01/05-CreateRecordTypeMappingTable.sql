@@ -4,8 +4,8 @@ IF NOT EXISTS (
     FROM
         INFORMATION_SCHEMA.TABLES
     WHERE
-        TABLE_NAME = 'Mapping'
-) BEGIN CREATE TABLE Mapping (
+        TABLE_NAME = 'RecordTypeMapping'
+) BEGIN CREATE TABLE RecordTypeMapping (
     Id UNIQUEIDENTIFIER NOT NULL,
     DataLibraryId UNIQUEIDENTIFIER NOT NULL,
     Division NVARCHAR(100) NOT NULL,
