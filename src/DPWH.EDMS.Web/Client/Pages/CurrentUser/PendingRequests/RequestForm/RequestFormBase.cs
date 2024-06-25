@@ -109,7 +109,7 @@ public class RequestFormBase : RxBaseComponent
     protected async Task LoadAuthorizeDocumentTypes()
     {
         // TO be renamed
-        var suppTypeResult = await LookupsService.GetAuthorizeDocuments();
+        var suppTypeResult = await LookupsService.GetAuthorizationDocumentTypes();
 
         if (suppTypeResult.Success)
         {

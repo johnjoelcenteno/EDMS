@@ -1713,6 +1713,47 @@
         }
       }
     },
+    "/api/recordrequests/supportingfiles/{id}": {
+      "get": {
+        "tags": [
+          "RecordRequestSupportingFiles"
+        ],
+        "operationId": "GetSupportingFileById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecordRequestDocumentModelBaseApiResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationFailureResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/roles/query": {
       "post": {
         "tags": [
@@ -4050,6 +4091,18 @@
           "uri": {
             "type": "string",
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "RecordRequestDocumentModelBaseApiResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "$ref": "#/components/schemas/RecordRequestDocumentModel"
           }
         },
         "additionalProperties": false
