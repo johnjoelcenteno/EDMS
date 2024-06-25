@@ -9,7 +9,6 @@ public interface ILookupsService
     Task<GetSecondaryIDsResultIEnumerableBaseApiResponse> GetSecondaryIdTypes();
     Task<GetAuthorizationDocumentsResultIEnumerableBaseApiResponse> GetAuthorizationDocumentTypes();
     Task<GetRecordTypesResultIEnumerableBaseApiResponse> GetRecordTypes();
-
     //Task<AddressLookup> GetRegions();
     //Task<AddressLookup> GetProvinces(string regionCode);
     ////Task<AddressLookup> GetCitiesWithoutProvince(string regionCode);

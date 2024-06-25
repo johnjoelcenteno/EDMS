@@ -104,23 +104,23 @@
                     @* <ValidationMessage For="@(() => SelectedItem.IsValidIdAccepted)" class="text-danger" /> *@
                 </div>
                 <div class="form-group p-2">
-                    <label for="suppDocType">Supporting Document</label>
-                    <TelerikDropDownList Data="@SupportingDocTypeList"
-                                         @bind-Value="SelectedSupportDocTypeId"
-                                         ValueField="@nameof(GetSecondaryIDsResult.Id)"
-                                         TextField="@nameof(GetSecondaryIDsResult.Name)"
+                    <label for="suppDocType">Authorization Document</label>
+                    <TelerikDropDownList Data="@AuthorizeDocTypeList"
+                                         @bind-Value="SelectedAuthorizeDocTypeId"
+                                         ValueField="@nameof(GetAuthorizationDocumentsResult.Id)"
+                                         TextField="@nameof(GetAuthorizationDocumentsResult.Name)"
                                          DefaultText="Select" />
                     <TelerikFileSelect AllowedExtensions="@AllowedExtensions"
-                                       OnSelect="@OnSelectSuppDoc"
-                                       OnRemove="@OnRemoveSuppDoc"
+                                       OnSelect="@OnSelectAuthDoc"
+                                       OnRemove="@OnRemoveAuthDoc"
                                        MaxFileSize="@MaxFileSize"
                                        MinFileSize="@MinFileSize"
                                        Multiple="false"
                                        Class="mt-2"
-                                       Enabled="GenericHelper.IsGuidHasValue(SelectedSupportDocTypeId)">
+                                       Enabled="GenericHelper.IsGuidHasValue(SelectedAuthorizeDocTypeId)">
                         <SelectFilesButtonTemplate>
                             <TelerikSvgIcon Icon="@SvgIcon.Upload" />
-                            Upload Supporting Document
+                            Upload Authorize Document
                         </SelectFilesButtonTemplate>
                     </TelerikFileSelect>
                     @* <ValidationMessage For="@(() => SelectedItem.IsValidIdAccepted)" class="text-danger" /> *@
@@ -128,7 +128,7 @@
             }
 
             <div class="form-group p-2">
-                <label for="recordsRequested">Record/s to be Requested</label>
+                <label for="recordsRequested">Document/s to be Requested</label>
                 <TelerikMultiSelect Data="@RecordTypesList"
                                     @bind-Value="@SelectedRecordTypesIdList"
                                     ValueField="@nameof(GetRecordTypesResult.Id)"                                    
