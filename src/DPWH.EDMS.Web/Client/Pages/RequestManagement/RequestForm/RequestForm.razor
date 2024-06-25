@@ -31,25 +31,18 @@
                 <div class="row m-0">
                     <div class="col-md-6 col-12 p-2">
                         <label for="employeeNo">Employee No.</label>
-                        <InputText id="employeeNo" class="form-control" @bind-Value="SelectedItem.EmployeeNumber" disabled/>
+                        <InputText id="employeeNo" class="form-control" @bind-Value="SelectedItem.EmployeeNumber"/>
                         <ValidationMessage For="@(() => SelectedItem.EmployeeNumber)" class="text-danger" />
                     </div>
                     <div class="col-md-6 col-12 p-2">
                         <label for="employeeNo">Employee Name</label>
-                        <input id="employeeName" class="form-control" value="@UserFullname" disabled />
+                        <input id="employeeName" class="form-control" value="" />
                         @* <ValidationMessage For="@(() => SelectedItem.EmployeeNumber)" class="text-danger" /> *@
                     </div>
                 </div>
             </div>
-
-            @* <div class="form-group p-2">
-                <label for="employeeNo">Employee No.</label>
-                <InputText id="employeeNo" class="form-control" @bind-Value="SelectedItem.EmployeeNumber" />
-                <ValidationMessage For="@(() => SelectedItem.EmployeeNumber)" class="text-danger" />
-            </div> *@
-
             <div class="form-group p-2">
-                <label>Active or Inactive</label>
+                <label>Inactive or Active</label>
                 <div>
                     <TelerikSwitch Class="float-right" @bind-Value="@SelectedItem.IsActiveEmployee"></TelerikSwitch>
                 </div>
@@ -104,11 +97,11 @@
                     @* <ValidationMessage For="@(() => SelectedItem.IsValidIdAccepted)" class="text-danger" /> *@
                 </div>
                 <div class="form-group p-2">
-                    <label for="suppDocType">Supporting Document</label>
-                    <TelerikDropDownList Data="@SupportingDocTypeList"
-                                         @bind-Value="SelectedSupportDocTypeId"
-                                         ValueField="@nameof(GetSecondaryIDsResult.Id)"
-                                         TextField="@nameof(GetSecondaryIDsResult.Name)"
+                    <label for="suppDocType">Authorized Document</label>
+                    <TelerikDropDownList Data="@AuthorizedDocTypeList"
+                                         @bind-Value="SelectedAuthorizedDocTypeId"
+                                         ValueField="@nameof(GetAuthorizationDocumentsResult.Id)"
+                                         TextField="@nameof(GetAuthorizationDocumentsResult.Name)"
                                          DefaultText="Select" />
                     <TelerikFileSelect AllowedExtensions="@AllowedExtensions"
                                        OnSelect="@OnSelectSuppDoc"
@@ -117,10 +110,10 @@
                                        MinFileSize="@MinFileSize"
                                        Multiple="false"
                                        Class="mt-2"
-                                       Enabled="GenericHelper.IsGuidHasValue(SelectedSupportDocTypeId)">
+                                       Enabled="GenericHelper.IsGuidHasValue(SelectedAuthorizedDocTypeId)">
                         <SelectFilesButtonTemplate>
                             <TelerikSvgIcon Icon="@SvgIcon.Upload" />
-                            Upload Supporting Document
+                            Upload Authorize Document
                         </SelectFilesButtonTemplate>
                     </TelerikFileSelect>
                     @* <ValidationMessage For="@(() => SelectedItem.IsValidIdAccepted)" class="text-danger" /> *@

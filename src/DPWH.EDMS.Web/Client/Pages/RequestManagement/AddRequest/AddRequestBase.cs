@@ -19,7 +19,6 @@ public class AddRequestBase : RxBaseComponent
     [Inject] public required IRecordRequestSupportingFilesService RecordRequestSupportingFilesService { get; set; }
     protected CreateRecordRequest SelectedItem { get; set; } = new();
     protected FluentValidationValidator? FluentValidationValidator;
-    protected bool IsLoading = false;
 
     protected override void OnInitialized()
     {
@@ -101,7 +100,7 @@ public class AddRequestBase : RxBaseComponent
                 if (createRes.Success)
                 {
                     ToastService.ShowSuccess("Successfully created request!");
-                    NavManager.NavigateTo("/my-pending-request");
+                    NavManager.NavigateTo("/request-management");
                 }
                 else
                 {

@@ -24,8 +24,6 @@ namespace DPWH.EDMS.Web.Client.Pages.RequestManagement.RequestForm;
 
 public class RequestFormBase : RxBaseComponent
 {
-    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateAsync { get; set; }   
-
     [Inject] public required IUsersService UserService { get; set; }
     [Inject] public required IToastService ToastService { get; set; }
     [Inject] public required IDocumentService DocumentService { get; set; }
@@ -45,7 +43,7 @@ public class RequestFormBase : RxBaseComponent
     //protected List<string> validIdTypes = new List<string> { "ID Type 1", "ID Type 2", "ID Type 3" };
     //protected List<string> supportingDocumentTypes = new List<string> { "Document Type 1", "Document Type 2", "Document Type 3" };
     protected List<GetValidIDsResult> ValidIDsList = new();
-    protected List<GetSecondaryIDsResult> SupportingDocTypeList = new();
+    protected List<GetAuthorizationDocumentsResult> AuthorizedDocTypeList = new();
     protected List<GetRecordTypesResult> RecordTypesList = new();
 
     protected List<Guid> SelectedRecordTypesIdList = new();
@@ -57,11 +55,9 @@ public class RequestFormBase : RxBaseComponent
     protected FluentValidationValidator? FluentValidationValidator;
 
     protected Guid? SelectedValidIdTypeId { get; set; }
-    protected Guid? SelectedSupportDocTypeId { get; set; }
+    protected Guid? SelectedAuthorizedDocTypeId { get; set; }
     protected UploadSupportingFileRequestModel? SelectedValidId { get; set; }
-    protected UploadSupportingFileRequestModel? SelectedSupportingDoc { get; set; }
-    protected UserModel CurrentUser { get; set; } = new();
-    protected string UserFullname = string.Empty;
+    protected UploadSupportingFileRequestModel? SelectedAuthorizedDoc { get; set; }
     //protected TelerikUpload SupportedDocumentUploadRef { get; set; }
 
     public int MinFileSize { get; set; } = 1024;
@@ -78,9 +74,8 @@ public class RequestFormBase : RxBaseComponent
     protected override async Task OnInitializedAsync()
     {
         IsLoading = true;
-        await GetUser();
         await LoadValidIDTypes();
-        await LoadSupportingDocumentTypes();
+        await LoadAuthorizedDocumentTypes();
         await LoadRecordTypes();        
         IsLoading = false;
     }
@@ -106,14 +101,14 @@ public class RequestFormBase : RxBaseComponent
             ToastService.ShowError("Something went wrong on loading valid ids");
         }
     }
-    protected async Task LoadSupportingDocumentTypes()
+    protected async Task LoadAuthorizedDocumentTypes()
     {
         // TO be renamed
-        var suppTypeResult = await LookupsService.GetSecondaryIdTypes();
+        var authDocTypeResult = await LookupsService.GetAuthorizationDocumentTypes();
 
-        if (suppTypeResult.Success)
+        if (authDocTypeResult.Success)
         {
-            SupportingDocTypeList = suppTypeResult.Data.ToList();
+            AuthorizedDocTypeList = authDocTypeResult.Data.ToList();
         }
         else
         {
@@ -140,38 +135,6 @@ public class RequestFormBase : RxBaseComponent
                .Select(e => e.ToString())
                .ToList();
     }
-
-    private async Task GetUser()
-    {
-        if (AuthenticationStateAsync is null)
-            return;
-
-        var authState = await AuthenticationStateAsync;
-        var user = authState.User;
-        if (user.Identity is not null && user.Identity.IsAuthenticated)
-        {
-            var userId = user.Claims.FirstOrDefault(c => c.Type == "sub")!.Value;
-            var roleValue = user.Claims.FirstOrDefault(c => c.Type == "role")!.Value;
-            var userRes = await UserService.GetById(Guid.Parse(userId));
-            if (userRes.Success)
-            {
-                CurrentUser = Mapper.Map<UserModel>(userRes.Data);
-                SelectedItem.EmployeeNumber = CurrentUser.EmployeeId;
-                //SelectedItem.EmployeeNumber = "TEST-ID-00001"; // FOR TESTING ONLY
-                UserFullname = GetUserFullname();
-            }
-        }
-    }
-
-    protected string GetUserFullname()
-    {   
-        if(!string.IsNullOrEmpty(CurrentUser.LastName) || !string.IsNullOrEmpty(CurrentUser.FirstName) || !string.IsNullOrEmpty(CurrentUser.MiddleInitial))
-        {
-            var name = $"{GenericHelper.GetDisplayValue(CurrentUser.LastName, " ")}, {CurrentUser.FirstName} {CurrentUser.MiddleInitial}";
-            return name;
-        }
-        return string.Empty;
-    }
     #endregion
 
     #region Submit Events
@@ -181,7 +144,7 @@ public class RequestFormBase : RxBaseComponent
         {
             if (HandleCreateOnSubmit.HasDelegate)
             {
-                await HandleCreateOnSubmit.InvokeAsync((SelectedItem, SelectedValidId, SelectedSupportingDoc)!);
+                await HandleCreateOnSubmit.InvokeAsync((SelectedItem, SelectedValidId, SelectedAuthorizedDoc)!);
             }
         }
         else
@@ -222,22 +185,22 @@ public class RequestFormBase : RxBaseComponent
 
     protected async void OnSelectSuppDoc(FileSelectEventArgs args)
     {
-        if (SelectedItem != null && GenericHelper.IsGuidHasValue(SelectedSupportDocTypeId))
+        if (SelectedItem != null && GenericHelper.IsGuidHasValue(SelectedAuthorizedDocTypeId))
         {
-            SelectedSupportingDoc = new UploadSupportingFileRequestModel()
+            SelectedAuthorizedDoc = new UploadSupportingFileRequestModel()
             {
                 document = null!,
                 documentType = Api.Contracts.RecordRequestProvidedDocumentTypes.AuthorizationDocument,
-                documentTypeId = SelectedSupportDocTypeId
+                documentTypeId = SelectedAuthorizedDocTypeId
             };
 
-            SelectedSupportingDoc.document = await DocumentService.GetFileToUpload(args);
+            SelectedAuthorizedDoc.document = await DocumentService.GetFileToUpload(args);
         }
     }
 
     protected void OnRemoveSuppDoc(FileSelectEventArgs args)
     {
-        SelectedSupportingDoc = null;
+        SelectedAuthorizedDoc = null;
     }
 
     //protected bool IsSelectedFileValid(FileSelectFileInfo file)
