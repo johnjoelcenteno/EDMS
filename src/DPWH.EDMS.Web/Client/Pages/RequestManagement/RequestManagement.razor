@@ -1,51 +1,78 @@
 ﻿@page "/request-management"
+@using DPWH.EDMS.Api.Contracts
+@using DPWH.EDMS.Components.Helpers
 
 @inherits RequestManagementBase
+
 @attribute [Authorize(Policy = "RequireActiveRoles")]
 
-<TelerikMediaQuery Media="(max-width: 480px)" OnChange="((changed) => XSmall = changed)"></TelerikMediaQuery>
-
 <EdmsBreadcrumbs Data="@BreadcrumbItems" />
+<EdmsLoader Visible="@IsLoading" />
+
 <h3>Request Management</h3>
+
 <hr />
 
 <div class="d-flex flex-row mt-3">
     <TelerikCard Width="100%">
         <CardBody>
-            <div class="d-flex flex-row justify-content-between">
-                <CardTitle Class="mb-0">Portal Requests</CardTitle>
+            <div class="d-flex flex-row">
+                <CardTitle Class="mb-0">Pending Requests</CardTitle>
             </div>
             <CardSeparator Class="my-2"></CardSeparator>
             <div>
-                @if (EmployeeList != null && !XSmall)
+                <TelerikButton Class="mb-2"
+                               Icon="@FontIcon.Plus"
+                               ThemeColor="@ThemeConstants.Button.ThemeColor.Primary"
+                               OnClick="GoToAddNewRequest">
+                    Add Request
+                </TelerikButton>
+                @if (GridData != null && !XSmall)
                 {
-                    <TelerikGrid TItem="EmployeeModel"
+                    <TelerikGrid TItem="RecordRequestModel"
                                  @bind-PageSize="@PageSize"
                                  Height="@GridHeight"
-                                 FilterMode="GridFilterMode.FilterRow"
+                                 FilterMode="GridFilterMode.None"
                                  Sortable=true
-                                 Data="EmployeeList"
+                                 Data="GridData"
                                  OnStateChanged="@OnStateChanged"
                                  @ref="GridRef"
-                                 Context="employee"
-                                 OnRowClick="GoToReviewRequestForm">
+                                 Context="item"
+                                 OnRowClick="GoToSelectedItemOverview">
                         <GridSettings>
                             <GridPagerSettings PageSizes="@PageSizes">
                             </GridPagerSettings>
                         </GridSettings>
                         <GridColumns>
-                            <GridColumn Field=@nameof(EmployeeModel.ControlNumber) Title="Control No." Filterable="false" />
-                            <GridColumn Field=@nameof(EmployeeModel.FullName) Title="Full Name" />
-                            <GridColumn Field=@nameof(EmployeeModel.RecordRequested) Title="Records Requested" />
-                            <GridColumn Field=@nameof(EmployeeModel.DateRequested) Title="Date Requested" />
-                            <GridColumn Field=@nameof(EmployeeModel.Purpose) Title="Purpose" />
-                            <GridColumn Field=@nameof(EmployeeModel.Status) Title="Status" />
+                            <GridColumn Field=@nameof(RecordRequestModel.ControlNumber) Title="Control No." Filterable="false" />
+                            <GridColumn Field=@nameof(RecordRequestModel.RequestedRecords) Title="Records Requested" Filterable="false">
+                                <Template>
+                                    @{
+                                        var req = context as RecordRequestModel;
+                                        string recs = req.RequestedRecords != null && req!.RequestedRecords.Count > 0
+                                        ? String.Join(", ", req.RequestedRecords.Select(r => r.RecordType))
+                                        : "-";
+                                    }
+                                    <p class="mb-0">@recs</p>
+                                </Template>
+                            </GridColumn>
+                            <GridColumn Field=@nameof(RecordRequestModel.DateRequested) Title="Date Requested">
+                                <Template>
+                                    @{
+                                        var req = context as RecordRequestModel;
+                                        string dt = GenericHelper.GetDateTimeDisplay(req.DateRequested);
+                                    }
+                                    <p class="mb-0">@dt</p>
+                                </Template>
+                            </GridColumn>
+                            <GridColumn Field=@nameof(RecordRequestModel.Purpose) Title="Purpose" />
+                            <GridColumn Field=@nameof(RecordRequestModel.Status) Title="Status" />
                         </GridColumns>
                     </TelerikGrid>
                 }
                 else
                 {
-                    <span>No data to display</span>
+                    <span>No Data to display.</span>
                 }
             </div>
             <TelerikPager PageChanged="@PageChangedHandler"
@@ -59,3 +86,9 @@
         </CardBody>
     </TelerikCard>
 </div>
+
+<style>
+    .k-grid .k-table-row {
+        cursor: pointer;
+    }
+</style>
