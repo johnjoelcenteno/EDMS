@@ -59,11 +59,14 @@ jobs:
               ScriptType: InlineScript
               FailOnStandardError: true
               Inline: |
-                $i="//*[@publishMethod=`"FTP`"]/"
-                [xml]$x=Get-AzureRMWebAppPublishingProfile -ResourceGroupName '${{ variables.ResourceGroupName }}' -Name ${{ variables.WebAppName }}
-                $u=$x.SelectNodes("$i@userName").value
-                $p=$x.SelectNodes("$i@userPWD").value
-                $s=$x.SelectNodes("$i@publishUrl").value                
+                # Get ftp profile
+                [xml]$configFile = Get-AzWebAppPublishingProfile -ResourceGroupName '${{ variables.ResourceGroupName }}' -Name ${{ variables.WebAppName }}
+                $ftpProfile = $configFile.publishData.publishProfile | Where-Object { $_.publishMethod -eq 'FTP' }
+                
+                # Set credentials
+                $u=$ftpProfile.userName
+                $p=$ftpProfile.userPWD
+                $s=$ftpProfile.publishUrl                
                 $z="##vso[task.setvariable variable"
                 Write-Host "$z=ftpusername]$u"
                 Write-Host "$z=ftppassword]$p"
