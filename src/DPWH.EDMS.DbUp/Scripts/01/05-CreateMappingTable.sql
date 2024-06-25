@@ -1,0 +1,19 @@
+IF NOT EXISTS (
+    SELECT
+        1
+    FROM
+        INFORMATION_SCHEMA.TABLES
+    WHERE
+        TABLE_NAME = 'Mapping'
+) BEGIN CREATE TABLE Mapping (
+    Id UNIQUEIDENTIFIER NOT NULL,
+    DataLibraryId UNIQUEIDENTIFIER NOT NULL,
+    Division NVARCHAR(100) NOT NULL,
+    Section NVARCHAR(150) NOT NULL,
+    CreatedBy NVARCHAR(150) NOT NULL,
+    Created [DATETIMEOFFSET](7) NOT NULL,
+    LastModifiedBy NVARCHAR(150) NULL,
+    LastModified [DATETIMEOFFSET](7) NULL,
+);
+
+END

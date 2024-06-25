@@ -28,6 +28,7 @@
     <EmbeddedResource Include="Scripts\01\01-Schema-Create.sql" />
     <EmbeddedResource Include="Scripts\01\04-Sequence-ControlNo.sql" />
     <EmbeddedResource Include="Scripts\01\03-Schema-AddChangeLogs.sql" />
+    <EmbeddedResource Include="Scripts\01\05-CreateMappingTable.sql" />
   </ItemGroup>
   
 	<ItemGroup>
