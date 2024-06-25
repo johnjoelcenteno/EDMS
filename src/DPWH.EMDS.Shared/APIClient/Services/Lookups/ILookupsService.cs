@@ -7,6 +7,7 @@ public interface ILookupsService
     Task<CommonLookup> GetLookups();
     Task<GetValidIDsResultIEnumerableBaseApiResponse> GetValidIdTypes();
     Task<GetSecondaryIDsResultIEnumerableBaseApiResponse> GetSecondaryIdTypes();
+    Task<GetAuthorizationDocumentsResultIEnumerableBaseApiResponse> GetAuthorizationDocumentTypes();
     Task<GetRecordTypesResultIEnumerableBaseApiResponse> GetRecordTypes();
     Task<GetAuthorizationDocumentsResultIEnumerableBaseApiResponse> GetAuthorizeDocuments();
     //Task<AddressLookup> GetRegions();

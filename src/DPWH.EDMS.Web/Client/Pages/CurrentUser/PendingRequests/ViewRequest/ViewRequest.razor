@@ -40,7 +40,7 @@
                 </div>
                 <div class="detail-flex">
                     <p><b>Active or Inactive Employee:</b>&nbsp; @(SelectedRecordRequest.IsActiveEmployee ? "Yes" : "No") </p>
-                    <p>Date Requested: @GenericHelper.GetDateTimeDisplay(SelectedRecordRequest.DateRequested)</p>
+                    <p><b>Date Requested:</b>&nbsp; @GenericHelper.GetDateTimeDisplay(SelectedRecordRequest.DateRequested)</p>
                 </div>
                 <div class="detail-flex">
                     <p><b>Purpose:</b>&nbsp;@SelectedRecordRequest.Purpose</p>
@@ -70,7 +70,7 @@
                         {
                             @foreach (var uploadedDoc in SelectedRecordRequest.Files)
                             {
-                                <li><a href="@uploadedDoc.Uri" target="_blank">@(uploadedDoc.Type == "ValidId" ? "Valid ID" : "Authorization Document")</a></li>
+                                <li><a href="@uploadedDoc.Uri" target="_blank">@GetDocumentTypeName(uploadedDoc.DocumentTypeId)</a></li>
                             }
                         }
                     </ul>

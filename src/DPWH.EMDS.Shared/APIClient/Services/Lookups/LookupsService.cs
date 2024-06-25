@@ -29,7 +29,7 @@ public class LookupsService : ILookupsService
         return await _client.GetSecondaryIDsAsync();
     }
 
-    public async Task<GetAuthorizationDocumentsResultIEnumerableBaseApiResponse> GetAuthorizeDocuments()
+    public async Task<GetAuthorizationDocumentsResultIEnumerableBaseApiResponse> GetAuthorizationDocumentTypes()
     {
         return await _client.GetAuthorizationDocumentsAsync();
     }

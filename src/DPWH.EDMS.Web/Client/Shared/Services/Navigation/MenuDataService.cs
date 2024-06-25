@@ -34,7 +34,7 @@ public class MenuDataService : IMenuDataService
                         Children = default,
                         Level = 0,
                         SortOrder = 0,
-                        AuthorizedRoles = new List<string>{ApplicationRoles.SuperAdmin, ApplicationRoles.SystemAdmin, ApplicationRoles.EndUser }
+                        AuthorizedRoles = new List<string>{ApplicationRoles.SuperAdmin, ApplicationRoles.SystemAdmin}
                     },
                     new ()
                     {
@@ -89,13 +89,33 @@ public class MenuDataService : IMenuDataService
         {
             new ()
             {
+                Text = "My Pending Request",
+                Url = "/my-pending-request",
+                Icon = "description",
+                Children = default,
+                Level = 0,
+                SortOrder = 0,
+                AuthorizedRoles = new List<string>{ ApplicationRoles.SuperAdmin, ApplicationRoles.SystemAdmin }
+            },
+            new ()
+            {
                 Text = "My Request History",
                 Url = "/my-request-history",
                 Icon = "description",
                 Children = default,
                 Level = 0,
                 SortOrder = 1,
-                AuthorizedRoles = new List<string>{ ApplicationRoles.SuperAdmin, ApplicationRoles.SystemAdmin, ApplicationRoles.EndUser }
+                AuthorizedRoles = new List<string>{ ApplicationRoles.SuperAdmin, ApplicationRoles.SystemAdmin }
+            },
+            new ()
+            {
+                Text = "Request History",
+                Url = "/my-request-history",
+                Icon = "description",
+                Children = default,
+                Level = 0,
+                SortOrder = 1,
+                AuthorizedRoles = new List<string>{ ApplicationRoles.EndUser }
             },
             new ()
             {
