@@ -8,6 +8,7 @@ using DPWH.EDMS.Api.Endpoints.Roles;
 using DPWH.EDMS.Api.Endpoints.AuditLogs;
 using DPWH.EDMS.Api.Endpoints.Root;
 using DPWH.EDMS.Api.Endpoints.Users;
+using DPWH.EDMS.Api.Endpoints.RecordsManagement;
 
 namespace DPWH.EDMS.Api.Endpoints;
 
