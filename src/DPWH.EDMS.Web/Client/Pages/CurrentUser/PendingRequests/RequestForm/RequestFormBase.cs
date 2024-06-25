@@ -45,7 +45,7 @@ public class RequestFormBase : RxBaseComponent
     //protected List<string> validIdTypes = new List<string> { "ID Type 1", "ID Type 2", "ID Type 3" };
     //protected List<string> supportingDocumentTypes = new List<string> { "Document Type 1", "Document Type 2", "Document Type 3" };
     protected List<GetValidIDsResult> ValidIDsList = new();
-    protected List<GetSecondaryIDsResult> SupportingDocTypeList = new();
+    protected List<GetAuthorizationDocumentsResult> AuthorizeDocTypeList = new();
     protected List<GetRecordTypesResult> RecordTypesList = new();
 
     protected List<Guid> SelectedRecordTypesIdList = new();
@@ -57,7 +57,7 @@ public class RequestFormBase : RxBaseComponent
     protected FluentValidationValidator? FluentValidationValidator;
 
     protected Guid? SelectedValidIdTypeId { get; set; }
-    protected Guid? SelectedSupportDocTypeId { get; set; }
+    protected Guid? SelectedAuthorizeDocTypeId { get; set; }
     protected UploadSupportingFileRequestModel? SelectedValidId { get; set; }
     protected UploadSupportingFileRequestModel? SelectedSupportingDoc { get; set; }
     protected UserModel CurrentUser { get; set; } = new();
@@ -80,7 +80,7 @@ public class RequestFormBase : RxBaseComponent
         IsLoading = true;
         await GetUser();
         await LoadValidIDTypes();
-        await LoadSupportingDocumentTypes();
+        await LoadAuthorizeDocumentTypes();
         await LoadRecordTypes();        
         IsLoading = false;
     }
@@ -106,18 +106,18 @@ public class RequestFormBase : RxBaseComponent
             ToastService.ShowError("Something went wrong on loading valid ids");
         }
     }
-    protected async Task LoadSupportingDocumentTypes()
+    protected async Task LoadAuthorizeDocumentTypes()
     {
         // TO be renamed
-        var suppTypeResult = await LookupsService.GetSecondaryIdTypes();
+        var suppTypeResult = await LookupsService.GetAuthorizationDocumentTypes();
 
         if (suppTypeResult.Success)
         {
-            SupportingDocTypeList = suppTypeResult.Data.ToList();
+            AuthorizeDocTypeList = suppTypeResult.Data.ToList();
         }
         else
         {
-            ToastService.ShowError("Something went wrong on loading supporting documents");
+            ToastService.ShowError("Something went wrong on loading authorize document");
         }
     }
     protected async Task LoadRecordTypes()
@@ -220,22 +220,22 @@ public class RequestFormBase : RxBaseComponent
         SelectedValidId = null;
     }
 
-    protected async void OnSelectSuppDoc(FileSelectEventArgs args)
+    protected async void OnSelectAuthDoc(FileSelectEventArgs args)
     {
-        if (SelectedItem != null && GenericHelper.IsGuidHasValue(SelectedSupportDocTypeId))
+        if (SelectedItem != null && GenericHelper.IsGuidHasValue(SelectedAuthorizeDocTypeId))
         {
             SelectedSupportingDoc = new UploadSupportingFileRequestModel()
             {
                 document = null!,
                 documentType = Api.Contracts.RecordRequestProvidedDocumentTypes.AuthorizationDocument,
-                documentTypeId = SelectedSupportDocTypeId
+                documentTypeId = SelectedAuthorizeDocTypeId
             };
 
             SelectedSupportingDoc.document = await DocumentService.GetFileToUpload(args);
         }
     }
 
-    protected void OnRemoveSuppDoc(FileSelectEventArgs args)
+    protected void OnRemoveAuthDoc(FileSelectEventArgs args)
     {
         SelectedSupportingDoc = null;
     }
