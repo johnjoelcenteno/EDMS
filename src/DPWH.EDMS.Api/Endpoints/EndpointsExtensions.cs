@@ -17,7 +17,8 @@ public static class EndpointsExtensions
     {
         // new endpoints
         app.MapRecordRequestsEndpoints();
-        app.MapEmployeeRequestEndpointExtensions();        
+        app.MapEmployeeRequestEndpointExtensions();
+        app.MapRecordTypeMappingExtensions();
 
         app.MapRootEndpoints();
         //app.MapAssetEndpoints();
