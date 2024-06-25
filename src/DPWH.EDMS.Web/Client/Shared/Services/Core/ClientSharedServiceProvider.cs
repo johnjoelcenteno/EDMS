@@ -1,4 +1,5 @@
-﻿using DPWH.EDMS.Web.Client.Shared.Services.Document;
+﻿using DPWH.EDMS.Client.Shared.APIClient.Services.DpwhIntegrations;
+using DPWH.EDMS.Web.Client.Shared.Services.Document;
 using DPWH.EDMS.Web.Client.Shared.Services.ExceptionHandler;
 using DPWH.EDMS.Web.Client.Shared.Services.Navigation;
 
@@ -10,6 +11,8 @@ public static class SharedServiceProvider
         services.AddScoped<IMenuDataService, MenuDataService>();
         services.AddScoped<IExceptionHandlerService, ExceptionHandlerService>();
         services.AddScoped<IDocumentService, DocumentService>();
+        services.AddScoped<IDpwhIntegrationsService, DpwhIntegrationsService>();
+
         services.AddScoped<NavRx>();
 
         return services;
