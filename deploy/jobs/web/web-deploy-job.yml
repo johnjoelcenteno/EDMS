@@ -51,7 +51,7 @@ jobs:
                 "build-$(Build.BuildNumber).zip" | Out-File $(Pipeline.Workspace)/drop/temp/packagename.txt -NoNewline -Encoding Ascii          
 
             # Deploy - Step 2: get FTP publish settings
-          - task: AzurePowerShell@3
+          - task: AzurePowerShell@5
             displayName: 'Deploy Blazor - Step 2/5: Get Publish FTP Settings'
             inputs:
               azureSubscription: '${{ variables.AzureSubscription }}'
