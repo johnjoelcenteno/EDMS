@@ -7,6 +7,9 @@
 <TelerikMediaQuery Media="(max-width: 480px)" OnChange="((changed) => XSmall = changed)"></TelerikMediaQuery>
 
 <EdmsBreadcrumbs Data="@BreadcrumbItems" />
+
+<EdmsLoader Visible="@IsLoading" />
+
 <h3>@UriName</h3>
 <hr />
 

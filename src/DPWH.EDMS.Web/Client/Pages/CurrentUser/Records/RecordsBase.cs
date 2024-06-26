@@ -1,69 +1,64 @@
-﻿using DPWH.EDMS.Components;
-using DPWH.EDMS.Api.Contracts;
-using DPWH.EDMS.Client.Shared.MockModels;
+﻿using DPWH.EDMS.Client.Shared.Models;
 using DPWH.EDMS.Components.Components.ReusableGrid;
-using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components;
-using Telerik.SvgIcons;
-using DPWH.EDMS.IDP.Core.Constants;
 using Telerik.Blazor.Components;
-using Telerik.DataSource;
-using DPWH.EDMS.Client.Shared.Models;
-using Microsoft.AspNetCore.Http.Extensions;
-using static Telerik.Blazor.ThemeConstants;
 using static DPWH.EDMS.Web.Client.Pages.CurrentUser.Records.RecordsBase;
 
 namespace DPWH.EDMS.Web.Client.Pages.CurrentUser.Records;
 
-public class RecordsBase : GridBase<EmployeeSamp>
+public class RecordsBase : GridBase<Document>
 {
-    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateAsync { get; set; }
+    [Parameter] public required string Id { get; set; }
     [Inject] public required NavigationManager NavigationManager { get; set; }
-    
-    public class EmployeeSamp
+    protected List<Document> DocumentList = new List<Document>();
+
+    public class Document
     {
-        public int EmployeeId { get; set; }
+        public int Id { get; set; }
+        public string DocumentName { get; set; }
         public string ControlNumber { get; set; }
         public DateTime DateRequested { get; set; }
-        public string DocumentName { get; set; }
     }
-    protected List<EmployeeSamp> EmployeeList = new List<EmployeeSamp>();
+
     protected override void OnInitialized()
     {
         BreadcrumbItems.Add(new BreadcrumbModel
         {
             Icon = "menu",
             Text = "My Records",
-            Url = "/my-Records"
+            Url = "/my-records"
         });
-        EmployeeList = GenerateEmployeeRecords(5);
+
+        DocumentList = GetDocuments();
     }
 
-    public async Task exportData(GridCommandEventArgs args)
+    protected List<Document> GetDocuments()
     {
-        EmployeeSamp selectedId = args.Item as EmployeeSamp;
-        
-        //Int32.TryParse(samp, out sampNumber);
-        NavigationManager.NavigateTo($"/personal-Data/{selectedId.EmployeeId}");
-    }
-    private List<EmployeeSamp> GenerateEmployeeRecords(int count)
-    {
-        var employees = new List<EmployeeSamp>();
-        var random = new Random();
-
-        for (int i = 1; i <= count; i++)
+        return new List<Document>
         {
-            var employee = new EmployeeSamp
-            {
-                EmployeeId = i,
-                ControlNumber = $"CN{i:D4}",
-                DateRequested = DateTime.Now.AddDays(-random.Next(0, 365)),
-                DocumentName = $"DocumentName{i}"
-            };
+            new Document { Id = 1, DocumentName = "Approved Appointments", ControlNumber = "CN001", DateRequested = DateTime.Now },
+            new Document { Id = 2, DocumentName = "Position Description Form (PDF)", ControlNumber = "CN002", DateRequested = DateTime.Now },
+            new Document { Id = 2, DocumentName = "Service Records", ControlNumber = "CN003", DateRequested = DateTime.Now },
+            new Document { Id = 4, DocumentName = "Employee Leave Card", ControlNumber = "CN004", DateRequested = DateTime.Now },
+            new Document { Id = 5, DocumentName = "Leave Application (Terminal Leave only)", ControlNumber = "CN005", DateRequested = DateTime.Now },
+            new Document { Id = 6, DocumentName = "Notice of Salary Adjustment (NOSA)", ControlNumber = "CN006", DateRequested = DateTime.Now },
+            new Document { Id = 7, DocumentName = "Personal Data Sheet (PDS) / Information Sheet (must be latest)", ControlNumber = "CN007", DateRequested = DateTime.Now },
+            new Document { Id = 8, DocumentName = "Administrative Case / Civil Case/Decisions", ControlNumber = "CN008", DateRequested = DateTime.Now },
+            new Document { Id = 9, DocumentName = "Training Certificates / Ratings", ControlNumber = "CN009", DateRequested = DateTime.Now },
+            new Document { Id = 10, DocumentName = "Travel Directive, Certificate of Appearance", ControlNumber = "CN010", DateRequested = DateTime.Now },
+            new Document { Id = 11, DocumentName = "Authority to Travel for Personal Reason", ControlNumber = "CN011", DateRequested = DateTime.Now },
+            new Document { Id = 12, DocumentName = "Memorandum Receipt for Equipment (MR)", ControlNumber = "CN012", DateRequested = DateTime.Now },
+            new Document { Id = 13, DocumentName = "GSIS Forms (Retirement, Information for Membership)", ControlNumber = "CN013", DateRequested = DateTime.Now },
+            new Document { Id = 14, DocumentName = "Memo (Designation, Directive)", ControlNumber = "CN014", DateRequested = DateTime.Now },
+            new Document { Id = 15, DocumentName = "Daily Wage Appointment/Plantilla", ControlNumber = "CN015", DateRequested = DateTime.Now }
+        };
+    }
 
-            employees.Add(employee);
-        }
+    public async Task viewData(GridCommandEventArgs args)
+    {
+        Document selectedId = args.Item as Document;
 
-        return employees;
+        //Int32.TryParse(samp, out sampNumber);
+        NavigationManager.NavigateTo($"/personal-data/{selectedId.Id}");
     }
 }

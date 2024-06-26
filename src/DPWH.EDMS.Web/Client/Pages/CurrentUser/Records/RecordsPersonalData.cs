@@ -1,22 +1,11 @@
-﻿using DPWH.EDMS.Components;
-using DPWH.EDMS.Api.Contracts;
-using DPWH.EDMS.Client.Shared.MockModels;
+﻿using DPWH.EDMS.Client.Shared.Models;
 using DPWH.EDMS.Components.Components.ReusableGrid;
-using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components;
-using Telerik.SvgIcons;
-using DPWH.EDMS.IDP.Core.Constants;
-using Telerik.Blazor.Components;
-using Telerik.DataSource;
-using DPWH.EDMS.Client.Shared.Models;
-using Microsoft.AspNetCore.Http.Extensions;
-using static Telerik.Blazor.ThemeConstants;
 using static DPWH.EDMS.Web.Client.Pages.CurrentUser.Records.RecordsBase;
-using Telerik.Blazor.Components.Breadcrumb;
 
 namespace DPWH.EDMS.Web.Client.Pages.CurrentUser.Records
 {
-    public class RecordsPersonalData : GridBase<EmployeeSamp>
+    public class RecordsPersonalData : GridBase<Document>
     {
         [Parameter]
         public int Id { get; set; }
@@ -34,16 +23,16 @@ namespace DPWH.EDMS.Web.Client.Pages.CurrentUser.Records
             {
                 Icon = "menu",
                 Text = "My Records",
-                Url = "/my-Records"
+                Url = "/my-records"
             });
             
             BreadcrumbItems.Add(new BreadcrumbModel
             {
                 Icon = "folder",
                 Text = "Personal Data",
-                Url = "/personal-Data"
+                Url = "/personal-data"
             });
-            EmployeeList = GenerateEmployeeRecords(5);
+            EmployeeList = GenerateEmployeeRecords(15);
         }
         private List<EmployeeSamp> GenerateEmployeeRecords(int count)
         {
