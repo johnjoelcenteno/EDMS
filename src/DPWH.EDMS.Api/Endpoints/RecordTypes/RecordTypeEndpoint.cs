@@ -29,7 +29,7 @@ public static class RecordTypeEndpoints
         .Produces<ProblemDetails>(StatusCodes.Status400BadRequest)
         .Produces<ProblemDetails>(StatusCodes.Status500InternalServerError);
 
-        builder.MapGet(ApiEndpoints.RecordTypes.Query, async (DataSourceRequest request, IMediator mediator, CancellationToken token) =>
+        builder.MapPost(ApiEndpoints.RecordTypes.Query, async (DataSourceRequest request, IMediator mediator, CancellationToken token) =>
         {
             var result = await mediator.Send(new QueryRecordTypesRequest(request), token);
             return result;
