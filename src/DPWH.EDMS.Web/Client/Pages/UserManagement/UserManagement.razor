@@ -1,5 +1,8 @@
 ﻿@page "/user-management"
 @using DPWH.EDMS.Client.Shared.Models
+@using DPWH.EDMS.IDP.Core.Constants
+@using DPWH.EDMS.Api.Contracts
+@using DPWH.EDMS.Components.Helpers
 
 @inherits UserManagementBase
 @attribute [Authorize(Roles = "dpwh_superadmin, system_admin")]
@@ -37,7 +40,7 @@
                 <h5 class="mb-0">View-Only Licenses</h5>
             </CardHeader>
             <CardBody>
-                <p class="um-value">No Limit</p>
+                <p class="um-value">Unlimited</p>
                 <div class="d-flex flex-row justify-content-between">
                     <p class="mb-0 k-font-size-sm">Unlimited Licenses</p>
                     <p class="mb-0 k-font-size-sm">Total User: @TotalUsers</p>
@@ -50,10 +53,15 @@
     <TelerikCard Width="100%">
         <CardBody>
             <div class="d-flex flex-row justify-content-between">
-                <CardTitle Class="mb-0">Users</CardTitle>
-                <TelerikButton Title="View All" Icon="@FontIcon.ChevronRight"></TelerikButton>
+                <CardTitle Class="mb-0">Users</CardTitle> 
             </div>
             <CardSeparator Class="my-2"></CardSeparator>
+            <TelerikButton Class="mb-2"
+                           Icon="@FontIcon.Plus"
+                           ThemeColor="@ThemeConstants.Button.ThemeColor.Primary"
+                           OnClick="AddUser">
+                Add User
+            </TelerikButton>
             <div>
                 @if (GridData != null && !XSmall)
                 {
@@ -122,8 +130,7 @@
             </TelerikPager>
         </CardBody>
     </TelerikCard>
-</div>
-
+</div> 
 <style>
     .um-card {
         display: flex;
