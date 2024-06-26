@@ -24,8 +24,11 @@
         </HeaderTemplate>
         <Content>
             <div class="d-flex flex-column">
-                <div class="d-flex flex-row mb-2">
+                <div class="d-flex flex-row justify-content-between mb-2">
                     <p class="edms-text-header-small">Request Details</p>
+                    <TelerikButton ButtonType="ButtonType.Submit" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary">
+                        Export
+                    </TelerikButton>
                 </div>
                 <div class="detail-flex">
                     <p><b>Control Number:</b>&nbsp; @SelectedRecordRequest.ControlNumber</p>
@@ -37,7 +40,7 @@
                     @if (SelectedRecordRequest.ClaimantType == ClaimantTypes.AuthorizedRepresentative.ToString())
                     {
                         <p><b>Representative Name: </b>&nbsp; @SelectedRecordRequest.AuthorizedRepresentative.RepresentativeName</p>
-                    }                    
+                    }
                 </div>
                 <div class="detail-flex">
                     <p><b>Active or Inactive Employee:</b>&nbsp; @(SelectedRecordRequest.IsActiveEmployee ? "Yes" : "No") </p>
@@ -74,9 +77,52 @@
                                 <li><a href="@uploadedDoc.Uri" target="_blank">@GetDocumentTypeName(uploadedDoc.DocumentTypeId)</a></li>
                             }
                         }
+                        else
+                        {
+                            <p>---</p>
+                        }
                     </ul>
                 </div>
             </div>
         </Content>
     </TabStripTab>
 </TelerikTabStrip>
+
+@if (IsRequestApproved == null)
+{
+    <div class="d-flex flex-row justify-content-between mt-3">
+        <TelerikButton @onclick="OnCancel"
+                       FillMode="@ThemeConstants.Button.FillMode.Outline" ThemeColor="@ThemeConstants.Button.ThemeColor.Secondary">
+            Cancel
+        </TelerikButton>
+        <div class="d-flex flex-row gap-2">
+            <TelerikButton OnClick="() => IsRequestApproved = false" FillMode="@ThemeConstants.Button.FillMode.Outline" ThemeColor="@ThemeConstants.Button.ThemeColor.Secondary">
+                Reject
+            </TelerikButton>
+            <TelerikButton OnClick="() => IsRequestApproved = true" ButtonType="ButtonType.Submit" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary">
+                Approve
+            </TelerikButton>
+        </div>
+    </div>
+}
+else
+{
+    <TelerikCard Class="my-3">
+        <CardBody>
+            <div class="d-flex flex-column">
+                <div class="d-flex flex-row justify-content-between mb-2">
+                    <p class="edms-text-header-small">Approval History</p>
+                    <TelerikButton ButtonType="ButtonType.Submit" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary">
+                        Export
+                    </TelerikButton>
+                </div>
+                <div class="d-flex flex-row gap-2">
+                    <p class="mb-0 fw-bold">Juan DelaCruz</p>
+                    <span class="role-chip">@(IsRequestApproved == true ? "Approved" : "Rejected")</span>
+                </div>
+                <p class="mb-0"><i>Super Admin - @GenericHelper.GetDateTimeDisplay(DateTime.Now) </i></p>
+                <p class="mt-3"><b>Remarks/Purpose: </b> @SelectedRecordRequest.Purpose</p>
+            </div>
+        </CardBody>
+    </TelerikCard>    
+}
