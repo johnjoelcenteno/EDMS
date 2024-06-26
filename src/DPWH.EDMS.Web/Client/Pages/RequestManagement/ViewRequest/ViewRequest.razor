@@ -1,0 +1,82 @@
+﻿@inherits ViewRequestBase
+
+@page "/request-management/view/{RequestId}"
+@using DPWH.EDMS.Components.Helpers
+@using DPWH.EDMS.Shared.Enums
+
+<EdmsBreadcrumbs Data="@BreadcrumbItems" />
+<EdmsLoader Visible="IsLoading" />
+
+<h3>Request Details</h3>
+
+<div class="d-flex flex-row align-items-center mb-2">
+    <p>Control Number: @SelectedRecordRequest.ControlNumber </p>
+    <span class="role-chip">@SelectedRecordRequest.Status</span>
+</div>
+<p>Employee No: @SelectedRecordRequest.EmployeeNumber &nbsp;&nbsp; / &nbsp;&nbsp; Date Requested: @GenericHelper.GetDateTimeDisplay(SelectedRecordRequest.DateRequested)</p>
+<hr />
+
+<TelerikTabStrip>
+    <TabStripTab>
+        <HeaderTemplate>
+            <span class="bi me-2 material-symbols-outlined">overview</span>
+            Overview
+        </HeaderTemplate>
+        <Content>
+            <div class="d-flex flex-column">
+                <div class="d-flex flex-row mb-2">
+                    <p class="edms-text-header-small">Request Details</p>
+                </div>
+                <div class="detail-flex">
+                    <p><b>Control Number:</b>&nbsp; @SelectedRecordRequest.ControlNumber</p>
+                    <p><b>Employee No:</b>&nbsp; @SelectedRecordRequest.EmployeeNumber</p>
+
+                </div>
+                <div class="detail-flex">
+                    <p><b>Claimant Type:</b>&nbsp; @(SelectedRecordRequest.ClaimantType == ClaimantTypes.AuthorizedRepresentative.ToString() ? "Authorized Representative" : "Requestor")</p>
+                    @if (SelectedRecordRequest.ClaimantType == ClaimantTypes.AuthorizedRepresentative.ToString())
+                    {
+                        <p><b>Representative Name: </b>&nbsp; @SelectedRecordRequest.AuthorizedRepresentative.RepresentativeName</p>
+                    }                    
+                </div>
+                <div class="detail-flex">
+                    <p><b>Active or Inactive Employee:</b>&nbsp; @(SelectedRecordRequest.IsActiveEmployee ? "Yes" : "No") </p>
+                    <p><b>Date Requested:</b>&nbsp; @GenericHelper.GetDateTimeDisplay(SelectedRecordRequest.DateRequested)</p>
+                </div>
+                <div class="detail-flex">
+                    <p><b>Purpose:</b>&nbsp;@SelectedRecordRequest.Purpose</p>
+                </div>
+                <hr />
+                <div class="d-flex flex-row mb-2">
+                    <p class="edms-text-header-small">Requested Documents</p>
+                </div>
+                <div class="detail-flex">
+                    <ul>
+                        @if (SelectedRecordRequest.RequestedRecords != null && SelectedRecordRequest.RequestedRecords.Count > 0)
+                        {
+                            @foreach (var record in SelectedRecordRequest.RequestedRecords)
+                            {
+                                <li>@record.RecordType</li>
+                            }
+                        }
+                    </ul>
+                </div>
+                <hr />
+                <div class="d-flex flex-row mb-2">
+                    <p class="edms-text-header-small">Uploaded Documents</p>
+                </div>
+                <div class="detail-flex">
+                    <ul>
+                        @if (SelectedRecordRequest.Files != null && SelectedRecordRequest.Files.Any())
+                        {
+                            @foreach (var uploadedDoc in SelectedRecordRequest.Files)
+                            {
+                                <li><a href="@uploadedDoc.Uri" target="_blank">@GetDocumentTypeName(uploadedDoc.DocumentTypeId)</a></li>
+                            }
+                        }
+                    </ul>
+                </div>
+            </div>
+        </Content>
+    </TabStripTab>
+</TelerikTabStrip>
