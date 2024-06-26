@@ -46,23 +46,13 @@ public class HomeBase : GridBase<EmployeeModel>
             },
             new SimpleKeyValue()
             {
-                Id = "Approve",
-                Name = "332",
-            },
-             new SimpleKeyValue()
-            {
-                Id = "Process",
-                Name = "530",
-            },
-            new SimpleKeyValue()
-            {
                 Id = "Release",
                 Name = "130",
             },
             new SimpleKeyValue()
             {
-                Id = "Recieved",
-                Name = "1000",
+                Id = "Claimed",
+                Name = "320",
             }
         };
         Categories = new string[] { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"  };
@@ -92,46 +82,6 @@ public class HomeBase : GridBase<EmployeeModel>
         }
     }
 
-    public class MyPieChartModel
-    {
-        public string SegmentName { get; set; }
-        public double SegmentValue { get; set; }
-    }
-
-    public List<MyPieChartModel> pieData = new List<MyPieChartModel>
-    {
-        new MyPieChartModel
-        {
-            SegmentName = "Series A",
-            SegmentValue = 60
-        },
-        new MyPieChartModel
-        {
-            SegmentName = "Series B",
-            SegmentValue = 60
-        },
-        new MyPieChartModel
-        {
-            SegmentName = "Series C",
-            SegmentValue = 60
-        },
-        new MyPieChartModel
-        {
-            SegmentName = "Series D",
-            SegmentValue = 60
-        },
-        new MyPieChartModel
-        {
-            SegmentName = "Series E",
-            SegmentValue = 60
-        },
-        new MyPieChartModel
-        {
-            SegmentName = "Series F",
-            SegmentValue = 60
-        }
-    };
-
     private List<EmployeeModel> GenerateEmployeeRecords(int count)
     {
         var employees = new List<EmployeeModel>();
@@ -141,10 +91,10 @@ public class HomeBase : GridBase<EmployeeModel>
         {
             var employee = new EmployeeModel
             {
-                ControlNumber = $"CN{i:D4}",
+                ControlNumber = $"2024{i:D6}",
                 DateRequested = DateTime.Now.AddDays(-random.Next(0, 365)),
                 LastName = $"LastName{i}",
-                FullName = $"FirstName{i} M. LastName{i}",
+                FullName = $"LastName{i} FirstName{i} M.",
                 MiddleInitial = "M",
                 RecordRequested = $"RecordType{random.Next(1, 5)}",
                 Purpose = $"Purpose{random.Next(1, 5)}",

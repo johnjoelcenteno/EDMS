@@ -1,4 +1,5 @@
 ﻿@page "/"
+@using DPWH.EDMS.Api.Contracts
 
 @attribute [Authorize(Roles = "dpwh_superadmin, system_admin, dpwh_enduser")]
 @inherits HomeBase
@@ -62,7 +63,6 @@
                         <GridColumns>
                             <GridColumn Field=@nameof(EmployeeModel.ControlNumber) Title="Control No." Filterable = "false" />
                             <GridColumn Field=@nameof(EmployeeModel.FullName) Title="Full Name" />
-                            <GridColumn Field=@nameof(EmployeeModel.RecordRequested) Title="Records Requested" />
                             <GridColumn Field=@nameof(EmployeeModel.DateRequested) Title="Date Requested" />
                             <GridColumn Field=@nameof(EmployeeModel.Status) Title="Status" />
                         </GridColumns>
@@ -118,16 +118,16 @@
         <div class="col">
             <TelerikCard Width="100%">
                 <CardHeader Class="ch-card">
-                    <h5 class="mb-0">Fullfilled Request </h5>
+                    <h5 class="mb-0">Overview Status </h5>
                 </CardHeader>
                 <div class="container">
                     <TelerikChart Class="PieChart" @ref="FullfilledChartRef">
                         <ChartSeriesItems>
-                            <ChartSeries Type="ChartSeriesType.Pie" Data="@pieData"
-                                                Field="@nameof(MyPieChartModel.SegmentValue)" CategoryField="@nameof(MyPieChartModel.SegmentName)">
+                        <ChartSeries Type="ChartSeriesType.Pie" Data="@OverviewStatusList"
+                                     Field="@nameof(SimpleKeyValue.Name)" CategoryField="@nameof(SimpleKeyValue.Id)">
                             <ChartSeriesTooltip Visible="true">
                                 <Template>
-                                    @((context.DataItem as MyPieChartModel).SegmentName) for @((context.DataItem as MyPieChartModel).SegmentValue)
+                                    @((context.DataItem as SimpleKeyValue).Id) for @((context.DataItem as SimpleKeyValue).Name)
                                 </Template>
                             </ChartSeriesTooltip>
                                 <ChartSeriesLabels Position="ChartSeriesLabelsPosition.Center"
