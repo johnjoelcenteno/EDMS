@@ -8,6 +8,7 @@ public interface IReadRepository
     IQueryable<RecordRequest> RecordRequestsView { get; }
     IQueryable<RecordRequestDocument> RecordRequestDocumentsView { get; }
     IQueryable<EmployeeRecord> EmployeeRecordsView { get; }
+    IQueryable<Record> RecordsView { get; }
     IQueryable<Asset> AssetsView { get; }
     IQueryable<InspectionRequest> InspectionRequestsView { get; }
     IQueryable<MaintenanceRequest> MaintenanceRequestsView { get; }

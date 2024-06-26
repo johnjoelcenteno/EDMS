@@ -9,6 +9,7 @@ using DPWH.EDMS.Api.Endpoints.AuditLogs;
 using DPWH.EDMS.Api.Endpoints.Root;
 using DPWH.EDMS.Api.Endpoints.Users;
 using DPWH.EDMS.Api.Endpoints.RecordsManagement;
+using DPWH.EDMS.Api.Endpoints.RecordRequests;
 
 namespace DPWH.EDMS.Api.Endpoints;
 
@@ -19,9 +20,8 @@ public static class EndpointsExtensions
         // new endpoints
         app.MapRecordRequestsEndpoints();
         app.MapEmployeeRequestEndpointExtensions();        
-
-        app.MapRootEndpoints();
-        //app.MapAssetEndpoints();
+        app.MapRecordsEndpoints();
+        app.MapRootEndpoints();        
         app.MapLookupsEndpoints();
         app.MapAddressEndpoints();
         app.MapLicensesEndpoints();
@@ -34,9 +34,6 @@ public static class EndpointsExtensions
         //app.MapArcGisIntegrationsEndpoints();
         app.MapDataLibrariesEndpoints();
         //app.MapDataSyncEndpoints();
-        //app.MapInspectionsEndpoints();
-        //app.MapMaintenanceRequestEndpoints();
-        //app.MapProjectMonitoringEndpoints();
 
         return app;
     }

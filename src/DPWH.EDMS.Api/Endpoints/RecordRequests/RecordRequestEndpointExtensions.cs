@@ -1,6 +1,4 @@
-﻿using DPWH.EDMS.Api.Endpoints.RecordRequests;
-
-namespace DPWH.EDMS.Api;
+﻿namespace DPWH.EDMS.Api.Endpoints.RecordRequests;
 
 public static class RecordRequestEndpointExtensions
 {

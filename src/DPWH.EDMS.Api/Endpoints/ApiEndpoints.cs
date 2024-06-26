@@ -30,6 +30,18 @@ public static class ApiEndpoints
         }
     }
 
+    public static class RecordManagement
+    {
+        private const string Base = $"{ApiBase}/records";
+
+        public const string Get = $"{Base}/{{id:guid}}";
+        public const string Query = $"{Base}/query";
+        public const string QueryByEmployeeId = $"{Base}/query/{{employeeId}}";
+        public const string Create = $"{Base}/create";
+        public const string Update = $"{Base}/update";
+        public const string Delete = $"{Base}/delete";
+    }
+
     public static class EmployeeRecordEndpoints
     {
         private const string Base = $"{ApiBase}/EmployeeRecords";

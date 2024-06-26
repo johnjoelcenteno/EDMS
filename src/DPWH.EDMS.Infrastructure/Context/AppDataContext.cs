@@ -17,10 +17,10 @@ public class AppDataContext : DbContext, IReadRepository, IWriteRepository
     public IQueryable<RecordRequest> RecordRequestsView => RecordRequests.Include(r => r.AuthorizedRepresentative).AsNoTracking();
     public DbSet<RecordRequestDocument> RecordRequestDocuments { get; set; }
     public IQueryable<RecordRequestDocument> RecordRequestDocumentsView => RecordRequestDocuments.AsNoTracking();
-
     public DbSet<RequestedRecord> RequestedRecords { get; set; }
     public IQueryable<RequestedRecord> RequestedRecordsView => RequestedRecords.AsNoTracking();
-
+    public DbSet<Record> Records { get; set; }
+    public IQueryable<Record> RecordsView => Records.AsNoTracking();
 
     public DbSet<EmployeeRecord> EmployeeRecords { get; set; }
     public IQueryable<EmployeeRecord> EmployeeRecordsView => EmployeeRecords.AsNoTracking();
