@@ -10,7 +10,7 @@ namespace DPWH.EDMS.Api.Endpoints.RecordsManagement;
 
 public static class EmployeeRecordEnpoint
 {
-    private const string TagName = "RecordsManagement";
+    private const string TagName = "EmployeeRecords";
 
     public static IEndpointRouteBuilder MapEmployeeRecordEndpoint(this IEndpointRouteBuilder app)
     {
