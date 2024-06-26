@@ -6,7 +6,7 @@ namespace DPWH.EDMS.Web.Client.Shared.Services.Navigation;
 public class MenuDataService : IMenuDataService
 {
     public IEnumerable<MenuModel> GetMenuItems() =>
-    new List<MenuModel>
+        new List<MenuModel>
         {
         // SUPER ADMIN MENUS
             new ()
@@ -19,7 +19,17 @@ public class MenuDataService : IMenuDataService
                 SortOrder = 0,
                 AuthorizedRoles = new List<string>{ ApplicationRoles.SuperAdmin, ApplicationRoles.SystemAdmin }
             },
-             new ()
+            new ()
+            {
+                Text = "Records Management",
+                Url = "/records-management",
+                Icon = "folder_open",
+                Children = default,
+                Level = 0,
+                SortOrder = 1,
+                AuthorizedRoles = new List<string>{ ApplicationRoles.SuperAdmin, ApplicationRoles.SystemAdmin }
+            },
+            new ()
             {
                 Text = "Request Management",
                 Url = "/request-management",
@@ -48,31 +58,10 @@ public class MenuDataService : IMenuDataService
                     },
                 },
                 Level = 0,
-                SortOrder = 1,
-                AuthorizedRoles = new List<string>{ ApplicationRoles.SuperAdmin, ApplicationRoles.SystemAdmin }
-            },
-
-             new ()
-            {
-                Text = "Records Management",
-                Url = "/records-management",
-                Icon = "folder_open",
-                Children = default,
-                Level = 0,
                 SortOrder = 2,
                 AuthorizedRoles = new List<string>{ ApplicationRoles.SuperAdmin, ApplicationRoles.SystemAdmin }
             },
-             new ()
-            {
-                Text = "Data Library",
-                Url = "/data-library",
-                Icon = "settings_applications",
-                Children = default,
-                Level = 0,
-                SortOrder = 3,
-                AuthorizedRoles = new List<string>{ ApplicationRoles.SuperAdmin, ApplicationRoles.SystemAdmin }
-            },
-              new ()
+            new ()
             {
                 Text = "User Management",
                 Url = "/user-management",
@@ -82,41 +71,31 @@ public class MenuDataService : IMenuDataService
                 SortOrder = 3,
                 AuthorizedRoles = new List<string>{ApplicationRoles.SuperAdmin, ApplicationRoles.SystemAdmin }
             },
+            new ()
+            {
+                Text = "Reports and Analytics",
+                Url = "/reports-and-analytics",
+                Icon = "settings_applications",
+                Children = default,
+                Level = 0,
+                SortOrder = 4,
+                AuthorizedRoles = new List<string>{ ApplicationRoles.SuperAdmin, ApplicationRoles.SystemAdmin }
+            },
+            new ()
+            {
+                Text = "Data Library",
+                Url = "/data-library",
+                Icon = "description",
+                Children = default,
+                Level = 0,
+                SortOrder = 5,
+                AuthorizedRoles = new List<string>{ ApplicationRoles.SuperAdmin, ApplicationRoles.SystemAdmin }
+            }
         };
 
     public IEnumerable<MenuModel> GetMenuItems2() =>
         new List<MenuModel>
         {
-            new ()
-            {
-                Text = "My Pending Request",
-                Url = "/my-pending-request",
-                Icon = "description",
-                Children = default,
-                Level = 0,
-                SortOrder = 0,
-                AuthorizedRoles = new List<string>{ ApplicationRoles.SuperAdmin, ApplicationRoles.SystemAdmin }
-            },
-            new ()
-            {
-                Text = "My Request History",
-                Url = "/my-request-history",
-                Icon = "description",
-                Children = default,
-                Level = 0,
-                SortOrder = 1,
-                AuthorizedRoles = new List<string>{ ApplicationRoles.SuperAdmin, ApplicationRoles.SystemAdmin }
-            },
-            new ()
-            {
-                Text = "Request History",
-                Url = "/my-request-history",
-                Icon = "description",
-                Children = default,
-                Level = 0,
-                SortOrder = 1,
-                AuthorizedRoles = new List<string>{ ApplicationRoles.EndUser }
-            },
             new ()
             {
                 Text = "My Records",
@@ -127,6 +106,16 @@ public class MenuDataService : IMenuDataService
                 SortOrder = 2,
                 AuthorizedRoles = new List<string>{ ApplicationRoles.SuperAdmin, ApplicationRoles.SystemAdmin, ApplicationRoles.EndUser }
             },
+            new ()
+            {
+                Text = "My Requests",
+                Url = "/my-requests",
+                Icon = "description",
+                Children = default,
+                Level = 0,
+                SortOrder = 1,
+                AuthorizedRoles = new List<string>{ ApplicationRoles.SuperAdmin, ApplicationRoles.SystemAdmin, ApplicationRoles.EndUser }
+            }
         };
 
     public IEnumerable<MenuModel> GetSettingsItems() =>

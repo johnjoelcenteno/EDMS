@@ -19,7 +19,7 @@ public class ViewRequestBase : RxBaseComponent
     [Inject] public required IToastService ToastService { get; set; }
 
     protected RecordRequestModel SelectedRecordRequest { get; set; } = new();
-    private Dictionary<Guid, string> IdTypesLookup = new Dictionary<Guid, string>();
+    protected Dictionary<Guid, string> IdTypesLookup = new Dictionary<Guid, string>();
 
 
     protected async override Task OnInitializedAsync()
