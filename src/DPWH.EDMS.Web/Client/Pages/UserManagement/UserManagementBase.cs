@@ -23,8 +23,7 @@ public class UserManagementBase : GridBase<UserModel>
     protected double LicenseLimit = 0;
     protected double LicenseUsed = 0;
     protected double TotalUsers = 0;
-    protected string getOpenBtn = "";
-    protected TelerikDialog dialogReference = new();
+    protected string getOpenBtn = ""; 
 
     protected ICollection<GetRequestingOfficeResult> RegionOfficeList { get; set; } = new List<GetRequestingOfficeResult>();
     protected List<GetRequestingOfficeResultItem> DEOlist { get; set; } = new List<GetRequestingOfficeResultItem>();
