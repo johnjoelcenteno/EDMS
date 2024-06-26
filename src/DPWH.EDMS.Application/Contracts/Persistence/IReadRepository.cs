@@ -5,6 +5,7 @@ namespace DPWH.EDMS.Application.Contracts.Persistence;
 
 public interface IReadRepository
 {
+    IQueryable<RecordType> RecordTypesView { get; }
     IQueryable<RecordRequest> RecordRequestsView { get; }
     IQueryable<RecordRequestDocument> RecordRequestDocumentsView { get; }
     IQueryable<EmployeeRecord> EmployeeRecordsView { get; }

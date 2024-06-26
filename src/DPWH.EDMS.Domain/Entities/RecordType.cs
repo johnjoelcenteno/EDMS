@@ -2,11 +2,11 @@
 
 namespace DPWH.EDMS.Domain;
 
-public class RecordTypeMapping : EntityBase
+public class RecordType : EntityBase
 {
-    private RecordTypeMapping() { }
+    private RecordType() { }
 
-    private RecordTypeMapping(Guid dataLibraryId, string division, string section, string createdBy)
+    private RecordType(Guid dataLibraryId, string division, string section, string createdBy)
     {
         Id = Guid.NewGuid();
         DataLibraryId = dataLibraryId;
@@ -15,9 +15,9 @@ public class RecordTypeMapping : EntityBase
         SetCreated(createdBy);
     }
 
-    public static RecordTypeMapping Create(Guid dataLibraryId, string division, string section, string createdBy)
+    public static RecordType Create(Guid dataLibraryId, string division, string section, string createdBy)
     {
-        var mapping = new RecordTypeMapping(dataLibraryId, division, section, createdBy);
+        var mapping = new RecordType(dataLibraryId, division, section, createdBy);
         return mapping;
     }
 

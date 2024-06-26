@@ -10,8 +10,8 @@ public interface IWriteRepository
     DbSet<EmployeeRecord> EmployeeRecords { get; }
     DbSet<RecordRequest> RecordRequests { get; }
     DbSet<RecordRequestDocument> RecordRequestDocuments { get; }
-    DbSet<RequestedRecord> RequestedRecords { get; }    
-
+    DbSet<RequestedRecord> RequestedRecords { get; }
+    DbSet<RecordType> RecordTypes { get; }
     DbSet<Asset> Assets { get; }
     DbSet<InspectionRequest> InspectionRequests { get; }
     DbSet<InspectionRequestDocument> InspectionRequestDocuments { get; }

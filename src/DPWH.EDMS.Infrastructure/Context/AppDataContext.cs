@@ -108,6 +108,10 @@ public class AppDataContext : DbContext, IReadRepository, IWriteRepository
     public DbSet<InspectionRequestProjectMonitoring> InspectionRequestProjectMonitoring { get; set; }
     public IQueryable<InspectionRequestProjectMonitoring> InspectionRequestProjectMonitoringView => InspectionRequestProjectMonitoring.AsNoTracking();
 
+    public DbSet<RecordType> RecordTypes { get; set; }
+
+    public IQueryable<RecordType> RecordTypesView => RecordTypes.AsNoTracking();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<AuthorizedRepresentative>()
@@ -118,7 +122,7 @@ public class AppDataContext : DbContext, IReadRepository, IWriteRepository
             b.HasOne(u => u.AuthorizedRepresentative)
                 .WithOne()
                 .HasForeignKey<AuthorizedRepresentative>(a => a.Id);
-            b.Navigation(u => u.AuthorizedRepresentative).IsRequired();         
+            b.Navigation(u => u.AuthorizedRepresentative).IsRequired();
         });
 
         modelBuilder.Entity<AssetDocument>()

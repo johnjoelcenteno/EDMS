@@ -6,9 +6,9 @@ public static class ApiEndpoints
 {
     private const string ApiBase = "api";
 
-    public static class RecordTypeMapping
+    public static class RecordTypes
     {
-        private const string Base = $"{ApiBase}/RecordTypeMapping";
+        private const string Base = $"{ApiBase}/RecordTypes";
 
         public const string Create = $"{Base}/Create";
         public const string Update = $"{Base}/{{id:guid}}";
