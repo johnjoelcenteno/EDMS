@@ -11,8 +11,7 @@ public static class SharedServiceProvider
         services.AddScoped<IMenuDataService, MenuDataService>();
         services.AddScoped<IExceptionHandlerService, ExceptionHandlerService>();
         services.AddScoped<IDocumentService, DocumentService>();
-        services.AddScoped<IDpwhIntegrationsService, DpwhIntegrationsService>();
-
+        services.AddScoped<IDpwhIntegrationsService, DpwhIntegrationsService>(); 
         services.AddScoped<NavRx>();
 
         return services;

@@ -5,8 +5,7 @@ namespace DPWH.EDMS.Client.Shared.APIClient.Services.DpwhIntegrations;
 
 public class DpwhIntegrationsService : IDpwhIntegrationsService
 {
-    private readonly DpwhIntegrationsClient _client;
-
+    private readonly DpwhIntegrationsClient _client; 
     public DpwhIntegrationsService(IHttpClientFactory httpClientFactory, ConfigManager configManager)
     {
         var httpClient = httpClientFactory.CreateClient(configManager.BaseApiClientName);
