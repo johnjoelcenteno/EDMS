@@ -19,6 +19,7 @@ public class ViewRequestBase : RxBaseComponent
     protected RecordRequestModel SelectedRecordRequest { get; set; } = new();
     private Dictionary<Guid, string> IdTypesLookup = new Dictionary<Guid, string>();
 
+    protected bool? IsRequestApproved;
 
     protected async override Task OnInitializedAsync()
     {
@@ -70,5 +71,9 @@ public class ViewRequestBase : RxBaseComponent
             return name;
         }
         return "Unknown";
+    }
+    protected void OnCancel()
+    {
+        NavManager.NavigateTo("/request-management");
     }
 }
