@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace DPWH.EDMS.Web.Client.Pages.UserManagement.Model;
+namespace DPWH.EDMS.Client.Shared.Models;
 
-    public class UserManagementModel
+public record UserManagementModel
 {
     [Required(ErrorMessage = "EmployeeID is required")]
     public string EmployeeId { get; set; }
