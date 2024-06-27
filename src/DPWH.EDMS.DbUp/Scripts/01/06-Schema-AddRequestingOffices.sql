@@ -1,7 +1,7 @@
 --Create RequestingOffices table
 IF NOT EXISTS (SELECT *	FROM sysobjects	WHERE name = N'RequestingOffices' AND xtype = 'U')
 BEGIN CREATE TABLE RequestingOffices (
-	Id UNIQUEIDENTIFIER PRIMARY KEY,	
+	Id [nvarchar](50) PRIMARY KEY,	
 	Name NVARCHAR(50) NOT NULL,
 	ParentId [uniqueidentifier] NOT NULL,	
 	NumberCode NVARCHAR(150) NOT NULL,
