@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DPWH.EMDS.Shared\DPWH.EDMS.Client.Shared.csproj" />
+    <ProjectReference Include="..\DPWH.EDMS.Client.Shared\DPWH.EDMS.Client.Shared.csproj" />
   </ItemGroup>
 
 </Project>
