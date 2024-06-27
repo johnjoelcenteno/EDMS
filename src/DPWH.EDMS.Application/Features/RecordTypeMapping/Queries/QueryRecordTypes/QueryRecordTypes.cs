@@ -20,7 +20,7 @@ public class QueryRecordTypes : IRequestHandler<QueryRecordTypesRequest, DataSou
     {
         var result = _readRepository
             .RecordTypesView
-            .Select(x => RecordTypeMappingMappers.Map(x))
+            .Select(x => RecordTypeMappers.Map(x))
             .ToDataSourceResult(request.DataSourceRequest.FixSerialization());
 
         return Task.FromResult(result);

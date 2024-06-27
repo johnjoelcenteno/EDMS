@@ -14,7 +14,7 @@ public static class ApiEndpoints
         public const string Update = $"{Base}/{{id:guid}}";
         public const string Delete = $"{Base}/{{id:guid}}";
         public const string Query = $"{Base}/Query";
-        public const string QueryById = $"{Base}/{{id:guid}}";
+        public const string QueryById = $"{Base}/QueryById/{{id:guid}}";
 
     }
 

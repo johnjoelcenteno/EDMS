@@ -2,6 +2,7 @@
 
 public class QueryRecordTypesModel
 {
+    public Guid Id { get; set; }
     public string Name { get; set; }
     public string Category { get; set; }
     public string Section { get; set; }

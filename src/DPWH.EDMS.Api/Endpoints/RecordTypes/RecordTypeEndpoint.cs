@@ -29,6 +29,21 @@ public static class RecordTypeEndpoints
         .Produces<ProblemDetails>(StatusCodes.Status400BadRequest)
         .Produces<ProblemDetails>(StatusCodes.Status500InternalServerError);
 
+        builder.MapGet(ApiEndpoints.RecordTypes.QueryById, async ([FromRoute] Guid Id, IMediator mediator) =>
+        {
+            var result = await mediator.Send(new QueryRecordTypeByIdRequest(Id));
+            var data = new BaseApiResponse<QueryRecordTypesModel?>(result);
+            return data is null ? Results.NotFound() : Results.Ok(data);
+        })
+        .WithName("Query record types by id")
+        .WithTags(TagName)
+        .WithDescription("Queries record type by id")
+        .WithApiVersionSet(ApiVersioning.VersionSet)
+        .HasApiVersion(1.0)
+        .Produces<BaseApiResponse<QueryRecordTypesModel?>>()
+        .Produces<ProblemDetails>(StatusCodes.Status400BadRequest)
+        .Produces<ProblemDetails>(StatusCodes.Status500InternalServerError);
+
         builder.MapPost(ApiEndpoints.RecordTypes.Query, async (DataSourceRequest request, IMediator mediator, CancellationToken token) =>
         {
             var result = await mediator.Send(new QueryRecordTypesRequest(request), token);
