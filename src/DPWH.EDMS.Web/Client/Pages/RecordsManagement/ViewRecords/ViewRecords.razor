@@ -1,0 +1,64 @@
+﻿@page "/records-management/{Id}/{DocumentId:int}"
+@using DPWH.EDMS.Components.Helpers
+@inherits ViewRecordsBase
+
+<EdmsBreadcrumbs Data="@BreadcrumbItems" />
+
+<h3>Records</h3>
+<div class="d-flex flex-row align-items-center mb-2">
+    <p>Name: @Record.FirstName @Record.LastName </p>
+    @* <span class="role-chip">@Record.Role</span> *@
+</div>
+@* <span>To view associated request </span> <NavLink href="/Personal-data">Click here</NavLink> *@
+<span>
+    (Control Number: <span style="color: #38339B;">@Document.ControlNumber</span>
+    / Date Requested: <span style="color: #38339B;">@(GenericHelper.GetDateDisplay(Document.DateRequested, "MM/dd/yyyy")))</span>
+</span>
+<hr />
+<TelerikCard Width="100%">
+    <CardBody>
+        <div class="d-flex flex-row justify-content-between">
+            <CardTitle Class="headName">@Document.DocumentName</CardTitle>
+        </div>
+        <CardSeparator Class="my-2"></CardSeparator>
+        <div class="container">
+            <div class="d-flex justify-content-end mb-2">
+                <TelerikButton Class="dlButton">Download</TelerikButton>
+            </div>
+            <div class="pdf-placeholder">
+                <CardImage Width="100%" Src="_content/DPWH.EDMS.Components/images/pdf-placeholder.png"></CardImage>
+            </div>
+        </div>
+    </CardBody>
+</TelerikCard>
+
+@code {
+
+}
+<style>
+    .pdf-placeholder {
+        box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+    }
+    .container {
+        width: 50%;
+    }
+
+    .dlButton {
+        background-color: #38339B;
+        color: white;
+    }
+
+    .headName {
+        color: #38339B;
+        margin-bottom: 0;
+    }
+
+    .role-chip {
+        background-color: #38339b;
+        color: #fff;
+        font-size: 12px;
+        border-radius: 25px;
+        padding: 3px 16px;
+        margin: 0 10px;
+    }
+</style>

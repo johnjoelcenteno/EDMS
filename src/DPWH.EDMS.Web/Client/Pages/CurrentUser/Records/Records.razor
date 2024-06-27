@@ -1,12 +1,15 @@
 ﻿@page "/my-records"
-@page "/records-management/{Id}"
 @inherits RecordsBase
 @inject NavigationManager Navigation
 @attribute [Authorize(Policy = "RequireActiveRoles")]
 
 <EdmsBreadcrumbs Data="@BreadcrumbItems" />
 
-<h3>@(Navigation.Uri.Contains("records-management") ? "Records" : "My Records")</h3>
+<h3>My Records</h3>
+<div class="d-flex flex-row align-items-center mb-2">
+    <p>@Record.FirstName @Record.LastName</p>
+    <span class="role-chip">Super Admin</span>
+</div>
 <hr />
 <div class="d-flex flex-row mt-3">
     <TelerikCard Width="100%">
@@ -64,5 +67,14 @@
             font-weight: 500;
             width: 100%;
 
+    }
+
+    .role-chip {
+        background-color: #38339b;
+        color: #fff;
+        font-size: 12px;
+        border-radius: 25px;
+        padding: 3px 16px;
+        margin: 0 10px;
     }
 </style>
