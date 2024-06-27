@@ -7,12 +7,16 @@
   "paths": {
     "/api/addresses": {
       "post": {
-        "tags": ["Address"],
+        "tags": [
+          "Address"
+        ],
         "operationId": "CreateAddress",
         "requestBody": {
           "content": {
             "application/json; api-version=1.0": {
-              "schema": {"$ref": "#/components/schemas/CreateAddressCommand"}
+              "schema": {
+                "$ref": "#/components/schemas/CreateAddressCommand"
+              }
             }
           },
           "required": true
@@ -32,7 +36,9 @@
             "description": "Bad Request",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           },
@@ -40,19 +46,25 @@
             "description": "Server Error",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           }
         }
       },
       "put": {
-        "tags": ["Address"],
+        "tags": [
+          "Address"
+        ],
         "operationId": "UpdateAddress",
         "requestBody": {
           "content": {
             "application/json; api-version=1.0": {
-              "schema": {"$ref": "#/components/schemas/UpdateAddressCommand"}
+              "schema": {
+                "$ref": "#/components/schemas/UpdateAddressCommand"
+              }
             }
           },
           "required": true
@@ -72,7 +84,9 @@
             "description": "Bad Request",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           },
@@ -80,7 +94,9 @@
             "description": "Server Error",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           }
@@ -89,14 +105,18 @@
     },
     "/api/addresses/{id}": {
       "delete": {
-        "tags": ["Address"],
+        "tags": [
+          "Address"
+        ],
         "operationId": "DeleteAddress",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "schema": {"type": "integer"}
+            "schema": {
+              "type": "integer"
+            }
           }
         ],
         "responses": {
@@ -114,7 +134,9 @@
             "description": "Bad Request",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           },
@@ -122,7 +144,9 @@
             "description": "Server Error",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           }
@@ -131,12 +155,16 @@
     },
     "/api/auditlog/query": {
       "post": {
-        "tags": ["AuditLogs"],
+        "tags": [
+          "AuditLogs"
+        ],
         "operationId": "QueryAuditLog",
         "requestBody": {
           "content": {
             "application/json; api-version=1.0": {
-              "schema": {"$ref": "#/components/schemas/DataSourceRequest"}
+              "schema": {
+                "$ref": "#/components/schemas/DataSourceRequest"
+              }
             }
           },
           "required": true
@@ -146,7 +174,9 @@
             "description": "Success",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/DataSourceResult"}
+                "schema": {
+                  "$ref": "#/components/schemas/DataSourceResult"
+                }
               }
             }
           },
@@ -154,7 +184,9 @@
             "description": "Bad Request",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           },
@@ -162,7 +194,9 @@
             "description": "Server Error",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           }
@@ -171,14 +205,18 @@
     },
     "/api/auditlog/{id}": {
       "get": {
-        "tags": ["AuditLogs"],
+        "tags": [
+          "AuditLogs"
+        ],
         "operationId": "GetByEntityIdAuditLog",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "schema": {"type": "string"}
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -196,7 +234,9 @@
             "description": "Bad Request",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           },
@@ -204,7 +244,9 @@
             "description": "Server Error",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           }
@@ -213,7 +255,9 @@
     },
     "/api/datalibraries": {
       "get": {
-        "tags": ["DataLibraries"],
+        "tags": [
+          "DataLibraries"
+        ],
         "operationId": "GetDataLibraries",
         "responses": {
           "200": {
@@ -230,19 +274,25 @@
             "description": "Server Error",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           }
         }
       },
       "post": {
-        "tags": ["DataLibraries"],
+        "tags": [
+          "DataLibraries"
+        ],
         "operationId": "AddDataLibrary",
         "requestBody": {
           "content": {
             "application/json; api-version=1.0": {
-              "schema": {"$ref": "#/components/schemas/AddDataLibraryCommand"}
+              "schema": {
+                "$ref": "#/components/schemas/AddDataLibraryCommand"
+              }
             }
           },
           "required": true
@@ -262,7 +312,9 @@
             "description": "Bad Request",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           },
@@ -270,14 +322,18 @@
             "description": "Server Error",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           }
         }
       },
       "put": {
-        "tags": ["DataLibraries"],
+        "tags": [
+          "DataLibraries"
+        ],
         "operationId": "UpdateDataLibrary",
         "requestBody": {
           "content": {
@@ -304,7 +360,9 @@
             "description": "Bad Request",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           },
@@ -312,7 +370,9 @@
             "description": "Server Error",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           }
@@ -321,14 +381,19 @@
     },
     "/api/datalibraries/{id}": {
       "delete": {
-        "tags": ["DataLibraries"],
+        "tags": [
+          "DataLibraries"
+        ],
         "operationId": "DeleteDataLibrary",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "schema": {"type": "string", "format": "uuid"}
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
           }
         ],
         "responses": {
@@ -346,7 +411,9 @@
             "description": "Bad Request",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           },
@@ -354,21 +421,28 @@
             "description": "Server Error",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           }
         }
       },
       "put": {
-        "tags": ["DataLibraries"],
+        "tags": [
+          "DataLibraries"
+        ],
         "operationId": "RecoverDataLibrary",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "schema": {"type": "string", "format": "uuid"}
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
           }
         ],
         "responses": {
@@ -386,7 +460,9 @@
             "description": "Bad Request",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           },
@@ -394,7 +470,287 @@
             "description": "Server Error",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/datasync/requestingoffices": {
+      "get": {
+        "tags": [
+          "DataSync"
+        ],
+        "operationId": "RequestingOfficeSync",
+        "parameters": [
+          {
+            "name": "enableCleanUp",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "500": {
+            "description": "Server Error",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/datasync/query": {
+      "post": {
+        "tags": [
+          "DataSync"
+        ],
+        "operationId": "QuerySyncedItems",
+        "requestBody": {
+          "content": {
+            "application/json; api-version=1.0": {
+              "schema": {
+                "$ref": "#/components/schemas/DataSourceRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/DataSourceResult"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/datasync/employees/{employeeId}": {
+      "get": {
+        "tags": [
+          "DataSync"
+        ],
+        "operationId": "SyncEmployeeById",
+        "parameters": [
+          {
+            "name": "employeeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmployeeBaseApiResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/datasync/agencies": {
+      "get": {
+        "tags": [
+          "DataSync"
+        ],
+        "operationId": "AgenciesSync",
+        "parameters": [
+          {
+            "name": "enableCleanUp",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "500": {
+            "description": "Server Error",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/datasync/arcgis": {
+      "post": {
+        "tags": [
+          "DataSync"
+        ],
+        "operationId": "ArcgisSync",
+        "parameters": [
+          {
+            "name": "EnableCleanup",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "serviceName",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "layerId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "regionId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "500": {
+            "description": "Server Error",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/datasync/pis-locations": {
+      "get": {
+        "tags": [
+          "DataSync"
+        ],
+        "operationId": "PisLocationsSync",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/StringBaseApiResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           }
@@ -403,14 +759,18 @@
     },
     "/api/dpwhintegrations/employees/{employeeId}": {
       "get": {
-        "tags": ["DpwhIntegrations"],
+        "tags": [
+          "DpwhIntegrations"
+        ],
         "operationId": "GetEmployeeById",
         "parameters": [
           {
             "name": "employeeId",
             "in": "path",
             "required": true,
-            "schema": {"type": "string"}
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -424,12 +784,16 @@
               }
             }
           },
-          "404": {"description": "Not Found"},
+          "404": {
+            "description": "Not Found"
+          },
           "400": {
             "description": "Bad Request",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           },
@@ -437,7 +801,9 @@
             "description": "Server Error",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           }
@@ -446,14 +812,18 @@
     },
     "/api/dpwhintegrations/employees/{employeeId}/raw": {
       "get": {
-        "tags": ["DpwhIntegrations"],
+        "tags": [
+          "DpwhIntegrations"
+        ],
         "operationId": "GetEmployeeByIdRaw",
         "parameters": [
           {
             "name": "employeeId",
             "in": "path",
             "required": true,
-            "schema": {"type": "string"}
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -471,7 +841,9 @@
             "description": "Bad Request",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           },
@@ -479,7 +851,9 @@
             "description": "Server Error",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           }
@@ -488,7 +862,9 @@
     },
     "/api/dpwhintegrations/positions": {
       "get": {
-        "tags": ["DpwhIntegrations"],
+        "tags": [
+          "DpwhIntegrations"
+        ],
         "operationId": "GetPositions",
         "responses": {
           "200": {
@@ -505,7 +881,9 @@
             "description": "Bad Request",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           },
@@ -513,7 +891,9 @@
             "description": "Server Error",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           }
@@ -522,16 +902,26 @@
     },
     "/api/dpwhintegrations/georegions/{type}/{id}": {
       "get": {
-        "tags": ["DpwhIntegrations"],
+        "tags": [
+          "DpwhIntegrations"
+        ],
         "operationId": "GetGeoRegions",
         "parameters": [
           {
             "name": "type",
             "in": "path",
             "required": true,
-            "schema": {"type": "string"}
+            "schema": {
+              "type": "string"
+            }
           },
-          { "name": "parentId", "in": "query", "schema": {"type": "string"} }
+          {
+            "name": "parentId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
         ],
         "responses": {
           "200": {
@@ -548,7 +938,9 @@
             "description": "Bad Request",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           },
@@ -556,7 +948,9 @@
             "description": "Server Error",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           }
@@ -565,7 +959,9 @@
     },
     "/api/dpwhintegrations/requestingoffices": {
       "get": {
-        "tags": ["DpwhIntegrations"],
+        "tags": [
+          "DpwhIntegrations"
+        ],
         "operationId": "GetRequestingOffices",
         "responses": {
           "200": {
@@ -582,7 +978,9 @@
             "description": "Bad Request",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           },
@@ -590,7 +988,9 @@
             "description": "Server Error",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           }
@@ -599,12 +999,16 @@
     },
     "/api/EmployeeRecords/Query": {
       "post": {
-        "tags": ["EmployeeRecords"],
+        "tags": [
+          "EmployeeRecords"
+        ],
         "operationId": "Query employee request",
         "requestBody": {
           "content": {
             "application/json; api-version=1.0": {
-              "schema": {"$ref": "#/components/schemas/DataSourceRequest"}
+              "schema": {
+                "$ref": "#/components/schemas/DataSourceRequest"
+              }
             }
           },
           "required": true
@@ -624,7 +1028,9 @@
             "description": "Not Found",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/DataSourceResult"}
+                "schema": {
+                  "$ref": "#/components/schemas/DataSourceResult"
+                }
               }
             }
           },
@@ -632,7 +1038,9 @@
             "description": "Bad Request",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           },
@@ -640,7 +1048,9 @@
             "description": "Server Error",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           }
@@ -649,14 +1059,19 @@
     },
     "/api/EmployeeRecords/{id}": {
       "get": {
-        "tags": ["EmployeeRecords"],
+        "tags": [
+          "EmployeeRecords"
+        ],
         "operationId": "Query employee request by id",
         "parameters": [
           {
             "name": "employeeRecordId",
             "in": "query",
             "required": true,
-            "schema": {"type": "string", "format": "uuid"}
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
           }
         ],
         "responses": {
@@ -673,14 +1088,20 @@
           "404": {
             "description": "Not Found",
             "content": {
-              "text/plain; api-version=1.0": { "schema": {"type": "string"} }
+              "text/plain; api-version=1.0": {
+                "schema": {
+                  "type": "string"
+                }
+              }
             }
           },
           "400": {
             "description": "Bad Request",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           },
@@ -688,21 +1109,28 @@
             "description": "Server Error",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           }
         }
       },
       "put": {
-        "tags": ["EmployeeRecords"],
+        "tags": [
+          "EmployeeRecords"
+        ],
         "operationId": "Update employee",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "schema": {"type": "string", "format": "uuid"}
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
           }
         ],
         "requestBody": {
@@ -730,7 +1158,10 @@
             "description": "Not Found",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"type": "string", "format": "uuid"}
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
               }
             }
           },
@@ -738,7 +1169,9 @@
             "description": "Bad Request",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           },
@@ -746,21 +1179,28 @@
             "description": "Server Error",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           }
         }
       },
       "delete": {
-        "tags": ["EmployeeRecords"],
+        "tags": [
+          "EmployeeRecords"
+        ],
         "operationId": "Delete Employee",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "schema": {"type": "string", "format": "uuid"}
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
           }
         ],
         "responses": {
@@ -778,7 +1218,10 @@
             "description": "Not Found",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"type": "string", "format": "uuid"}
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
               }
             }
           },
@@ -786,7 +1229,9 @@
             "description": "Bad Request",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           },
@@ -794,7 +1239,9 @@
             "description": "Server Error",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           }
@@ -803,7 +1250,9 @@
     },
     "/api/EmployeeRecords": {
       "post": {
-        "tags": ["EmployeeRecords"],
+        "tags": [
+          "EmployeeRecords"
+        ],
         "operationId": "Create Employee",
         "requestBody": {
           "content": {
@@ -830,7 +1279,10 @@
             "description": "Not Found",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"type": "string", "format": "uuid"}
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
               }
             }
           },
@@ -838,7 +1290,9 @@
             "description": "Bad Request",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           },
@@ -846,7 +1300,9 @@
             "description": "Server Error",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           }
@@ -855,7 +1311,9 @@
     },
     "/api/licenses/status": {
       "get": {
-        "tags": ["Licenses"],
+        "tags": [
+          "Licenses"
+        ],
         "operationId": "GetLicenseStatus",
         "responses": {
           "200": {
@@ -872,7 +1330,9 @@
             "description": "Bad Request",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           },
@@ -880,7 +1340,9 @@
             "description": "Server Error",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           }
@@ -889,14 +1351,18 @@
     },
     "/api/lookups": {
       "get": {
-        "tags": ["Lookups"],
+        "tags": [
+          "Lookups"
+        ],
         "operationId": "Lookups",
         "responses": {
           "200": {
             "description": "Success",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/CommonLookup"}
+                "schema": {
+                  "$ref": "#/components/schemas/CommonLookup"
+                }
               }
             }
           }
@@ -905,14 +1371,18 @@
     },
     "/api/lookups/regions": {
       "get": {
-        "tags": ["Lookups"],
+        "tags": [
+          "Lookups"
+        ],
         "operationId": "GetRegions",
         "responses": {
           "200": {
             "description": "Success",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/AddressLookup"}
+                "schema": {
+                  "$ref": "#/components/schemas/AddressLookup"
+                }
               }
             }
           }
@@ -921,14 +1391,18 @@
     },
     "/api/lookups/regions/{regionCode}/provinces": {
       "get": {
-        "tags": ["Lookups"],
+        "tags": [
+          "Lookups"
+        ],
         "operationId": "GetProvinces",
         "parameters": [
           {
             "name": "regionCode",
             "in": "path",
             "required": true,
-            "schema": {"type": "string"}
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -936,7 +1410,9 @@
             "description": "Success",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/AddressLookup"}
+                "schema": {
+                  "$ref": "#/components/schemas/AddressLookup"
+                }
               }
             }
           }
@@ -945,14 +1421,18 @@
     },
     "/api/lookups/provinces/{provinceCode}/cities-municipalities": {
       "get": {
-        "tags": ["Lookups"],
+        "tags": [
+          "Lookups"
+        ],
         "operationId": "GetCityOrMunicipalities",
         "parameters": [
           {
             "name": "provinceCode",
             "in": "path",
             "required": true,
-            "schema": {"type": "string"}
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -960,7 +1440,9 @@
             "description": "Success",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/AddressLookup"}
+                "schema": {
+                  "$ref": "#/components/schemas/AddressLookup"
+                }
               }
             }
           }
@@ -969,14 +1451,18 @@
     },
     "/api/lookups/cities-municipalities/{cityOrMunicipalityCode}/barangays": {
       "get": {
-        "tags": ["Lookups"],
+        "tags": [
+          "Lookups"
+        ],
         "operationId": "GetBarangays",
         "parameters": [
           {
             "name": "cityOrMunicipalityCode",
             "in": "path",
             "required": true,
-            "schema": {"type": "string"}
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -984,7 +1470,9 @@
             "description": "Success",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/AddressLookup"}
+                "schema": {
+                  "$ref": "#/components/schemas/AddressLookup"
+                }
               }
             }
           }
@@ -993,7 +1481,9 @@
     },
     "/api/lookups/agencies": {
       "get": {
-        "tags": ["Lookups"],
+        "tags": [
+          "Lookups"
+        ],
         "operationId": "GetAgencyList",
         "responses": {
           "200": {
@@ -1010,7 +1500,9 @@
             "description": "Bad Request",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           },
@@ -1018,7 +1510,9 @@
             "description": "Server Error",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           }
@@ -1027,7 +1521,9 @@
     },
     "/api/lookups/requestingoffices": {
       "get": {
-        "tags": ["Lookups"],
+        "tags": [
+          "Lookups"
+        ],
         "operationId": "GetRequestingOfficeList",
         "responses": {
           "200": {
@@ -1044,7 +1540,9 @@
             "description": "Bad Request",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           },
@@ -1052,7 +1550,9 @@
             "description": "Server Error",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           }
@@ -1061,7 +1561,9 @@
     },
     "/api/lookups/recordtypes": {
       "get": {
-        "tags": ["Lookups"],
+        "tags": [
+          "Lookups"
+        ],
         "operationId": "GetRecordTypes",
         "responses": {
           "200": {
@@ -1078,7 +1580,9 @@
             "description": "Server Error",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           }
@@ -1087,7 +1591,9 @@
     },
     "/api/lookups/validids": {
       "get": {
-        "tags": ["Lookups"],
+        "tags": [
+          "Lookups"
+        ],
         "operationId": "GetValidIDs",
         "responses": {
           "200": {
@@ -1104,7 +1610,9 @@
             "description": "Server Error",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           }
@@ -1113,7 +1621,9 @@
     },
     "/api/lookups/secondaryids": {
       "get": {
-        "tags": ["Lookups"],
+        "tags": [
+          "Lookups"
+        ],
         "operationId": "GetSecondaryIDs",
         "responses": {
           "200": {
@@ -1130,7 +1640,9 @@
             "description": "Server Error",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           }
@@ -1139,7 +1651,9 @@
     },
     "/api/lookups/authorizationdocuments": {
       "get": {
-        "tags": ["Lookups"],
+        "tags": [
+          "Lookups"
+        ],
         "operationId": "GetAuthorizationDocuments",
         "responses": {
           "200": {
@@ -1156,7 +1670,9 @@
             "description": "Server Error",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           }
@@ -1165,14 +1681,19 @@
     },
     "/api/recordrequests/{id}": {
       "get": {
-        "tags": ["RecordRequests"],
+        "tags": [
+          "RecordRequests"
+        ],
         "operationId": "GetRecordRequest",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "schema": {"type": "string", "format": "uuid"}
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
           }
         ],
         "responses": {
@@ -1186,18 +1707,24 @@
               }
             }
           },
-          "404": {"description": "Not Found"}
+          "404": {
+            "description": "Not Found"
+          }
         }
       }
     },
     "/api/recordrequests/query": {
       "post": {
-        "tags": ["RecordRequests"],
+        "tags": [
+          "RecordRequests"
+        ],
         "operationId": "QueryRecordRequests",
         "requestBody": {
           "content": {
             "application/json; api-version=1.0": {
-              "schema": {"$ref": "#/components/schemas/DataSourceRequest"}
+              "schema": {
+                "$ref": "#/components/schemas/DataSourceRequest"
+              }
             }
           },
           "required": true
@@ -1207,7 +1734,9 @@
             "description": "Success",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/DataSourceResult"}
+                "schema": {
+                  "$ref": "#/components/schemas/DataSourceResult"
+                }
               }
             }
           },
@@ -1215,7 +1744,9 @@
             "description": "Bad Request",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           },
@@ -1223,7 +1754,9 @@
             "description": "Server Error",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           }
@@ -1232,20 +1765,26 @@
     },
     "/api/recordrequests/query/{employeeId}": {
       "post": {
-        "tags": ["RecordRequests"],
+        "tags": [
+          "RecordRequests"
+        ],
         "operationId": "QueryRecordRequestsByEmployeeId",
         "parameters": [
           {
             "name": "employeeId",
             "in": "path",
             "required": true,
-            "schema": {"type": "string"}
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "requestBody": {
           "content": {
             "application/json; api-version=1.0": {
-              "schema": {"$ref": "#/components/schemas/DataSourceRequest"}
+              "schema": {
+                "$ref": "#/components/schemas/DataSourceRequest"
+              }
             }
           },
           "required": true
@@ -1255,7 +1794,9 @@
             "description": "Success",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/DataSourceResult"}
+                "schema": {
+                  "$ref": "#/components/schemas/DataSourceResult"
+                }
               }
             }
           },
@@ -1263,7 +1804,9 @@
             "description": "Bad Request",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           },
@@ -1271,7 +1814,9 @@
             "description": "Server Error",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           }
@@ -1280,12 +1825,16 @@
     },
     "/api/recordrequests/create": {
       "post": {
-        "tags": ["RecordRequests"],
+        "tags": [
+          "RecordRequests"
+        ],
         "operationId": "CreateRecordRequest",
         "requestBody": {
           "content": {
             "application/json; api-version=1.0": {
-              "schema": {"$ref": "#/components/schemas/CreateRecordRequest"}
+              "schema": {
+                "$ref": "#/components/schemas/CreateRecordRequest"
+              }
             }
           },
           "required": true
@@ -1295,7 +1844,9 @@
             "description": "Success",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/CreateResponse"}
+                "schema": {
+                  "$ref": "#/components/schemas/CreateResponse"
+                }
               }
             }
           },
@@ -1303,7 +1854,9 @@
             "description": "Bad Request",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           },
@@ -1311,7 +1864,9 @@
             "description": "Server Error",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           }
@@ -1320,14 +1875,18 @@
     },
     "/api/recordrequests/update": {
       "put": {
-        "tags": ["RecordRequests"],
+        "tags": [
+          "RecordRequests"
+        ],
         "operationId": "Update document request",
         "parameters": [
           {
             "name": "employeeId",
             "in": "query",
             "required": true,
-            "schema": {"type": "string"}
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -1344,14 +1903,20 @@
           "404": {
             "description": "Not Found",
             "content": {
-              "text/plain; api-version=1.0": { "schema": {"type": "string"} }
+              "text/plain; api-version=1.0": {
+                "schema": {
+                  "type": "string"
+                }
+              }
             }
           },
           "400": {
             "description": "Bad Request",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           },
@@ -1359,7 +1924,9 @@
             "description": "Server Error",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           }
@@ -1368,14 +1935,19 @@
     },
     "/api/recordrequests/delete": {
       "delete": {
-        "tags": ["RecordRequests"],
+        "tags": [
+          "RecordRequests"
+        ],
         "operationId": "DeleteRecordRequest",
         "parameters": [
           {
             "name": "id",
             "in": "query",
             "required": true,
-            "schema": {"type": "string", "format": "uuid"}
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
           }
         ],
         "responses": {
@@ -1383,21 +1955,29 @@
             "description": "Success",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/DeleteResponse"}
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteResponse"
+                }
               }
             }
           },
           "404": {
             "description": "Not Found",
             "content": {
-              "text/plain; api-version=1.0": { "schema": {"type": "string"} }
+              "text/plain; api-version=1.0": {
+                "schema": {
+                  "type": "string"
+                }
+              }
             }
           },
           "500": {
             "description": "Server Error",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           }
@@ -1406,26 +1986,43 @@
     },
     "/api/recordrequests/supportingfiles": {
       "post": {
-        "tags": ["RecordRequestSupportingFiles"],
+        "tags": [
+          "RecordRequestSupportingFiles"
+        ],
         "operationId": "UploadSupportingFile",
         "requestBody": {
           "content": {
             "multipart/form-data": {
               "schema": {
-                "required": ["DocumentType", "DocumentTypeId"],
+                "required": [
+                  "DocumentType",
+                  "DocumentTypeId"
+                ],
                 "type": "object",
                 "properties": {
-                  "Document": {"type": "string", "format": "binary"},
+                  "Document": {
+                    "type": "string",
+                    "format": "binary"
+                  },
                   "DocumentType": {
                     "$ref": "#/components/schemas/RecordRequestProvidedDocumentTypes"
                   },
-                  "DocumentTypeId": {"type": "string", "format": "uuid"}
+                  "DocumentTypeId": {
+                    "type": "string",
+                    "format": "uuid"
+                  }
                 }
               },
               "encoding": {
-                "Document"      : {"style": "form"},
-                "DocumentType"  : {"style": "form"},
-                "DocumentTypeId": {"style": "form"}
+                "Document": {
+                  "style": "form"
+                },
+                "DocumentType": {
+                  "style": "form"
+                },
+                "DocumentTypeId": {
+                  "style": "form"
+                }
               }
             }
           }
@@ -1435,7 +2032,9 @@
             "description": "Success",
             "content": {
               "application/json": {
-                "schema": {"$ref": "#/components/schemas/CreateResponse"}
+                "schema": {
+                  "$ref": "#/components/schemas/CreateResponse"
+                }
               }
             }
           },
@@ -1454,14 +2053,19 @@
     },
     "/api/recordrequests/supportingfiles/{id}": {
       "get": {
-        "tags": ["RecordRequestSupportingFiles"],
+        "tags": [
+          "RecordRequestSupportingFiles"
+        ],
         "operationId": "GetSupportingFileById",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "schema": {"type": "string", "format": "uuid"}
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
           }
         ],
         "responses": {
@@ -1490,14 +2094,19 @@
     },
     "/api/records/{id}": {
       "get": {
-        "tags": ["Records Management"],
+        "tags": [
+          "Records Management"
+        ],
         "operationId": "GetRecordById",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "schema": {"type": "string", "format": "uuid"}
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
           }
         ],
         "responses": {
@@ -1511,18 +2120,24 @@
               }
             }
           },
-          "404": {"description": "Not Found"}
+          "404": {
+            "description": "Not Found"
+          }
         }
       }
     },
     "/api/records/query": {
       "post": {
-        "tags": ["Records Management"],
+        "tags": [
+          "Records Management"
+        ],
         "operationId": "QueryRecords",
         "requestBody": {
           "content": {
             "application/json; api-version=1.0": {
-              "schema": {"$ref": "#/components/schemas/DataSourceRequest"}
+              "schema": {
+                "$ref": "#/components/schemas/DataSourceRequest"
+              }
             }
           },
           "required": true
@@ -1532,7 +2147,9 @@
             "description": "Success",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/DataSourceResult"}
+                "schema": {
+                  "$ref": "#/components/schemas/DataSourceResult"
+                }
               }
             }
           },
@@ -1540,7 +2157,9 @@
             "description": "Bad Request",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           },
@@ -1548,7 +2167,9 @@
             "description": "Server Error",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           }
@@ -1557,20 +2178,26 @@
     },
     "/api/records/query/{employeeId}": {
       "post": {
-        "tags": ["Records Management"],
+        "tags": [
+          "Records Management"
+        ],
         "operationId": "QueryRecordsByEmployeeId",
         "parameters": [
           {
             "name": "employeeId",
             "in": "path",
             "required": true,
-            "schema": {"type": "string"}
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "requestBody": {
           "content": {
             "application/json; api-version=1.0": {
-              "schema": {"$ref": "#/components/schemas/DataSourceRequest"}
+              "schema": {
+                "$ref": "#/components/schemas/DataSourceRequest"
+              }
             }
           },
           "required": true
@@ -1580,7 +2207,9 @@
             "description": "Success",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/DataSourceResult"}
+                "schema": {
+                  "$ref": "#/components/schemas/DataSourceResult"
+                }
               }
             }
           },
@@ -1588,7 +2217,9 @@
             "description": "Bad Request",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           },
@@ -1596,7 +2227,9 @@
             "description": "Server Error",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           }
@@ -1605,12 +2238,16 @@
     },
     "/api/records/create": {
       "post": {
-        "tags": ["Records Management"],
+        "tags": [
+          "Records Management"
+        ],
         "operationId": "CreateRecord",
         "requestBody": {
           "content": {
             "application/json; api-version=1.0": {
-              "schema": {"$ref": "#/components/schemas/CreateRecordModel"}
+              "schema": {
+                "$ref": "#/components/schemas/CreateRecordModel"
+              }
             }
           },
           "required": true
@@ -1620,7 +2257,9 @@
             "description": "Success",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/CreateResponse"}
+                "schema": {
+                  "$ref": "#/components/schemas/CreateResponse"
+                }
               }
             }
           },
@@ -1628,7 +2267,9 @@
             "description": "Bad Request",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           },
@@ -1636,7 +2277,9 @@
             "description": "Server Error",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           }
@@ -1645,14 +2288,19 @@
     },
     "/api/records/delete": {
       "delete": {
-        "tags": ["Records Management"],
+        "tags": [
+          "Records Management"
+        ],
         "operationId": "DeleteRecord",
         "parameters": [
           {
             "name": "id",
             "in": "query",
             "required": true,
-            "schema": {"type": "string", "format": "uuid"}
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
           }
         ],
         "responses": {
@@ -1660,21 +2308,239 @@
             "description": "Success",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/DeleteResponse"}
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteResponse"
+                }
               }
             }
           },
           "404": {
             "description": "Not Found",
             "content": {
-              "text/plain; api-version=1.0": { "schema": {"type": "string"} }
+              "text/plain; api-version=1.0": {
+                "schema": {
+                  "type": "string"
+                }
+              }
             }
           },
           "500": {
             "description": "Server Error",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/RecordTypes/Create": {
+      "post": {
+        "tags": [
+          "RecordTypes"
+        ],
+        "operationId": "Create record type",
+        "requestBody": {
+          "content": {
+            "application/json; api-version=1.0": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRecordTypeModel"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/GuidBaseApiResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/RecordTypes/Query": {
+      "post": {
+        "tags": [
+          "RecordTypes"
+        ],
+        "operationId": "Query record type",
+        "requestBody": {
+          "content": {
+            "application/json; api-version=1.0": {
+              "schema": {
+                "$ref": "#/components/schemas/DataSourceRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/DataSourceResultBaseApiResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/RecordTypes/{id}": {
+      "put": {
+        "tags": [
+          "RecordTypes"
+        ],
+        "operationId": "Update record type",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json; api-version=1.0": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateRecordTypeModel"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/GuidNullableBaseApiResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "RecordTypes"
+        ],
+        "operationId": "Delete record type",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/GuidNullableBaseApiResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           }
@@ -1683,12 +2549,16 @@
     },
     "/api/roles/query": {
       "post": {
-        "tags": ["Roles"],
+        "tags": [
+          "Roles"
+        ],
         "operationId": "QueryRoles",
         "requestBody": {
           "content": {
             "application/json; api-version=1.0": {
-              "schema": {"$ref": "#/components/schemas/DataSourceRequest"}
+              "schema": {
+                "$ref": "#/components/schemas/DataSourceRequest"
+              }
             }
           },
           "required": true
@@ -1698,7 +2568,9 @@
             "description": "Success",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/DataSourceResult"}
+                "schema": {
+                  "$ref": "#/components/schemas/DataSourceResult"
+                }
               }
             }
           },
@@ -1706,7 +2578,9 @@
             "description": "Server Error",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           }
@@ -1715,12 +2589,16 @@
     },
     "/api/system/create": {
       "post": {
-        "tags": ["System"],
+        "tags": [
+          "System"
+        ],
         "operationId": "CreateSystemLogs",
         "requestBody": {
           "content": {
             "application/json; api-version=1.0": {
-              "schema": {"$ref": "#/components/schemas/CreateSystemLogsRequest"}
+              "schema": {
+                "$ref": "#/components/schemas/CreateSystemLogsRequest"
+              }
             }
           },
           "required": true
@@ -1730,7 +2608,9 @@
             "description": "Success",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/CreateResponse"}
+                "schema": {
+                  "$ref": "#/components/schemas/CreateResponse"
+                }
               }
             }
           },
@@ -1749,14 +2629,19 @@
     },
     "/api/system/{id}": {
       "get": {
-        "tags": ["System"],
+        "tags": [
+          "System"
+        ],
         "operationId": "GetSystemLog",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "schema": {"type": "string", "format": "uuid"}
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
           }
         ],
         "responses": {
@@ -1764,7 +2649,9 @@
             "description": "Success",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/SystemLogsResponse"}
+                "schema": {
+                  "$ref": "#/components/schemas/SystemLogsResponse"
+                }
               }
             }
           },
@@ -1781,20 +2668,27 @@
         }
       },
       "put": {
-        "tags": ["System"],
+        "tags": [
+          "System"
+        ],
         "operationId": "UpdateSystemLog",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "schema": {"type": "string", "format": "uuid"}
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
           }
         ],
         "requestBody": {
           "content": {
             "application/json; api-version=1.0": {
-              "schema": {"$ref": "#/components/schemas/UpdateSystemLogsRequest"}
+              "schema": {
+                "$ref": "#/components/schemas/UpdateSystemLogsRequest"
+              }
             }
           },
           "required": true
@@ -1804,7 +2698,9 @@
             "description": "Success",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/UpdateResponse"}
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateResponse"
+                }
               }
             }
           },
@@ -1812,21 +2708,28 @@
             "description": "Not Found",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/UpdateResponse"}
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateResponse"
+                }
               }
             }
           }
         }
       },
       "delete": {
-        "tags": ["System"],
+        "tags": [
+          "System"
+        ],
         "operationId": "DeleteSystemLog",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "schema": {"type": "string", "format": "uuid"}
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
           }
         ],
         "responses": {
@@ -1834,7 +2737,9 @@
             "description": "Success",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/DeleteResponse"}
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteResponse"
+                }
               }
             }
           },
@@ -1842,7 +2747,9 @@
             "description": "Not Found",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/DeleteResponse"}
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteResponse"
+                }
               }
             }
           }
@@ -1851,12 +2758,16 @@
     },
     "/api/system/query": {
       "post": {
-        "tags": ["System"],
+        "tags": [
+          "System"
+        ],
         "operationId": "QuerySystemLogs",
         "requestBody": {
           "content": {
             "application/json; api-version=1.0": {
-              "schema": {"$ref": "#/components/schemas/DataSourceRequest"}
+              "schema": {
+                "$ref": "#/components/schemas/DataSourceRequest"
+              }
             }
           },
           "required": true
@@ -1866,7 +2777,9 @@
             "description": "Success",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/DataSourceResult"}
+                "schema": {
+                  "$ref": "#/components/schemas/DataSourceResult"
+                }
               }
             }
           },
@@ -1874,7 +2787,9 @@
             "description": "Not Found",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/DataSourceResult"}
+                "schema": {
+                  "$ref": "#/components/schemas/DataSourceResult"
+                }
               }
             }
           }
@@ -1883,14 +2798,19 @@
     },
     "/api/users/{id}": {
       "get": {
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "operationId": "GetUserById",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "schema": {"type": "string", "format": "uuid"}
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
           }
         ],
         "responses": {
@@ -1908,7 +2828,9 @@
             "description": "Bad Request",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           },
@@ -1916,21 +2838,28 @@
             "description": "Server Error",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           }
         }
       },
       "delete": {
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "operationId": "DeleteUser",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "schema": {"type": "string", "format": "uuid"}
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
           }
         ],
         "responses": {
@@ -1948,7 +2877,9 @@
             "description": "Bad Request",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           },
@@ -1956,27 +2887,36 @@
             "description": "Server Error",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           }
         }
       },
       "put": {
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "operationId": "UpdateUser",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "schema": {"type": "string", "format": "uuid"}
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
           }
         ],
         "requestBody": {
           "content": {
             "application/json; api-version=1.0": {
-              "schema": {"$ref": "#/components/schemas/UpdateUserCommand"}
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUserCommand"
+              }
             }
           },
           "required": true
@@ -1996,7 +2936,9 @@
             "description": "Bad Request",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           },
@@ -2004,7 +2946,9 @@
             "description": "Server Error",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           }
@@ -2013,14 +2957,18 @@
     },
     "/api/users/{employeeId}": {
       "get": {
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "operationId": "GetUserByEmployeeId",
         "parameters": [
           {
             "name": "employeeId",
             "in": "path",
             "required": true,
-            "schema": {"type": "string"}
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -2038,7 +2986,9 @@
             "description": "Bad Request",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           },
@@ -2046,7 +2996,9 @@
             "description": "Server Error",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           }
@@ -2055,12 +3007,16 @@
     },
     "/api/users": {
       "post": {
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "operationId": "CreateUser",
         "requestBody": {
           "content": {
             "application/json; api-version=1.0": {
-              "schema": {"$ref": "#/components/schemas/CreateUserCommand"}
+              "schema": {
+                "$ref": "#/components/schemas/CreateUserCommand"
+              }
             }
           },
           "required": true
@@ -2080,7 +3036,9 @@
             "description": "Bad Request",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           },
@@ -2088,7 +3046,9 @@
             "description": "Server Error",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           }
@@ -2097,7 +3057,9 @@
     },
     "/api/users/createwithrole": {
       "post": {
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "operationId": "CreateUserWithRole",
         "requestBody": {
           "content": {
@@ -2124,7 +3086,9 @@
             "description": "Bad Request",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           },
@@ -2132,7 +3096,9 @@
             "description": "Server Error",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           }
@@ -2141,12 +3107,16 @@
     },
     "/api/users/query": {
       "post": {
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "operationId": "QueryUsers",
         "requestBody": {
           "content": {
             "application/json; api-version=1.0": {
-              "schema": {"$ref": "#/components/schemas/DataSourceRequest"}
+              "schema": {
+                "$ref": "#/components/schemas/DataSourceRequest"
+              }
             }
           },
           "required": true
@@ -2156,7 +3126,9 @@
             "description": "Success",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/DataSourceResult"}
+                "schema": {
+                  "$ref": "#/components/schemas/DataSourceResult"
+                }
               }
             }
           },
@@ -2164,7 +3136,9 @@
             "description": "Bad Request",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           },
@@ -2172,7 +3146,9 @@
             "description": "Server Error",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           }
@@ -2181,12 +3157,16 @@
     },
     "/api/users/deactivate": {
       "post": {
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "operationId": "DeactivateUser",
         "requestBody": {
           "content": {
             "application/json; api-version=1.0": {
-              "schema": {"$ref": "#/components/schemas/DeactivateUserCommand"}
+              "schema": {
+                "$ref": "#/components/schemas/DeactivateUserCommand"
+              }
             }
           },
           "required": true
@@ -2206,7 +3186,9 @@
             "description": "Bad Request",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           },
@@ -2214,7 +3196,9 @@
             "description": "Server Error",
             "content": {
               "application/json; api-version=1.0": {
-                "schema": {"$ref": "#/components/schemas/ProblemDetails"}
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
               }
             }
           }
@@ -2227,35 +3211,58 @@
       "AddDataLibraryCommand": {
         "type": "object",
         "properties": {
-          "type" : {"$ref": "#/components/schemas/DataLibraryTypes"},
-          "value": {"type": "string", "nullable": true}
+          "type": {
+            "$ref": "#/components/schemas/DataLibraryTypes"
+          },
+          "value": {
+            "type": "string",
+            "nullable": true
+          }
         },
         "additionalProperties": false
       },
       "AddDataLibraryResult": {
         "type": "object",
         "properties": {
-          "id"   : {"type": "string", "format": "uuid"                  },
-          "type" : {"type": "string",                   "nullable": true},
-          "value": {"type": "string",                   "nullable": true}
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "value": {
+            "type": "string",
+            "nullable": true
+          }
         },
         "additionalProperties": false
       },
       "AddDataLibraryResultBaseApiResponse": {
         "type": "object",
         "properties": {
-          "success": {"type": "boolean"}                                  ,
-          "data"   : {"$ref": "#/components/schemas/AddDataLibraryResult"}
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "$ref": "#/components/schemas/AddDataLibraryResult"
+          }
         },
         "additionalProperties": false
       },
       "AddressLookup": {
         "type": "object",
         "properties": {
-          "key": {"type": "string", "nullable": true},
+          "key": {
+            "type": "string",
+            "nullable": true
+          },
           "addressData": {
             "type": "array",
-            "items": {"$ref": "#/components/schemas/SimpleKeyValueAddress"},
+            "items": {
+              "$ref": "#/components/schemas/SimpleKeyValueAddress"
+            },
             "nullable": true
           }
         },
@@ -2264,23 +3271,42 @@
       "Aggregator": {
         "type": "object",
         "properties": {
-          "field"    : {"type": "string", "nullable": true},
-          "aggregate": {"type": "string", "nullable": true}
+          "field": {
+            "type": "string",
+            "nullable": true
+          },
+          "aggregate": {
+            "type": "string",
+            "nullable": true
+          }
         },
         "additionalProperties": false
       },
       "AuthorizedRepresentativeModel": {
         "type": "object",
         "properties": {
-          "representativeName": {"type": "string", "nullable": true},
-          "validId": {"type": "string", "format": "uuid", "nullable": true},
-          "validIdUri": {"type": "string", "nullable": true},
+          "representativeName": {
+            "type": "string",
+            "nullable": true
+          },
+          "validId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "validIdUri": {
+            "type": "string",
+            "nullable": true
+          },
           "supportingDocument": {
             "type": "string",
             "format": "uuid",
             "nullable": true
           },
-          "supportingDocumentUri": {"type": "string", "nullable": true}
+          "supportingDocumentUri": {
+            "type": "string",
+            "nullable": true
+          }
         },
         "additionalProperties": false
       },
@@ -2289,12 +3315,16 @@
         "properties": {
           "lookups": {
             "type": "array",
-            "items": {"$ref": "#/components/schemas/Lookup"},
+            "items": {
+              "$ref": "#/components/schemas/Lookup"
+            },
             "nullable": true
           },
           "addressLookups": {
             "type": "array",
-            "items": {"$ref": "#/components/schemas/AddressLookup"},
+            "items": {
+              "$ref": "#/components/schemas/AddressLookup"
+            },
             "nullable": true
           }
         },
@@ -2303,50 +3333,107 @@
       "CreateAddressCommand": {
         "type": "object",
         "properties": {
-          "id"      : {"type": "string", "nullable": true}             ,
-          "name"    : {"type": "string", "nullable": true}             ,
-          "type"    : {"$ref": "#/components/schemas/GeoLocationTypes"},
-          "parentId": {"type": "string", "nullable": true}
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "type": {
+            "$ref": "#/components/schemas/GeoLocationTypes"
+          },
+          "parentId": {
+            "type": "string",
+            "nullable": true
+          }
         },
         "additionalProperties": false
       },
       "CreateAddressResult": {
         "type": "object",
         "properties": {
-          "id"      : {"type": "string", "nullable": true},
-          "name"    : {"type": "string", "nullable": true},
-          "type"    : {"type": "string", "nullable": true},
-          "parentId": {"type": "string", "nullable": true}
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "parentId": {
+            "type": "string",
+            "nullable": true
+          }
         },
         "additionalProperties": false
       },
       "CreateAddressResultBaseApiResponse": {
         "type": "object",
         "properties": {
-          "success": {"type": "boolean"}                                 ,
-          "data"   : {"$ref": "#/components/schemas/CreateAddressResult"}
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "$ref": "#/components/schemas/CreateAddressResult"
+          }
         },
         "additionalProperties": false
       },
       "CreateRecordModel": {
         "type": "object",
         "properties": {
-          "employeeId"  : {"type": "string", "nullable": true},
-          "recordTypeId": {"type": "string", "format": "uuid"},
-          "recordName"  : {"type": "string", "nullable": true},
-          "recordUri"   : {"type": "string", "nullable": true}
+          "employeeId": {
+            "type": "string",
+            "nullable": true
+          },
+          "recordTypeId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "recordName": {
+            "type": "string",
+            "nullable": true
+          },
+          "recordUri": {
+            "type": "string",
+            "nullable": true
+          }
         },
         "additionalProperties": false
       },
       "CreateRecordRequest": {
         "type": "object",
         "properties": {
-          "employeeNumber": {"type": "string", "nullable": true},
-          "isActiveEmployee": {"type": "boolean"},
-          "claimant": {"type": "string", "nullable": true},
-          "dateRequested": {"type": "string", "format": "date-time"},
-          "authorizedRepresentative": {"type": "string", "nullable": true},
-          "validId": {"type": "string", "format": "uuid", "nullable": true},
+          "employeeNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "isActiveEmployee": {
+            "type": "boolean"
+          },
+          "claimant": {
+            "type": "string",
+            "nullable": true
+          },
+          "dateRequested": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "authorizedRepresentative": {
+            "type": "string",
+            "nullable": true
+          },
+          "validId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
           "supportingDocument": {
             "type": "string",
             "format": "uuid",
@@ -2354,178 +3441,454 @@
           },
           "requestedRecords": {
             "type": "array",
-            "items": {"type": "string", "format": "uuid"},
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
             "nullable": true
           },
-          "purpose": {"type": "string", "nullable": true}
+          "purpose": {
+            "type": "string",
+            "nullable": true
+          }
         },
         "additionalProperties": false
       },
       "CreateRecordTypeModel": {
         "type": "object",
         "properties": {
-          "name"    : {"type": "string" , "nullable": true},
-          "category": {"type": "string" , "nullable": true},
-          "section" : {"type": "string" , "nullable": true},
-          "office"  : {"type": "string" , "nullable": true},
-          "isActive": {"type": "boolean"                  }
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "category": {
+            "type": "string",
+            "nullable": true
+          },
+          "section": {
+            "type": "string",
+            "nullable": true
+          },
+          "office": {
+            "type": "string",
+            "nullable": true
+          },
+          "isActive": {
+            "type": "boolean"
+          }
         },
         "additionalProperties": false
       },
       "CreateResponse": {
         "type": "object",
         "properties": {
-          "success": {"type": "boolean"                                    },
-          "error"  : {"type": "string" , "nullable": true                  },
-          "id"     : {"type": "string" ,                   "format": "uuid"}
+          "success": {
+            "type": "boolean"
+          },
+          "error": {
+            "type": "string",
+            "nullable": true
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          }
         },
         "additionalProperties": false
       },
       "CreateSystemLogsRequest": {
         "type": "object",
         "properties": {
-          "version"    : {"type": "string", "nullable": true}     ,
-          "description": {"type": "string", "nullable": true}     ,
-          "created"    : {"type": "string", "format": "date-time"},
-          "createdBy"  : {"type": "string", "nullable": true}
+          "version": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          }
         },
         "additionalProperties": false
       },
       "CreateUpdateEmployeeModel": {
         "type": "object",
         "properties": {
-          "firstName"                : {"type": "string", "nullable": true},
-          "middleName"               : {"type": "string", "nullable": true},
-          "lastName"                 : {"type": "string", "nullable": true},
-          "office"                   : {"type": "string", "nullable": true},
-          "email"                    : {"type": "string", "nullable": true},
-          "mobileNumber"             : {"type": "string", "nullable": true},
-          "employeeNumber"           : {"type": "string", "nullable": true},
-          "regionCentralOffice"      : {"type": "string", "nullable": true},
-          "districtBureauService"    : {"type": "string", "nullable": true},
-          "position"                 : {"type": "string", "nullable": true},
-          "designation"              : {"type": "string", "nullable": true},
-          "employeeId"               : {"type": "string", "nullable": true},
-          "role"                     : {"type": "string", "nullable": true},
-          "userAccess"               : {"type": "string", "nullable": true},
-          "department"               : {"type": "string", "nullable": true},
-          "regionalOfficeRegion"     : {"type": "string", "nullable": true},
-          "regionalOfficeProvince"   : {"type": "string", "nullable": true},
-          "districtEngineeringOffice": {"type": "string", "nullable": true},
-          "designationTitle"         : {"type": "string", "nullable": true}
+          "firstName": {
+            "type": "string",
+            "nullable": true
+          },
+          "middleName": {
+            "type": "string",
+            "nullable": true
+          },
+          "lastName": {
+            "type": "string",
+            "nullable": true
+          },
+          "office": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "mobileNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "employeeNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "regionCentralOffice": {
+            "type": "string",
+            "nullable": true
+          },
+          "districtBureauService": {
+            "type": "string",
+            "nullable": true
+          },
+          "position": {
+            "type": "string",
+            "nullable": true
+          },
+          "designation": {
+            "type": "string",
+            "nullable": true
+          },
+          "employeeId": {
+            "type": "string",
+            "nullable": true
+          },
+          "role": {
+            "type": "string",
+            "nullable": true
+          },
+          "userAccess": {
+            "type": "string",
+            "nullable": true
+          },
+          "department": {
+            "type": "string",
+            "nullable": true
+          },
+          "regionalOfficeRegion": {
+            "type": "string",
+            "nullable": true
+          },
+          "regionalOfficeProvince": {
+            "type": "string",
+            "nullable": true
+          },
+          "districtEngineeringOffice": {
+            "type": "string",
+            "nullable": true
+          },
+          "designationTitle": {
+            "type": "string",
+            "nullable": true
+          }
         },
         "additionalProperties": false
       },
       "CreateUserCommand": {
         "type": "object",
         "properties": {
-          "email"                    : {"type": "string", "nullable": true},
-          "firstName"                : {"type": "string", "nullable": true},
-          "middleInitial"            : {"type": "string", "nullable": true},
-          "lastName"                 : {"type": "string", "nullable": true},
-          "mobileNumber"             : {"type": "string", "nullable": true},
-          "employeeId"               : {"type": "string", "nullable": true},
-          "department"               : {"type": "string", "nullable": true},
-          "position"                 : {"type": "string", "nullable": true},
-          "regionalOfficeRegion"     : {"type": "string", "nullable": true},
-          "regionalOfficeProvince"   : {"type": "string", "nullable": true},
-          "districtEngineeringOffice": {"type": "string", "nullable": true},
-          "designationTitle"         : {"type": "string", "nullable": true}
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "firstName": {
+            "type": "string",
+            "nullable": true
+          },
+          "middleInitial": {
+            "type": "string",
+            "nullable": true
+          },
+          "lastName": {
+            "type": "string",
+            "nullable": true
+          },
+          "mobileNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "employeeId": {
+            "type": "string",
+            "nullable": true
+          },
+          "department": {
+            "type": "string",
+            "nullable": true
+          },
+          "position": {
+            "type": "string",
+            "nullable": true
+          },
+          "regionalOfficeRegion": {
+            "type": "string",
+            "nullable": true
+          },
+          "regionalOfficeProvince": {
+            "type": "string",
+            "nullable": true
+          },
+          "districtEngineeringOffice": {
+            "type": "string",
+            "nullable": true
+          },
+          "designationTitle": {
+            "type": "string",
+            "nullable": true
+          }
         },
         "additionalProperties": false
       },
       "CreateUserResult": {
         "type": "object",
         "properties": {
-          "id": {"type": "string", "nullable": true},
-          "userName": {"type": "string", "nullable": true},
-          "email": {"type": "string", "nullable": true},
-          "firstName": {"type": "string", "nullable": true},
-          "middleInitial": {"type": "string", "nullable": true},
-          "lastName": {"type": "string", "nullable": true},
-          "mobileNumber": {"type": "string", "nullable": true},
-          "department": {"type": "string", "nullable": true},
-          "position": {"type": "string", "nullable": true},
-          "regionalOfficeRegion": {"type": "string", "nullable": true},
-          "regionalOfficeProvince": {"type": "string", "nullable": true},
-          "districtEngineeringOffice": {"type": "string", "nullable": true},
-          "designationTitle": {"type": "string", "nullable": true},
-          "createdBy": {"type": "string", "nullable": true},
-          "createdDate": {"type": "string", "format": "date-time"}
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "userName": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "firstName": {
+            "type": "string",
+            "nullable": true
+          },
+          "middleInitial": {
+            "type": "string",
+            "nullable": true
+          },
+          "lastName": {
+            "type": "string",
+            "nullable": true
+          },
+          "mobileNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "department": {
+            "type": "string",
+            "nullable": true
+          },
+          "position": {
+            "type": "string",
+            "nullable": true
+          },
+          "regionalOfficeRegion": {
+            "type": "string",
+            "nullable": true
+          },
+          "regionalOfficeProvince": {
+            "type": "string",
+            "nullable": true
+          },
+          "districtEngineeringOffice": {
+            "type": "string",
+            "nullable": true
+          },
+          "designationTitle": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          }
         },
         "additionalProperties": false
       },
       "CreateUserResultBaseApiResponse": {
         "type": "object",
         "properties": {
-          "success": {"type": "boolean"}                              ,
-          "data"   : {"$ref": "#/components/schemas/CreateUserResult"}
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "$ref": "#/components/schemas/CreateUserResult"
+          }
         },
         "additionalProperties": false
       },
       "CreateUserWithRoleCommand": {
         "type": "object",
         "properties": {
-          "email"                    : {"type": "string", "nullable": true},
-          "firstName"                : {"type": "string", "nullable": true},
-          "middleInitial"            : {"type": "string", "nullable": true},
-          "lastName"                 : {"type": "string", "nullable": true},
-          "role"                     : {"type": "string", "nullable": true},
-          "mobileNumber"             : {"type": "string", "nullable": true},
-          "employeeId"               : {"type": "string", "nullable": true},
-          "department"               : {"type": "string", "nullable": true},
-          "position"                 : {"type": "string", "nullable": true},
-          "regionalOfficeRegion"     : {"type": "string", "nullable": true},
-          "regionalOfficeProvince"   : {"type": "string", "nullable": true},
-          "districtEngineeringOffice": {"type": "string", "nullable": true},
-          "designationTitle"         : {"type": "string", "nullable": true}
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "firstName": {
+            "type": "string",
+            "nullable": true
+          },
+          "middleInitial": {
+            "type": "string",
+            "nullable": true
+          },
+          "lastName": {
+            "type": "string",
+            "nullable": true
+          },
+          "role": {
+            "type": "string",
+            "nullable": true
+          },
+          "mobileNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "employeeId": {
+            "type": "string",
+            "nullable": true
+          },
+          "department": {
+            "type": "string",
+            "nullable": true
+          },
+          "position": {
+            "type": "string",
+            "nullable": true
+          },
+          "regionalOfficeRegion": {
+            "type": "string",
+            "nullable": true
+          },
+          "regionalOfficeProvince": {
+            "type": "string",
+            "nullable": true
+          },
+          "districtEngineeringOffice": {
+            "type": "string",
+            "nullable": true
+          },
+          "designationTitle": {
+            "type": "string",
+            "nullable": true
+          }
         },
         "additionalProperties": false
       },
       "CreateUserWithRoleResult": {
         "type": "object",
         "properties": {
-          "id": {"type": "string", "nullable": true},
-          "userName": {"type": "string", "nullable": true},
-          "email": {"type": "string", "nullable": true},
-          "firstName": {"type": "string", "nullable": true},
-          "middleInitial": {"type": "string", "nullable": true},
-          "lastName": {"type": "string", "nullable": true},
-          "mobileNumber": {"type": "string", "nullable": true},
-          "role": {"type": "string", "nullable": true},
-          "userAccess": {"type": "string", "nullable": true},
-          "department": {"type": "string", "nullable": true},
-          "position": {"type": "string", "nullable": true},
-          "regionalOfficeRegion": {"type": "string", "nullable": true},
-          "regionalOfficeProvince": {"type": "string", "nullable": true},
-          "districtEngineeringOffice": {"type": "string", "nullable": true},
-          "designationTitle": {"type": "string", "nullable": true},
-          "createdBy": {"type": "string", "nullable": true},
-          "createdDate": {"type": "string", "format": "date-time"}
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "userName": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "firstName": {
+            "type": "string",
+            "nullable": true
+          },
+          "middleInitial": {
+            "type": "string",
+            "nullable": true
+          },
+          "lastName": {
+            "type": "string",
+            "nullable": true
+          },
+          "mobileNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "role": {
+            "type": "string",
+            "nullable": true
+          },
+          "userAccess": {
+            "type": "string",
+            "nullable": true
+          },
+          "department": {
+            "type": "string",
+            "nullable": true
+          },
+          "position": {
+            "type": "string",
+            "nullable": true
+          },
+          "regionalOfficeRegion": {
+            "type": "string",
+            "nullable": true
+          },
+          "regionalOfficeProvince": {
+            "type": "string",
+            "nullable": true
+          },
+          "districtEngineeringOffice": {
+            "type": "string",
+            "nullable": true
+          },
+          "designationTitle": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          }
         },
         "additionalProperties": false
       },
       "CreateUserWithRoleResultBaseApiResponse": {
         "type": "object",
         "properties": {
-          "success": {"type": "boolean"}                                      ,
-          "data"   : {"$ref": "#/components/schemas/CreateUserWithRoleResult"}
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "$ref": "#/components/schemas/CreateUserWithRoleResult"
+          }
         },
         "additionalProperties": false
       },
       "DataLibraryTypes": {
         "enum": [
-          "Agency"                ,
-          "BuildingStatus"        ,
-          "ConstructionType"      ,
-          "Group"                 ,
-          "LotStatus"             ,
-          "PolicyCoverage"        ,
-          "ProofOfOwnership"      ,
-          "PropertyCondition"     ,
-          "RentalRates"           ,
-          "RecordTypes"           ,
-          "ValidIDs"              ,
+          "Agency",
+          "BuildingStatus",
+          "ConstructionType",
+          "Group",
+          "LotStatus",
+          "PolicyCoverage",
+          "ProofOfOwnership",
+          "PropertyCondition",
+          "RentalRates",
+          "RecordTypes",
+          "ValidIDs",
           "AuthorizationDocuments"
         ],
         "type": "string"
@@ -2533,22 +3896,36 @@
       "DataSourceRequest": {
         "type": "object",
         "properties": {
-          "take": {"type": "integer", "format": "int32"},
-          "skip": {"type": "integer", "format": "int32"},
+          "take": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "skip": {
+            "type": "integer",
+            "format": "int32"
+          },
           "sort": {
             "type": "array",
-            "items": {"$ref": "#/components/schemas/Sort"},
+            "items": {
+              "$ref": "#/components/schemas/Sort"
+            },
             "nullable": true
           },
-          "filter": {"$ref": "#/components/schemas/Filter"},
+          "filter": {
+            "$ref": "#/components/schemas/Filter"
+          },
           "group": {
             "type": "array",
-            "items": {"$ref": "#/components/schemas/Group"},
+            "items": {
+              "$ref": "#/components/schemas/Group"
+            },
             "nullable": true
           },
           "aggregate": {
             "type": "array",
-            "items": {"$ref": "#/components/schemas/Aggregator"},
+            "items": {
+              "$ref": "#/components/schemas/Aggregator"
+            },
             "nullable": true
           }
         },
@@ -2557,163 +3934,345 @@
       "DataSourceResult": {
         "type": "object",
         "properties": {
-          "data"      : {"type": "array", "items": {}, "nullable": true},
-          "groups"    : {"type": "array", "items": {}, "nullable": true},
-          "aggregates": {"nullable": true}                              ,
-          "total"     : {"type": "integer", "format": "int32"}          ,
-          "errors"    : {"nullable": true}
+          "data": {
+            "type": "array",
+            "items": { },
+            "nullable": true
+          },
+          "groups": {
+            "type": "array",
+            "items": { },
+            "nullable": true
+          },
+          "aggregates": {
+            "nullable": true
+          },
+          "total": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "errors": {
+            "nullable": true
+          }
         },
         "additionalProperties": false
       },
       "DataSourceResultBaseApiResponse": {
         "type": "object",
         "properties": {
-          "success": {"type": "boolean"}                              ,
-          "data"   : {"$ref": "#/components/schemas/DataSourceResult"}
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "$ref": "#/components/schemas/DataSourceResult"
+          }
         },
         "additionalProperties": false
       },
       "DeactivateUserCommand": {
         "type": "object",
         "properties": {
-          "userId": {"type": "string", "format": "uuid"                  },
-          "reason": {"type": "string",                   "nullable": true}
+          "userId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "reason": {
+            "type": "string",
+            "nullable": true
+          }
         },
         "additionalProperties": false
       },
       "DeactivateUserResult": {
         "type": "object",
         "properties": {
-          "userId"   : {"type": "string", "nullable": true},
-          "oldAccess": {"type": "string", "nullable": true},
-          "newAccess": {"type": "string", "nullable": true}
+          "userId": {
+            "type": "string",
+            "nullable": true
+          },
+          "oldAccess": {
+            "type": "string",
+            "nullable": true
+          },
+          "newAccess": {
+            "type": "string",
+            "nullable": true
+          }
         },
         "additionalProperties": false
       },
       "DeactivateUserResultBaseApiResponse": {
         "type": "object",
         "properties": {
-          "success": {"type": "boolean"}                                  ,
-          "data"   : {"$ref": "#/components/schemas/DeactivateUserResult"}
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "$ref": "#/components/schemas/DeactivateUserResult"
+          }
         },
         "additionalProperties": false
       },
       "DeleteAddressResult": {
         "type": "object",
         "properties": {
-          "id"      : {"type": "string", "nullable": true},
-          "name"    : {"type": "string", "nullable": true},
-          "type"    : {"type": "string", "nullable": true},
-          "parentId": {"type": "string", "nullable": true}
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "parentId": {
+            "type": "string",
+            "nullable": true
+          }
         },
         "additionalProperties": false
       },
       "DeleteAddressResultBaseApiResponse": {
         "type": "object",
         "properties": {
-          "success": {"type": "boolean"}                                 ,
-          "data"   : {"$ref": "#/components/schemas/DeleteAddressResult"}
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "$ref": "#/components/schemas/DeleteAddressResult"
+          }
         },
         "additionalProperties": false
       },
       "DeleteDataLibraryResult": {
         "type": "object",
         "properties": {
-          "id"       : {"type": "string" , "format": "uuid"                  },
-          "type"     : {"type": "string" ,                   "nullable": true},
-          "value"    : {"type": "string" ,                   "nullable": true},
-          "isDeleted": {"type": "boolean"                                    }
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "value": {
+            "type": "string",
+            "nullable": true
+          },
+          "isDeleted": {
+            "type": "boolean"
+          }
         },
         "additionalProperties": false
       },
       "DeleteDataLibraryResultBaseApiResponse": {
         "type": "object",
         "properties": {
-          "success": {"type": "boolean"}                                     ,
-          "data"   : {"$ref": "#/components/schemas/DeleteDataLibraryResult"}
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "$ref": "#/components/schemas/DeleteDataLibraryResult"
+          }
         },
         "additionalProperties": false
       },
       "DeleteResponse": {
         "type": "object",
         "properties": {
-          "success": {"type": "boolean"                                    },
-          "error"  : {"type": "string" , "nullable": true                  },
-          "id"     : {"type": "string" ,                   "format": "uuid"}
+          "success": {
+            "type": "boolean"
+          },
+          "error": {
+            "type": "string",
+            "nullable": true
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          }
         },
         "additionalProperties": false
       },
       "Employee": {
         "type": "object",
         "properties": {
-          "employeeId"            : {"type": "string", "nullable": true},
-          "networkId"             : {"type": "string", "nullable": true},
-          "familyName"            : {"type": "string", "nullable": true},
-          "firstName"             : {"type": "string", "nullable": true},
-          "middleInitial"         : {"type": "string", "nullable": true},
-          "positionCode"          : {"type": "string", "nullable": true},
-          "plantillaPosition"     : {"type": "string", "nullable": true},
-          "plantillaOfficeId"     : {"type": "string", "nullable": true},
-          "plantillaOfficeName"   : {"type": "string", "nullable": true},
-          "bureauServiceRoDeoId"  : {"type": "string", "nullable": true},
-          "bureauServiceRoDeoName": {"type": "string", "nullable": true},
-          "centralOrRegionId"     : {"type": "string", "nullable": true},
-          "centralOrRegionName"   : {"type": "string", "nullable": true},
-          "designationGroup"      : {"type": "string", "nullable": true},
-          "designationCode"       : {"type": "string", "nullable": true},
-          "designationTitle"      : {"type": "string", "nullable": true},
-          "designationOfficeId"   : {"type": "string", "nullable": true},
-          "designationOfficeName" : {"type": "string", "nullable": true},
-          "designationStartDate"  : {"type": "string", "nullable": true},
-          "designationStartEnd"   : {"type": "string", "nullable": true}
+          "employeeId": {
+            "type": "string",
+            "nullable": true
+          },
+          "networkId": {
+            "type": "string",
+            "nullable": true
+          },
+          "familyName": {
+            "type": "string",
+            "nullable": true
+          },
+          "firstName": {
+            "type": "string",
+            "nullable": true
+          },
+          "middleInitial": {
+            "type": "string",
+            "nullable": true
+          },
+          "positionCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "plantillaPosition": {
+            "type": "string",
+            "nullable": true
+          },
+          "plantillaOfficeId": {
+            "type": "string",
+            "nullable": true
+          },
+          "plantillaOfficeName": {
+            "type": "string",
+            "nullable": true
+          },
+          "bureauServiceRoDeoId": {
+            "type": "string",
+            "nullable": true
+          },
+          "bureauServiceRoDeoName": {
+            "type": "string",
+            "nullable": true
+          },
+          "centralOrRegionId": {
+            "type": "string",
+            "nullable": true
+          },
+          "centralOrRegionName": {
+            "type": "string",
+            "nullable": true
+          },
+          "designationGroup": {
+            "type": "string",
+            "nullable": true
+          },
+          "designationCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "designationTitle": {
+            "type": "string",
+            "nullable": true
+          },
+          "designationOfficeId": {
+            "type": "string",
+            "nullable": true
+          },
+          "designationOfficeName": {
+            "type": "string",
+            "nullable": true
+          },
+          "designationStartDate": {
+            "type": "string",
+            "nullable": true
+          },
+          "designationStartEnd": {
+            "type": "string",
+            "nullable": true
+          }
         },
         "additionalProperties": false
       },
       "EmployeeBaseApiResponse": {
         "type": "object",
         "properties": {
-          "success": {"type": "boolean"}                      ,
-          "data"   : {"$ref": "#/components/schemas/Employee"}
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "$ref": "#/components/schemas/Employee"
+          }
         },
         "additionalProperties": false
       },
       "Filter": {
         "type": "object",
         "properties": {
-          "field": {"type": "string", "nullable": true},
-          "operator": {"type": "string", "nullable": true},
-          "value": {"nullable": true},
-          "logic": {"type": "string", "nullable": true},
+          "field": {
+            "type": "string",
+            "nullable": true
+          },
+          "operator": {
+            "type": "string",
+            "nullable": true
+          },
+          "value": {
+            "nullable": true
+          },
+          "logic": {
+            "type": "string",
+            "nullable": true
+          },
           "filters": {
             "type": "array",
-            "items": {"$ref": "#/components/schemas/Filter"},
+            "items": {
+              "$ref": "#/components/schemas/Filter"
+            },
             "nullable": true
           }
         },
         "additionalProperties": false
       },
       "GeoLocationTypes": {
-        "enum": ["RG", "R", "P", "CC", "CD", "M", "C", "B"],
+        "enum": [
+          "RG",
+          "R",
+          "P",
+          "CC",
+          "CD",
+          "M",
+          "C",
+          "B"
+        ],
         "type": "string"
       },
       "GeoRegion": {
         "type": "object",
         "properties": {
-          "myId"     : {"type": "string", "nullable": true},
-          "myIdAdmin": {"type": "string", "nullable": true},
-          "parentId" : {"type": "string", "nullable": true},
-          "name"     : {"type": "string", "nullable": true},
-          "type"     : {"type": "string", "nullable": true}
+          "myId": {
+            "type": "string",
+            "nullable": true
+          },
+          "myIdAdmin": {
+            "type": "string",
+            "nullable": true
+          },
+          "parentId": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "type": {
+            "type": "string",
+            "nullable": true
+          }
         },
         "additionalProperties": false
       },
       "GeoRegionArrayBaseApiResponse": {
         "type": "object",
         "properties": {
-          "success": {"type": "boolean"},
+          "success": {
+            "type": "boolean"
+          },
           "data": {
             "type": "array",
-            "items": {"$ref": "#/components/schemas/GeoRegion"},
+            "items": {
+              "$ref": "#/components/schemas/GeoRegion"
+            },
             "nullable": true
           }
         },
@@ -2722,12 +4281,26 @@
       "GetAgenciesResult": {
         "type": "object",
         "properties": {
-          "id": {"type": "string", "nullable": true, "readOnly": true},
-          "code": {"type": "string", "nullable": true, "readOnly": true},
-          "name": {"type": "string", "nullable": true, "readOnly": true},
+          "id": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "code": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
           "attachedAgencies": {
             "type": "array",
-            "items": {"type": "string"},
+            "items": {
+              "type": "string"
+            },
             "nullable": true
           }
         },
@@ -2736,10 +4309,14 @@
       "GetAgenciesResultIEnumerableBaseApiResponse": {
         "type": "object",
         "properties": {
-          "success": {"type": "boolean"},
+          "success": {
+            "type": "boolean"
+          },
           "data": {
             "type": "array",
-            "items": {"$ref": "#/components/schemas/GetAgenciesResult"},
+            "items": {
+              "$ref": "#/components/schemas/GetAgenciesResult"
+            },
             "nullable": true
           }
         },
@@ -2767,16 +4344,27 @@
           "model": {
             "$ref": "#/components/schemas/GetAuditLogByEntityIdResultItemModel"
           },
-          "propertyId": {"type": "string", "nullable": true},
-          "buildingName": {"type": "string", "nullable": true},
-          "buildingId": {"type": "string", "nullable": true}
+          "propertyId": {
+            "type": "string",
+            "nullable": true
+          },
+          "buildingName": {
+            "type": "string",
+            "nullable": true
+          },
+          "buildingId": {
+            "type": "string",
+            "nullable": true
+          }
         },
         "additionalProperties": false
       },
       "GetAuditLogByEntityIdResultIEnumerableBaseApiResponse": {
         "type": "object",
         "properties": {
-          "success": {"type": "boolean"},
+          "success": {
+            "type": "boolean"
+          },
           "data": {
             "type": "array",
             "items": {
@@ -2790,40 +4378,72 @@
       "GetAuditLogByEntityIdResultItemChange": {
         "type": "object",
         "properties": {
-          "field": {"type": "string", "nullable": true},
-          "from" : {"type": "string", "nullable": true},
-          "to"   : {"type": "string", "nullable": true}
+          "field": {
+            "type": "string",
+            "nullable": true
+          },
+          "from": {
+            "type": "string",
+            "nullable": true
+          },
+          "to": {
+            "type": "string",
+            "nullable": true
+          }
         },
         "additionalProperties": false
       },
       "GetAuditLogByEntityIdResultItemModel": {
         "type": "object",
         "properties": {
-          "entityId": {"type": "string", "nullable": true},
-          "entity": {"type": "string", "nullable": true},
-          "action": {"type": "string", "nullable": true},
+          "entityId": {
+            "type": "string",
+            "nullable": true
+          },
+          "entity": {
+            "type": "string",
+            "nullable": true
+          },
+          "action": {
+            "type": "string",
+            "nullable": true
+          },
           "created": {
             "type": "string",
             "format": "date-time",
             "nullable": true
           },
-          "createdBy": {"type": "string", "nullable": true},
-          "employeeNumber": {"type": "string", "nullable": true}
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "employeeNumber": {
+            "type": "string",
+            "nullable": true
+          }
         },
         "additionalProperties": false
       },
       "GetAuthorizationDocumentsResult": {
         "type": "object",
         "properties": {
-          "id"  : {"type": "string", "format": "uuid"                  },
-          "name": {"type": "string",                   "nullable": true}
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          }
         },
         "additionalProperties": false
       },
       "GetAuthorizationDocumentsResultIEnumerableBaseApiResponse": {
         "type": "object",
         "properties": {
-          "success": {"type": "boolean"},
+          "success": {
+            "type": "boolean"
+          },
           "data": {
             "type": "array",
             "items": {
@@ -2837,7 +4457,10 @@
       "GetDataLibraryResult": {
         "type": "object",
         "properties": {
-          "type": {"type": "string", "nullable": true},
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
           "data": {
             "type": "array",
             "items": {
@@ -2851,10 +4474,14 @@
       "GetDataLibraryResultIEnumerableBaseApiResponse": {
         "type": "object",
         "properties": {
-          "success": {"type": "boolean"},
+          "success": {
+            "type": "boolean"
+          },
           "data": {
             "type": "array",
-            "items": {"$ref": "#/components/schemas/GetDataLibraryResult"},
+            "items": {
+              "$ref": "#/components/schemas/GetDataLibraryResult"
+            },
             "nullable": true
           }
         },
@@ -2863,50 +4490,84 @@
       "GetDataLibraryResultValue": {
         "type": "object",
         "properties": {
-          "id": {"type": "string", "format": "uuid"},
-          "value": {"type": "string", "nullable": true},
-          "isDeleted": {"type": "boolean"},
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "value": {
+            "type": "string",
+            "nullable": true
+          },
+          "isDeleted": {
+            "type": "boolean"
+          },
           "created": {
             "type": "string",
             "format": "date-time",
             "nullable": true
           },
-          "createdBy": {"type": "string", "nullable": true}
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          }
         },
         "additionalProperties": false
       },
       "GetLicenseStatusResult": {
         "type": "object",
         "properties": {
-          "limit"        : {"type": "integer", "format": "int32"},
-          "available"    : {"type": "integer", "format": "int32"},
-          "endUsersCount": {"type": "integer", "format": "int32"}
+          "limit": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "available": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "endUsersCount": {
+            "type": "integer",
+            "format": "int32"
+          }
         },
         "additionalProperties": false
       },
       "GetLicenseStatusResultBaseApiResponse": {
         "type": "object",
         "properties": {
-          "success": {"type": "boolean"}                                    ,
-          "data"   : {"$ref": "#/components/schemas/GetLicenseStatusResult"}
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "$ref": "#/components/schemas/GetLicenseStatusResult"
+          }
         },
         "additionalProperties": false
       },
       "GetRecordTypesResult": {
         "type": "object",
         "properties": {
-          "id"  : {"type": "string", "format": "uuid"                  },
-          "name": {"type": "string",                   "nullable": true}
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          }
         },
         "additionalProperties": false
       },
       "GetRecordTypesResultIEnumerableBaseApiResponse": {
         "type": "object",
         "properties": {
-          "success": {"type": "boolean"},
+          "success": {
+            "type": "boolean"
+          },
           "data": {
             "type": "array",
-            "items": {"$ref": "#/components/schemas/GetRecordTypesResult"},
+            "items": {
+              "$ref": "#/components/schemas/GetRecordTypesResult"
+            },
             "nullable": true
           }
         },
@@ -2915,8 +4576,14 @@
       "GetRequestingOfficeResult": {
         "type": "object",
         "properties": {
-          "regionId": {"type": "string", "nullable": true},
-          "regionName": {"type": "string", "nullable": true},
+          "regionId": {
+            "type": "string",
+            "nullable": true
+          },
+          "regionName": {
+            "type": "string",
+            "nullable": true
+          },
           "implementingOffices": {
             "type": "array",
             "items": {
@@ -2930,7 +4597,9 @@
       "GetRequestingOfficeResultIEnumerableBaseApiResponse": {
         "type": "object",
         "properties": {
-          "success": {"type": "boolean"},
+          "success": {
+            "type": "boolean"
+          },
           "data": {
             "type": "array",
             "items": {
@@ -2944,26 +4613,42 @@
       "GetRequestingOfficeResultItem": {
         "type": "object",
         "properties": {
-          "subOfficeId"  : {"type": "string", "nullable": true},
-          "subOfficeName": {"type": "string", "nullable": true}
+          "subOfficeId": {
+            "type": "string",
+            "nullable": true
+          },
+          "subOfficeName": {
+            "type": "string",
+            "nullable": true
+          }
         },
         "additionalProperties": false
       },
       "GetSecondaryIDsResult": {
         "type": "object",
         "properties": {
-          "id"  : {"type": "string", "format": "uuid"                  },
-          "name": {"type": "string",                   "nullable": true}
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          }
         },
         "additionalProperties": false
       },
       "GetSecondaryIDsResultIEnumerableBaseApiResponse": {
         "type": "object",
         "properties": {
-          "success": {"type": "boolean"},
+          "success": {
+            "type": "boolean"
+          },
           "data": {
             "type": "array",
-            "items": {"$ref": "#/components/schemas/GetSecondaryIDsResult"},
+            "items": {
+              "$ref": "#/components/schemas/GetSecondaryIDsResult"
+            },
             "nullable": true
           }
         },
@@ -2972,50 +4657,118 @@
       "GetUserByIdResult": {
         "type": "object",
         "properties": {
-          "id": {"type": "string", "nullable": true},
-          "userName": {"type": "string", "nullable": true},
-          "employeeId": {"type": "string", "nullable": true},
-          "email": {"type": "string", "nullable": true},
-          "firstName": {"type": "string", "nullable": true},
-          "middleInitial": {"type": "string", "nullable": true},
-          "lastName": {"type": "string", "nullable": true},
-          "mobileNumber": {"type": "string", "nullable": true},
-          "role": {"type": "string", "nullable": true},
-          "userAccess": {"type": "string", "nullable": true},
-          "department": {"type": "string", "nullable": true},
-          "position": {"type": "string", "nullable": true},
-          "regionalOfficeRegion": {"type": "string", "nullable": true},
-          "regionalOfficeProvince": {"type": "string", "nullable": true},
-          "districtEngineeringOffice": {"type": "string", "nullable": true},
-          "designationTitle": {"type": "string", "nullable": true},
-          "createdBy": {"type": "string", "nullable": true},
-          "createdDate": {"type": "string", "format": "date-time"}
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "userName": {
+            "type": "string",
+            "nullable": true
+          },
+          "employeeId": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "firstName": {
+            "type": "string",
+            "nullable": true
+          },
+          "middleInitial": {
+            "type": "string",
+            "nullable": true
+          },
+          "lastName": {
+            "type": "string",
+            "nullable": true
+          },
+          "mobileNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "role": {
+            "type": "string",
+            "nullable": true
+          },
+          "userAccess": {
+            "type": "string",
+            "nullable": true
+          },
+          "department": {
+            "type": "string",
+            "nullable": true
+          },
+          "position": {
+            "type": "string",
+            "nullable": true
+          },
+          "regionalOfficeRegion": {
+            "type": "string",
+            "nullable": true
+          },
+          "regionalOfficeProvince": {
+            "type": "string",
+            "nullable": true
+          },
+          "districtEngineeringOffice": {
+            "type": "string",
+            "nullable": true
+          },
+          "designationTitle": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          }
         },
         "additionalProperties": false
       },
       "GetUserByIdResultBaseApiResponse": {
         "type": "object",
         "properties": {
-          "success": {"type": "boolean"}                               ,
-          "data"   : {"$ref": "#/components/schemas/GetUserByIdResult"}
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "$ref": "#/components/schemas/GetUserByIdResult"
+          }
         },
         "additionalProperties": false
       },
       "GetValidIDsResult": {
         "type": "object",
         "properties": {
-          "id"  : {"type": "string", "format": "uuid"                  },
-          "name": {"type": "string",                   "nullable": true}
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          }
         },
         "additionalProperties": false
       },
       "GetValidIDsResultIEnumerableBaseApiResponse": {
         "type": "object",
         "properties": {
-          "success": {"type": "boolean"},
+          "success": {
+            "type": "boolean"
+          },
           "data": {
             "type": "array",
-            "items": {"$ref": "#/components/schemas/GetValidIDsResult"},
+            "items": {
+              "$ref": "#/components/schemas/GetValidIDsResult"
+            },
             "nullable": true
           }
         },
@@ -3024,11 +4777,19 @@
       "Group": {
         "type": "object",
         "properties": {
-          "field": {"type": "string", "nullable": true},
-          "dir": {"type": "string", "nullable": true},
+          "field": {
+            "type": "string",
+            "nullable": true
+          },
+          "dir": {
+            "type": "string",
+            "nullable": true
+          },
           "aggregates": {
             "type": "array",
-            "items": {"$ref": "#/components/schemas/Aggregator"},
+            "items": {
+              "$ref": "#/components/schemas/Aggregator"
+            },
             "nullable": true
           }
         },
@@ -3037,36 +4798,63 @@
       "GuidBaseApiResponse": {
         "type": "object",
         "properties": {
-          "success": {"type": "boolean"                  },
-          "data"   : {"type": "string" , "format": "uuid"}
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "type": "string",
+            "format": "uuid"
+          }
         },
         "additionalProperties": false
       },
       "GuidNullableBaseApiResponse": {
         "type": "object",
         "properties": {
-          "success": {"type": "boolean"                                    },
-          "data"   : {"type": "string" , "format": "uuid", "nullable": true}
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          }
         },
         "additionalProperties": false
       },
       "ImplementingOffice": {
         "type": "object",
         "properties": {
-          "officeId"     : {"type": "string", "nullable": true},
-          "officeName"   : {"type": "string", "nullable": true},
-          "subOfficeId"  : {"type": "string", "nullable": true},
-          "subOfficeName": {"type": "string", "nullable": true}
+          "officeId": {
+            "type": "string",
+            "nullable": true
+          },
+          "officeName": {
+            "type": "string",
+            "nullable": true
+          },
+          "subOfficeId": {
+            "type": "string",
+            "nullable": true
+          },
+          "subOfficeName": {
+            "type": "string",
+            "nullable": true
+          }
         },
         "additionalProperties": false
       },
       "ImplementingOfficeArrayBaseApiResponse": {
         "type": "object",
         "properties": {
-          "success": {"type": "boolean"},
+          "success": {
+            "type": "boolean"
+          },
           "data": {
             "type": "array",
-            "items": {"$ref": "#/components/schemas/ImplementingOffice"},
+            "items": {
+              "$ref": "#/components/schemas/ImplementingOffice"
+            },
             "nullable": true
           }
         },
@@ -3075,10 +4863,15 @@
       "Lookup": {
         "type": "object",
         "properties": {
-          "key": {"type": "string", "nullable": true},
+          "key": {
+            "type": "string",
+            "nullable": true
+          },
           "data": {
             "type": "array",
-            "items": {"$ref": "#/components/schemas/SimpleKeyValue"},
+            "items": {
+              "$ref": "#/components/schemas/SimpleKeyValue"
+            },
             "nullable": true
           }
         },
@@ -3087,19 +4880,32 @@
       "Position": {
         "type": "object",
         "properties": {
-          "posType"      : {"type": "string", "nullable": true},
-          "positionTitle": {"type": "string", "nullable": true},
-          "salaryGrade"  : {"type": "string", "nullable": true}
+          "posType": {
+            "type": "string",
+            "nullable": true
+          },
+          "positionTitle": {
+            "type": "string",
+            "nullable": true
+          },
+          "salaryGrade": {
+            "type": "string",
+            "nullable": true
+          }
         },
         "additionalProperties": false
       },
       "PositionArrayBaseApiResponse": {
         "type": "object",
         "properties": {
-          "success": {"type": "boolean"},
+          "success": {
+            "type": "boolean"
+          },
           "data": {
             "type": "array",
-            "items": {"$ref": "#/components/schemas/Position"},
+            "items": {
+              "$ref": "#/components/schemas/Position"
+            },
             "nullable": true
           }
         },
@@ -3108,68 +4914,153 @@
       "ProblemDetails": {
         "type": "object",
         "properties": {
-          "type"    : {"type": "string" , "nullable": true                   },
-          "title"   : {"type": "string" , "nullable": true                   },
-          "status"  : {"type": "integer", "nullable": true, "format": "int32"},
-          "detail"  : {"type": "string" , "nullable": true                   },
-          "instance": {"type": "string" , "nullable": true                   }
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "detail": {
+            "type": "string",
+            "nullable": true
+          },
+          "instance": {
+            "type": "string",
+            "nullable": true
+          }
         },
-        "additionalProperties": {}
+        "additionalProperties": { }
       },
       "RecordModel": {
         "type": "object",
         "properties": {
-          "id"          : {"type": "string", "format": "uuid"},
-          "employeeId"  : {"type": "string", "nullable": true},
-          "recordTypeId": {"type": "string", "format": "uuid"},
-          "recordName"  : {"type": "string", "nullable": true},
-          "recordUri"   : {"type": "string", "nullable": true}
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "employeeId": {
+            "type": "string",
+            "nullable": true
+          },
+          "recordTypeId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "recordName": {
+            "type": "string",
+            "nullable": true
+          },
+          "recordUri": {
+            "type": "string",
+            "nullable": true
+          }
         },
         "additionalProperties": false
       },
       "RecordModelBaseApiResponse": {
         "type": "object",
         "properties": {
-          "success": {"type": "boolean"}                         ,
-          "data"   : {"$ref": "#/components/schemas/RecordModel"}
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "$ref": "#/components/schemas/RecordModel"
+          }
         },
         "additionalProperties": false
       },
       "RecordRequestDocumentModel": {
         "type": "object",
         "properties": {
-          "id": {"type": "string", "format": "uuid", "nullable": true},
-          "name": {"type": "string", "nullable": true},
-          "filename": {"type": "string", "nullable": true},
-          "type": {"type": "string", "nullable": true},
-          "documentTypeId": {"type": "string", "format": "uuid"},
-          "fileSize": {"type": "integer", "format": "int64", "nullable": true},
-          "uri": {"type": "string", "nullable": true}
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "filename": {
+            "type": "string",
+            "nullable": true
+          },
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "documentTypeId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "fileSize": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          },
+          "uri": {
+            "type": "string",
+            "nullable": true
+          }
         },
         "additionalProperties": false
       },
       "RecordRequestDocumentModelBaseApiResponse": {
         "type": "object",
         "properties": {
-          "success": {"type": "boolean"},
-          "data": {"$ref": "#/components/schemas/RecordRequestDocumentModel"}
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "$ref": "#/components/schemas/RecordRequestDocumentModel"
+          }
         },
         "additionalProperties": false
       },
       "RecordRequestModel": {
         "type": "object",
         "properties": {
-          "id": {"type": "string", "format": "uuid"},
-          "controlNumber": {"type": "integer", "format": "int32"},
-          "employeeNumber": {"type": "string", "nullable": true},
-          "isActiveEmployee": {"type": "boolean"},
-          "claimantType": {"type": "string", "nullable": true},
-          "dateRequested": {"type": "string", "format": "date-time"},
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "controlNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "employeeNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "isActiveEmployee": {
+            "type": "boolean"
+          },
+          "claimantType": {
+            "type": "string",
+            "nullable": true
+          },
+          "dateRequested": {
+            "type": "string",
+            "format": "date-time"
+          },
           "authorizedRepresentative": {
             "$ref": "#/components/schemas/AuthorizedRepresentativeModel"
           },
-          "purpose": {"type": "string", "nullable": true},
-          "status": {"type": "string", "nullable": true},
+          "purpose": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
           "files": {
             "type": "array",
             "items": {
@@ -3179,7 +5070,9 @@
           },
           "requestedRecords": {
             "type": "array",
-            "items": {"$ref": "#/components/schemas/RequestedRecordModel"},
+            "items": {
+              "$ref": "#/components/schemas/RequestedRecordModel"
+            },
             "nullable": true
           }
         },
@@ -3188,245 +5081,551 @@
       "RecordRequestModelBaseApiResponse": {
         "type": "object",
         "properties": {
-          "success": {"type": "boolean"}                                ,
-          "data"   : {"$ref": "#/components/schemas/RecordRequestModel"}
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "$ref": "#/components/schemas/RecordRequestModel"
+          }
         },
         "additionalProperties": false
       },
       "RecordRequestProvidedDocumentTypes": {
-        "enum": ["ValidId", "AuthorizationDocument"],
+        "enum": [
+          "ValidId",
+          "AuthorizationDocument"
+        ],
         "type": "string"
       },
       "RecoverDataLibraryResult": {
         "type": "object",
         "properties": {
-          "id"       : {"type": "string" , "format": "uuid"                  },
-          "type"     : {"type": "string" ,                   "nullable": true},
-          "value"    : {"type": "string" ,                   "nullable": true},
-          "isDeleted": {"type": "boolean"                                    }
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "value": {
+            "type": "string",
+            "nullable": true
+          },
+          "isDeleted": {
+            "type": "boolean"
+          }
         },
         "additionalProperties": false
       },
       "RecoverDataLibraryResultBaseApiResponse": {
         "type": "object",
         "properties": {
-          "success": {"type": "boolean"}                                      ,
-          "data"   : {"$ref": "#/components/schemas/RecoverDataLibraryResult"}
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "$ref": "#/components/schemas/RecoverDataLibraryResult"
+          }
         },
         "additionalProperties": false
       },
       "RemoveUserResult": {
         "type": "object",
         "properties": {
-          "id": {"type": "string", "nullable": true},
-          "userName": {"type": "string", "nullable": true},
-          "email": {"type": "string", "nullable": true},
-          "firstName": {"type": "string", "nullable": true},
-          "lastName": {"type": "string", "nullable": true},
-          "mobileNumber": {"type": "string", "nullable": true},
-          "department": {"type": "string", "nullable": true},
-          "position": {"type": "string", "nullable": true},
-          "regionalOfficeRegion": {"type": "string", "nullable": true},
-          "regionalOfficeProvince": {"type": "string", "nullable": true},
-          "districtEngineeringOffice": {"type": "string", "nullable": true},
-          "designationTitle": {"type": "string", "nullable": true},
-          "createdBy": {"type": "string", "nullable": true},
-          "createdDate": {"type": "string", "format": "date-time"}
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "userName": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "firstName": {
+            "type": "string",
+            "nullable": true
+          },
+          "lastName": {
+            "type": "string",
+            "nullable": true
+          },
+          "mobileNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "department": {
+            "type": "string",
+            "nullable": true
+          },
+          "position": {
+            "type": "string",
+            "nullable": true
+          },
+          "regionalOfficeRegion": {
+            "type": "string",
+            "nullable": true
+          },
+          "regionalOfficeProvince": {
+            "type": "string",
+            "nullable": true
+          },
+          "districtEngineeringOffice": {
+            "type": "string",
+            "nullable": true
+          },
+          "designationTitle": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          }
         },
         "additionalProperties": false
       },
       "RemoveUserResultBaseApiResponse": {
         "type": "object",
         "properties": {
-          "success": {"type": "boolean"}                              ,
-          "data"   : {"$ref": "#/components/schemas/RemoveUserResult"}
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "$ref": "#/components/schemas/RemoveUserResult"
+          }
         },
         "additionalProperties": false
       },
       "RequestedRecordModel": {
         "type": "object",
         "properties": {
-          "recordTypeId": {"type": "string", "format": "uuid"},
-          "recordType"  : {"type": "string", "nullable": true}
+          "recordTypeId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "recordType": {
+            "type": "string",
+            "nullable": true
+          }
         },
         "additionalProperties": false
       },
       "SimpleKeyValue": {
         "type": "object",
         "properties": {
-          "id"  : {"type": "string", "nullable": true},
-          "name": {"type": "string", "nullable": true}
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          }
         },
         "additionalProperties": false
       },
       "SimpleKeyValueAddress": {
         "type": "object",
         "properties": {
-          "id"      : {"type": "string", "nullable": true},
-          "name"    : {"type": "string", "nullable": true},
-          "uniqueId": {"type": "string", "nullable": true}
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "uniqueId": {
+            "type": "string",
+            "nullable": true
+          }
         },
         "additionalProperties": false
       },
       "Sort": {
         "type": "object",
         "properties": {
-          "field": {"type": "string", "nullable": true},
-          "dir"  : {"type": "string", "nullable": true}
+          "field": {
+            "type": "string",
+            "nullable": true
+          },
+          "dir": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "StringBaseApiResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "type": "string",
+            "nullable": true
+          }
         },
         "additionalProperties": false
       },
       "SystemLogsModel": {
         "type": "object",
         "properties": {
-          "id"         : {"type": "string", "format": "uuid"}     ,
-          "version"    : {"type": "string", "nullable": true}     ,
-          "description": {"type": "string", "nullable": true}     ,
-          "created"    : {"type": "string", "format": "date-time"},
-          "createdBy"  : {"type": "string", "nullable": true}
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "version": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          }
         },
         "additionalProperties": false
       },
       "SystemLogsResponse": {
         "type": "object",
         "properties": {
-          "success": {"type": "boolean"}                             ,
-          "error"  : {"type": "string", "nullable": true}            ,
-          "model"  : {"$ref": "#/components/schemas/SystemLogsModel"}
+          "success": {
+            "type": "boolean"
+          },
+          "error": {
+            "type": "string",
+            "nullable": true
+          },
+          "model": {
+            "$ref": "#/components/schemas/SystemLogsModel"
+          }
         },
         "additionalProperties": false
       },
       "UpdateAddressCommand": {
         "type": "object",
         "properties": {
-          "id"      : {"type": "string", "nullable": true}             ,
-          "name"    : {"type": "string", "nullable": true}             ,
-          "type"    : {"$ref": "#/components/schemas/GeoLocationTypes"},
-          "parentId": {"type": "string", "nullable": true}
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "type": {
+            "$ref": "#/components/schemas/GeoLocationTypes"
+          },
+          "parentId": {
+            "type": "string",
+            "nullable": true
+          }
         },
         "additionalProperties": false
       },
       "UpdateAddressResult": {
         "type": "object",
         "properties": {
-          "id"      : {"type": "string", "nullable": true},
-          "name"    : {"type": "string", "nullable": true},
-          "type"    : {"type": "string", "nullable": true},
-          "parentId": {"type": "string", "nullable": true}
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "parentId": {
+            "type": "string",
+            "nullable": true
+          }
         },
         "additionalProperties": false
       },
       "UpdateAddressResultBaseApiResponse": {
         "type": "object",
         "properties": {
-          "success": {"type": "boolean"}                                 ,
-          "data"   : {"$ref": "#/components/schemas/UpdateAddressResult"}
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "$ref": "#/components/schemas/UpdateAddressResult"
+          }
         },
         "additionalProperties": false
       },
       "UpdateDataLibraryCommand": {
         "type": "object",
         "properties": {
-          "id"   : {"type": "string", "format": "uuid"                  },
-          "value": {"type": "string",                   "nullable": true}
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "value": {
+            "type": "string",
+            "nullable": true
+          }
         },
         "additionalProperties": false
       },
       "UpdateDataLibraryResult": {
         "type": "object",
         "properties": {
-          "id"      : {"type": "string", "format": "uuid"}             ,
-          "type"    : {"$ref": "#/components/schemas/DataLibraryTypes"},
-          "oldValue": {"type": "string", "nullable": true}             ,
-          "value"   : {"type": "string", "nullable": true}
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "type": {
+            "$ref": "#/components/schemas/DataLibraryTypes"
+          },
+          "oldValue": {
+            "type": "string",
+            "nullable": true
+          },
+          "value": {
+            "type": "string",
+            "nullable": true
+          }
         },
         "additionalProperties": false
       },
       "UpdateDataLibraryResultBaseApiResponse": {
         "type": "object",
         "properties": {
-          "success": {"type": "boolean"}                                     ,
-          "data"   : {"$ref": "#/components/schemas/UpdateDataLibraryResult"}
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "$ref": "#/components/schemas/UpdateDataLibraryResult"
+          }
         },
         "additionalProperties": false
       },
       "UpdateRecordTypeModel": {
         "type": "object",
         "properties": {
-          "name"    : {"type": "string" , "nullable": true},
-          "category": {"type": "string" , "nullable": true},
-          "section" : {"type": "string" , "nullable": true},
-          "office"  : {"type": "string" , "nullable": true},
-          "isActive": {"type": "boolean"                  }
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "category": {
+            "type": "string",
+            "nullable": true
+          },
+          "section": {
+            "type": "string",
+            "nullable": true
+          },
+          "office": {
+            "type": "string",
+            "nullable": true
+          },
+          "isActive": {
+            "type": "boolean"
+          }
         },
         "additionalProperties": false
       },
       "UpdateResponse": {
         "type": "object",
         "properties": {
-          "success": {"type": "boolean"                                    },
-          "error"  : {"type": "string" , "nullable": true                  },
-          "id"     : {"type": "string" ,                   "format": "uuid"}
+          "success": {
+            "type": "boolean"
+          },
+          "error": {
+            "type": "string",
+            "nullable": true
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          }
         },
         "additionalProperties": false
       },
       "UpdateSystemLogsRequest": {
         "type": "object",
         "properties": {
-          "version"    : {"type": "string", "nullable": true}     ,
-          "description": {"type": "string", "nullable": true}     ,
-          "created"    : {"type": "string", "format": "date-time"},
-          "createdBy"  : {"type": "string", "nullable": true}
+          "version": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          }
         },
         "additionalProperties": false
       },
       "UpdateUserCommand": {
         "type": "object",
         "properties": {
-          "userId"                   : {"type": "string", "format": "uuid"},
-          "firstName"                : {"type": "string", "nullable": true},
-          "lastName"                 : {"type": "string", "nullable": true},
-          "role"                     : {"type": "string", "nullable": true},
-          "mobileNumber"             : {"type": "string", "nullable": true},
-          "employeeId"               : {"type": "string", "nullable": true},
-          "department"               : {"type": "string", "nullable": true},
-          "position"                 : {"type": "string", "nullable": true},
-          "regionalOfficeRegion"     : {"type": "string", "nullable": true},
-          "regionalOfficeProvince"   : {"type": "string", "nullable": true},
-          "districtEngineeringOffice": {"type": "string", "nullable": true},
-          "designationTitle"         : {"type": "string", "nullable": true}
+          "userId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "firstName": {
+            "type": "string",
+            "nullable": true
+          },
+          "lastName": {
+            "type": "string",
+            "nullable": true
+          },
+          "role": {
+            "type": "string",
+            "nullable": true
+          },
+          "mobileNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "employeeId": {
+            "type": "string",
+            "nullable": true
+          },
+          "department": {
+            "type": "string",
+            "nullable": true
+          },
+          "position": {
+            "type": "string",
+            "nullable": true
+          },
+          "regionalOfficeRegion": {
+            "type": "string",
+            "nullable": true
+          },
+          "regionalOfficeProvince": {
+            "type": "string",
+            "nullable": true
+          },
+          "districtEngineeringOffice": {
+            "type": "string",
+            "nullable": true
+          },
+          "designationTitle": {
+            "type": "string",
+            "nullable": true
+          }
         },
         "additionalProperties": false
       },
       "UpdateUserResult": {
         "type": "object",
         "properties": {
-          "id": {"type": "string", "nullable": true},
-          "userName": {"type": "string", "nullable": true},
-          "email": {"type": "string", "nullable": true},
-          "firstName": {"type": "string", "nullable": true},
-          "lastName": {"type": "string", "nullable": true},
-          "mobileNumber": {"type": "string", "nullable": true},
-          "oldAccess": {"type": "string", "nullable": true},
-          "role": {"type": "string", "nullable": true},
-          "userAccess": {"type": "string", "nullable": true},
-          "department": {"type": "string", "nullable": true},
-          "position": {"type": "string", "nullable": true},
-          "regionalOfficeRegion": {"type": "string", "nullable": true},
-          "regionalOfficeProvince": {"type": "string", "nullable": true},
-          "districtEngineeringOffice": {"type": "string", "nullable": true},
-          "createdBy": {"type": "string", "nullable": true},
-          "createdDate": {"type": "string", "format": "date-time"},
-          "lastModified": {"type": "string", "format": "date-time"},
-          "lastModifiedBy": {"type": "string", "nullable": true}
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "userName": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "firstName": {
+            "type": "string",
+            "nullable": true
+          },
+          "lastName": {
+            "type": "string",
+            "nullable": true
+          },
+          "mobileNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "oldAccess": {
+            "type": "string",
+            "nullable": true
+          },
+          "role": {
+            "type": "string",
+            "nullable": true
+          },
+          "userAccess": {
+            "type": "string",
+            "nullable": true
+          },
+          "department": {
+            "type": "string",
+            "nullable": true
+          },
+          "position": {
+            "type": "string",
+            "nullable": true
+          },
+          "regionalOfficeRegion": {
+            "type": "string",
+            "nullable": true
+          },
+          "regionalOfficeProvince": {
+            "type": "string",
+            "nullable": true
+          },
+          "districtEngineeringOffice": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "lastModified": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "lastModifiedBy": {
+            "type": "string",
+            "nullable": true
+          }
         },
         "additionalProperties": false
       },
       "UpdateUserResultBaseApiResponse": {
         "type": "object",
         "properties": {
-          "success": {"type": "boolean"}                              ,
-          "data"   : {"$ref": "#/components/schemas/UpdateUserResult"}
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "$ref": "#/components/schemas/UpdateUserResult"
+          }
         },
         "additionalProperties": false
       },
@@ -3435,7 +5634,9 @@
         "properties": {
           "errors": {
             "type": "array",
-            "items": {"$ref": "#/components/schemas/ValidationResponse"},
+            "items": {
+              "$ref": "#/components/schemas/ValidationResponse"
+            },
             "nullable": true
           }
         },
@@ -3444,8 +5645,14 @@
       "ValidationResponse": {
         "type": "object",
         "properties": {
-          "propertyName": {"type": "string", "nullable": true},
-          "message"     : {"type": "string", "nullable": true}
+          "propertyName": {
+            "type": "string",
+            "nullable": true
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          }
         },
         "additionalProperties": false
       }
@@ -3457,11 +5664,17 @@
           "authorizationCode": {
             "authorizationUrl": "https://app-idp-ngobia-dpwh-dev.azurewebsites.net/connect/authorize",
             "tokenUrl": "https://app-idp-ngobia-dpwh-dev.azurewebsites.net/connect/token",
-            "scopes": {"dpwhedmsapi.write": "api read & write access"}
+            "scopes": {
+              "dpwhedmsapi.write": "api read & write access"
+            }
           }
         }
       }
     }
   },
-  "security": [ {"oauth2": []} ]
+  "security": [
+    {
+      "oauth2": [ ]
+    }
+  ]
 }
