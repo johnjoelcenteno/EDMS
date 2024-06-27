@@ -23,6 +23,11 @@ public class RecordRequestsService : IRecordRequestsService
         return await _client.QueryRecordRequestsAsync(body);
     }
 
+    public async Task<DataSourceResult> QueryByEmployeeId(string employeeId, DataSourceRequest body)
+    {
+        return await _client.QueryRecordRequestsByEmployeeIdAsync(employeeId, body);
+    }
+
     public async Task<RecordRequestModelBaseApiResponse> GetById(Guid id)
     {
         return await _client.GetRecordRequestAsync(id);

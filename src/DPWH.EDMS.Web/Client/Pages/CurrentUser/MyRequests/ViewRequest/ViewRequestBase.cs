@@ -6,10 +6,8 @@ using DPWH.EDMS.Client.Shared.Models;
 using DPWH.EDMS.Components;
 using DPWH.EDMS.Components.Helpers;
 using Microsoft.AspNetCore.Components;
-using Telerik.Blazor.Components.Breadcrumb;
-using static System.Net.WebRequestMethods;
 
-namespace DPWH.EDMS.Web.Client.Pages.CurrentUser.PendingRequests.ViewRequest;
+namespace DPWH.EDMS.Web.Client.Pages.CurrentUser.MyRequests.ViewRequest;
 
 public class ViewRequestBase : RxBaseComponent
 {
@@ -45,8 +43,8 @@ public class ViewRequestBase : RxBaseComponent
                 new BreadcrumbModel
                 {
                     Icon = "menu",
-                    Text = "My Pending Request",
-                    Url = "/my-pending-request",
+                    Text = "My Requests",
+                    Url = "/my-requests",
                 },
                 new BreadcrumbModel
                 {
@@ -59,7 +57,7 @@ public class ViewRequestBase : RxBaseComponent
         else
         {
             ToastService.ShowError("Something went wrong on loading record request.");
-            NavManager.NavigateTo("/my-pending-request");
+            NavManager.NavigateTo("/my-requests");
         }
 
         IsLoading = false;
