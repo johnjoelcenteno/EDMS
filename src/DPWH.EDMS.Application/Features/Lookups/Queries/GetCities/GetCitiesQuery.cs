@@ -21,7 +21,7 @@ internal sealed class GetCitiesHandler : IRequestHandler<GetCitiesQuery, Address
     {
         var provinceCode = request.ProvinceCode;
         var entity = await _repository
-            .GeoLocationView
+            .GeolocationsView
             .Where(d => d.Type == GeoLocationTypes.C.ToString() || d.Type == GeoLocationTypes.M.ToString())
             .Where(d => d.ParentId.Contains(provinceCode))
             .ToListAsync(cancellationToken);

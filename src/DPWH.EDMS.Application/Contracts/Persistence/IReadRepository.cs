@@ -14,7 +14,7 @@ public interface IReadRepository
     IQueryable<MaintenanceRequest> MaintenanceRequestsView { get; }
     IQueryable<BuildingComponent> BuildingComponentsView { get; }
     IQueryable<FinancialDetailsDocuments> FinancialDetailsDocumentsView { get; }
-    IQueryable<GeoLocation> GeoLocationView { get; }
+    IQueryable<GeoLocation> GeolocationsView { get; }
     IQueryable<AssetFileDocument> AssetFilesView { get; }
     IQueryable<AssetImageDocument> AssetImagesView { get; }
     IQueryable<ConfigSetting> ConfigSettingsView { get; }

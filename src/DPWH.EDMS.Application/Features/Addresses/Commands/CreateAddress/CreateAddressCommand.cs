@@ -32,7 +32,7 @@ internal sealed class CreateAddressHandler : IRequestHandler<CreateAddressComman
     {
         var address = GeoLocation.Create(request.Id, null, request.Name, request.Type.ToString(), request.ParentId, _principal.GetUserName());
 
-        await _repository.GeoLocation.AddAsync(address, cancellationToken);
+        await _repository.Geolocations.AddAsync(address, cancellationToken);
         await _repository.SaveChangesAsync(cancellationToken);
 
         return new CreateAddressResult(address);
