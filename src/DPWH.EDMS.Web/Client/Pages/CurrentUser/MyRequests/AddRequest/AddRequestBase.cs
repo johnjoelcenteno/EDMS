@@ -2,16 +2,14 @@
 using DPWH.EDMS.Api.Contracts;
 using DPWH.EDMS.Client.Shared.APIClient.Services.RecordRequests;
 using DPWH.EDMS.Client.Shared.APIClient.Services.RecordRequestSupportingFiles;
-using DPWH.EDMS.Client.Shared.MockModels;
 using DPWH.EDMS.Client.Shared.Models;
 using DPWH.EDMS.Components;
 using DPWH.EDMS.Shared.Enums;
 using DPWH.EDMS.Web.Client.Shared.BlazoredFluentValidator;
 using DPWH.EDMS.Web.Client.Shared.Services.ExceptionHandler;
 using Microsoft.AspNetCore.Components;
-using System.ComponentModel.DataAnnotations;
 
-namespace DPWH.EDMS.Web.Client.Pages.CurrentUser.PendingRequests.AddRequest;
+namespace DPWH.EDMS.Web.Client.Pages.CurrentUser.MyRequests.AddRequest;
 
 public class AddRequestBase : RxBaseComponent
 {
@@ -35,7 +33,7 @@ public class AddRequestBase : RxBaseComponent
 
     protected void OnCancel()
     {
-        NavManager.NavigateTo("/my-pending-request");
+        NavManager.NavigateTo("/my-requests");
     }
 
     protected async Task HandleSubmit((CreateRecordRequest, UploadSupportingFileRequestModel, UploadSupportingFileRequestModel) parameters)
@@ -79,7 +77,7 @@ public class AddRequestBase : RxBaseComponent
                             if (createRes.Success)
                             {
                                 ToastService.ShowSuccess("Successfully created request!");
-                                NavManager.NavigateTo("/my-pending-request");
+                                NavManager.NavigateTo("/my-requests");
                             }
                             else
                             {
@@ -104,7 +102,7 @@ public class AddRequestBase : RxBaseComponent
                 if (createRes.Success)
                 {
                     ToastService.ShowSuccess("Successfully created request!");
-                    NavManager.NavigateTo("/my-pending-request");
+                    NavManager.NavigateTo("/my-requests");
                 }
                 else
                 {

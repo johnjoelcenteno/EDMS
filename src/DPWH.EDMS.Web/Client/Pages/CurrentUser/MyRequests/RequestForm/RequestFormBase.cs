@@ -20,7 +20,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 using DPWH.NGOBIA.Client.Shared.APIClient.Services.Users;
 using AutoMapper;
 
-namespace DPWH.EDMS.Web.Client.Pages.CurrentUser.PendingRequests.RequestForm;
+namespace DPWH.EDMS.Web.Client.Pages.CurrentUser.MyRequests.RequestForm;
 
 public class RequestFormBase : RxBaseComponent
 {
@@ -72,7 +72,7 @@ public class RequestFormBase : RxBaseComponent
     protected override void OnInitialized()
     {
         LoadClaimantTypes();
-        _SetDefaultRequestDate();
+        _SetDefaultValues();
     }
 
     protected override async Task OnInitializedAsync()
@@ -86,12 +86,14 @@ public class RequestFormBase : RxBaseComponent
     }
 
     #region Load Events
-    private void _SetDefaultRequestDate()
+    private void _SetDefaultValues()
     {
         if (SelectedItem.DateRequested == default)
         {
             SelectedItem.DateRequested = DateTime.Now;
         }
+
+        SelectedItem.IsActiveEmployee = true;
     }
     protected async Task LoadValidIDTypes()
     {
