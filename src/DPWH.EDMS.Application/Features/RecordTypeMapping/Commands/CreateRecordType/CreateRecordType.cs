@@ -7,13 +7,13 @@ using MediatR;
 namespace DPWH.EDMS.Application;
 
 public record class CreateRecordTypeRequest(CreateRecordTypeModel Model) : IRequest<Guid>;
-public class CreateRecordTypeMapping : IRequestHandler<CreateRecordTypeRequest, Guid>
+public class CreateRecordType : IRequestHandler<CreateRecordTypeRequest, Guid>
 {
     public IWriteRepository WriteRepository { get; }
 
     private readonly ClaimsPrincipal _principal;
 
-    public CreateRecordTypeMapping(IWriteRepository writeRepository, ClaimsPrincipal principal)
+    public CreateRecordType(IWriteRepository writeRepository, ClaimsPrincipal principal)
     {
         WriteRepository = writeRepository;
         _principal = principal;

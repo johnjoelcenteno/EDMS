@@ -5,10 +5,10 @@ using Microsoft.EntityFrameworkCore;
 namespace DPWH.EDMS.Application;
 
 public record class DeleteRecordTypeRequest(Guid Id) : IRequest<Guid?>;
-public class DeleteRecordTypeMapping : IRequestHandler<DeleteRecordTypeRequest, Guid?>
+public class DeleteRecordType : IRequestHandler<DeleteRecordTypeRequest, Guid?>
 {
     public IWriteRepository WriteRepository { get; }
-    public DeleteRecordTypeMapping(IWriteRepository writeRepository)
+    public DeleteRecordType(IWriteRepository writeRepository)
     {
         WriteRepository = writeRepository;
     }

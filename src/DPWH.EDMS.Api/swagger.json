@@ -2852,17 +2852,24 @@
       "CreateRecordTypeModel": {
         "type": "object",
         "properties": {
-          "dataLibraryId": {
+          "name": {
             "type": "string",
-            "format": "uuid"
+            "nullable": true
           },
-          "division": {
+          "category": {
             "type": "string",
             "nullable": true
           },
           "section": {
             "type": "string",
             "nullable": true
+          },
+          "office": {
+            "type": "string",
+            "nullable": true
+          },
+          "isActive": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -4761,17 +4768,24 @@
       "UpdateRecordTypeModel": {
         "type": "object",
         "properties": {
-          "dataLibraryId": {
+          "name": {
             "type": "string",
-            "format": "uuid"
+            "nullable": true
           },
-          "division": {
+          "category": {
             "type": "string",
             "nullable": true
           },
           "section": {
             "type": "string",
             "nullable": true
+          },
+          "office": {
+            "type": "string",
+            "nullable": true
+          },
+          "isActive": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false

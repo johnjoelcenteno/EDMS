@@ -8,9 +8,9 @@ namespace DPWH.EDMS.Application;
 
 public record class UpdateRecordTypeRequest(Guid Id, UpdateRecordTypeModel model) : IRequest<Guid?>;
 
-public class UpdateRecordTypeMapping : IRequestHandler<UpdateRecordTypeRequest, Guid?>
+public class UpdateRecordType : IRequestHandler<UpdateRecordTypeRequest, Guid?>
 {
-    public UpdateRecordTypeMapping(IWriteRepository writeRepository, ClaimsPrincipal principal)
+    public UpdateRecordType(IWriteRepository writeRepository, ClaimsPrincipal principal)
     {
         WriteRepository = writeRepository;
         _principal = principal;
