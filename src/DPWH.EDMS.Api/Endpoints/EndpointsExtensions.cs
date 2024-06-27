@@ -10,6 +10,7 @@ using DPWH.EDMS.Api.Endpoints.Root;
 using DPWH.EDMS.Api.Endpoints.Users;
 using DPWH.EDMS.Api.Endpoints.RecordsManagement;
 using DPWH.EDMS.Api.Endpoints.RecordRequests;
+using DPWH.EDMS.Api.Endpoints.DataSync;
 
 namespace DPWH.EDMS.Api.Endpoints;
 
@@ -33,7 +34,7 @@ public static class EndpointsExtensions
         app.MapDpwhIntegrationsEndpoints();
         //app.MapArcGisIntegrationsEndpoints();
         app.MapDataLibrariesEndpoints();
-        //app.MapDataSyncEndpoints();
+        app.MapDataSyncEndpoints();
 
         return app;
     }
