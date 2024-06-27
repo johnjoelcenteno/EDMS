@@ -77,7 +77,7 @@ public class HomeBase : GridBase<EmployeeModel>
         {
             if (user.IsInRole(ApplicationRoles.EndUser))
             {
-                NavigationManager.NavigateTo("/my-pending-request");
+                NavigationManager.NavigateTo("/my-requests");
             }
         }
     }
