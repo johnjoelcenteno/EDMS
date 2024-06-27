@@ -16,26 +16,29 @@ namespace DPWH.EDMS.Api.Endpoints;
 
 public static class EndpointsExtensions
 {
-    public static IEndpointRouteBuilder MapApiEndpoints(this IEndpointRouteBuilder app)
-    {
-        // new endpoints
-        app.MapRecordRequestsEndpoints();
-        app.MapEmployeeRequestEndpointExtensions();        
-        app.MapRecordsEndpoints();
-        app.MapRootEndpoints();        
-        app.MapLookupsEndpoints();
-        app.MapAddressEndpoints();
-        app.MapLicensesEndpoints();
-        app.MapUsersEndpoints();
-        app.MapRoleEndpoints();
-        //app.MapReportsEndpoints();
-        app.MapAuditLogsEndpoints();
-        app.MapSystemLogsEndpoints();
-        app.MapDpwhIntegrationsEndpoints();
-        //app.MapArcGisIntegrationsEndpoints();
-        app.MapDataLibrariesEndpoints();
-        app.MapDataSyncEndpoints();
+        public static IEndpointRouteBuilder MapApiEndpoints(this IEndpointRouteBuilder app)
+        {
+                // new endpoints
+                app.MapRecordRequestsEndpoints();
+                app.MapEmployeeRequestEndpointExtensions();
+                app.MapRecordTypeExtensions();
 
-        return app;
-    }
+                //app.MapAssetEndpoints();
+                app.MapRecordsEndpoints();
+                app.MapRootEndpoints();
+                app.MapLookupsEndpoints();
+                app.MapAddressEndpoints();
+                app.MapLicensesEndpoints();
+                app.MapUsersEndpoints();
+                app.MapRoleEndpoints();
+                //app.MapReportsEndpoints();
+                app.MapAuditLogsEndpoints();
+                app.MapSystemLogsEndpoints();
+                app.MapDpwhIntegrationsEndpoints();
+                //app.MapArcGisIntegrationsEndpoints();
+                app.MapDataLibrariesEndpoints();
+                app.MapDataSyncEndpoints();
+
+                return app;
+        }
 }

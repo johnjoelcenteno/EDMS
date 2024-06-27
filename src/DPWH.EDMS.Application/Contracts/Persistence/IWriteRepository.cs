@@ -11,6 +11,7 @@ public interface IWriteRepository
     DbSet<RecordRequest> RecordRequests { get; }
     DbSet<RecordRequestDocument> RecordRequestDocuments { get; }
     DbSet<RequestedRecord> RequestedRecords { get; }
+    DbSet<RecordType> RecordTypes { get; }
     DbSet<Record> Records { get; }
 
     DbSet<Asset> Assets { get; }

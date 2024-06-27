@@ -1,8 +1,22 @@
+using DPWH.EDMS.Domain;
+
 namespace DPWH.EDMS.Api.Endpoints;
 
 public static class ApiEndpoints
 {
     private const string ApiBase = "api";
+
+    public static class RecordTypes
+    {
+        private const string Base = $"{ApiBase}/RecordTypes";
+
+        public const string Create = $"{Base}/Create";
+        public const string Update = $"{Base}/{{id:guid}}";
+        public const string Delete = $"{Base}/{{id:guid}}";
+        public const string Query = $"{Base}/Query";
+        public const string QueryById = $"{Base}/QueryById/{{id:guid}}";
+
+    }
 
     public static class RecordRequest
     {
@@ -77,7 +91,7 @@ public static class ApiEndpoints
         public const string ValidIDs = $"{Base}/validids";
         public const string SecondaryIDs = $"{Base}/secondaryids";
         public const string AuthorizationDocuments = $"{Base}/authorizationdocuments";
-        
+
         public const string RequestingOffices = $"{Base}/requestingoffices";
         public const string BuildingComponents = $"{Base}/buildingcomponents";
     }
