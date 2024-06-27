@@ -1,0 +1,22 @@
+﻿@using DPWH.EDMS.Api.Contracts
+@using DPWH.EDMS.Components.Helpers
+@inherits UserFormBase
+
+<EdmsLoader Visible="@IsLoading" />
+
+<EditForm Model="@User">
+    <FluentValidationValidator @ref="FluentValidationValidator" DisableAssemblyScanning="@true"></FluentValidationValidator>
+    <TelerikCard Class="edms-card-form">
+        <CardBody>
+    <h6 class="mb-2" for="EmployeeID">Employee ID</h6>
+    <div class="d-flex justify-content-between">
+        <TelerikTextBox Width="500px" Id="EmployeeID" @bind-Value="@User.EmployeeId" PlaceHolder="Search Employee ID"></TelerikTextBox>
+        <TelerikButton OnClick="@ClearSearch">X</TelerikButton>
+        <TelerikButton OnClick="@(() => OnSearchEmployeeID(User.EmployeeId))" ThemeColor="@(ThemeConstants.Button.ThemeColor.Primary)">Search</TelerikButton>
+    </div>
+    <label class="SearchStatus">@(OnEmpId == true ? "" : "Employee not found.")</label>
+    <label class="SearchStatus">@(OnSearchPis == true ? "" : "Something went wrong. Please try again.")</label>
+
+      </CardBody>
+    </TelerikCard>
+</EditForm>

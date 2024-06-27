@@ -12,6 +12,8 @@ public interface IWriteRepository
     DbSet<RecordRequestDocument> RecordRequestDocuments { get; }
     DbSet<RequestedRecord> RequestedRecords { get; }
     DbSet<RecordType> RecordTypes { get; }
+    DbSet<Record> Records { get; }
+
     DbSet<Asset> Assets { get; }
     DbSet<InspectionRequest> InspectionRequests { get; }
     DbSet<InspectionRequestDocument> InspectionRequestDocuments { get; }
@@ -20,7 +22,7 @@ public interface IWriteRepository
     DbSet<AssetFileDocument> AssetFiles { get; }
     DbSet<FinancialDetails> FinancialDetails { get; }
     DbSet<FinancialDetailsDocuments> FinancialDetailsDocuments { get; }
-    DbSet<GeoLocation> GeoLocation { get; }
+    DbSet<GeoLocation> Geolocations { get; }
     DbSet<ConfigSetting> ConfigSettings { get; }
     DbSet<SystemLog> SystemLogs { get; }
     DbSet<DataLibrary> DataLibraries { get; }

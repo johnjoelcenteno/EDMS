@@ -7,7 +7,7 @@
 <TelerikMediaQuery Media="(max-width: 480px)" OnChange="((changed) => XSmall = changed)"></TelerikMediaQuery>
 
 <EdmsBreadcrumbs Data="@BreadcrumbItems" />
-<h3>Record Management</h3>
+<h3>Records Management</h3>
 <hr />
 
 <div class="d-flex flex-row mt-3">
@@ -28,7 +28,8 @@
                                  Data="RecordList"
                                  OnStateChanged="@OnStateChanged"
                                  @ref="GridRef"
-                                 Context="record">
+                                 Context="record"
+                                 OnRowClick="GoToSelectedItemDocuments">
                         <GridSettings>
                             <GridPagerSettings PageSizes="@PageSizes">
                             </GridPagerSettings>
@@ -39,9 +40,9 @@
                             <GridColumn Field=@nameof(RecordModel.MiddleName) Title="Middle Name" />
                             <GridColumn Field=@nameof(RecordModel.Office) Title="Office" />
                             <GridColumn Field=@nameof(RecordModel.BureauServiceDivisionSectionUnit) Title="Bureau/Service/Division/Section/Unit" />
-                            <GridCommandColumn Width="50px">
+                            @* <GridCommandColumn Width="50px">
                                 <TelerikButton Icon="@FontIcon.MoreVertical"></TelerikButton>
-                            </GridCommandColumn>
+                            </GridCommandColumn> *@
                         </GridColumns>
                     </TelerikGrid>
                 }

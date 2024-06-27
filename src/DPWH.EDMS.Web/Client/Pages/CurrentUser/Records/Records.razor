@@ -1,12 +1,12 @@
-﻿@page "/my-Records"
-
+﻿@page "/my-records"
+@page "/records-management/{Id}"
 @inherits RecordsBase
 @inject NavigationManager Navigation
 @attribute [Authorize(Policy = "RequireActiveRoles")]
 
 <EdmsBreadcrumbs Data="@BreadcrumbItems" />
 
-<h3>My Records</h3>
+<h3>@(Navigation.Uri.Contains("records-management") ? "Records" : "My Records")</h3>
 <hr />
 <div class="d-flex flex-row mt-3">
     <TelerikCard Width="100%">
@@ -17,14 +17,14 @@
             <CardSeparator Class="my-2"></CardSeparator>
             <div class="mobile-property-grid">
 
-                @if (EmployeeList != null && !XSmall)
+                @if (DocumentList != null && !XSmall)
                 {
-                    <TelerikGrid TItem="EmployeeSamp"
+                    <TelerikGrid TItem="Document"
                                  @bind-PageSize="@PageSize"
                                  Height="@GridHeight"
                                  FilterMode="GridFilterMode.FilterRow"
                                  Sortable=true
-                                 Data="EmployeeList"
+                                 Data="DocumentList"
                                  OnStateChanged="@OnStateChanged"
                                  @ref="GridRef"
                                  Context="employee">
@@ -33,9 +33,12 @@
                             </GridPagerSettings>
                         </GridSettings>
                         <GridColumns>
-                            <GridColumn Field=@nameof(EmployeeSamp.DocumentName) Title="Document Name" />
-                            <GridCommandColumn Width="10%">
-                                <GridCommandButton Class="exportButton" Command="ExportData" OnClick="@exportData">Export</GridCommandButton>
+                            <GridColumn Field=@nameof(Document.DocumentName) Title="Document Name" />
+                            <GridCommandColumn Width="5%">
+                                <GridCommandButton Class="commandButton" Command="ExportData" OnClick="@viewData">View</GridCommandButton>
+                            </GridCommandColumn>
+                            <GridCommandColumn Width="5%">
+                                <GridCommandButton Class="commandButton">Export</GridCommandButton>
                             </GridCommandColumn>
                         </GridColumns>
                     </TelerikGrid>
@@ -57,7 +60,7 @@
     </TelerikCard>
 </div>
 <style>
-    .exportButton{
+    .commandButton{
             font-weight: 500;
             width: 100%;
 

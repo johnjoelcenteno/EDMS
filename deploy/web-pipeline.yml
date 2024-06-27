@@ -16,6 +16,8 @@ trigger:
     - src/DPWH.EDMS.Web/*
     - src/DPWH.EDMS.Components/*
     - src/DPWH.EMDS.Shared/*
+    - deploy/jobs/web/*
+    - deploy/variables/web/*
     exclude:
     - src/*
 

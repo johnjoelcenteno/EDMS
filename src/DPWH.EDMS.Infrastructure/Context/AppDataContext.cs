@@ -17,10 +17,10 @@ public class AppDataContext : DbContext, IReadRepository, IWriteRepository
     public IQueryable<RecordRequest> RecordRequestsView => RecordRequests.Include(r => r.AuthorizedRepresentative).AsNoTracking();
     public DbSet<RecordRequestDocument> RecordRequestDocuments { get; set; }
     public IQueryable<RecordRequestDocument> RecordRequestDocumentsView => RecordRequestDocuments.AsNoTracking();
-
     public DbSet<RequestedRecord> RequestedRecords { get; set; }
     public IQueryable<RequestedRecord> RequestedRecordsView => RequestedRecords.AsNoTracking();
-
+    public DbSet<Record> Records { get; set; }
+    public IQueryable<Record> RecordsView => Records.AsNoTracking();
 
     public DbSet<EmployeeRecord> EmployeeRecords { get; set; }
     public IQueryable<EmployeeRecord> EmployeeRecordsView => EmployeeRecords.AsNoTracking();
@@ -47,8 +47,8 @@ public class AppDataContext : DbContext, IReadRepository, IWriteRepository
     public DbSet<AssetFileDocument> AssetFiles { get; set; }
     public IQueryable<AssetFileDocument> AssetFilesView => AssetFiles.AsNoTracking();
 
-    public DbSet<GeoLocation> GeoLocation { get; set; }
-    public IQueryable<GeoLocation> GeoLocationView => GeoLocation.AsNoTracking();
+    public DbSet<GeoLocation> Geolocations { get; set; }
+    public IQueryable<GeoLocation> GeolocationsView => Geolocations.AsNoTracking();
 
     public DbSet<ConfigSetting> ConfigSettings { get; set; }
     public IQueryable<ConfigSetting> ConfigSettingsView => ConfigSettings.AsNoTracking();

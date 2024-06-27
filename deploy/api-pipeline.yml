@@ -18,6 +18,8 @@ trigger:
       - src/DPWH.EDMS.Application/*
       - src/DPWH.EDMS.Infrastructure/*
       - src/DPWH.EDMS.DbUp/*
+      - deploy/jobs/api/*
+      - deploy/variables/api/*
     exclude:
       - src/*
 

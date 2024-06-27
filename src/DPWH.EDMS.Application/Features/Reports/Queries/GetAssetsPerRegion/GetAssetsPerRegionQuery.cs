@@ -19,7 +19,7 @@ internal sealed class GetAssetsPerRegionHandler : IRequestHandler<GetAssetsPerRe
 
     public Task<DataSourceResult> Handle(GetAssetsPerRegionQuery request, CancellationToken cancellationToken)
     {
-        var result = _repository.GeoLocationView
+        var result = _repository.GeolocationsView
             .Where(address => address.Type == "Region")
             .GroupJoin(
                 _repository.AssetsView, address => address.Name,

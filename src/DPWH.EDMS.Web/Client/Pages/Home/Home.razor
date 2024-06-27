@@ -1,4 +1,5 @@
 ﻿@page "/"
+@using DPWH.EDMS.Api.Contracts
 
 @attribute [Authorize(Roles = "dpwh_superadmin, system_admin, dpwh_enduser")]
 @inherits HomeBase
@@ -23,21 +24,6 @@
                         <CardHeader Class="ch-card-flex">
                             <h6 style="font-size: 12px;" class="mb-0">@status.Id</h6>
                             <h1 class="mb-0">@status.Name</h1>
-                        </CardHeader>
-                    </TelerikCard>
-                }
-            </div>
-            <div class="col d-flex flex-row flex-wrap m-0 pr-0">
-                @foreach (var status in SecondStatusList)
-                {
-                    <TelerikCard Class="ch-card-flex flex-grow-1">
-                        <CardHeader Class="ch-card-flex d-inline-flex">
-                            <strong style="font-size: 12px; align-content:center;" class="mb-0">@status.Id</strong>
-                            @if(status.Name != "")
-                            {
-                                <span class="ov-circle">@status.Name</span>
-                            }
-                            
                         </CardHeader>
                     </TelerikCard>
                 }
@@ -77,44 +63,7 @@
                         <GridColumns>
                             <GridColumn Field=@nameof(EmployeeModel.ControlNumber) Title="Control No." Filterable = "false" />
                             <GridColumn Field=@nameof(EmployeeModel.FullName) Title="Full Name" />
-                            <GridColumn Field=@nameof(EmployeeModel.RecordRequested) Title="Records Requested" ShowFilterCellButtons="false">
-                                <FilterCellTemplate>
-                                    <TelerikDropDownList 
-                                                         Class="col-6"
-                                                         ValueField="@nameof(EmployeeModel.RecordRequested)"
-                                                         TextField="@nameof(EmployeeModel.RecordRequested)"
-                                                         DefaultText="All"
-                                                         @bind-Value="DropDownListValue"
-
-                                                         Data="EmployeeList">
-                                    </TelerikDropDownList>
-                                    <TelerikButton ButtonType="ButtonType.Button"
-                                                   Class="k-clear-button-visible ml-2"
-                                                   Icon="@SvgIcon.Filter"
-                                                   OnClick="@(async () =>
-                                          {
-                                             
-
-                                              // clear filter through the method the context provides
-                                              await context.FilterAsync();
-                                          })">
-                                    </TelerikButton>
-                                    <TelerikButton ButtonType="ButtonType.Button"
-                                                   Class="k-clear-button-visible ml-2"
-                                                   Icon="@SvgIcon.FilterClear"
-                                                   Enabled="@( DropDownListValue != null )"
-                                                   OnClick="@(async () =>
-                                          {
-                                              DropDownListValue = null;
-
-                                              // clear filter through the method the context provides
-                                              await context.ClearFilterAsync();
-                                          })">
-                                    </TelerikButton>
-                            </FilterCellTemplate> 
-                            </GridColumn>
                             <GridColumn Field=@nameof(EmployeeModel.DateRequested) Title="Date Requested" />
-                            <GridColumn Field=@nameof(EmployeeModel.Purpose) Title="Purpose" />
                             <GridColumn Field=@nameof(EmployeeModel.Status) Title="Status" />
                         </GridColumns>
                     </TelerikGrid>
@@ -169,16 +118,16 @@
         <div class="col">
             <TelerikCard Width="100%">
                 <CardHeader Class="ch-card">
-                    <h5 class="mb-0">Fullfilled Request </h5>
+                    <h5 class="mb-0">Overview Status </h5>
                 </CardHeader>
                 <div class="container">
                     <TelerikChart Class="PieChart" @ref="FullfilledChartRef">
                         <ChartSeriesItems>
-                            <ChartSeries Type="ChartSeriesType.Pie" Data="@pieData"
-                                                Field="@nameof(MyPieChartModel.SegmentValue)" CategoryField="@nameof(MyPieChartModel.SegmentName)">
+                        <ChartSeries Type="ChartSeriesType.Pie" Data="@OverviewStatusList"
+                                     Field="@nameof(SimpleKeyValue.Name)" CategoryField="@nameof(SimpleKeyValue.Id)">
                             <ChartSeriesTooltip Visible="true">
                                 <Template>
-                                    @((context.DataItem as MyPieChartModel).SegmentName) for @((context.DataItem as MyPieChartModel).SegmentValue)
+                                    @((context.DataItem as SimpleKeyValue).Id) for @((context.DataItem as SimpleKeyValue).Name)
                                 </Template>
                             </ChartSeriesTooltip>
                                 <ChartSeriesLabels Position="ChartSeriesLabelsPosition.Center"
@@ -207,41 +156,27 @@
         <div class="col">
             <TelerikCard Width="100%">
                 <CardHeader Class="ch-card">
-                    <h5 class="mb-0">Requested Documents </h5>
+                    <h5 class="mb-0">Monthly Requests </h5>
                 </CardHeader>
                 <div class="container">
-                    <TelerikChart @ref="RequstChartRef">
-                        <ChartSeriesItems>
-                            <ChartSeries Type="ChartSeriesType.Pie" Data="@pieData"
-                                         Field="@nameof(MyPieChartModel.SegmentValue)" CategoryField="@nameof(MyPieChartModel.SegmentName)">
-                            <ChartSeriesTooltip Visible="true">
-                                <Template>
-                                    @((context.DataItem as MyPieChartModel).SegmentName) for @((context.DataItem as MyPieChartModel).SegmentValue)
-                                </Template>
-                            </ChartSeriesTooltip>
-                                <ChartSeriesLabels Position="ChartSeriesLabelsPosition.Center"
-                                                   Visible="true"
-                                                   Font="16px 'Times New Roman'"
-                                                   Background="transparent"></ChartSeriesLabels>
-                            
-                            </ChartSeries>
-                        </ChartSeriesItems>
-                        
-                        @if (XSmall)
-                        {
-                            <ChartLegend Position="ChartLegendPosition.Bottom">
+                <TelerikChart>
+                    <ChartTooltip Visible="true"></ChartTooltip>
+                    <ChartLegend Visible="false"></ChartLegend>
 
-                            </ChartLegend>
-                        }
-                        else
-                        {
-                        RequstChartRef.Refresh();
-                            <ChartLegend Position="ChartLegendPosition.Right">
+                    <ChartSeriesItems>
+                        <ChartSeries Type="ChartSeriesType.Bar" Name="Total Visits" Data="@Series1Data">
+                        </ChartSeries>
+                    </ChartSeriesItems>
 
-                            </ChartLegend>
-                        }
-                
-                    </TelerikChart>
+                    <ChartValueAxes>
+                        <ChartValueAxis Max="50000"></ChartValueAxis>
+                    </ChartValueAxes>
+
+                    <ChartCategoryAxes>
+                        <ChartCategoryAxis Categories="@Categories"></ChartCategoryAxis>
+                    </ChartCategoryAxes>
+
+                </TelerikChart>
                 </div>
             </TelerikCard>
         </div>

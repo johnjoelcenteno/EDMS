@@ -56,7 +56,7 @@ internal sealed class SyncAddressHandler(ClaimsPrincipal principal, IWriteReposi
             .Where(l => l.ParentRef is null || list.All(i => i.Id != l.ParentRef))
             .ToList();
 
-        await repository.GeoLocation.AddRangeAsync(parents, cancellationToken);
+        await repository.Geolocations.AddRangeAsync(parents, cancellationToken);
         await repository.SaveChangesAsync(cancellationToken);
 
         return list.Except(parents).ToList();

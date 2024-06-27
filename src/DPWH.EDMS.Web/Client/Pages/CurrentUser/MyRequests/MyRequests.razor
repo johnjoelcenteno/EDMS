@@ -1,0 +1,23 @@
+﻿@page "/my-requests"
+@using DPWH.EDMS.Components.Components
+@using DPWH.EDMS.Web.Client.Pages.CurrentUser.MyRequests.MyRequestsGrid
+
+@inherits MyRequestsBase
+@attribute [Authorize(Policy = "RequireActiveRoles")]
+
+<EdmsBreadcrumbs Data="@BreadcrumbItems" />
+
+<h3>My Requests</h3>
+<hr />
+
+<TelerikTabStrip>
+    <TabStripTab Title="All">
+        <MyRequestsGrid></MyRequestsGrid>
+    </TabStripTab>
+    <TabStripTab Title="Completed">
+        <MyRequestsGrid></MyRequestsGrid>
+    </TabStripTab>
+    <TabStripTab Title="Rejected">
+        <MyRequestsGrid></MyRequestsGrid>
+    </TabStripTab>
+</TelerikTabStrip>

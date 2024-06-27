@@ -61,6 +61,7 @@ public class AddRequestBase : RxBaseComponent
                     {
 
                         CreateResponse uploadSupportingDocRes = new();
+                        currentDocRequest.ValidId = uploadValidIdRes.Id;
 
                         await ExceptionHandlerService.HandleApiException(async () =>
                         {
@@ -70,8 +71,8 @@ public class AddRequestBase : RxBaseComponent
                         if (uploadSupportingDocRes.Success)
                         {
                             // set values
-                            SelectedItem = currentDocRequest;
-                            SelectedItem.ValidId = uploadValidIdRes.Id;
+                            //SelectedItem = currentDocRequest;
+                            currentDocRequest.SupportingDocument = uploadSupportingDocRes.Id;
 
                             var createRes = await RecordRequestsService.CreateRecordRequest(currentDocRequest);
 

@@ -1,4 +1,4 @@
-﻿@page "/personal-Data/{Id:int}"
+﻿@page "/personal-data/{Id:int}"
 @using DPWH.EDMS.Components.Helpers
 @inherits RecordsPersonalData
 
@@ -6,7 +6,7 @@
 
 <h3>My Records</h3>
 <span>Personal Data Sheet</span><br />
-<span>To view associated request </span> <NavLink href="/Personal-Data">Click here</NavLink>
+<span>To view associated request </span> <NavLink href="/Personal-data">Click here</NavLink>
 <span>
     (Control Number: <span style="color: #38339B;">@EmployeeList[Id-1].ControlNumber</span>
     / Date Requested: <span style="color: #38339B;">@(GenericHelper.GetDateDisplay(EmployeeList[Id-1].DateRequested, "MM/dd/yyyy")))</span>

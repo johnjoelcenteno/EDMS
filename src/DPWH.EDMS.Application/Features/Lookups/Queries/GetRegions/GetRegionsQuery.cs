@@ -20,7 +20,7 @@ internal sealed class GetRegionsHandler : IRequestHandler<GetRegionsQuery, Addre
     public async Task<AddressLookup> Handle(GetRegionsQuery request, CancellationToken cancellationToken)
     {
         var entity = await _repository
-            .GeoLocationView
+            .GeolocationsView
             .Where(d => d.Type == GeoLocationTypes.R.ToString())
             .ToListAsync(cancellationToken);
 

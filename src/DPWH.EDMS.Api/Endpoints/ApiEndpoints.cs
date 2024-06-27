@@ -24,6 +24,7 @@ public static class ApiEndpoints
 
         public const string Get = $"{Base}/{{id:guid}}";
         public const string Query = $"{Base}/query";
+        public const string QueryByEmployeeId = $"{Base}/query/{{employeeId}}";
         public const string Create = $"{Base}/create";
         public const string Update = $"{Base}/update";
         public const string Delete = $"{Base}/delete";
@@ -43,6 +44,18 @@ public static class ApiEndpoints
         }
     }
 
+    public static class RecordManagement
+    {
+        private const string Base = $"{ApiBase}/records";
+
+        public const string Get = $"{Base}/{{id:guid}}";
+        public const string Query = $"{Base}/query";
+        public const string QueryByEmployeeId = $"{Base}/query/{{employeeId}}";
+        public const string Create = $"{Base}/create";
+        public const string Update = $"{Base}/update";
+        public const string Delete = $"{Base}/delete";
+    }
+
     public static class EmployeeRecordEndpoints
     {
         private const string Base = $"{ApiBase}/EmployeeRecords";
@@ -52,36 +65,6 @@ public static class ApiEndpoints
         public const string Create = $"{Base}";
         public const string Update = $"{Base}/{{id:guid}}";
         public const string Delete = $"{Base}/{{id:guid}}";
-    }
-
-    public static class Assets
-    {
-        private const string Base = $"{ApiBase}/assets";
-
-        public const string Create = Base;
-        public const string Update = Base;
-        public const string Query = $"{Base}/query";
-        public const string Get = $"{Base}/{{id:guid}}";
-        public const string Patch = $"{Base}/{{id:guid}}";
-        public const string Delete = $"{Base}/{{id:guid}}";
-        public const string UpdateStatus = $"{Base}/{{id:guid}}/updatestatus";
-        public const string GetByImplementingOffice = $"{Base}/implementingoffices";
-        public const string GetByRegionalOffice = $"{Base}/regionaloffices";
-        public const string GetByBuildingId = $"{Base}/buildings/{{id}}";
-        public const string Validate = $"{Base}/validate";
-
-        public static class AssetDocuments
-        {
-            public const string DeleteDocument = $"{Base}/{{assetId:guid}}/documents/delete";
-            //public const string DeleteDocument = $"{GetDocuments}/delete";
-            public const string GetImages = $"{Base}/{{assetId:guid}}/images";
-            public const string GetFiles = $"{Base}/{{assetId:guid}}/files";
-            public const string SaveImage = $"{Base}/{{assetId:guid}}/images/save";
-            public const string SaveFile = $"{Base}/{{assetId:guid}}/files/{{documentType}}";
-            public const string UpdateFileProperties = $"{Base}/{{assetId:guid}}/files/{{documentType}}/properties";
-            public const string SaveFinancialFile = $"{Base}/{{assetId:guid}}/funding-history";
-            public const string UpdateFinancialFileProperties = $"{Base}/{{assetId:guid}}/funding-history/properties";
-        }
     }
 
     public static class Licenses

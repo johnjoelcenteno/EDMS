@@ -8,6 +8,7 @@ using Telerik.DataSource;
 namespace DPWH.EDMS.Client.Shared.MockModels;
 public class RecordModel
 {
+    public Guid Id { get; set; }
     public string LastName { get; set; }
     public string FirstName { get; set; }
     public string MiddleName { get; set; }

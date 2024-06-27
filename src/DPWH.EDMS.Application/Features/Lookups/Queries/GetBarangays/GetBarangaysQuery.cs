@@ -22,7 +22,7 @@ internal sealed class GetBarangaysHandler : IRequestHandler<GetBarangaysQuery, A
         var cityOrMunicipalityCode = request.CityCode;
 
         var entity = await _repository
-            .GeoLocationView
+            .GeolocationsView
             .Where(d => d.Type == GeoLocationTypes.B.ToString() && d.ParentId.Contains(cityOrMunicipalityCode))
             .ToListAsync(cancellationToken);
 

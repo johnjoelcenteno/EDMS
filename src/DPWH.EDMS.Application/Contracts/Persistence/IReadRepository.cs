@@ -9,12 +9,13 @@ public interface IReadRepository
     IQueryable<RecordRequest> RecordRequestsView { get; }
     IQueryable<RecordRequestDocument> RecordRequestDocumentsView { get; }
     IQueryable<EmployeeRecord> EmployeeRecordsView { get; }
+    IQueryable<Record> RecordsView { get; }
     IQueryable<Asset> AssetsView { get; }
     IQueryable<InspectionRequest> InspectionRequestsView { get; }
     IQueryable<MaintenanceRequest> MaintenanceRequestsView { get; }
     IQueryable<BuildingComponent> BuildingComponentsView { get; }
     IQueryable<FinancialDetailsDocuments> FinancialDetailsDocumentsView { get; }
-    IQueryable<GeoLocation> GeoLocationView { get; }
+    IQueryable<GeoLocation> GeolocationsView { get; }
     IQueryable<AssetFileDocument> AssetFilesView { get; }
     IQueryable<AssetImageDocument> AssetImagesView { get; }
     IQueryable<ConfigSetting> ConfigSettingsView { get; }

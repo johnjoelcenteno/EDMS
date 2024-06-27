@@ -1,0 +1,13 @@
+﻿@page "/user-management/add"
+@using DPWH.EDMS.Web.Client.Pages.UserManagement.UserForm
+
+@inherits AddUserBase
+@attribute [Authorize(Policy = "RequireActiveRoles")]
+
+<EdmsBreadcrumbs Data="@BreadcrumbItems" />
+<EdmsLoader Visible="IsLoading" />
+
+<h3>Add New User</h3>
+<hr />
+
+<UserForm></UserForm>

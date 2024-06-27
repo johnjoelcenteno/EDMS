@@ -8,36 +8,39 @@ using DPWH.EDMS.Api.Endpoints.Roles;
 using DPWH.EDMS.Api.Endpoints.AuditLogs;
 using DPWH.EDMS.Api.Endpoints.Root;
 using DPWH.EDMS.Api.Endpoints.Users;
+using DPWH.EDMS.Api.Endpoints.RecordsManagement;
+using DPWH.EDMS.Api.Endpoints.RecordRequests;
+using DPWH.EDMS.Api.Endpoints.DataSync;
 
 namespace DPWH.EDMS.Api.Endpoints;
 
 public static class EndpointsExtensions
 {
-    public static IEndpointRouteBuilder MapApiEndpoints(this IEndpointRouteBuilder app)
-    {
-        // new endpoints
-        app.MapRecordRequestsEndpoints();
-        app.MapEmployeeRequestEndpointExtensions();
-        app.MapRecordTypeExtensions();
+        public static IEndpointRouteBuilder MapApiEndpoints(this IEndpointRouteBuilder app)
+        {
+                // new endpoints
+                app.MapRecordRequestsEndpoints();
+                app.MapEmployeeRequestEndpointExtensions();
+                app.MapRecordTypeExtensions();
 
-        app.MapRootEndpoints();
-        //app.MapAssetEndpoints();
-        app.MapLookupsEndpoints();
-        app.MapAddressEndpoints();
-        app.MapLicensesEndpoints();
-        app.MapUsersEndpoints();
-        app.MapRoleEndpoints();
-        //app.MapReportsEndpoints();
-        app.MapAuditLogsEndpoints();
-        app.MapSystemLogsEndpoints();
-        app.MapDpwhIntegrationsEndpoints();
-        //app.MapArcGisIntegrationsEndpoints();
-        app.MapDataLibrariesEndpoints();
-        //app.MapDataSyncEndpoints();
-        //app.MapInspectionsEndpoints();
-        //app.MapMaintenanceRequestEndpoints();
-        //app.MapProjectMonitoringEndpoints();
+                app.MapRootEndpoints();
+                //app.MapAssetEndpoints();
+                app.MapEmployeeRequestEndpointExtensions();
+                app.MapRecordsEndpoints();
+                app.MapRootEndpoints();
+                app.MapLookupsEndpoints();
+                app.MapAddressEndpoints();
+                app.MapLicensesEndpoints();
+                app.MapUsersEndpoints();
+                app.MapRoleEndpoints();
+                //app.MapReportsEndpoints();
+                app.MapAuditLogsEndpoints();
+                app.MapSystemLogsEndpoints();
+                app.MapDpwhIntegrationsEndpoints();
+                //app.MapArcGisIntegrationsEndpoints();
+                app.MapDataLibrariesEndpoints();
+                app.MapDataSyncEndpoints();
 
-        return app;
-    }
+                return app;
+        }
 }
