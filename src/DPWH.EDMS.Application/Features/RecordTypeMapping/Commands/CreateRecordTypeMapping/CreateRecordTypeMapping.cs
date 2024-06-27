@@ -1,5 +1,7 @@
-﻿using DPWH.EDMS.Application.Contracts.Persistence;
+﻿using System.Security.Claims;
+using DPWH.EDMS.Application.Contracts.Persistence;
 using DPWH.EDMS.Domain;
+using DPWH.EDMS.IDP.Core.Extensions;
 using MediatR;
 
 namespace DPWH.EDMS.Application;
@@ -8,16 +10,27 @@ public record class CreateRecordTypeRequest(CreateRecordTypeModel Model) : IRequ
 public class CreateRecordTypeMapping : IRequestHandler<CreateRecordTypeRequest, Guid>
 {
     public IWriteRepository WriteRepository { get; }
-    public CreateRecordTypeMapping(IWriteRepository writeRepository)
+
+    private readonly ClaimsPrincipal _principal;
+
+    public CreateRecordTypeMapping(IWriteRepository writeRepository, ClaimsPrincipal principal)
     {
         WriteRepository = writeRepository;
+        _principal = principal;
     }
 
     public async Task<Guid> Handle(CreateRecordTypeRequest request, CancellationToken cancellationToken)
     {
         var model = request.Model;
-        string createdBy = "";
-        RecordType recordTypeMapping = RecordType.Create(model.DataLibraryId, model.Division, model.Section, createdBy);
+        string createdBy = _principal.GetUserName();
+        RecordType recordTypeMapping = RecordType.Create(
+            model.Name,
+            model.Category,
+            model.Section,
+            model.Office,
+            model.IsActive,
+            createdBy
+        );
 
         WriteRepository.RecordTypes.Add(recordTypeMapping);
         await WriteRepository.SaveChangesAsync();

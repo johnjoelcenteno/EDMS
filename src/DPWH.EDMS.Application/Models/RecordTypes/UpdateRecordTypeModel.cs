@@ -1,3 +1,9 @@
 ﻿namespace DPWH.EDMS.Application;
 
-public record class UpdateRecordTypeModel(Guid DataLibraryId, string Division, string Section);
+public record class UpdateRecordTypeModel(
+    string Name,
+    string Category,
+    string Section,
+    string Office,
+    bool IsActive
+);

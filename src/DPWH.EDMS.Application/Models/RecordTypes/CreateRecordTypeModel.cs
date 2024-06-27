@@ -2,4 +2,10 @@
 
 namespace DPWH.EDMS.Application;
 
-public record class CreateRecordTypeModel(Guid DataLibraryId, string Division, string Section);
+public record class CreateRecordTypeModel(
+    string Name,
+    string Category,
+    string Section,
+    string Office,
+    bool IsActive
+);

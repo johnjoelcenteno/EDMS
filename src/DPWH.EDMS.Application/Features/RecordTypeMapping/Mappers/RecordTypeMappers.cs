@@ -8,9 +8,11 @@ public static class RecordTypeMappingMappers
     {
         return new QueryRecordTypesModel
         {
-            DataLibraryId = recordType.DataLibraryId,
-            Division = recordType.Division,
+            Name = recordType.Name,
+            Category = recordType.Category,
             Section = recordType.Section,
+            Office = recordType.Office,
+            IsActive = recordType.IsActive,
         };
     }
 }

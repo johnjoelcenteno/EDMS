@@ -1,35 +1,45 @@
 ﻿using DPWH.EDMS.Domain.Common;
+using System;
 
-namespace DPWH.EDMS.Domain;
-
-public class RecordType : EntityBase
+namespace DPWH.EDMS.Domain
 {
-    private RecordType() { }
-
-    private RecordType(Guid dataLibraryId, string division, string section, string createdBy)
+    public class RecordType : EntityBase
     {
-        Id = Guid.NewGuid();
-        DataLibraryId = dataLibraryId;
-        Division = division;
-        Section = section;
-        SetCreated(createdBy);
-    }
+        private RecordType() { }
 
-    public static RecordType Create(Guid dataLibraryId, string division, string section, string createdBy)
-    {
-        var mapping = new RecordType(dataLibraryId, division, section, createdBy);
-        return mapping;
-    }
+        private RecordType(Guid id, string name, string category, string section, string office, bool isActive)
+        {
+            Id = id;
+            Name = name;
+            Category = category;
+            Section = section;
+            Office = office;
+            IsActive = isActive;
+        }
 
-    public void Update(Guid dataLibraryId, string division, string section, string modifiedBy)
-    {
-        DataLibraryId = dataLibraryId;
-        Division = division;
-        Section = section;
-        SetModified(modifiedBy);
-    }
+        public static RecordType Create(string name, string category, string section, string office, bool isActive, string createdBy)
+        {
+            var id = Guid.NewGuid();
 
-    public Guid DataLibraryId { get; private set; }
-    public string Division { get; private set; }
-    public string Section { get; private set; }
+            var recordType = new RecordType(id, name, category, section, office, isActive);
+            recordType.SetCreated(createdBy);
+            return recordType;
+        }
+
+        public void Update(string name, string category, string section, string office, bool isActive, string modifiedBy)
+        {
+            Name = name;
+            Category = category;
+            Section = section;
+            Office = office;
+            IsActive = isActive;
+            SetModified(modifiedBy);
+        }
+
+        public string Name { get; private set; }
+        public string Category { get; private set; }
+        public string Section { get; private set; }
+        public string Office { get; private set; }
+        public bool IsActive { get; private set; }
+    }
 }
