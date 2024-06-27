@@ -54,3 +54,17 @@ BEGIN CREATE TABLE [dbo].[Agencies](
     WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY] ) ON [PRIMARY]
 END
 GO
+
+-- Create Table DataSyncLogs Table
+IF NOT EXISTS (SELECT *	FROM sysobjects	WHERE name = N'[DataSyncLogs]' AND xtype = 'U')
+BEGIN CREATE TABLE [dbo].[DataSyncLogs] (
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [Type] [nvarchar](100) NOT NULL,
+    [Result] [nvarchar](250) NULL,
+    [Description] [nvarchar](250) NULL,
+	[CreatedBy] [nvarchar](100) NOT NULL,
+    [Created] [DATETIMEOFFSET](7) NOT NULL
+    CONSTRAINT [PK_DataSyncLogs] PRIMARY KEY CLUSTERED ( [Id] ASC )
+    WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY] ) ON [PRIMARY]
+END
+GO
