@@ -2,9 +2,9 @@
 IF NOT EXISTS (SELECT *	FROM sysobjects	WHERE name = N'RequestingOffices' AND xtype = 'U')
 BEGIN CREATE TABLE RequestingOffices (
 	Id [nvarchar](50) PRIMARY KEY,	
-	Name NVARCHAR(50) NOT NULL,
-	ParentId [uniqueidentifier] NOT NULL,	
-	NumberCode NVARCHAR(150) NOT NULL,
+	Name NVARCHAR(250) NULL,
+	ParentId [nvarchar](50) NULL,	
+	NumberCode NVARCHAR(150) NULL,
 	Created [DATETIMEOFFSET](7) NOT NULL,
 	CreatedBy NVARCHAR(150),
 	LastModified [DATETIMEOFFSET](7) NULL,
