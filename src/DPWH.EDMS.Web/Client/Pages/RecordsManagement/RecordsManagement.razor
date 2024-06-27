@@ -3,7 +3,7 @@
 @inherits RecordsManagementBase
 @attribute [Authorize(Policy = "RequireActiveRoles")]
 
-@* <EdmsLoader Visible="@IsLoading" /> *@
+<EdmsLoader Visible="@IsLoading" />
 <TelerikMediaQuery Media="(max-width: 480px)" OnChange="((changed) => XSmall = changed)"></TelerikMediaQuery>
 
 <EdmsBreadcrumbs Data="@BreadcrumbItems" />
@@ -25,7 +25,7 @@
                                  Height="@GridHeight"
                                  FilterMode="GridFilterMode.FilterRow"
                                  Sortable=true
-                                 Data="RecordList"
+                                 Data="MockData.GetRecords()"
                                  OnStateChanged="@OnStateChanged"
                                  @ref="GridRef"
                                  Context="record"
@@ -40,9 +40,6 @@
                             <GridColumn Field=@nameof(RecordModel.MiddleName) Title="Middle Name" />
                             <GridColumn Field=@nameof(RecordModel.Office) Title="Office" />
                             <GridColumn Field=@nameof(RecordModel.BureauServiceDivisionSectionUnit) Title="Bureau/Service/Division/Section/Unit" />
-                            @* <GridCommandColumn Width="50px">
-                                <TelerikButton Icon="@FontIcon.MoreVertical"></TelerikButton>
-                            </GridCommandColumn> *@
                         </GridColumns>
                     </TelerikGrid>
                 }

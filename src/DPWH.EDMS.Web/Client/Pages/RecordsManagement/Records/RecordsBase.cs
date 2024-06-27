@@ -4,27 +4,37 @@ using DPWH.EDMS.Components.Components.ReusableGrid;
 using Microsoft.AspNetCore.Components;
 using Telerik.Blazor.Components;
 
-namespace DPWH.EDMS.Web.Client.Pages.CurrentUser.Records;
+namespace DPWH.EDMS.Web.Client.Pages.RecordsManagement.Records;
 
 public class RecordsBase : GridBase<Document>
 {
     [Parameter] public required string Id { get; set; }
     [Inject] public required NavigationManager NavigationManager { get; set; }
-    protected EDMS.Client.Shared.MockModels.RecordModel Record { get; set; }
-    protected MockCurrentData CurrentData { get; set; }
     protected List<Document> DocumentList = new List<Document>();
+    protected RecordModel Record { get; set; } = new RecordModel();
 
     protected override void OnInitialized()
     {
         BreadcrumbItems.Add(new BreadcrumbModel
         {
             Icon = "menu",
-            Text = "My Records",
-            Url = "/my-records"
+            Text = "Records Management",
+            Url = "/records-management"
         });
 
-        Record = MockCurrentData.GetCurrentRecord();
-        DocumentList = MockCurrentData.GetDocuments();
+        BreadcrumbItems.Add(new BreadcrumbModel
+        {
+            Icon = "menu",
+            Text = "Records",
+            Url = "/records"
+        });
+    }
+
+    protected override void OnParametersSet()
+    {
+        var records = MockData.GetRecords();
+        Record = records.FirstOrDefault(r => r.Id == Id);
+        DocumentList = Record?.Documents ?? new List<Document>();
     }
 
     public async Task viewData(GridCommandEventArgs args)
@@ -32,6 +42,6 @@ public class RecordsBase : GridBase<Document>
         Document selectedId = args.Item as Document;
 
         //Int32.TryParse(samp, out sampNumber);
-        NavigationManager.NavigateTo($"/my-records/{selectedId.Id}");
+        NavigationManager.NavigateTo($"/records-management/{Id}/{selectedId.Id}");
     }
 }

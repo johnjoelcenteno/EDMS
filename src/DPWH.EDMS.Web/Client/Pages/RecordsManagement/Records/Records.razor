@@ -1,0 +1,81 @@
+﻿@page "/records-management/{Id}"
+@inherits RecordsBase
+@inject NavigationManager Navigation
+@attribute [Authorize(Policy = "RequireActiveRoles")]
+
+<EdmsBreadcrumbs Data="@BreadcrumbItems" />
+
+<h3>Records</h3>
+<div class="d-flex flex-row align-items-center mb-2">
+    <p>Name: @Record.FirstName @Record.LastName </p>
+    @* <span class="role-chip">@Record.Role</span> *@
+</div>
+<p>Email: @Record.EmailAddress &nbsp;&nbsp; / &nbsp;&nbsp; Contact: @Record.ContactNumber</p>
+<hr />
+
+<div class="d-flex flex-row mt-3">
+    <TelerikTabStrip>
+        <TabStripTab Title="Records">
+            <TelerikCard Width="100%">
+                <CardBody>
+                    <div class="mobile-property-grid">
+
+                        @if (DocumentList != null && !XSmall)
+                        {
+                            <TelerikGrid TItem="Document"
+                                         @bind-PageSize="@PageSize"
+                                         Height="@GridHeight"
+                                         FilterMode="GridFilterMode.FilterRow"
+                                         Sortable=true
+                                         Data="DocumentList"
+                                         OnStateChanged="@OnStateChanged"
+                                         @ref="GridRef"
+                                         Context="employee">
+                                <GridSettings>
+                                    <GridPagerSettings PageSizes="@PageSizes">
+                                    </GridPagerSettings>
+                                </GridSettings>
+                                <GridColumns>
+                                    <GridColumn Field=@nameof(Document.DocumentName) Title="Document Name" />
+                                    <GridCommandColumn Width="5%">
+                                        <GridCommandButton Class="commandButton" Command="ExportData" OnClick="@viewData">View</GridCommandButton>
+                                    </GridCommandColumn>
+                                    <GridCommandColumn Width="5%">
+                                        <GridCommandButton Class="commandButton">Export</GridCommandButton>
+                                    </GridCommandColumn>
+                                </GridColumns>
+                            </TelerikGrid>
+                        }
+                        else
+                        {
+                            <span>No Data to display.</span>
+                        }
+                    </div>
+                    <TelerikPager PageChanged="@PageChangedHandler"
+                                  Total="TotalItems"
+                                  ButtonCount="6"
+                                  PageSize="@PageSize"
+                                  PageSizeChanged="@PageSizeChangedHandler"
+                                  PageSizes="@(new List<int?> {5, 10, 20})"
+                                  Page="@Page">
+                    </TelerikPager>
+                </CardBody>
+            </TelerikCard>
+        </TabStripTab>
+    </TelerikTabStrip>
+</div>
+<style>
+    .commandButton {
+        font-weight: 500;
+        width: 100%;
+    }
+
+    .role-chip {
+        background-color: #38339b;
+        color: #fff;
+        font-size: 12px;
+        border-radius: 25px;
+        padding: 3px 16px;
+        margin: 0 10px;
+    }
+</style>

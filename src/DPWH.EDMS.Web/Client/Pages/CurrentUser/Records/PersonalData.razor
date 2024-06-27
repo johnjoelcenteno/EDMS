@@ -1,31 +1,29 @@
-﻿@page "/personal-data/{Id:int}"
+﻿@page "/my-records/{Id:int}"
 @using DPWH.EDMS.Components.Helpers
 @inherits RecordsPersonalData
 
 <EdmsBreadcrumbs Data="@BreadcrumbItems" />
 
 <h3>My Records</h3>
-<span>Personal Data Sheet</span><br />
+@* <span>Personal Data Sheet</span><br />
 <span>To view associated request </span> <NavLink href="/Personal-data">Click here</NavLink>
 <span>
     (Control Number: <span style="color: #38339B;">@EmployeeList[Id-1].ControlNumber</span>
     / Date Requested: <span style="color: #38339B;">@(GenericHelper.GetDateDisplay(EmployeeList[Id-1].DateRequested, "MM/dd/yyyy")))</span>
-</span>
+</span> *@
 <hr />
 <TelerikCard Width="100%">
     <CardBody>
         <div class="d-flex flex-row justify-content-between">
-            <CardTitle Class="headName">Personal Data Sheet</CardTitle>
+            <CardTitle Class="headName">@Document.DocumentName</CardTitle>
         </div>
         <CardSeparator Class="my-2"></CardSeparator>
         <div class="container">
             <div class="d-flex justify-content-end mb-2">
                 <TelerikButton Class="dlButton">Download</TelerikButton>
             </div>
-            <CardImage Width="100%" Src="_content/DPWH.EDMS.Components/images/image-default.svg"></CardImage>
-        </div>
-            
-        
+            <CardImage Width="100%" Src="_content/DPWH.EDMS.Components/images/pdf-placeholder.png"></CardImage>
+        </div> 
     </CardBody>
 </TelerikCard>
 
@@ -33,6 +31,10 @@
     
 }
 <style>
+    .pdf-placeholder {
+        box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+    }
+
     .container{
         width: 50%;
     }
