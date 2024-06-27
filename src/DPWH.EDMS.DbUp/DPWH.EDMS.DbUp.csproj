@@ -16,6 +16,7 @@
     <None Remove="Scripts\01\04-Sequence-ControlNo.sql" />
     <None Remove="Scripts\01\05-Records.sql" />
     <None Remove="Scripts\01\06-Schema-AddRequestingOffices.sql" />
+    <None Remove="Scripts\01\07-Schema-RenameGeolocationTable.sql" />
   </ItemGroup>
 
   <ItemGroup>
@@ -32,6 +33,7 @@
     <EmbeddedResource Include="Scripts\01\04-Sequence-ControlNo.sql" />
     <EmbeddedResource Include="Scripts\01\03-Schema-AddChangeLogs.sql" />
     <EmbeddedResource Include="Scripts\01\06-Schema-AddRequestingOffices.sql" />
+    <EmbeddedResource Include="Scripts\01\07-Schema-RenameGeolocationTable.sql" />
   </ItemGroup>
   
 	<ItemGroup>

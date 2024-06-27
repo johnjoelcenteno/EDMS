@@ -18,7 +18,7 @@ internal sealed class GetAssetsByRegionAndYearHandler : IRequestHandler<GetAsset
 
     public async Task<GetAssetsByRegionAndYearResult> Handle(GetAssetsByRegionAndYearQuery request, CancellationToken cancellationToken)
     {
-        var region = await _repository.GeoLocationView
+        var region = await _repository.GeolocationsView
             .FirstOrDefaultAsync(a => a.MyId == request.RegionId, cancellationToken);
 
         if (region is null)

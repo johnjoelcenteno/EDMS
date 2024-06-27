@@ -30,7 +30,7 @@ internal sealed class UpdateAddressHandler : IRequestHandler<UpdateAddressComman
     }
     public async Task<UpdateAddressResult> Handle(UpdateAddressCommand request, CancellationToken cancellationToken)
     {
-        var address = await _repository.GeoLocation
+        var address = await _repository.Geolocations
             .FirstOrDefaultAsync(a => a.MyId == request.Id, cancellationToken);
 
         if (address is null)

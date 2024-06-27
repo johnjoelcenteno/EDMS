@@ -47,8 +47,8 @@ public class AppDataContext : DbContext, IReadRepository, IWriteRepository
     public DbSet<AssetFileDocument> AssetFiles { get; set; }
     public IQueryable<AssetFileDocument> AssetFilesView => AssetFiles.AsNoTracking();
 
-    public DbSet<GeoLocation> GeoLocation { get; set; }
-    public IQueryable<GeoLocation> GeoLocationView => GeoLocation.AsNoTracking();
+    public DbSet<GeoLocation> Geolocations { get; set; }
+    public IQueryable<GeoLocation> GeolocationsView => Geolocations.AsNoTracking();
 
     public DbSet<ConfigSetting> ConfigSettings { get; set; }
     public IQueryable<ConfigSetting> ConfigSettingsView => ConfigSettings.AsNoTracking();

@@ -18,14 +18,14 @@ internal sealed class DeleteAddressHandler : IRequestHandler<DeleteAddressComman
 
     public async Task<DeleteAddressResult> Handle(DeleteAddressCommand request, CancellationToken cancellationToken)
     {
-        var address = await _repository.GeoLocation.FirstOrDefaultAsync(a => a.MyId == request.Id, cancellationToken);
+        var address = await _repository.Geolocations.FirstOrDefaultAsync(a => a.MyId == request.Id, cancellationToken);
 
         if (address is null)
         {
             throw new AppException($"Address with Id `{request.Id}` not found.");
         }
 
-        _repository.GeoLocation.Remove(address);
+        _repository.Geolocations.Remove(address);
         await _repository.SaveChangesAsync(cancellationToken);
 
         return new DeleteAddressResult(address);
