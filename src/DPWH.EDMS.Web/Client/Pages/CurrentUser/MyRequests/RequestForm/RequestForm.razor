@@ -101,28 +101,36 @@
                             Upload Valid ID
                         </SelectFilesButtonTemplate>
                     </TelerikFileSelect>
+                    @if(!IsValidIdValid())
+                    {
+                        <div class="text-danger">The Valid ID is required.</div>
+                    }
                     @* <ValidationMessage For="@(() => SelectedItem.IsValidIdAccepted)" class="text-danger" /> *@
                 </div>
                 <div class="form-group p-2">
                     <label for="suppDocType">Authorization Document</label>
                     <TelerikDropDownList Data="@AuthorizeDocTypeList"
-                                         @bind-Value="SelectedAuthorizeDocTypeId"
+                                         @bind-Value="SelectedAuthorizedDocTypeId"
                                          ValueField="@nameof(GetAuthorizationDocumentsResult.Id)"
                                          TextField="@nameof(GetAuthorizationDocumentsResult.Name)"
                                          DefaultText="Select" />
                     <TelerikFileSelect AllowedExtensions="@AllowedExtensions"
-                                       OnSelect="@OnSelectAuthDoc"
-                                       OnRemove="@OnRemoveAuthDoc"
+                                       OnSelect="@OnSelectAuthorizedDocument"
+                                       OnRemove="@OnRemoveAuthorizedDocument"
                                        MaxFileSize="@MaxFileSize"
                                        MinFileSize="@MinFileSize"
                                        Multiple="false"
                                        Class="mt-2"
-                                       Enabled="GenericHelper.IsGuidHasValue(SelectedAuthorizeDocTypeId)">
+                                       Enabled="GenericHelper.IsGuidHasValue(SelectedAuthorizedDocTypeId)">
                         <SelectFilesButtonTemplate>
                             <TelerikSvgIcon Icon="@SvgIcon.Upload" />
                             Upload Authorize Document
                         </SelectFilesButtonTemplate>
                     </TelerikFileSelect>
+                    @if (!IsAuthorizedDocumentValid())
+                    {
+                        <div class="text-danger">The Authorized Document is required.</div>
+                    }
                     @* <ValidationMessage For="@(() => SelectedItem.IsValidIdAccepted)" class="text-danger" /> *@
                 </div>
             }

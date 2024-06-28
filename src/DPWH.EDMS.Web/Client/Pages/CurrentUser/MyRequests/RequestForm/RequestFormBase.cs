@@ -57,9 +57,9 @@ public class RequestFormBase : RxBaseComponent
     protected FluentValidationValidator? FluentValidationValidator;
 
     protected Guid? SelectedValidIdTypeId { get; set; }
-    protected Guid? SelectedAuthorizeDocTypeId { get; set; }
+    protected Guid? SelectedAuthorizedDocTypeId { get; set; }
     protected UploadSupportingFileRequestModel? SelectedValidId { get; set; }
-    protected UploadSupportingFileRequestModel? SelectedSupportingDoc { get; set; }
+    protected UploadSupportingFileRequestModel? SelectedAuthorizedDocument { get; set; }
     protected UserModel CurrentUser { get; set; } = new();
     protected string UserFullname = string.Empty;
     //protected TelerikUpload SupportedDocumentUploadRef { get; set; }
@@ -179,18 +179,13 @@ public class RequestFormBase : RxBaseComponent
     #region Submit Events
     protected async Task HandleOnSubmitCallback()
     {
-        if (await FluentValidationValidator!.ValidateAsync())
+        if (await FluentValidationValidator!.ValidateAsync() && IsValidIdValid() && IsAuthorizedDocumentValid())
         {
             if (HandleCreateOnSubmit.HasDelegate)
             {
-                await HandleCreateOnSubmit.InvokeAsync((SelectedItem, SelectedValidId, SelectedSupportingDoc)!);
+                await HandleCreateOnSubmit.InvokeAsync((SelectedItem, SelectedValidId, SelectedAuthorizedDocument)!);
             }
-        }
-        else
-        {
-            //ToastService!.ShowError("Something went wrong, on submitting form. Please contact administrator.");
-            await HandleCreateOnSubmit.InvokeAsync((null, null, null)!);
-        }
+        }        
     }
     protected async Task HandleOnCancelCallback()
     {
@@ -222,75 +217,44 @@ public class RequestFormBase : RxBaseComponent
         SelectedValidId = null;
     }
 
-    protected async void OnSelectAuthDoc(FileSelectEventArgs args)
+    protected async void OnSelectAuthorizedDocument(FileSelectEventArgs args)
     {
-        if (SelectedItem != null && GenericHelper.IsGuidHasValue(SelectedAuthorizeDocTypeId))
+        if (SelectedItem != null && GenericHelper.IsGuidHasValue(SelectedAuthorizedDocTypeId))
         {
-            SelectedSupportingDoc = new UploadSupportingFileRequestModel()
+            SelectedAuthorizedDocument = new UploadSupportingFileRequestModel()
             {
                 document = null!,
                 documentType = Api.Contracts.RecordRequestProvidedDocumentTypes.AuthorizationDocument,
-                documentTypeId = SelectedAuthorizeDocTypeId
+                documentTypeId = SelectedAuthorizedDocTypeId
             };
 
-            SelectedSupportingDoc.document = await DocumentService.GetFileToUpload(args);
+            SelectedAuthorizedDocument.document = await DocumentService.GetFileToUpload(args);
         }
     }
 
-    protected void OnRemoveAuthDoc(FileSelectEventArgs args)
+    protected void OnRemoveAuthorizedDocument(FileSelectEventArgs args)
     {
-        SelectedSupportingDoc = null;
+        SelectedAuthorizedDocument = null;
     }
 
-    //protected bool IsSelectedFileValid(FileSelectFileInfo file)
-    //{
-    //    return !(file.InvalidExtension || file.InvalidMaxFileSize || file.InvalidMinFileSize);
-    //}
+    protected bool IsValidIdValid()
+    {
+        return 
+            SelectedItem.Claimant != ClaimantTypes.AuthorizedRepresentative.ToString() ||
+            SelectedValidId != null && 
+            SelectedValidId.document != null && 
+            SelectedValidId.documentTypeId != null && 
+            SelectedValidId.documentType != null;
+    }
 
-    //protected void UpdateValidationModel()
-    //{
-    //    bool areAllUploadedFilesValid = false;
-
-    //    if (FilesValidationInfo.Keys.Count > 0 &&
-    //        !FilesValidationInfo.Values.Contains(false))
-    //    {
-    //        areAllUploadedFilesValid = true;
-    //    }
-
-    //    SelectedItem.IsValidIdAccepted = areAllUploadedFilesValid;
-
-    //    StateHasChanged();
-    //}
-
+    protected bool IsAuthorizedDocumentValid()
+    {
+        return
+            SelectedItem.Claimant != ClaimantTypes.AuthorizedRepresentative.ToString() ||
+            SelectedAuthorizedDocument != null &&
+            SelectedAuthorizedDocument.document != null &&
+            SelectedAuthorizedDocument.documentTypeId != null &&
+            SelectedAuthorizedDocument.documentType != null;
+    }
     #endregion
-    //protected async Task<CreateRecordRequest> FetchDocumentRequestValue()
-    //{
-    //    List<Guid> parsedGuids = new List<Guid>();
-    //    foreach (var record in SelectedItem.RecordsRequested)
-    //    {
-    //        if (Guid.TryParse(record, out var guid))
-    //        {
-    //            parsedGuids.Add(guid);
-    //        }
-    //        else
-    //        {
-    //            ToastService!.ShowError($"Warning: Invalid GUID format for record: {record}");
-    //        }
-    //    }
-
-    //    return new CreateRecordRequest
-    //    {
-    //        EmployeeNumber = SelectedItem.EmployeeNo,
-    //        ControlNumber = SelectedItem.ControlNumber,
-    //        IsActiveEmployee = SelectedItem.IsActive,
-    //        Claimant = SelectedItem.DocumentClaimant.ToString(),
-    //        DateRequested = SelectedItem.DateRequested,
-    //        AuthorizedRepresentative = SelectedItem.AuthorizedRepresentative,
-    //        //ValidId = SelectedItem.ValidId, // TODO
-    //        //SupportingDocument = SelectedItem,
-    //        //RequestedRecords = SelectedItem.RecordsRequested?.Select(Guid.Parse).ToList(), // TODO
-    //        RequestedRecords = parsedGuids,
-    //        Purpose = "Visa Application"
-    //    };
-    //}
 }
