@@ -109,8 +109,11 @@ public class AppDataContext : DbContext, IReadRepository, IWriteRepository
     public IQueryable<InspectionRequestProjectMonitoring> InspectionRequestProjectMonitoringView => InspectionRequestProjectMonitoring.AsNoTracking();
 
     public DbSet<RecordType> RecordTypes { get; set; }
-
     public IQueryable<RecordType> RecordTypesView => RecordTypes.AsNoTracking();
+
+    public DbSet<Signatory> Signatories { get; set; }
+    public IQueryable<Signatory> SignatoriesView => Signatories.AsNoTracking();
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
