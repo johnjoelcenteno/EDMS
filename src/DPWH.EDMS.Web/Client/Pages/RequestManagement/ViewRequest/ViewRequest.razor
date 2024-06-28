@@ -74,7 +74,7 @@
                         {
                             @foreach (var uploadedDoc in SelectedRecordRequest.Files)
                             {
-                                <li><a href="@uploadedDoc.Uri" target="_blank">@GetDocumentTypeName(uploadedDoc.DocumentTypeId)</a></li>
+                                <li><strong>@checkIdType(@GetDocumentTypeName(uploadedDoc.DocumentTypeId))</strong> <a href="@uploadedDoc.Uri" target="_blank">@GetDocumentTypeName(uploadedDoc.DocumentTypeId)</a></li>
                             }
                         }
                         else
