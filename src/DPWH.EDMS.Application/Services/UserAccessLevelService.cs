@@ -45,7 +45,7 @@ public class UserAccessLevelService : IUserAccessLevelService
 
         //get all users with roles that requires license
         var licenseRoles = await _roleManager.Roles
-            .Where(r => !ApplicationPolicies.NoLicenseUsers.Contains(r.Name))
+            .Where(r => !ApplicationPolicies.NoLicenseUsers.Contains(r.Name) && ApplicationPolicies.RequireActiveRoles.Contains(r.Name))
             .Select(r => new SimpleKeyValue(r.Id, r.Name))
             .ToListAsync(cancellationToken);
 
