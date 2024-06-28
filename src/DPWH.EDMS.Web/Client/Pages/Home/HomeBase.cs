@@ -56,7 +56,7 @@ public class HomeBase : GridBase<EmployeeModel>
             }
         };
         Categories = new string[] { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"  };
-        Series1Data = new List<object>() { 5000, 7000, 12000, 10000, 19000, 24000, 18000, 30000, 34000, 28000, 36000, 41000 };
+        Series1Data = new List<object>() { 250, 440, 580, 660, 553, 311, 600, 580, 600, 770, 910, 820 };
 
         DropDownListValue = "All";
 
