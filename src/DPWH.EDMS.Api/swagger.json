@@ -3455,6 +3455,10 @@
             "format": "uuid",
             "nullable": true
           },
+          "validIdName": {
+            "type": "string",
+            "nullable": true
+          },
           "validIdUri": {
             "type": "string",
             "nullable": true
@@ -3462,6 +3466,10 @@
           "supportingDocument": {
             "type": "string",
             "format": "uuid",
+            "nullable": true
+          },
+          "supportingDocumentName": {
+            "type": "string",
             "nullable": true
           },
           "supportingDocumentUri": {
