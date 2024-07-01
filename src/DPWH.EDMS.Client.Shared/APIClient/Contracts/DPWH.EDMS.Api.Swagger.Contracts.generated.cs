@@ -803,11 +803,17 @@ namespace DPWH.EDMS.Api.Contracts
         [Newtonsoft.Json.JsonProperty("validId", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public System.Guid? ValidId { get; set; }
 
+        [Newtonsoft.Json.JsonProperty("validIdName", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string ValidIdName { get; set; }
+
         [Newtonsoft.Json.JsonProperty("validIdUri", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string ValidIdUri { get; set; }
 
         [Newtonsoft.Json.JsonProperty("supportingDocument", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public System.Guid? SupportingDocument { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("supportingDocumentName", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string SupportingDocumentName { get; set; }
 
         [Newtonsoft.Json.JsonProperty("supportingDocumentUri", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string SupportingDocumentUri { get; set; }
