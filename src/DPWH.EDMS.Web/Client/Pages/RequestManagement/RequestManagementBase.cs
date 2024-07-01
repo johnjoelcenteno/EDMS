@@ -13,7 +13,6 @@ namespace DPWH.EDMS.Web.Client.Pages.RequestManagement;
 public class RequestManagementBase : GridBase<RecordRequestModel>
 {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateAsync { get; set; }
-
     [Inject] public required IRecordRequestsService RecordRequestsService { get; set; }
     protected int ActiveTabIndex { get; set; } = 1;
     protected List<string> RequestStates = new List<string>();
