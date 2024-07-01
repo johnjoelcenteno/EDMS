@@ -99,7 +99,7 @@
                                     </NavLink>
                                     @if (level0Item.Expanded && level0Item.Children != null && level0Item.Children.Count() > 0)
                                     {
-                                        <ul class="nav-link-subitem">
+                                        <ul class="@(DrawerRef.Expanded ? "nav-link-subitem":"nav-link-subitem-closed")">
                                             @foreach (var level1Item in level0Item.Children)
                                             {
                                                 <li>
@@ -175,7 +175,7 @@
                                     </NavLink>
                                     @if (level0Item.Expanded && level0Item.Children != null && level0Item.Children.Count() > 0)
                                     {
-                                        <ul class="nav-link-subitem">
+                                        <ul class="@(DrawerRef.Expanded ? "nav-link-subitem":"nav-link-subitem-closed")">
                                             @foreach (var level1Item in level0Item.Children)
                                             {
                                                 <li>
@@ -251,7 +251,7 @@
                                     </NavLink>
                                     @if (level0Item.Expanded && level0Item.Children != null && level0Item.Children.Count() > 0)
                                     {
-                                        <ul class="nav-link-subitem">
+                                        <ul class="@(DrawerRef.Expanded ? "nav-link-subitem":"nav-link-subitem-closed")">
                                             @foreach (var level1Item in level0Item.Children)
                                             {
                                                 <li>

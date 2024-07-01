@@ -87,6 +87,12 @@ ul.nav-link-subitem {
     overflow: auto;
     max-height: 60vh;
 }
+ul.nav-link-subitem-closed {
+    list-style: none;
+    padding-left: 0px;
+    overflow: auto;
+    max-height: 60vh;
+}
 
 div.avatar-container {
     margin-top: 25px;
