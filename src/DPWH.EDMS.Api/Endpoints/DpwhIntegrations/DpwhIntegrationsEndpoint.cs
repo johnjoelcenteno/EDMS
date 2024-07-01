@@ -14,7 +14,7 @@ public static class DpwhIntegrationsEndpoint
     {
         app.MapGet(ApiEndpoints.DpwhIntegrations.Employee, async ([FromRoute] string employeeId, IDpwhApiService dpwhApiService) =>
             {
-                var result = await dpwhApiService.Get<EmployeeResponse>(EmployeeResponse.Operation, employeeId);
+                var result = await dpwhApiService.GetWithRetry<EmployeeResponse>(EmployeeResponse.Operation, employeeId);
                 var data = new BaseApiResponse<Employee>(result.Body.Container.Data);
 
                 if (result?.Body?.Container?.Data is null)
@@ -74,7 +74,7 @@ public static class DpwhIntegrationsEndpoint
 
         app.MapGet(ApiEndpoints.DpwhIntegrations.GeoRegion, async (string? type, string? parentId, IDpwhApiService dpwhApiService) =>
         {
-            var response = await dpwhApiService.GetLocation<GeoRegionResponse>(GeoRegionResponse.Operation, type, parentId);
+            var response = await dpwhApiService.GetLocationWithRetry<GeoRegionResponse>(GeoRegionResponse.Operation, type, parentId);
 
             if (response?.Body?.Response?.Result?.Data is null)
             {
