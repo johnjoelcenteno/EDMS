@@ -17,7 +17,7 @@
                 <div class="row m-0">
                     <div class="col-md-6 col-12 p-2">
                         <label for="controlNumber">Control Number</label>
-                        <input id="controlNumber" class="form-control text-muted" value="Auto Generated" disabled/>                        
+                        <input id="controlNumber" class="form-control text-muted" value="Auto Generated" disabled />
                     </div>
                     <div class="col-md-6 col-12 p-2">
                         <label for="dateRequested">Date and Time Requested</label>
@@ -31,7 +31,7 @@
                 <div class="row m-0">
                     <div class="col-md-6 col-12 p-2">
                         <label for="employeeNo">Employee No.</label>
-                        <InputText id="employeeNo" class="form-control" @bind-Value="SelectedItem.EmployeeNumber"/>
+                        <InputText id="employeeNo" class="form-control" @bind-Value="SelectedItem.EmployeeNumber" />
                         <ValidationMessage For="@(() => SelectedItem.EmployeeNumber)" class="text-danger" />
                     </div>
                     <div class="col-md-6 col-12 p-2">
@@ -94,18 +94,22 @@
                             Upload Valid ID
                         </SelectFilesButtonTemplate>
                     </TelerikFileSelect>
+                    @if (!IsValidIdValid())
+                    {
+                        <div class="text-danger">The Valid ID is required.</div>
+                    }
                     @* <ValidationMessage For="@(() => SelectedItem.IsValidIdAccepted)" class="text-danger" /> *@
                 </div>
                 <div class="form-group p-2">
-                    <label for="suppDocType">Authorized Document</label>
-                    <TelerikDropDownList Data="@AuthorizedDocTypeList"
+                    <label for="suppDocType">Authorization Document</label>
+                    <TelerikDropDownList Data="@AuthorizeDocTypeList"
                                          @bind-Value="SelectedAuthorizedDocTypeId"
                                          ValueField="@nameof(GetAuthorizationDocumentsResult.Id)"
                                          TextField="@nameof(GetAuthorizationDocumentsResult.Name)"
                                          DefaultText="Select" />
                     <TelerikFileSelect AllowedExtensions="@AllowedExtensions"
-                                       OnSelect="@OnSelectSuppDoc"
-                                       OnRemove="@OnRemoveSuppDoc"
+                                       OnSelect="@OnSelectAuthorizedDocument"
+                                       OnRemove="@OnRemoveAuthorizedDocument"
                                        MaxFileSize="@MaxFileSize"
                                        MinFileSize="@MinFileSize"
                                        Multiple="false"
@@ -116,6 +120,10 @@
                             Upload Authorize Document
                         </SelectFilesButtonTemplate>
                     </TelerikFileSelect>
+                    @if (!IsAuthorizedDocumentValid())
+                    {
+                        <div class="text-danger">The Authorized Document is required.</div>
+                    }
                     @* <ValidationMessage For="@(() => SelectedItem.IsValidIdAccepted)" class="text-danger" /> *@
                 </div>
             }
@@ -124,7 +132,7 @@
                 <label for="recordsRequested">Record/s to be Requested</label>
                 <TelerikMultiSelect Data="@RecordTypesList"
                                     @bind-Value="@SelectedRecordTypesIdList"
-                                    ValueField="@nameof(GetRecordTypesResult.Id)"                                    
+                                    ValueField="@nameof(GetRecordTypesResult.Id)"
                                     TextField="@nameof(GetRecordTypesResult.Name)"
                                     OnChange="() => SelectedItem.RequestedRecords = SelectedRecordTypesIdList"
                                     Placeholder="-">

@@ -36,7 +36,7 @@ public class AddRequestBase : RxBaseComponent
         NavManager.NavigateTo("/my-requests");
     }
 
-    protected async Task HandleSubmit((CreateRecordRequest, UploadSupportingFileRequestModel, UploadSupportingFileRequestModel) parameters)
+    protected async Task HandleSubmit((CreateRecordRequest, UploadRecordRequestDocumentModel, UploadRecordRequestDocumentModel) parameters)
     {
         var (currentDocRequest, validId, suppDoc) = parameters;
 
@@ -52,7 +52,7 @@ public class AddRequestBase : RxBaseComponent
 
                     await ExceptionHandlerService.HandleApiException(async () =>
                     {
-                        uploadValidIdRes = await RecordRequestSupportingFilesService.Upload(validId.document, validId.documentType, validId.documentTypeId);
+                        uploadValidIdRes = await RecordRequestSupportingFilesService.Upload(validId.Document, validId.DocumentType, validId.DocumentTypeId);
                     });
 
                     if (uploadValidIdRes.Success)
@@ -63,7 +63,7 @@ public class AddRequestBase : RxBaseComponent
 
                         await ExceptionHandlerService.HandleApiException(async () =>
                         {
-                            uploadSupportingDocRes = await RecordRequestSupportingFilesService.Upload(suppDoc.document, suppDoc.documentType, suppDoc.documentTypeId);
+                            uploadSupportingDocRes = await RecordRequestSupportingFilesService.Upload(suppDoc.Document, suppDoc.DocumentType, suppDoc.DocumentTypeId);
                         });
 
                         if (uploadSupportingDocRes.Success)
