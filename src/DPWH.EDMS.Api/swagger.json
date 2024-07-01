@@ -1823,6 +1823,66 @@
         }
       }
     },
+    "/api/recordrequests/query/status/{status}": {
+      "post": {
+        "tags": [
+          "RecordRequests"
+        ],
+        "operationId": "QueryRecordRequestsByStatus",
+        "parameters": [
+          {
+            "name": "status",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json; api-version=1.0": {
+              "schema": {
+                "$ref": "#/components/schemas/DataSourceRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/DataSourceResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/recordrequests/create": {
       "post": {
         "tags": [
@@ -5820,8 +5880,8 @@
         "type": "oauth2",
         "flows": {
           "authorizationCode": {
-            "authorizationUrl": "https://app-idp-ngobia-dpwh-dev.azurewebsites.net/connect/authorize",
-            "tokenUrl": "https://app-idp-ngobia-dpwh-dev.azurewebsites.net/connect/token",
+            "authorizationUrl": "https://localhost:5001/connect/authorize",
+            "tokenUrl": "https://localhost:5001/connect/token",
             "scopes": {
               "dpwhedmsapi.write": "api read & write access"
             }

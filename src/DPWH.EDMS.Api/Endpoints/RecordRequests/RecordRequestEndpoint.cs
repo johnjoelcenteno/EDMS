@@ -2,6 +2,7 @@
 using DPWH.EDMS.Application.Features.RecordRequests.Queries;
 using DPWH.EDMS.Application.Features.RecordRequests.Queries.GetRecordRequestById;
 using DPWH.EDMS.Application.Features.RecordRequests.Queries.GetRecordRequestsByEmployeeIdQuery;
+using DPWH.EDMS.Application.Features.RecordRequests.Queries.GetRecordRequestsByStatusQuery;
 using DPWH.EDMS.Application.Features.RecordRequests.Queries.GetRecordRequestsQuery;
 using DPWH.EDMS.Application.Models;
 using DPWH.EDMS.Application.Models.DpwhResponses;
@@ -56,6 +57,20 @@ public static class RecordRequestEndpoint
             .WithName("QueryRecordRequestsByEmployeeId")
             .WithTags(TagName)
             .WithDescription("Get record request by employeeId")
+            .WithApiVersionSet(ApiVersioning.VersionSet)
+            .HasApiVersion(1.0)
+            .Produces<DataSourceResult>()
+            .Produces<ProblemDetails>(StatusCodes.Status400BadRequest)
+            .Produces<ProblemDetails>(StatusCodes.Status500InternalServerError);
+
+        app.MapPost(ApiEndpoints.RecordRequest.QueryByStatus, async (DataSourceRequest request, string status, IMediator mediator) =>
+        {
+            var result = await mediator.Send(new GetRecordRequestsByStatusQuery(request, status));
+            return result;
+        })
+            .WithName("QueryRecordRequestsByStatus")
+            .WithTags(TagName)
+            .WithDescription("Get record request by status")
             .WithApiVersionSet(ApiVersioning.VersionSet)
             .HasApiVersion(1.0)
             .Produces<DataSourceResult>()
