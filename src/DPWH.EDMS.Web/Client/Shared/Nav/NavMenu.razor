@@ -329,7 +329,7 @@
         </AuthorizeView>
         @if (!XSmall)
         {
-            <div id="sidebar-expander">
+            <div id="@(DrawerRef.Expanded ? "sidebar-expander":"sidebar-expander-closed")">
                 <TelerikButton OnClick="@ToggleDrawer" FillMode="@(ThemeConstants.Button.FillMode.Flat)">
                     <span class="material-symbols-outlined xl">@(DrawerRef.Expanded ? "chevron_left" : "chevron_right") </span>
                 </TelerikButton>
@@ -350,7 +350,7 @@
         font-weight: 400;
         font-size: 15px;
     }
-
+    
 
         .nav-link:hover {
             background-color: #eb4a1f !important;
