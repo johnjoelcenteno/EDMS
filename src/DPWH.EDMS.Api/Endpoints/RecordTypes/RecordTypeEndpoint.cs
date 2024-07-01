@@ -44,6 +44,20 @@ public static class RecordTypeEndpoints
         .Produces<ProblemDetails>(StatusCodes.Status400BadRequest)
         .Produces<ProblemDetails>(StatusCodes.Status500InternalServerError);
 
+        builder.MapGet(ApiEndpoints.RecordTypes.QueryByCategory, async ([FromRoute] string category, IMediator mediator) =>
+       {
+           var result = await mediator.Send(new QueryRecordTypesByCategoryRequest(category));
+           var data = new BaseApiResponse<List<QueryRecordTypesModel>>(result);
+       })
+       .WithName("Query record types by category")
+       .WithTags(TagName)
+       .WithDescription("Query record types by category")
+       .WithApiVersionSet(ApiVersioning.VersionSet)
+       .HasApiVersion(1.0)
+       .Produces<BaseApiResponse<List<QueryRecordTypesModel>>>()
+       .Produces<ProblemDetails>(StatusCodes.Status400BadRequest)
+       .Produces<ProblemDetails>(StatusCodes.Status500InternalServerError);
+
         builder.MapPost(ApiEndpoints.RecordTypes.Query, async (DataSourceRequest request, IMediator mediator, CancellationToken token) =>
         {
             var result = await mediator.Send(new QueryRecordTypesRequest(request), token);

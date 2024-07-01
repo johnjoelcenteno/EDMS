@@ -1,5 +1,6 @@
 using DPWH.EDMS.Application.Contracts.Persistence;
 using DPWH.EDMS.Domain.Extensions;
+using DPWH.EDMS.IDP.Core.Constants;
 using KendoNET.DynamicLinq;
 using MediatR;
 
@@ -13,6 +14,7 @@ internal sealed class GetUsersHandler(IReadAppIdpRepository repository) : IReque
     {
         var result = repository
             .ViewUserAccess
+            .Where(p => ApplicationPolicies.RequireActiveRoles.Contains(p.UserRole))
             .Select(p => new GetUsersQueryResult
             {
                 Id = p.Id,
