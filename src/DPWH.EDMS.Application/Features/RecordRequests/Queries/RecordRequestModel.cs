@@ -18,8 +18,10 @@ public record AuthorizedRepresentativeModel
 {    
     public string? RepresentativeName { get; set; }
     public Guid? ValidId { get; set; }
+    public string? ValidIdName {  get; set; }
     public string? ValidIdUri { get; set; }
     public Guid? SupportingDocument { get; set; }
+    public string? SupportingDocumentName {  get; set; }
     public string? SupportingDocumentUri { get; set; }
 }
 
