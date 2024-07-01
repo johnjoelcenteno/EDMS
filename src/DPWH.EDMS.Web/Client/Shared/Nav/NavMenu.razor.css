@@ -48,6 +48,9 @@
     transition: 200ms;
     overflow-y: auto;
 }
+    ::-webkit-scrollbar{
+        display: none;
+    }
 
     .sidebar .sidebar-container {
         position: relative;
@@ -57,11 +60,18 @@
     }
 
         .sidebar .sidebar-container #sidebar-expander {
-            position: absolute !important;
+            position: fixed !important;
+            bottom: 10rem;
+            color: #fff;
+            left: 16rem;
+        }
+        .sidebar .sidebar-container #sidebar-expander-closed {
+            position: relative !important;
             bottom: 0;
             color: #fff;
             right: 0;
         }
+        
 
 
     .sidebar .logo img {
