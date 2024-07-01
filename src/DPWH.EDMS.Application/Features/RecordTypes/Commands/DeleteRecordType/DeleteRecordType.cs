@@ -2,7 +2,7 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace DPWH.EDMS.Application;
+namespace DPWH.EDMS.Application.Features.RecordTypes.Commands;
 
 public record class DeleteRecordTypeRequest(Guid Id) : IRequest<Guid?>;
 public class DeleteRecordType : IRequestHandler<DeleteRecordTypeRequest, Guid?>

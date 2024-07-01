@@ -1,10 +1,10 @@
 ﻿using DPWH.EDMS.Api.Endpoints;
 using DPWH.EDMS.Application;
-using DPWH.EDMS.Application.Features.RecordRequests.Commands.CreateRecordRequest;
+using DPWH.EDMS.Application.Features.RecordTypes.Commands;
+using DPWH.EDMS.Application.Features.RecordTypes.Queries;
 using DPWH.EDMS.Application.Models;
 using KendoNET.DynamicLinq;
 using MediatR;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DPWH.EDMS.Api;

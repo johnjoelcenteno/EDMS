@@ -4,7 +4,7 @@ using DPWH.EDMS.Domain;
 using DPWH.EDMS.IDP.Core.Extensions;
 using MediatR;
 
-namespace DPWH.EDMS.Application;
+namespace DPWH.EDMS.Application.Features.RecordTypes.Commands;
 
 public record class CreateRecordTypeRequest(CreateRecordTypeModel Model) : IRequest<Guid>;
 public class CreateRecordType : IRequestHandler<CreateRecordTypeRequest, Guid>

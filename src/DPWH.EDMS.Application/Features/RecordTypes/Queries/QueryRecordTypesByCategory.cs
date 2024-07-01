@@ -1,9 +1,9 @@
 ﻿using DPWH.EDMS.Application.Contracts.Persistence;
-using DPWH.EDMS.Application.Features.ProjectMonitorings.Mappers;
+using DPWH.EDMS.Application.Features.RecordTypes.Mappers;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace DPWH.EDMS.Application;
+namespace DPWH.EDMS.Application.Features.RecordTypes.Queries;
 
 public record class QueryRecordTypesByCategoryRequest(string category) : IRequest<List<QueryRecordTypesModel>?>;
 public class QueryRecordTypesByCategory : IRequestHandler<QueryRecordTypesByCategoryRequest, List<QueryRecordTypesModel>?>

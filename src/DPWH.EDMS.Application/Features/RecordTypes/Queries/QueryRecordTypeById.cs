@@ -1,9 +1,9 @@
 ﻿using DPWH.EDMS.Application.Contracts.Persistence;
-using DPWH.EDMS.Application.Features.ProjectMonitorings.Mappers;
+using DPWH.EDMS.Application.Features.RecordTypes.Mappers;
 using DPWH.EDMS.Domain;
 using MediatR;
 
-namespace DPWH.EDMS.Application;
+namespace DPWH.EDMS.Application.Features.RecordTypes.Queries;
 
 public record class QueryRecordTypeByIdRequest(Guid Id) : IRequest<QueryRecordTypesModel?>;
 public class QueryRecordTypeById : IRequestHandler<QueryRecordTypeByIdRequest, QueryRecordTypesModel?>
