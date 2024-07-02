@@ -61,7 +61,7 @@
 
         .sidebar .sidebar-container #sidebar-expander {
             position: fixed !important;
-            bottom: 10rem;
+            bottom: 0;
             color: #fff;
             left: 16rem;
         }
