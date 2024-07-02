@@ -1,47 +1,90 @@
-﻿using DPWH.EDMS.Client.Shared.MockModels;
+﻿using DPWH.EDMS.Api.Contracts;
+using DPWH.EDMS.Client.Shared.APIClient.Services.RecordRequests;
 using DPWH.EDMS.Client.Shared.Models;
 using DPWH.EDMS.Components.Components.ReusableGrid;
+using DPWH.EDMS.Components.Helpers;
+using DPWH.NGOBIA.Client.Shared.APIClient.Services.Users;
 using Microsoft.AspNetCore.Components;
 using Telerik.Blazor.Components;
 
 namespace DPWH.EDMS.Web.Client.Pages.RecordsManagement.Records;
 
-public class RecordsBase : GridBase<Document>
+public class RecordsBase : GridBase<RecordRequestModel>
 {
     [Parameter] public required string Id { get; set; }
+    [Inject] public required IUsersService UsersService { get; set; }
+    [Inject] public required IRecordRequestsService RecordRequestsService { get; set; }
     [Inject] public required NavigationManager NavigationManager { get; set; }
-    protected List<Document> DocumentList = new List<Document>();
-    protected RecordModel Record { get; set; } = new RecordModel();
+    protected GetUserByIdResult SelectedUser { get; set; } = new();
 
-    protected override void OnInitialized()
+    protected async override Task OnInitializedAsync()
     {
-        BreadcrumbItems.Add(new BreadcrumbModel
+        IsLoading = true;
+
+        await LoadData((res) =>
         {
-            Icon = "menu",
-            Text = "Records Management",
-            Url = "/records-management"
+            SelectedUser = res;
+
+            BreadcrumbItems.AddRange(new List<BreadcrumbModel>
+            {
+                new BreadcrumbModel
+                {
+                    Icon = "menu",
+                    Text = "Records Management",
+                    Url = "/records-management",
+                },
+                new BreadcrumbModel
+                {
+                    Icon = "create_new_folder",
+                    Text = "Records",
+                    Url = NavManager.Uri.ToString(),
+                },
+            });
+
+            StateHasChanged();
         });
 
-        BreadcrumbItems.Add(new BreadcrumbModel
+        await LoadRequestHistoryData();
+        IsLoading = false;
+        StateHasChanged();
+    }
+
+    protected async Task LoadData(Action<GetUserByIdResult> onLoadCb)
+    {
+        var getRecord = await UsersService.GetById(Guid.Parse(Id));
+
+        if (getRecord.Success)
         {
-            Icon = "menu",
-            Text = "Records",
-            Url = "/records"
-        });
+            if (onLoadCb != null)
+            {
+                onLoadCb.Invoke(getRecord.Data);
+            }
+        }
+        else
+        {
+            ToastService.ShowError("Something went wrong on loading user details.");
+            NavManager.NavigateTo("/records-management");
+        }
     }
 
-    protected override void OnParametersSet()
+    protected async Task LoadRequestHistoryData()
     {
-        var records = MockData.GetRecords();
-        Record = records.FirstOrDefault(r => r.Id == Id);
-        DocumentList = Record?.Documents ?? new List<Document>();
+        var result = await RecordRequestsService.QueryByEmployeeId(SelectedUser.EmployeeId, DataSourceReq);
+        GridData = GenericHelper.GetListByDataSource<RecordRequestModel>(result.Data);
+        TotalItems = result.Total;
     }
 
-    public async Task viewData(GridCommandEventArgs args)
+    protected void GoToSelectedItemOverview(GridRowClickEventArgs args)
     {
-        Document selectedId = args.Item as Document;
+        IsLoading = true;
 
-        //Int32.TryParse(samp, out sampNumber);
-        NavigationManager.NavigateTo($"/records-management/{Id}/{selectedId.Id}");
+        var selectedItem = args.Item as RecordRequestModel;
+
+        if (selectedItem != null)
+        {
+            NavManager.NavigateTo($"/records-management/{Id}/request-history-{selectedItem.Id.ToString()}");
+        }
+
+        IsLoading = false;
     }
 }

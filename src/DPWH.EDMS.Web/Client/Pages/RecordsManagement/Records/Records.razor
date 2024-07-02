@@ -1,69 +1,151 @@
 ﻿@page "/records-management/{Id}"
+@using DPWH.EDMS.Api.Contracts
+@using DPWH.EDMS.Components.Helpers
+
 @inherits RecordsBase
-@inject NavigationManager Navigation
 @attribute [Authorize(Policy = "RequireActiveRoles")]
 
-<EdmsBreadcrumbs Data="@BreadcrumbItems" />
+<EdmsLoader Visible="@IsLoading" />
+<TelerikMediaQuery Media="(max-width: 480px)" OnChange="((changed) => XSmall = changed)"></TelerikMediaQuery>
 
+<EdmsBreadcrumbs Data="@BreadcrumbItems" />
 <h3>Records</h3>
 <div class="d-flex flex-row align-items-center mb-2">
-    <p>Name: @Record.FirstName @Record.LastName </p>
+    <p>Name: @SelectedUser.FirstName @SelectedUser.LastName </p>
     @* <span class="role-chip">@Record.Role</span> *@
 </div>
-<p>Email: @Record.EmailAddress &nbsp;&nbsp; / &nbsp;&nbsp; Contact: @Record.ContactNumber</p>
+<p>Email: @SelectedUser.Email &nbsp;&nbsp; / &nbsp;&nbsp; Contact: @SelectedUser.MobileNumber</p>
 <hr />
 
-<div class="d-flex flex-row mt-3">
-    <TelerikTabStrip>
-        <TabStripTab Title="Records">
-            <TelerikCard Width="100%">
-                <CardBody>
-                    <div class="mobile-property-grid">
+<TelerikTabStrip>
+    <TabStripTab Title="Personal Details">
+        <div class="d-flex flex-column">
+            <div class="d-flex flex-row mb-2">
+                <p class="edms-text-header-small">Designation Details</p>
+            </div>
+            <div class="detail-flex">
+                <p><b>Regional/Central Office:</b>&nbsp; @SelectedUser.RegionalOfficeRegion</p>
+                <p><b>Position:</b>&nbsp; @SelectedUser.Position</p>
+            </div>
+            <div class="detail-flex">
+                <p><b>District/Bureau/Service:</b>&nbsp; @SelectedUser.Department</p>
+                <p><b>Designation:</b>&nbsp; @SelectedUser.DesignationTitle</p>
+            </div>
+            <hr />
+            <div class="d-flex flex-row mb-2">
+                <p class="edms-text-header-small">Account Information</p>
+            </div>
+            <div class="detail-flex">
+                <p><b>Account Status:</b>&nbsp; UserAccess</p>
+                <p><b>Date Joined:</b>&nbsp; @GenericHelper.GetDateDisplay(SelectedUser.CreatedDate)</p>
+            </div>
+        </div>
+    </TabStripTab>
+    <TabStripTab Title="Request History">
+        @if (GridData != null && !XSmall)
+            {
+                <TelerikGrid TItem="RecordRequestModel"
+                             @bind-PageSize="@PageSize"
+                             Height="@GridHeight"
+                             FilterMode="GridFilterMode.None"
+                             Sortable=true
+                             Data="GridData"
+                             OnStateChanged="@OnStateChanged"
+                             @ref="GridRef"
+                             Context="item"
+                             OnRowClick="GoToSelectedItemOverview">
+                    <GridSettings>
+                        <GridPagerSettings PageSizes="@PageSizes">
+                        </GridPagerSettings>
+                    </GridSettings>
+                    <GridColumns>
+                        <GridColumn Field=@nameof(RecordRequestModel.ControlNumber) Title="Control No." Filterable="false" />
+                        <GridColumn Field=@nameof(RecordRequestModel.RequestedRecords) Title="Records Requested" Filterable="false">
+                            <Template>
+                                @{
+                            var req = context as RecordRequestModel;
+                            string recs = req.RequestedRecords != null && req!.RequestedRecords.Count > 0
+                            ? String.Join(", ", req.RequestedRecords.Select(r => r.RecordType))
+                            : "-";
+                                }
+                                <p class="mb-0">@recs</p>
+                            </Template>
+                        </GridColumn>
+                        <GridColumn Field=@nameof(RecordRequestModel.DateRequested) Title="Date Requested">
+                            <Template>
+                                @{
+                            var req = context as RecordRequestModel;
+                            string dt = GenericHelper.GetDateTimeDisplay(req.DateRequested);
+                                }
+                                <p class="mb-0">@dt</p>
+                            </Template>
+                        </GridColumn>
+                        <GridColumn Field=@nameof(RecordRequestModel.Purpose) Title="Purpose" />
+                        <GridColumn Field=@nameof(RecordRequestModel.Status) Title="Status" />
+                    </GridColumns>
+                </TelerikGrid>
+            }
+            else
+            {
+                <span>No Data to display.</span>
+            }
+                <TelerikPager PageChanged="@PageChangedHandler"
+                              Total="TotalItems"
+                              ButtonCount="6"
+                              PageSize="@PageSize"
+                              PageSizeChanged="@PageSizeChangedHandler"
+                              PageSizes="@(new List<int?> {5, 10, 20})"
+                              Page="@Page">
+                </TelerikPager>
+    </TabStripTab>
+    @* <TabStripTab Title="Records">
+        <TelerikCard Width="100%">
+            <CardBody>
+                <div class="mobile-property-grid">
 
-                        @if (DocumentList != null && !XSmall)
-                        {
-                            <TelerikGrid TItem="Document"
-                                         @bind-PageSize="@PageSize"
-                                         Height="@GridHeight"
-                                         FilterMode="GridFilterMode.FilterRow"
-                                         Sortable=true
-                                         Data="DocumentList"
-                                         OnStateChanged="@OnStateChanged"
-                                         @ref="GridRef"
-                                         Context="employee">
-                                <GridSettings>
-                                    <GridPagerSettings PageSizes="@PageSizes">
-                                    </GridPagerSettings>
-                                </GridSettings>
-                                <GridColumns>
-                                    <GridColumn Field=@nameof(Document.DocumentName) Title="Document Name" />
-                                    <GridCommandColumn Width="5%">
-                                        <GridCommandButton Class="commandButton" Command="ExportData" OnClick="@viewData">View</GridCommandButton>
-                                    </GridCommandColumn>
-                                    <GridCommandColumn Width="5%">
-                                        <GridCommandButton Class="commandButton">Export</GridCommandButton>
-                                    </GridCommandColumn>
-                                </GridColumns>
-                            </TelerikGrid>
-                        }
-                        else
-                        {
-                            <span>No Data to display.</span>
-                        }
-                    </div>
-                    <TelerikPager PageChanged="@PageChangedHandler"
-                                  Total="TotalItems"
-                                  ButtonCount="6"
-                                  PageSize="@PageSize"
-                                  PageSizeChanged="@PageSizeChangedHandler"
-                                  PageSizes="@(new List<int?> {5, 10, 20})"
-                                  Page="@Page">
-                    </TelerikPager>
-                </CardBody>
-            </TelerikCard>
-        </TabStripTab>
-    </TelerikTabStrip>
-</div>
+                    @if (DocumentList != null && !XSmall)
+                    {
+                        <TelerikGrid TItem="Document"
+                                     @bind-PageSize="@PageSize"
+                                     Height="@GridHeight"
+                                     FilterMode="GridFilterMode.FilterRow"
+                                     Sortable=true
+                                     Data="DocumentList"
+                                     OnStateChanged="@OnStateChanged"
+                                     @ref="GridRef"
+                                     Context="employee">
+                            <GridSettings>
+                                <GridPagerSettings PageSizes="@PageSizes">
+                                </GridPagerSettings>
+                            </GridSettings>
+                            <GridColumns>
+                                <GridColumn Field=@nameof(Document.DocumentName) Title="Document Name" />
+                                <GridCommandColumn Width="5%">
+                                    <GridCommandButton Class="commandButton" Command="ExportData" OnClick="@viewData">View</GridCommandButton>
+                                </GridCommandColumn>
+                                <GridCommandColumn Width="5%">
+                                    <GridCommandButton Class="commandButton">Export</GridCommandButton>
+                                </GridCommandColumn>
+                            </GridColumns>
+                        </TelerikGrid>
+                    }
+                    else
+                    {
+                        <span>No Data to display.</span>
+                    }
+                </div>
+                <TelerikPager PageChanged="@PageChangedHandler"
+                              Total="TotalItems"
+                              ButtonCount="6"
+                              PageSize="@PageSize"
+                              PageSizeChanged="@PageSizeChangedHandler"
+                              PageSizes="@(new List<int?> {5, 10, 20})"
+                              Page="@Page">
+                </TelerikPager>
+            </CardBody>
+        </TelerikCard>
+    </TabStripTab> *@
+</TelerikTabStrip>
 <style>
     .commandButton {
         font-weight: 500;
@@ -78,4 +160,17 @@
         padding: 3px 16px;
         margin: 0 10px;
     }
+
+    .detail-flex {
+        display: flex;
+        flex: 100;
+        flex-wrap: wrap;
+    }
+
+        .detail-flex p {
+            display: flex;
+            flex-wrap: wrap;
+            flex: 50;
+            line-height: 35px;
+        }
 </style>
