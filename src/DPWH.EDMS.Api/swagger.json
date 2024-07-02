@@ -1823,6 +1823,66 @@
         }
       }
     },
+    "/api/recordrequests/query/status/{status}": {
+      "post": {
+        "tags": [
+          "RecordRequests"
+        ],
+        "operationId": "QueryRecordRequestsByStatus",
+        "parameters": [
+          {
+            "name": "status",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json; api-version=1.0": {
+              "schema": {
+                "$ref": "#/components/schemas/DataSourceRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/DataSourceResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/recordrequests/create": {
       "post": {
         "tags": [
@@ -2688,6 +2748,216 @@
         }
       }
     },
+    "/api/Signatories": {
+      "post": {
+        "tags": [
+          "Signatories"
+        ],
+        "operationId": "Creates new signatory",
+        "requestBody": {
+          "content": {
+            "application/json; api-version=1.0": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateSignatoryModel"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/GuidBaseApiResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Signatories/Query": {
+      "post": {
+        "tags": [
+          "Signatories"
+        ],
+        "operationId": "Query signatories",
+        "requestBody": {
+          "content": {
+            "application/json; api-version=1.0": {
+              "schema": {
+                "$ref": "#/components/schemas/DataSourceRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/DataSourceResultBaseApiResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Signatories/{id}": {
+      "put": {
+        "tags": [
+          "Signatories"
+        ],
+        "operationId": "Updates signatory",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json; api-version=1.0": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateSignatoryModel"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/GuidNullableBaseApiResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Signatories"
+        ],
+        "operationId": "Delete signatory",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/GuidNullableBaseApiResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/system/create": {
       "post": {
         "tags": [
@@ -3395,6 +3665,10 @@
             "format": "uuid",
             "nullable": true
           },
+          "validIdName": {
+            "type": "string",
+            "nullable": true
+          },
           "validIdUri": {
             "type": "string",
             "nullable": true
@@ -3402,6 +3676,10 @@
           "supportingDocument": {
             "type": "string",
             "format": "uuid",
+            "nullable": true
+          },
+          "supportingDocumentName": {
+            "type": "string",
             "nullable": true
           },
           "supportingDocumentUri": {
@@ -3593,6 +3871,39 @@
           "id": {
             "type": "string",
             "format": "uuid"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreateSignatoryModel": {
+        "type": "object",
+        "properties": {
+          "documentType": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "position": {
+            "type": "string",
+            "nullable": true
+          },
+          "office1": {
+            "type": "string",
+            "nullable": true
+          },
+          "office2": {
+            "type": "string",
+            "nullable": true
+          },
+          "signatoryNo": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "isActive": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -5621,6 +5932,39 @@
         },
         "additionalProperties": false
       },
+      "UpdateSignatoryModel": {
+        "type": "object",
+        "properties": {
+          "documentType": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "position": {
+            "type": "string",
+            "nullable": true
+          },
+          "office1": {
+            "type": "string",
+            "nullable": true
+          },
+          "office2": {
+            "type": "string",
+            "nullable": true
+          },
+          "signatoryNo": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "isActive": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
       "UpdateSystemLogsRequest": {
         "type": "object",
         "properties": {
@@ -5820,8 +6164,8 @@
         "type": "oauth2",
         "flows": {
           "authorizationCode": {
-            "authorizationUrl": "https://app-idp-ngobia-dpwh-dev.azurewebsites.net/connect/authorize",
-            "tokenUrl": "https://app-idp-ngobia-dpwh-dev.azurewebsites.net/connect/token",
+            "authorizationUrl": "https://localhost:5001/connect/authorize",
+            "tokenUrl": "https://localhost:5001/connect/token",
             "scopes": {
               "dpwhedmsapi.write": "api read & write access"
             }
