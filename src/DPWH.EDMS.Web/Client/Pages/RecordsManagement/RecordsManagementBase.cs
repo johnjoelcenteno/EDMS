@@ -1,16 +1,16 @@
-﻿using DPWH.EDMS.Client.Shared.MockModels;
-using DPWH.EDMS.Client.Shared.Models;
+﻿using DPWH.EDMS.Client.Shared.Models;
 using DPWH.EDMS.Components.Components.ReusableGrid;
+using DPWH.NGOBIA.Client.Shared.APIClient.Services.Users;
+using Microsoft.AspNetCore.Components;
 using Telerik.Blazor.Components;
 using Telerik.DataSource;
 
 
 namespace DPWH.EDMS.Web.Client.Pages.RecordsManagement;
 
-public class RecordsManagementBase : GridBase<RecordModel>
+public class RecordsManagementBase : GridBase<UserModel>
 {
-    protected MockData MockData { get; set; }
-    protected List<RecordModel> RecordList = new List<RecordModel>();
+    [Inject] public required IUsersService UsersService { get; set; }
     public FilterOperator filterOperator { get; set; } = FilterOperator.StartsWith;
 
 
@@ -22,24 +22,19 @@ public class RecordsManagementBase : GridBase<RecordModel>
             Text = "Records Management",
             Url = "/records-management"
         });
-
-        MockData.GetRecords();
     }
 
-    public List<FilterOperator> filterOperators { get; set; } = new List<FilterOperator>()
+    protected async override Task OnInitializedAsync()
     {
-        FilterOperator.IsEqualTo,
-        FilterOperator.IsNotEqualTo,
-        FilterOperator.StartsWith,
-        FilterOperator.Contains,
-        FilterOperator.DoesNotContain
-    };
+        ServiceCb = UsersService.Query;
+        await LoadData();
+    }
 
     protected void GoToSelectedItemDocuments(GridRowClickEventArgs args)
     {
         IsLoading = true;
 
-        var selectedItem = args.Item as RecordModel;
+        var selectedItem = args.Item as UserModel;
 
         if (selectedItem != null)
         {

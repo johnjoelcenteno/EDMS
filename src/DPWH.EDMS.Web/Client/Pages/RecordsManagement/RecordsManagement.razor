@@ -1,4 +1,5 @@
 ﻿@page "/records-management"
+@using DPWH.EDMS.Client.Shared.Models
 
 @inherits RecordsManagementBase
 @attribute [Authorize(Policy = "RequireActiveRoles")]
@@ -18,14 +19,14 @@
             </div>
             <CardSeparator Class="my-2"></CardSeparator>
             <div>
-                @if (RecordList != null && !XSmall)
+                @if (GridData != null && !XSmall)
                 {
-                    <TelerikGrid TItem="RecordModel"
+                    <TelerikGrid TItem="UserModel"
                                  @bind-PageSize="@PageSize"
                                  Height="@GridHeight"
                                  FilterMode="GridFilterMode.FilterRow"
                                  Sortable=true
-                                 Data="MockData.GetRecords()"
+                                 Data="GridData"
                                  OnStateChanged="@OnStateChanged"
                                  @ref="GridRef"
                                  Context="record"
@@ -35,11 +36,11 @@
                             </GridPagerSettings>
                         </GridSettings>
                         <GridColumns>
-                            <GridColumn Field=@nameof(RecordModel.FirstName) Title="First Name" />
-                            <GridColumn Field=@nameof(RecordModel.LastName) Title="Last Name" />
-                            <GridColumn Field=@nameof(RecordModel.MiddleName) Title="Middle Name" />
-                            <GridColumn Field=@nameof(RecordModel.Office) Title="Office" />
-                            <GridColumn Field=@nameof(RecordModel.BureauServiceDivisionSectionUnit) Title="Bureau/Service/Division/Section/Unit" />
+                            <GridColumn Field=@nameof(UserModel.FirstName) Title="First Name" />
+                            <GridColumn Field=@nameof(UserModel.LastName) Title="Last Name" />
+                            <GridColumn Field=@nameof(UserModel.MiddleInitial) Title="Middle Name" />
+                            <GridColumn Field=@nameof(UserModel.RegionalOfficeRegion) Title="Office" />
+                            <GridColumn Field=@nameof(UserModel.Department) Title="Bureau/Service/Division/Section/Unit" />
                         </GridColumns>
                     </TelerikGrid>
                 }
