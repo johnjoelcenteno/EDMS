@@ -6,6 +6,17 @@ public static class ApiEndpoints
 {
     private const string ApiBase = "api";
 
+    public static class Signatories
+    {
+        private const string Base = $"{ApiBase}/Signatories";
+
+        public const string Create = $"{Base}";
+        public const string Update = $"{Base}/{{id:guid}}";
+        public const string Delete = $"{Base}/{{id:guid}}";
+        public const string Query = $"{Base}/Query";
+        public const string QueryById = $"{Base}/GetById/{{id:guid}}";
+    }
+
     public static class RecordTypes
     {
         private const string Base = $"{ApiBase}/RecordTypes";
