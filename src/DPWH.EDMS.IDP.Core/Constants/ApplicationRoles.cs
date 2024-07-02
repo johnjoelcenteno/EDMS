@@ -9,6 +9,7 @@ public static class ApplicationRoles
     public const string Manager = $"{RolePrefix}manager";
     public const string EndUser = $"{RolePrefix}enduser";
     public const string ITSupport = $"{RolePrefix}it_support";
+    public const string Staff = $"{RolePrefix}staff";
     public const string Deactivated = "deactivated";
     public const string Suspended = "suspended";
 
@@ -18,6 +19,7 @@ public static class ApplicationRoles
             { Manager, "Manager" },
             { ITSupport, "IT Support"},
             { EndUser, "End User"},
+            { Staff, "Staff"},
             { Deactivated, "Deactivated" },
             { Suspended, "Suspended" }
         };
