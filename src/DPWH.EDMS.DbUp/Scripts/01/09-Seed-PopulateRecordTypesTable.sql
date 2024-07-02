@@ -43,3 +43,21 @@ INSERT INTO [RecordTypes] VALUES
 	(NEWID(),N'Certificate of Employer-Employee Relationship',N'Personal Records',N'Employee Welfare and Benefits Section',N'HRMD',1,N'System','2024-07-02 01:14:45.360000',NULL,NULL),
 	(NEWID(),N'Certificate of Employer-Employee Relationship',N'Personal Records',N'Employee Welfare and Benefits Section',N'HRMD',1,N'System','2024-07-02 01:14:45.360000',NULL,NULL),
 	(NEWID(),N'Certification of No Loan Deductions',N'Personal Records',N'Employee Welfare and Benefits Section',N'HRMD',1,N'System','2024-07-02 01:14:45.360000',NULL,NULL);
+
+-- Archived
+INSERT INTO [RecordTypes] VALUES 
+	(NEWID(), N'Approved Appointments', N'Archived', N'Archived', NULL, 1, N'System', '2024-07-02 01:14:45.360000', NULL, NULL),
+	(NEWID(), N'Position Description Form (PDF)', N'Archived', N'Archived', NULL, 1, N'System', '2024-07-02 01:14:45.360000', NULL, NULL),
+	(NEWID(), N'Service Records', N'Archived', N'Archived', NULL, 1, N'System', '2024-07-02 01:14:45.360000', NULL, NULL),
+	(NEWID(), N'Employee Leave Card', N'Archived', N'Archived', NULL, 1, N'System', '2024-07-02 01:14:45.360000', NULL, NULL),
+	(NEWID(), N'Leave Application (Terminal Leave only)', N'Archived', N'Archived', NULL, 1, N'System', '2024-07-02 01:14:45.360000', NULL, NULL),
+	(NEWID(), N'Notice of Salary Adjustment (NOSA)', N'Archived', N'Archived', NULL, 1, N'System', '2024-07-02 01:14:45.360000', NULL, NULL),
+	(NEWID(), N'Personal Data Sheet (PDS) / Information Sheet (must be latest)', N'Archived', N'Archived', NULL, 1, N'System', '2024-07-02 01:14:45.360000', NULL, NULL),
+	(NEWID(), N'Administrative Case / Civil Case/Decisions', N'Archived', N'Archived', NULL, 1, N'System', '2024-07-02 01:14:45.360000', NULL, NULL),
+	(NEWID(), N'Training Certificates / Ratings', N'Archived', N'Archived', NULL, 1, N'System', '2024-07-02 01:14:45.360000', NULL, NULL),
+	(NEWID(), N'Travel Directive, Certificate of Appearance', N'Archived', N'Archived', NULL, 1, N'System', '2024-07-02 01:14:45.360000', NULL, NULL),
+	(NEWID(), N'Authority to Travel for Personal Reason', N'Archived', N'Archived', NULL, 1, N'System', '2024-07-02 01:14:45.360000', NULL, NULL),
+	(NEWID(), N'Memorandum Receipt for Equipment (MR)', N'Archived', N'Archived', NULL, 1, N'System', '2024-07-02 01:14:45.360000', NULL, NULL),
+	(NEWID(), N'GSIS Forms (Retirement, Information for Membership)', N'Archived', N'Archived', NULL, 1, N'System', '2024-07-02 01:14:45.360000', NULL, NULL),
+	(NEWID(), N'Memo (Designation, Directive)', N'Archived', N'Archived', NULL, 1, N'System', '2024-07-02 01:14:45.360000', NULL, NULL),
+	(NEWID(), N'Daily Wage Appointment / Plantilla', N'Archived', N'Archived', NULL, 1, N'System', '2024-07-02 01:14:45.360000', NULL, NULL);
