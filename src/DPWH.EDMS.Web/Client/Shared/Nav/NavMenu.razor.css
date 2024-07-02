@@ -48,6 +48,9 @@
     transition: 200ms;
     overflow-y: auto;
 }
+    ::-webkit-scrollbar{
+        display: none;
+    }
 
     .sidebar .sidebar-container {
         position: relative;
@@ -57,11 +60,18 @@
     }
 
         .sidebar .sidebar-container #sidebar-expander {
-            position: absolute !important;
+            position: fixed !important;
+            bottom: 0;
+            color: #fff;
+            left: 16rem;
+        }
+        .sidebar .sidebar-container #sidebar-expander-closed {
+            position: relative !important;
             bottom: 0;
             color: #fff;
             right: 0;
         }
+        
 
 
     .sidebar .logo img {
@@ -74,6 +84,12 @@
 ul.nav-link-subitem {
     list-style: none;
     padding-left: 10px;
+    overflow: auto;
+    max-height: 60vh;
+}
+ul.nav-link-subitem-closed {
+    list-style: none;
+    padding-left: 0px;
     overflow: auto;
     max-height: 60vh;
 }
