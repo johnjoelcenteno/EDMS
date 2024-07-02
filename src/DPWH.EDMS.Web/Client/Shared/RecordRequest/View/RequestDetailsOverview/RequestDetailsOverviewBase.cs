@@ -17,8 +17,6 @@ public class RequestDetailsOverviewBase : RxBaseComponent
     [Inject] public required IToastService ToastService { get; set; }
 
     protected RecordRequestModel SelectedRecordRequest { get; set; } = new();
-    protected RecordRequestDocumentModel SelectedValid { get; set; } = new();
-    protected RecordRequestDocumentModel SelectedAuthorizedDocument { get; set; } = new();
 
     protected string CancelReturnUrl = string.Empty;
 
@@ -46,5 +44,27 @@ public class RequestDetailsOverviewBase : RxBaseComponent
             ToastService.ShowError("Something went wrong on loading record request.");
             NavManager.NavigateTo("/my-requests");
         }
+    }
+
+    protected string GetValidIdTextDisplay()
+    {
+        return
+            SelectedRecordRequest.AuthorizedRepresentative != null &&
+            GenericHelper.IsGuidHasValue(SelectedRecordRequest.AuthorizedRepresentative.ValidId) &&
+            !string.IsNullOrEmpty(SelectedRecordRequest.AuthorizedRepresentative.ValidIdUri)
+                ? SelectedRecordRequest.AuthorizedRepresentative.ValidIdName
+                : "No ID attached.";
+
+    }
+
+    protected string GetSupportingDocTextDisplay()
+    {
+        return
+            SelectedRecordRequest.AuthorizedRepresentative != null &&
+            GenericHelper.IsGuidHasValue(SelectedRecordRequest.AuthorizedRepresentative.SupportingDocument) &&
+            !string.IsNullOrEmpty(SelectedRecordRequest.AuthorizedRepresentative.SupportingDocumentUri)
+                ? SelectedRecordRequest.AuthorizedRepresentative.SupportingDocumentName
+                : "No Document attached.";
+
     }
 }

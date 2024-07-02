@@ -62,7 +62,7 @@
                     </GridSettings>
                     <GridColumns>
                         <GridColumn Field=@nameof(RecordRequestModel.ControlNumber) Title="Control No." Filterable="false" />
-                        <GridColumn Field=@nameof(RecordRequestModel.RequestedRecords) Title="Records Requested" Filterable="false">
+                        <GridColumn Field=@nameof(RecordRequestModel.RequestedRecords) Title="Records Requested" Filterable="false" Sortable="false">
                             <Template>
                                 @{
                             var req = context as RecordRequestModel;
