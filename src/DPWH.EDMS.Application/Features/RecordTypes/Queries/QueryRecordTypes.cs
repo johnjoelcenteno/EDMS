@@ -1,9 +1,10 @@
 ﻿using DPWH.EDMS.Application.Contracts.Persistence;
+using DPWH.EDMS.Application.Features.RecordTypes.Mappers;
 using DPWH.EDMS.Domain.Extensions;
 using KendoNET.DynamicLinq;
 using MediatR;
 
-namespace DPWH.EDMS.Application;
+namespace DPWH.EDMS.Application.Features.RecordTypes.Queries;
 
 public record QueryRecordTypesRequest(DataSourceRequest DataSourceRequest) : IRequest<DataSourceResult>;
 

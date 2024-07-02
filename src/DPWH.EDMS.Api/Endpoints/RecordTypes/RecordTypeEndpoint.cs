@@ -1,10 +1,10 @@
 ﻿using DPWH.EDMS.Api.Endpoints;
 using DPWH.EDMS.Application;
-using DPWH.EDMS.Application.Features.RecordRequests.Commands.CreateRecordRequest;
+using DPWH.EDMS.Application.Features.RecordTypes.Commands;
+using DPWH.EDMS.Application.Features.RecordTypes.Queries;
 using DPWH.EDMS.Application.Models;
 using KendoNET.DynamicLinq;
 using MediatR;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DPWH.EDMS.Api;
@@ -43,6 +43,20 @@ public static class RecordTypeEndpoints
         .Produces<BaseApiResponse<QueryRecordTypesModel?>>()
         .Produces<ProblemDetails>(StatusCodes.Status400BadRequest)
         .Produces<ProblemDetails>(StatusCodes.Status500InternalServerError);
+
+        builder.MapGet(ApiEndpoints.RecordTypes.QueryByCategory, async ([FromRoute] string category, IMediator mediator) =>
+       {
+           var result = await mediator.Send(new QueryRecordTypesByCategoryRequest(category));
+           var data = new BaseApiResponse<List<QueryRecordTypesModel>>(result);
+       })
+       .WithName("Query record types by category")
+       .WithTags(TagName)
+       .WithDescription("Query record types by category")
+       .WithApiVersionSet(ApiVersioning.VersionSet)
+       .HasApiVersion(1.0)
+       .Produces<BaseApiResponse<List<QueryRecordTypesModel>>>()
+       .Produces<ProblemDetails>(StatusCodes.Status400BadRequest)
+       .Produces<ProblemDetails>(StatusCodes.Status500InternalServerError);
 
         builder.MapPost(ApiEndpoints.RecordTypes.Query, async (DataSourceRequest request, IMediator mediator, CancellationToken token) =>
         {

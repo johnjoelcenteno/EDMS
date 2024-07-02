@@ -3,7 +3,7 @@ using DPWH.EDMS.Application.Contracts.Persistence;
 using DPWH.EDMS.IDP.Core.Extensions;
 using MediatR;
 
-namespace DPWH.EDMS.Application;
+namespace DPWH.EDMS.Application.Features.RecordTypes.Commands;
 
 
 public record class UpdateRecordTypeRequest(Guid Id, UpdateRecordTypeModel model) : IRequest<Guid?>;

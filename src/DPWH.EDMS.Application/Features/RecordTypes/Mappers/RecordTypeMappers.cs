@@ -1,6 +1,6 @@
 ﻿using DPWH.EDMS.Domain;
 
-namespace DPWH.EDMS.Application;
+namespace DPWH.EDMS.Application.Features.RecordTypes.Mappers;
 
 public static class RecordTypeMappers
 {
