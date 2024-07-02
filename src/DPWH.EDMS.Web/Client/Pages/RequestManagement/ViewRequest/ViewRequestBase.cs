@@ -20,7 +20,6 @@ public class ViewRequestBase : RequestDetailsOverviewBase
         await LoadData((res) =>
         {
             SelectedRecordRequest = res;
-
             BreadcrumbItems.AddRange(new List<BreadcrumbModel>
             {
                 new BreadcrumbModel

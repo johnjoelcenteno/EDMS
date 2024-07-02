@@ -11,7 +11,7 @@
 
 <h3>Request Details</h3>
 
-@if(SelectedRecordRequest != null)
+@if (SelectedRecordRequest != null && !IsLoading)
 {
     <div class="d-flex flex-row align-items-center mb-2">
         <p>Control Number: @SelectedRecordRequest.ControlNumber </p>
@@ -41,13 +41,13 @@
                     </div>
                     <div class="detail-flex">
                         <p><b>Claimant Type:</b>&nbsp; @(SelectedRecordRequest.ClaimantType == ClaimantTypes.AuthorizedRepresentative.ToString() ? "Authorized Representative" : "Requestor")</p>
-                        @if (SelectedRecordRequest.ClaimantType == ClaimantTypes.AuthorizedRepresentative.ToString())
+                        @if (SelectedRecordRequest != null && SelectedRecordRequest.ClaimantType == ClaimantTypes.AuthorizedRepresentative.ToString())
                         {
                             <p><b>Representative Name: </b>&nbsp; @SelectedRecordRequest.AuthorizedRepresentative.RepresentativeName</p>
                         }
                     </div>
                     <div class="detail-flex">
-                        <p><b>Active or Inactive Employee:</b>&nbsp; @(SelectedRecordRequest.IsActiveEmployee ? "Yes" : "No") </p>
+                        <p><b>Active or Inactive Employee:</b>&nbsp; @(SelectedRecordRequest!.IsActiveEmployee ? "Yes" : "No") </p>
                         <p><b>Date Requested:</b>&nbsp; @GenericHelper.GetDateTimeDisplay(SelectedRecordRequest.DateRequested)</p>
                     </div>
                     <div class="detail-flex">
@@ -61,7 +61,7 @@
                         <ul>
                             @if (SelectedRecordRequest.RequestedRecords != null && SelectedRecordRequest.RequestedRecords.Count > 0)
                             {
-                                @foreach (var record in SelectedRecordRequest.RequestedRecords)
+                                foreach (var record in SelectedRecordRequest.RequestedRecords)
                                 {
                                     <li>@record.RecordType</li>
                                 }
@@ -74,15 +74,18 @@
                     </div>
                     <div class="detail-flex">
                         <ul>
-                            @if (SelectedRecordRequest.Files != null && SelectedRecordRequest.Files.Any())
-                            {
-                                <li><strong>Valid ID:</strong> <a href="@SelectedRecordRequest.AuthorizedRepresentative.ValidIdUri" target="_blank">@SelectedRecordRequest.AuthorizedRepresentative.ValidId</a></li>
-                                <li><strong>Authorized Document:</strong> <a href="@SelectedRecordRequest.AuthorizedRepresentative.ValidIdUri" target="_blank">@SelectedRecordRequest.AuthorizedRepresentative.ValidId</a></li>
-                            }
-                            else
-                            {
-                                <p>No document/s found.</p>
-                            }
+                            <li>
+                                <strong>Valid ID:</strong>
+                                <a href="@SelectedRecordRequest!.AuthorizedRepresentative.ValidIdUri" target="_blank">
+                                    @GetValidIdTextDisplay()
+                                </a>
+                            </li>
+                            <li>
+                                <strong>Authorized Document:</strong>
+                                <a href="@SelectedRecordRequest.AuthorizedRepresentative.SupportingDocumentUri" target="_blank">
+                                    @GetSupportingDocTextDisplay()
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </div>
