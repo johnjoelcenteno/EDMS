@@ -5107,63 +5107,6 @@
         },
         "additionalProperties": { }
       },
-      "QueryRecordTypesModel": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "name": {
-            "type": "string",
-            "nullable": true
-          },
-          "category": {
-            "type": "string",
-            "nullable": true
-          },
-          "section": {
-            "type": "string",
-            "nullable": true
-          },
-          "office": {
-            "type": "string",
-            "nullable": true
-          },
-          "isActive": {
-            "type": "boolean"
-          }
-        },
-        "additionalProperties": false
-      },
-      "QueryRecordTypesModelBaseApiResponse": {
-        "type": "object",
-        "properties": {
-          "success": {
-            "type": "boolean"
-          },
-          "data": {
-            "$ref": "#/components/schemas/QueryRecordTypesModel"
-          }
-        },
-        "additionalProperties": false
-      },
-      "QueryRecordTypesModelListBaseApiResponse": {
-        "type": "object",
-        "properties": {
-          "success": {
-            "type": "boolean"
-          },
-          "data": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/QueryRecordTypesModel"
-            },
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
       "RecordModel": {
         "type": "object",
         "properties": {
