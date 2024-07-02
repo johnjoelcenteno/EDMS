@@ -1823,6 +1823,66 @@
         }
       }
     },
+    "/api/recordrequests/query/status/{status}": {
+      "post": {
+        "tags": [
+          "RecordRequests"
+        ],
+        "operationId": "QueryRecordRequestsByStatus",
+        "parameters": [
+          {
+            "name": "status",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json; api-version=1.0": {
+              "schema": {
+                "$ref": "#/components/schemas/DataSourceRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/DataSourceResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/recordrequests/create": {
       "post": {
         "tags": [
@@ -3395,6 +3455,10 @@
             "format": "uuid",
             "nullable": true
           },
+          "validIdName": {
+            "type": "string",
+            "nullable": true
+          },
           "validIdUri": {
             "type": "string",
             "nullable": true
@@ -3402,6 +3466,10 @@
           "supportingDocument": {
             "type": "string",
             "format": "uuid",
+            "nullable": true
+          },
+          "supportingDocumentName": {
+            "type": "string",
             "nullable": true
           },
           "supportingDocumentUri": {
@@ -5039,63 +5107,6 @@
         },
         "additionalProperties": { }
       },
-      "QueryRecordTypesModel": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "name": {
-            "type": "string",
-            "nullable": true
-          },
-          "category": {
-            "type": "string",
-            "nullable": true
-          },
-          "section": {
-            "type": "string",
-            "nullable": true
-          },
-          "office": {
-            "type": "string",
-            "nullable": true
-          },
-          "isActive": {
-            "type": "boolean"
-          }
-        },
-        "additionalProperties": false
-      },
-      "QueryRecordTypesModelBaseApiResponse": {
-        "type": "object",
-        "properties": {
-          "success": {
-            "type": "boolean"
-          },
-          "data": {
-            "$ref": "#/components/schemas/QueryRecordTypesModel"
-          }
-        },
-        "additionalProperties": false
-      },
-      "QueryRecordTypesModelListBaseApiResponse": {
-        "type": "object",
-        "properties": {
-          "success": {
-            "type": "boolean"
-          },
-          "data": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/QueryRecordTypesModel"
-            },
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
       "RecordModel": {
         "type": "object",
         "properties": {
@@ -5820,8 +5831,8 @@
         "type": "oauth2",
         "flows": {
           "authorizationCode": {
-            "authorizationUrl": "https://app-idp-ngobia-dpwh-dev.azurewebsites.net/connect/authorize",
-            "tokenUrl": "https://app-idp-ngobia-dpwh-dev.azurewebsites.net/connect/token",
+            "authorizationUrl": "https://localhost:5001/connect/authorize",
+            "tokenUrl": "https://localhost:5001/connect/token",
             "scopes": {
               "dpwhedmsapi.write": "api read & write access"
             }
