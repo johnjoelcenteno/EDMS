@@ -36,6 +36,7 @@
     <EmbeddedResource Include="Scripts\01\06-Schema-AddRequestingOffices.sql" />
     <EmbeddedResource Include="Scripts\01\07-Schema-RenameGeolocationTable.sql" />
     <EmbeddedResource Include="Scripts\01\08-CreateSignaturesTable.sql" />
+    <EmbeddedResource Include="Scripts\01\09-Seed-PopulateRecordTypesTable.sql" />
   </ItemGroup>
   
 	<ItemGroup>
