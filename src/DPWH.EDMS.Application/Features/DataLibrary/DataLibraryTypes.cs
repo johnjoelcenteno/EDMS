@@ -10,8 +10,8 @@ public enum DataLibraryTypes
     PolicyCoverage,
     ProofOfOwnership,
     PropertyCondition,
-    RentalRates,
-    RecordTypes,
+    RentalRates,    
     ValidIDs,    
-    AuthorizationDocuments
+    AuthorizationDocuments,
+    Purposes
 }

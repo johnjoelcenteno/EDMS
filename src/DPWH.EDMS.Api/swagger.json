@@ -1559,19 +1559,79 @@
         }
       }
     },
-    "/api/lookups/recordtypes": {
+    "/api/lookups/issuances": {
       "get": {
         "tags": [
           "Lookups"
         ],
-        "operationId": "GetRecordTypes",
+        "operationId": "GetIssuances",
         "responses": {
           "200": {
             "description": "Success",
             "content": {
               "application/json; api-version=1.0": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetRecordTypesResultIEnumerableBaseApiResponse"
+                  "$ref": "#/components/schemas/GetLookupResultIEnumerableBaseApiResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/lookups/employeerecords": {
+      "get": {
+        "tags": [
+          "Lookups"
+        ],
+        "operationId": "GetEmployeeRecords",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetLookupResultIEnumerableBaseApiResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/lookups/archives": {
+      "get": {
+        "tags": [
+          "Lookups"
+        ],
+        "operationId": "GetArchives",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetLookupResultIEnumerableBaseApiResponse"
                 }
               }
             }
@@ -1619,36 +1679,6 @@
         }
       }
     },
-    "/api/lookups/secondaryids": {
-      "get": {
-        "tags": [
-          "Lookups"
-        ],
-        "operationId": "GetSecondaryIDs",
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json; api-version=1.0": {
-                "schema": {
-                  "$ref": "#/components/schemas/GetSecondaryIDsResultIEnumerableBaseApiResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Server Error",
-            "content": {
-              "application/json; api-version=1.0": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/api/lookups/authorizationdocuments": {
       "get": {
         "tags": [
@@ -1679,354 +1709,19 @@
         }
       }
     },
-    "/api/recordrequests/{id}": {
+    "/api/lookups/purposes": {
       "get": {
         "tags": [
-          "RecordRequests"
+          "Lookups"
         ],
-        "operationId": "GetRecordRequest",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          }
-        ],
+        "operationId": "GetPurposes",
         "responses": {
           "200": {
             "description": "Success",
             "content": {
               "application/json; api-version=1.0": {
                 "schema": {
-                  "$ref": "#/components/schemas/RecordRequestModelBaseApiResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      }
-    },
-    "/api/recordrequests/query": {
-      "post": {
-        "tags": [
-          "RecordRequests"
-        ],
-        "operationId": "QueryRecordRequests",
-        "requestBody": {
-          "content": {
-            "application/json; api-version=1.0": {
-              "schema": {
-                "$ref": "#/components/schemas/DataSourceRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json; api-version=1.0": {
-                "schema": {
-                  "$ref": "#/components/schemas/DataSourceResult"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json; api-version=1.0": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Server Error",
-            "content": {
-              "application/json; api-version=1.0": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/recordrequests/query/{employeeId}": {
-      "post": {
-        "tags": [
-          "RecordRequests"
-        ],
-        "operationId": "QueryRecordRequestsByEmployeeId",
-        "parameters": [
-          {
-            "name": "employeeId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json; api-version=1.0": {
-              "schema": {
-                "$ref": "#/components/schemas/DataSourceRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json; api-version=1.0": {
-                "schema": {
-                  "$ref": "#/components/schemas/DataSourceResult"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json; api-version=1.0": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Server Error",
-            "content": {
-              "application/json; api-version=1.0": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/recordrequests/query/status/{status}": {
-      "post": {
-        "tags": [
-          "RecordRequests"
-        ],
-        "operationId": "QueryRecordRequestsByStatus",
-        "parameters": [
-          {
-            "name": "status",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json; api-version=1.0": {
-              "schema": {
-                "$ref": "#/components/schemas/DataSourceRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json; api-version=1.0": {
-                "schema": {
-                  "$ref": "#/components/schemas/DataSourceResult"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json; api-version=1.0": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Server Error",
-            "content": {
-              "application/json; api-version=1.0": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/recordrequests/create": {
-      "post": {
-        "tags": [
-          "RecordRequests"
-        ],
-        "operationId": "CreateRecordRequest",
-        "requestBody": {
-          "content": {
-            "application/json; api-version=1.0": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateRecordRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json; api-version=1.0": {
-                "schema": {
-                  "$ref": "#/components/schemas/CreateResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json; api-version=1.0": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Server Error",
-            "content": {
-              "application/json; api-version=1.0": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/recordrequests/update": {
-      "put": {
-        "tags": [
-          "RecordRequests"
-        ],
-        "operationId": "Update document request",
-        "parameters": [
-          {
-            "name": "employeeId",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json; api-version=1.0": {
-                "schema": {
-                  "$ref": "#/components/schemas/EmployeeBaseApiResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "text/plain; api-version=1.0": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json; api-version=1.0": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Server Error",
-            "content": {
-              "application/json; api-version=1.0": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/recordrequests/delete": {
-      "delete": {
-        "tags": [
-          "RecordRequests"
-        ],
-        "operationId": "DeleteRecordRequest",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json; api-version=1.0": {
-                "schema": {
-                  "$ref": "#/components/schemas/DeleteResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "text/plain; api-version=1.0": {
-                "schema": {
-                  "type": "string"
+                  "$ref": "#/components/schemas/GetLookupResultIEnumerableBaseApiResponse"
                 }
               }
             }
@@ -2691,6 +2386,371 @@
               "application/json; api-version=1.0": {
                 "schema": {
                   "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/recordrequests/{id}": {
+      "get": {
+        "tags": [
+          "Requests Management"
+        ],
+        "operationId": "GetRecordRequest",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecordRequestModelBaseApiResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/recordrequests/query": {
+      "post": {
+        "tags": [
+          "Requests Management"
+        ],
+        "operationId": "QueryRecordRequests",
+        "requestBody": {
+          "content": {
+            "application/json; api-version=1.0": {
+              "schema": {
+                "$ref": "#/components/schemas/DataSourceRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/DataSourceResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/recordrequests/query/{employeeId}": {
+      "post": {
+        "tags": [
+          "Requests Management"
+        ],
+        "operationId": "QueryRecordRequestsByEmployeeId",
+        "parameters": [
+          {
+            "name": "employeeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json; api-version=1.0": {
+              "schema": {
+                "$ref": "#/components/schemas/DataSourceRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/DataSourceResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/recordrequests/query/status/{status}": {
+      "post": {
+        "tags": [
+          "Requests Management"
+        ],
+        "operationId": "QueryRecordRequestsByStatus",
+        "parameters": [
+          {
+            "name": "status",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json; api-version=1.0": {
+              "schema": {
+                "$ref": "#/components/schemas/DataSourceRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/DataSourceResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/recordrequests/create": {
+      "post": {
+        "tags": [
+          "Requests Management"
+        ],
+        "operationId": "CreateRecordRequest",
+        "requestBody": {
+          "content": {
+            "application/json; api-version=1.0": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRecordRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/recordrequests/update": {
+      "put": {
+        "tags": [
+          "Requests Management"
+        ],
+        "operationId": "Update document request",
+        "parameters": [
+          {
+            "name": "employeeId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmployeeBaseApiResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain; api-version=1.0": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/recordrequests/delete": {
+      "delete": {
+        "tags": [
+          "Requests Management"
+        ],
+        "operationId": "DeleteRecordRequest",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain; api-version=1.0": {
+                "schema": {
+                  "type": "string"
                 }
               }
             }
@@ -3656,6 +3716,16 @@
       "AuthorizedRepresentativeModel": {
         "type": "object",
         "properties": {
+          "supportingFileValidId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "supportingFileAuthorizationDocumentId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
           "representativeName": {
             "type": "string",
             "nullable": true
@@ -3673,16 +3743,16 @@
             "type": "string",
             "nullable": true
           },
-          "supportingDocument": {
+          "authorizationDocumentId": {
             "type": "string",
             "format": "uuid",
             "nullable": true
           },
-          "supportingDocumentName": {
+          "authorizationDocumentName": {
             "type": "string",
             "nullable": true
           },
-          "supportingDocumentUri": {
+          "authorizationDocumentUri": {
             "type": "string",
             "nullable": true
           }
@@ -3793,9 +3863,6 @@
             "type": "string",
             "nullable": true
           },
-          "isActiveEmployee": {
-            "type": "boolean"
-          },
           "claimant": {
             "type": "string",
             "nullable": true
@@ -3808,12 +3875,12 @@
             "type": "string",
             "nullable": true
           },
-          "validId": {
+          "supportingFileValidId": {
             "type": "string",
             "format": "uuid",
             "nullable": true
           },
-          "supportingDocument": {
+          "supportingFileAuthorizationDocumentId": {
             "type": "string",
             "format": "uuid",
             "nullable": true
@@ -4299,9 +4366,9 @@
           "ProofOfOwnership",
           "PropertyCondition",
           "RentalRates",
-          "RecordTypes",
           "ValidIDs",
-          "AuthorizationDocuments"
+          "AuthorizationDocuments",
+          "Purposes"
         ],
         "type": "string"
       },
@@ -4955,7 +5022,7 @@
         },
         "additionalProperties": false
       },
-      "GetRecordTypesResult": {
+      "GetLookupResult": {
         "type": "object",
         "properties": {
           "id": {
@@ -4969,7 +5036,7 @@
         },
         "additionalProperties": false
       },
-      "GetRecordTypesResultIEnumerableBaseApiResponse": {
+      "GetLookupResultIEnumerableBaseApiResponse": {
         "type": "object",
         "properties": {
           "success": {
@@ -4978,7 +5045,7 @@
           "data": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/GetRecordTypesResult"
+              "$ref": "#/components/schemas/GetLookupResult"
             },
             "nullable": true
           }
@@ -5031,36 +5098,6 @@
           },
           "subOfficeName": {
             "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "GetSecondaryIDsResult": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "name": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "GetSecondaryIDsResultIEnumerableBaseApiResponse": {
-        "type": "object",
-        "properties": {
-          "success": {
-            "type": "boolean"
-          },
-          "data": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/GetSecondaryIDsResult"
-            },
             "nullable": true
           }
         },
@@ -5507,9 +5544,6 @@
           "employeeNumber": {
             "type": "string",
             "nullable": true
-          },
-          "isActiveEmployee": {
-            "type": "boolean"
           },
           "claimantType": {
             "type": "string",

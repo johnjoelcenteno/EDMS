@@ -1,15 +1,14 @@
 ﻿using DPWH.EDMS.Application.Contracts.Persistence;
 using DPWH.EDMS.Application.Contracts.Services;
-using DPWH.EDMS.Application.Features.Lookups.Queries.GetRecordTypes;
+using DPWH.EDMS.Application.Features.Lookups.Queries;
+using DPWH.EDMS.Application.Features.RecordTypes;
 using DPWH.EDMS.Application.Models;
 using DPWH.EDMS.Domain.Entities;
 using DPWH.EDMS.Domain.Exceptions;
 using DPWH.EDMS.Domain.Extensions;
 using DPWH.EDMS.IDP.Core.Extensions;
-using DPWH.EDMS.Shared;
 using DPWH.EDMS.Shared.Enums;
 using MediatR;
-using System.Linq;
 using System.Security.Claims;
 
 namespace DPWH.EDMS.Application.Features.RecordRequests.Commands.CreateRecordRequest;
@@ -28,15 +27,16 @@ internal sealed class CreateRecordRequestCommandHandler(IWriteRepository writeRe
         AuthorizedRepresentative? representative = null;
         if(claimantType == ClaimantTypes.AuthorizedRepresentative)
         {
-            representative = AuthorizedRepresentative.Create(model.AuthorizedRepresentative, model.ValidId, model.SupportingDocument);
+            representative = AuthorizedRepresentative.Create(model.AuthorizedRepresentative, model.SupportingFileValidId, model.SupportingFileAuthorizationDocumentId);
 
             isAuthorizedRep = true;            
         }
 
         //Optional for now: Make sure requested record type is valid
-        var recordTypes = readRepository.DataLibrariesView
-            .Where(d => d.Type == WellKnownDataLibraryTypes.RecordTypes)
-            .Select(d => new GetRecordTypesResult(d.Id, d.Value))
+        var recordTypes = readRepository.RecordTypesView
+            .Where(d => d.Category == RecordTypesCategory.Issuances.GetDescription() ||
+                        d.Category == RecordTypesCategory.EmployeeRecords.GetDescription())
+            .Select(d => new GetLookupResult(d.Id, d.Name))
             .ToList();
 
         var inputRecordTypes = model.RequestedRecords;
@@ -51,7 +51,7 @@ internal sealed class CreateRecordRequestCommandHandler(IWriteRepository writeRe
         var requestNumber = await _generatorService.Generate(DateTimeOffset.Now, cancellationToken);
 
         var recordRequest = RecordRequest.Create(requestNumber, model.EmployeeNumber, claimantType,
-            model.IsActiveEmployee, model.DateRequested, representative, model.Purpose, principal.GetUserName());
+            model.DateRequested, representative, model.Purpose, principal.GetUserName());
 
         
         foreach (var providedRequestedRecord in model.RequestedRecords)
@@ -62,12 +62,11 @@ internal sealed class CreateRecordRequestCommandHandler(IWriteRepository writeRe
 
         if (isAuthorizedRep)
         {
-            //If Claimant is Representative, we need atleast valid ID
-            
-            if (model.ValidId is not null && model.ValidId != default)
+            //If Claimant is Representative, we need atleast valid ID            
+            if (model.SupportingFileValidId is not null && model.SupportingFileValidId != default)
             {
                 //get ValidId and update reference
-                var validId = writeRepository.RecordRequestDocuments.FirstOrDefault(d => d.Id == model.ValidId);
+                var validId = writeRepository.RecordRequestDocuments.FirstOrDefault(d => d.Id == model.SupportingFileValidId);
 
                 if (validId is not null)
                 {
@@ -75,10 +74,10 @@ internal sealed class CreateRecordRequestCommandHandler(IWriteRepository writeRe
                 }
             }
 
-            if (model.SupportingDocument is not null && model.SupportingDocument != default)
+            if (model.SupportingFileAuthorizationDocumentId is not null && model.SupportingFileAuthorizationDocumentId != default)
             {
-                //get SupportingDocument and update reference
-                var supportingDocument = writeRepository.RecordRequestDocuments.FirstOrDefault(d => d.Id == model.SupportingDocument);
+                //get AuthorizationDocuments and update reference
+                var supportingDocument = writeRepository.RecordRequestDocuments.FirstOrDefault(d => d.Id == model.SupportingFileAuthorizationDocumentId);
 
                 if (supportingDocument is not null)
                 {

@@ -1,45 +1,29 @@
-IF NOT EXISTS (SELECT *	FROM sysobjects	WHERE name = 'EmployeeRecords' AND xtype = 'U')
-BEGIN CREATE TABLE EmployeeRecords (
-	Id UNIQUEIDENTIFIER PRIMARY KEY,
-	FirstName NVARCHAR(50) NOT NULL,
-	MiddleName NVARCHAR(50),
-	LastName NVARCHAR(50) NOT NULL,
-	Office NVARCHAR(100),
-	Email NVARCHAR(100),
-	MobileNumber NVARCHAR(15),
-	EmployeeNumber NVARCHAR(50) NOT NULL UNIQUE,
-	EmployeeId NVARCHAR(75) NOT NULL UNIQUE,
-	RegionCentralOffice NVARCHAR(100),
-	DistrictBureauService NVARCHAR(100),
-	Position NVARCHAR(100),
-	Designation NVARCHAR(100),
-	Role NVARCHAR(150),
-	UserAccess NVARCHAR(50),
-	Department NVARCHAR(150),
-	RegionalOfficeRegion NVARCHAR(150),
-	RegionalOfficeProvince NVARCHAR(150),
-	DistrictEngineeringOffice NVARCHAR(150),
-	DesignationTitle NVARCHAR(150),
-	Created [DATETIMEOFFSET](7) NOT NULL,
-	CreatedBy NVARCHAR(50),
-	LastModified [DATETIMEOFFSET](7) NULL,
-	LastModifiedBy NVARCHAR(50) NULL
-);
-END 
+--Create 
+IF OBJECT_ID('dbo.ControlNumberSequence', 'SO') IS NULL 
+BEGIN
+    --DROP SEQUENCE dbo.ControlNumberSequence
+    CREATE SEQUENCE [dbo].[ControlNumberSequence] 
+     AS [int]
+     START WITH 1
+     INCREMENT BY 1
+     MINVALUE 1
+     MAXVALUE 999999
+     CACHE
+END
+GO
 
 --Create RecordRequests table
 IF NOT EXISTS (SELECT *	FROM sysobjects	WHERE name = N'RecordRequests' AND xtype = 'U')
 BEGIN CREATE TABLE RecordRequests (
 	Id UNIQUEIDENTIFIER PRIMARY KEY,
 	ControlNumber [int] NOT NULL,	
-	EmployeeNumber NVARCHAR(50) NOT NULL,
-	IsActiveEmployee [bit] NOT NULL,
+	EmployeeNumber NVARCHAR(50) NOT NULL,	
 	ClaimantType NVARCHAR(50),
 	DateRequested [DATETIMEOFFSET](7) NOT NULL,
 	RepresentativeName NVARCHAR(150) NULL,
 	ValidId [uniqueidentifier] NULL,
-	SupportingDocument [uniqueidentifier] NULL,	
-	Purpose NVARCHAR(100),
+	AuthorizationDocumentId [uniqueidentifier] NULL,	
+	Purpose NVARCHAR(150),
 	Status NVARCHAR(50),
 	Created [DATETIMEOFFSET](7) NOT NULL,
 	CreatedBy NVARCHAR(150),
@@ -80,6 +64,55 @@ BEGIN CREATE TABLE RequestedRecords (
 ) ON [PRIMARY]
 END
 
+--Create UserRecords table
+IF NOT EXISTS (SELECT *	FROM sysobjects	WHERE name = N'Records' AND xtype = 'U')
+BEGIN CREATE TABLE Records (
+	Id UNIQUEIDENTIFIER PRIMARY KEY,	
+	EmployeeId NVARCHAR(50) NOT NULL,
+	RecordTypeId [uniqueidentifier] NOT NULL,	
+	RecordName NVARCHAR(150) NOT NULL,
+	RecordUri NVARCHAR(250) NULL,	
+	Created [DATETIMEOFFSET](7) NOT NULL,
+	CreatedBy NVARCHAR(150),
+	LastModified [DATETIMEOFFSET](7) NULL,
+	LastModifiedBy NVARCHAR(150) NULL,
+);
+END
+GO
+
+IF NOT EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'RecordTypes')
+BEGIN CREATE TABLE RecordTypes (
+    Id UNIQUEIDENTIFIER NOT NULL PRIMARY KEY,
+    Name NVARCHAR(150) NOT NULL,
+    Category NVARCHAR(100) NOT NULL,
+    Section NVARCHAR(150) NULL,
+    Office NVARCHAR(150) NULL,
+    IsActive BIT NOT NULL DEFAULT 0,
+    CreatedBy NVARCHAR(150) NOT NULL,
+    Created DateTimeOffset NOT NULL,
+    LastModifiedBy NVARCHAR(150) NULL,
+    LastModified DateTimeOffset NULL
+);
+END
+
+IF NOT EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Signatories')
+BEGIN CREATE TABLE Signatories (
+    Id UNIQUEIDENTIFIER NOT NULL PRIMARY KEY,
+    DocumentType NVARCHAR(150) NOT NULL,
+    Name NVARCHAR(150) NOT NULL,
+    Position NVARCHAR(150) NOT NULL,
+    Office1 NVARCHAR(150) NOT NULL,
+    Office2 NVARCHAR(150) NULL,
+    SignatoryNo INT DEFAULT 0,
+    IsActive BIT NOT NULL DEFAULT 1,
+    CreatedBy NVARCHAR(150) NOT NULL,
+    Created DateTimeOffset NOT NULL,
+    LastModifiedBy NVARCHAR(150) NULL,
+    LastModified DateTimeOffset NULL
+);
+
+END
+
 --Constraints
 ALTER TABLE [dbo].[RequestedRecords]  WITH NOCHECK ADD CONSTRAINT [FK_RequestedRecords_RecordRequest_Id] FOREIGN KEY([RecordRequestId])
 REFERENCES [dbo].[RecordRequests] ([Id])
@@ -89,12 +122,12 @@ GO
 ALTER TABLE [dbo].[RequestedRecords] CHECK CONSTRAINT [FK_RequestedRecords_RecordRequest_Id]
 GO
 
-ALTER TABLE [dbo].[RequestedRecords]  WITH NOCHECK ADD CONSTRAINT [FK_RequestedRecords_DataLibraries_Id] FOREIGN KEY([RecordTypeId])
-REFERENCES [dbo].[DataLibraries] ([Id])
+ALTER TABLE [dbo].[RequestedRecords]  WITH NOCHECK ADD CONSTRAINT [FK_RequestedRecords_RecordTypes_Id] FOREIGN KEY([RecordTypeId])
+REFERENCES [dbo].[RecordTypes] ([Id])
 ON DELETE CASCADE
 GO
 
-ALTER TABLE [dbo].[RequestedRecords] CHECK CONSTRAINT [FK_RequestedRecords_DataLibraries_Id]
+ALTER TABLE [dbo].[RequestedRecords] CHECK CONSTRAINT [FK_RequestedRecords_RecordTypes_Id]
 GO
 
 ALTER TABLE [dbo].[RecordRequestDocuments]  WITH NOCHECK ADD CONSTRAINT [FK_RecordRequestDocuments_RecordRequests_Id] FOREIGN KEY([RecordRequestId])

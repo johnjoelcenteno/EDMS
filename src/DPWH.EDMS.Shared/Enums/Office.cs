@@ -2,7 +2,7 @@
 
 namespace DPWH.EDMS.Shared.Enums;
 
-public enum Division
+public enum Offices
 {
     [Description("Records Management Division")]
     RMD,

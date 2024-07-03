@@ -1,6 +1,5 @@
 ﻿using DPWH.EDMS.Application.Features.RecordRequests.Queries;
 using DPWH.EDMS.Domain.Entities;
-using DPWH.EDMS.Domain.Extensions;
 using DPWH.EDMS.Shared.Enums;
 
 namespace DPWH.EDMS.Application.Features.RecordRequests.Mappers;
@@ -13,19 +12,20 @@ public static class RecordRequestMappers
         {
             Id = entity.Id,
             ControlNumber = entity.ControlNumber,
-            EmployeeNumber = entity.EmployeeNumber,
-            IsActiveEmployee = entity.IsActiveEmployee,
+            EmployeeNumber = entity.EmployeeNumber,            
             ClaimantType = entity.ClaimantType,
             DateRequested = entity.DateRequested,
-            AuthorizedRepresentative = entity.AuthorizedRepresentative != null ? new AuthorizedRepresentativeModel
+            AuthorizedRepresentative = entity.AuthorizedRepresentative.ValidId is not null ? new AuthorizedRepresentativeModel
             {
+                SupportingFileValidId = entity.AuthorizedRepresentative.ValidId,
+                SupportingFileAuthorizationDocumentId = entity.AuthorizedRepresentative.AuthorizationDocumentId,
                 RepresentativeName = entity.AuthorizedRepresentative.RepresentativeName,
-                ValidId = entity.AuthorizedRepresentative.ValidId,
-                ValidIdName = EnumExtensions.GetDescriptionFromValue<RecordRequestProvidedDocumentTypes>(entity.Files?.FirstOrDefault(predicate: f => f.Type == RecordRequestProvidedDocumentTypes.ValidId.ToString()).Type),
+                ValidId = (entity.Files?.FirstOrDefault(f => f.Type == RecordRequestProvidedDocumentTypes.ValidId.ToString())) == null ? null : entity.Files?.FirstOrDefault(predicate: f => f.Type == RecordRequestProvidedDocumentTypes.ValidId.ToString()).DocumentTypeId,
+                ValidIdName = (entity.Files?.FirstOrDefault(f => f.Type == RecordRequestProvidedDocumentTypes.ValidId.ToString())) == null ? null : entity.Files?.FirstOrDefault(predicate: f => f.Type == RecordRequestProvidedDocumentTypes.ValidId.ToString()).Name,
                 ValidIdUri = (entity.Files?.FirstOrDefault(f => f.Type == RecordRequestProvidedDocumentTypes.ValidId.ToString())) == null ? null : entity.Files?.FirstOrDefault(predicate: f => f.Type == RecordRequestProvidedDocumentTypes.ValidId.ToString()).Uri,
-                SupportingDocument = entity.AuthorizedRepresentative.SupportingDocument,
-                SupportingDocumentName = EnumExtensions.GetDescriptionFromValue<RecordRequestProvidedDocumentTypes>(entity.Files?.FirstOrDefault(predicate: f => f.Type == RecordRequestProvidedDocumentTypes.AuthorizationDocument.ToString()).Type),
-                SupportingDocumentUri = (entity.Files?.FirstOrDefault(f => f.Type == RecordRequestProvidedDocumentTypes.AuthorizationDocument.ToString())) == null ? null : entity.Files?.FirstOrDefault(predicate: f => f.Type == RecordRequestProvidedDocumentTypes.AuthorizationDocument.ToString()).Uri
+                AuthorizationDocumentId = (entity.Files?.FirstOrDefault(predicate: f => f.Type == RecordRequestProvidedDocumentTypes.AuthorizationDocument.ToString())) == null ? null : entity.Files?.FirstOrDefault(predicate: f => f.Type == RecordRequestProvidedDocumentTypes.AuthorizationDocument.ToString()).DocumentTypeId,
+                AuthorizationDocumentName = (entity.Files?.FirstOrDefault(predicate: f => f.Type == RecordRequestProvidedDocumentTypes.AuthorizationDocument.ToString())) == null ? null : entity.Files?.FirstOrDefault(predicate: f => f.Type == RecordRequestProvidedDocumentTypes.AuthorizationDocument.ToString()).Name,
+                AuthorizationDocumentUri = (entity.Files?.FirstOrDefault(f => f.Type == RecordRequestProvidedDocumentTypes.AuthorizationDocument.ToString())) == null ? null : entity.Files?.FirstOrDefault(predicate: f => f.Type == RecordRequestProvidedDocumentTypes.AuthorizationDocument.ToString()).Uri
             } : null,
             RequestedRecords = entity.RequestedRecords.Select(rr => new RequestedRecordModel(rr.RecordTypeId, rr.RecordType)).ToList(),
             Purpose = entity.Purpose,

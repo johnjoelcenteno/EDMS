@@ -128,29 +128,9 @@ public class AppDataContext : DbContext, IReadRepository, IWriteRepository
             b.Navigation(u => u.AuthorizedRepresentative).IsRequired();
         });
 
-        modelBuilder.Entity<AssetDocument>()
-               .ToTable("AssetDocuments")
-               .HasDiscriminator<string>("Category")
-               .HasValue<AssetImageDocument>(AssetDocumentCategory.Image.ToString())
-               .HasValue<AssetFileDocument>(AssetDocumentCategory.File.ToString());
-
-        modelBuilder.Entity<RentalRateDocument>()
-                .ToTable("RentalRatesDocuments")
-                .HasDiscriminator<string>("Category")
-                .HasValue<RentalRateImageDocument>(AssetDocumentCategory.Image.ToString())
-                .HasValue<RentalRateFileDocument>(AssetDocumentCategory.File.ToString());
-
         base.OnModelCreating(modelBuilder);
 
         SetDefaultDecimalPrecision(modelBuilder);
-
-        modelBuilder.Entity<RentalRate>()
-            .Property(r => r.CapitalizationRate)
-            .HasPrecision(18, 4);
-
-        modelBuilder.Entity<RentalRate>()
-            .Property(r => r.CapitalizationRatePercentage)
-            .HasPrecision(18, 4);
     }
 
     private void SetDefaultDecimalPrecision(ModelBuilder builder)

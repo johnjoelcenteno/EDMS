@@ -10,8 +10,7 @@ public class RecordRequest : EntityBase
     public static RecordRequest Create(       
        int controlNumber,
        string employeeNumber,
-       ClaimantTypes claimantType,
-       bool isActiveEmployee,
+       ClaimantTypes claimantType,       
        DateTimeOffset dateRequested,
        AuthorizedRepresentative? representative,       
        string purpose,       
@@ -23,20 +22,18 @@ public class RecordRequest : EntityBase
             Id = Guid.NewGuid(),
             ControlNumber = controlNumber,
             EmployeeNumber = employeeNumber,
-            ClaimantType = claimantType.ToString(),
-            IsActiveEmployee = isActiveEmployee,
+            ClaimantType = claimantType.ToString(),            
             DateRequested = dateRequested,
             AuthorizedRepresentative = representative,
             Purpose = purpose,
-            Status = RecordRequestStates.Submitted.ToString(),
+            Status = RecordRequestStates.Review.ToString(),
             RequestedRecords = []
         };
         entity.SetCreated(createdBy);
         return entity;
     }    
     public int ControlNumber { get; private set; }
-    public string EmployeeNumber { get; private set; }
-    public bool IsActiveEmployee { get; private set; }
+    public string EmployeeNumber { get; private set; }    
     public string ClaimantType { get; private set; }
     public DateTimeOffset DateRequested { get; private set; }
     public AuthorizedRepresentative? AuthorizedRepresentative { get; private set; }    

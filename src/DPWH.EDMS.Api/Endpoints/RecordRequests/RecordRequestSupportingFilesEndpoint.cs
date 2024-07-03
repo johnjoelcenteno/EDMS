@@ -5,6 +5,7 @@ using DPWH.EDMS.Infrastructure.Storage;
 using DPWH.EDMS.Application.Features.RecordRequests.Commands.SaveUploadedFile;
 using DPWH.EDMS.Application;
 using DPWH.EDMS.Application.Features.RecordRequests.Queries;
+using DPWH.EDMS.Application.Features.DataLibrary.Queries.GetDataLibraryById;
 
 namespace DPWH.EDMS.Api.Endpoints.RecordRequests;
 
@@ -47,9 +48,16 @@ public static class RecordRequestSupportingFilesEndpoint
                 metadata.Add("DocumentType", model.DocumentType.ToString());
                 metadata.Add("DocumentTypeId", model.DocumentTypeId.ToString());
 
+                //Make sure we are using valid document - ValidIds/AuthorizationDocuments
+                var documentType = await mediator.Send(new GetDataLibraryByIdQuery(model.DocumentTypeId));
+                if (documentType is null)
+                {
+                    return Results.BadRequest(new ValidationFailureResponse() { Errors = [new ValidationResponse() { Message = "Invalid DocumentTypeId", PropertyName = "DocumentTypeId" }] });
+                }
+
                 var uri = await blobService.Put(WellKnownContainers.RecordRequestSupportingFiles, request.Id.ToString(), data, request.File.ContentType, metadata);
 
-                var command = new SaveUploadedRecordRequestFileCommand(request.Filename, request.Filename, model.DocumentType.ToString(),
+                var command = new SaveUploadedRecordRequestFileCommand(documentType.Value, request.Filename, model.DocumentType.ToString(),
                     model.DocumentTypeId, model.Document.Length, uri);
 
                 var response = await mediator.Send(command, token);
@@ -59,8 +67,7 @@ public static class RecordRequestSupportingFilesEndpoint
             .WithName("UploadSupportingFile")
             .WithTags(TagName)
             .WithDescription("Upload file and save it as record.")
-            .DisableAntiforgery()
-            //.Accepts<IFormFile>("multipart/form-data")
+            .DisableAntiforgery()            
             .Produces<CreateResponse>(StatusCodes.Status200OK)
             .Produces<ValidationFailureResponse>(StatusCodes.Status400BadRequest);
 

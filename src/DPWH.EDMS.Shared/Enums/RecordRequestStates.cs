@@ -2,8 +2,7 @@
 
 public enum RecordRequestStates
 {
-    Submitted,
-    Cancelled,
-    Assigned,   
-    Approved
+    Review,    
+    Release,   
+    Claimed
 }
