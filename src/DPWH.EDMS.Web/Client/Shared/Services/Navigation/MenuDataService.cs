@@ -34,29 +34,7 @@ public class MenuDataService : IMenuDataService
                 Text = "Request Management",
                 Url = "/request-management",
                 Icon = "folder_open",
-                Children = new List<MenuModel>()
-                {
-                    new ()
-                    {
-                        Text = "Pending Request",
-                        Url = "/my-pending-request",
-                        Icon = "description",
-                        Children = default,
-                        Level = 0,
-                        SortOrder = 0,
-                        AuthorizedRoles = new List<string>{ApplicationRoles.SuperAdmin, ApplicationRoles.SystemAdmin}
-                    },
-                    new ()
-                    {
-                        Text = "Request Management",
-                        Url = "/request-management",
-                        Icon = "description",
-                        Children = default,
-                        Level = 0,
-                        SortOrder = 1,
-                        AuthorizedRoles = new List<string>{ ApplicationRoles.SuperAdmin, ApplicationRoles.SystemAdmin }
-                    },
-                },
+                Children = default,
                 Level = 0,
                 SortOrder = 2,
                 AuthorizedRoles = new List<string>{ ApplicationRoles.SuperAdmin, ApplicationRoles.SystemAdmin }
