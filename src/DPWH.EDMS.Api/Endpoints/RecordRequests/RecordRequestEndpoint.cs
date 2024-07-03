@@ -14,7 +14,7 @@ namespace DPWH.EDMS.Api.Endpoints.RecordRequests;
 
 public static class RecordRequestEndpoint
 {
-    private const string TagName = "RecordRequests";
+    private const string TagName = "Requests Management";
 
     public static IEndpointRouteBuilder MapRecordRequests(this IEndpointRouteBuilder app)
     {

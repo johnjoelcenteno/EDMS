@@ -40,7 +40,10 @@ public static class LoggerConfigurationExtensions
             .Enrich.WithProperty("ApplicationName", assemblyName)
             .Enrich.WithProperty("ApplicationVersion", assemblyVersion)
             .Enrich.WithProperty("Environment", environment)
-            .If(isConsoleConfigured, c => c.WriteTo.Console())
+            .If(isConsoleConfigured, c => {
+                c.WriteTo.Console();
+                c.MinimumLevel.Override("Microsoft", LogEventLevel.Information);
+            })
             .If(isAppInsightsConfigured,
                 c => c.WriteTo.ApplicationInsights(TelemetryConfiguration.CreateDefault(), TelemetryConverter.Traces));
 

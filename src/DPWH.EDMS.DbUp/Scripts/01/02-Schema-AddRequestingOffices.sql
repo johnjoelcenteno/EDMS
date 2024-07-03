@@ -13,9 +13,9 @@ BEGIN CREATE TABLE RequestingOffices (
 END
 GO
 
---  Create GeoLocation table
-IF NOT EXISTS (SELECT *	FROM sysobjects	WHERE name = N'[Geolocation]' AND xtype = 'U')
-BEGIN CREATE TABLE [dbo].[Geolocation](
+--  Create GeoLocations table
+IF NOT EXISTS (SELECT *	FROM sysobjects	WHERE name = N'[Geolocations]' AND xtype = 'U')
+BEGIN CREATE TABLE [dbo].[Geolocations](
     [Id] [UNIQUEIDENTIFIER] NOT NULL,
     [Name] [nvarchar](250) NOT NULL,
     [Type] [nvarchar](100) NOT NULL,
@@ -27,13 +27,13 @@ BEGIN CREATE TABLE [dbo].[Geolocation](
     [Created] [DATETIMEOFFSET](7) NOT NULL,
     [LastModifiedBy] [nvarchar](100) NULL,
     [LastModified] [DATETIMEOFFSET](7) NULL
-    CONSTRAINT [PK_Geolocation] PRIMARY KEY CLUSTERED ( [Id] ASC )
+    CONSTRAINT [PK_Geolocations] PRIMARY KEY CLUSTERED ( [Id] ASC )
     WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]) ON [PRIMARY]
 END
 GO
 
 -- create parent (Id) -  child (w/ ParentKey) relation
-ALTER TABLE [dbo].[Geolocation] ADD CONSTRAINT FK_ParentRef FOREIGN KEY (ParentRef) REFERENCES [dbo].[Geolocation](Id)
+ALTER TABLE [dbo].[Geolocations] ADD CONSTRAINT FK_ParentRef FOREIGN KEY (ParentRef) REFERENCES [dbo].[Geolocations](Id)
 GO
 
 -- Create Table Agencies

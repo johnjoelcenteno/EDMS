@@ -50,6 +50,9 @@ public class RecordRequestDocument : EntityBase
     /// Either ValidId or SupportingDocument
     /// </summary>
     public string Type { get; set; }
+    /// <summary>
+    /// Expect the Id from drop-down menu (from DataLibrary - ValidIDs or AuthorizationDocuments
+    /// </summary>
     public Guid DocumentTypeId { get; set; }
     public long? FileSize { get; set; }
     public string? Uri { get; set; }
