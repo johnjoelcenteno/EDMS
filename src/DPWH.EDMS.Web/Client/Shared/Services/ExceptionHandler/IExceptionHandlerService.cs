@@ -10,6 +10,6 @@ public interface IExceptionHandlerService
     Task<T?> HandleApiException<T>(
         Func<Task<T?>> func,
         Action? afterSuccessCb = null,
-        string? successMessage = null); 
+        string? successMessage = null);
 }
 
