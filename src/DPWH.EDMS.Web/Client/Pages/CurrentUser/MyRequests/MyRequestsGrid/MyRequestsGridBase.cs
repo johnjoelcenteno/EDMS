@@ -1,6 +1,4 @@
 ﻿using DPWH.EDMS.Api.Contracts;
-using DPWH.EDMS.Client.Shared.APIClient.Services.RecordRequests;
-using DPWH.EDMS.Components.Components.ReusableGrid;
 using DPWH.EDMS.IDP.Core.Constants;
 using DPWH.EDMS.IDP.Core.Extensions;
 using DPWH.EDMS.Web.Client.Pages.CurrentUser.MyRequests.GridBaseExtension;

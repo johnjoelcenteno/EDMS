@@ -22,7 +22,8 @@ public class RequestFormBase : RequestFormComponentBase
         await _GetUser();
         await LoadValidIDTypes();
         await LoadAuthorizeDocumentTypes();
-        await LoadRecordTypes();        
+        await LoadIssuanceList();
+        await LoadEmployeeRecordList();
         IsLoading = false;
     }
 
@@ -33,8 +34,6 @@ public class RequestFormBase : RequestFormComponentBase
         {
             SelectedItem.DateRequested = DateTime.Now;
         }
-
-        SelectedItem.IsActiveEmployee = true;
     }   
     private async Task _GetUser()
     {

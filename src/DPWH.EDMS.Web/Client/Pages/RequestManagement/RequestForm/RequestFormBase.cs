@@ -15,7 +15,8 @@ public class RequestFormBase : RequestFormComponentBase
         IsLoading = true;
         await LoadValidIDTypes();
         await LoadAuthorizeDocumentTypes();
-        await LoadRecordTypes();        
+        await LoadIssuanceList();        
+        await LoadEmployeeRecordList();        
         IsLoading = false;
     }
 
@@ -26,6 +27,8 @@ public class RequestFormBase : RequestFormComponentBase
         {
             SelectedItem.DateRequested = DateTime.Now;
         }
+
+        //SelectedItem.IsActiveEmployee = true;
     }
     #endregion
 }

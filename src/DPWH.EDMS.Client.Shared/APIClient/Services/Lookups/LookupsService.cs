@@ -19,63 +19,59 @@ public class LookupsService : ILookupsService
         return await _client.LookupsAsync();
     }
 
+    public async Task<AddressLookup> GetRegions()
+    {
+        return await _client.GetRegionsAsync();
+    }
+
+    public async Task<AddressLookup> GetProvinces(string regionCode)
+    {
+        return await _client.GetProvincesAsync(regionCode);
+    }
+
+    public async Task<AddressLookup> GetCityOrMunicipalities(string provinceCode)
+    {
+        return await _client.GetCityOrMunicipalitiesAsync(provinceCode);
+    }
+
+    public async Task<AddressLookup> GetBarangays(string cityMunicipalityCode)
+    {
+        return await _client.GetBarangaysAsync(cityMunicipalityCode);
+    }
+    public async Task<GetAgenciesResultIEnumerableBaseApiResponse> GetAgencyList()
+    {
+        return await _client.GetAgencyListAsync();
+    }
+    public async Task<GetRequestingOfficeResultIEnumerableBaseApiResponse> GetRequestingOfficeList()
+    {
+        return await _client.GetRequestingOfficeListAsync();
+    }
+    public async Task<GetLookupResultIEnumerableBaseApiResponse> GetIssuances()
+    {
+        return await _client.GetIssuancesAsync();
+    }
+
+    public async Task<GetLookupResultIEnumerableBaseApiResponse> GetEmployeeRecords()
+    {
+        return await _client.GetEmployeeRecordsAsync();
+    }
+    public async Task<GetLookupResultIEnumerableBaseApiResponse> GetArchives()
+    {
+        return await _client.GetArchivesAsync();
+    }
+
     public async Task<GetValidIDsResultIEnumerableBaseApiResponse> GetValidIdTypes()
     {
         return await _client.GetValidIDsAsync();
     }
 
-    public async Task<GetSecondaryIDsResultIEnumerableBaseApiResponse> GetSecondaryIdTypes()
-    {
-        return await _client.GetSecondaryIDsAsync();
-    }
-
-    public async Task<GetAuthorizationDocumentsResultIEnumerableBaseApiResponse> GetAuthorizationDocumentTypes()
+    public async Task<GetAuthorizationDocumentsResultIEnumerableBaseApiResponse> GetAuthorizationDocuments()
     {
         return await _client.GetAuthorizationDocumentsAsync();
     }
 
-    public async Task<GetRecordTypesResultIEnumerableBaseApiResponse> GetRecordTypes()
+    public async Task<GetLookupResultIEnumerableBaseApiResponse> GetPurposes()
     {
-        return await _client.GetRecordTypesAsync();
+        return await _client.GetPurposesAsync();
     }
-
-    ////public async Task<AddressLookup> GetRegions()
-    ////{
-    ////    return await _client.GetRegionsAsync();
-    ////}
-
-    ////public async Task<AddressLookup> GetProvinces(string regionCode)
-    ////{
-    ////    return await _client.GetProvincesAsync(regionCode);
-    ////}
-
-    //////public async Task<AddressLookup> GetCitiesWithoutProvince(string regionCode)
-    //////{
-    //////    return await _client.GetCityOrMunicipalitiesWithoutProvinceAsync(regionCode);
-    //////}
-
-    ////public async Task<AddressLookup> GetCities(string provinceCode)
-    ////{
-    ////    return await _client.GetCityOrMunicipalitiesAsync(provinceCode);
-    ////}
-
-    ////public async Task<AddressLookup> GetBarangays(string cityCode)
-    ////{
-    ////    return await _client.GetBarangaysAsync(cityCode);
-    ////}
-
-    ////public async Task<GetRequestingOfficeResultIEnumerableBaseApiResponse> GetRequestingOffices()
-    ////{
-    ////    return await _client.GetRequestingOfficeListAsync();
-    ////}
-
-    ////public async Task<GetAgenciesResultIEnumerableBaseApiResponse> GetDepartmentsQuery()
-    ////{
-    ////    return await _client.GetAgencyListAsync();
-    ////}
-
-    ////public async Task<GetBuildingComponentsResultIEnumerableBaseApiResponse> GetBuildingComponents()
-    ////{
-    ////    return await _client.GetBuildingComponentsAsync();
-    ////}
 }

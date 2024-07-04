@@ -3,7 +3,7 @@ using Blazored.Toast.Services;
 using DPWH.EDMS.Api.Contracts;
 using DPWH.EDMS.Client.Shared.APIClient.Services.DataLibrary;
 using DPWH.EDMS.Client.Shared.APIClient.Services.Lookups;
-using DPWH.EDMS.Client.Shared.APIClient.Services.RecordRequests;
+using DPWH.EDMS.Client.Shared.APIClient.Services.RequestManagement;
 using DPWH.EDMS.Client.Shared.Models;
 using DPWH.EDMS.Components;
 using DPWH.EDMS.Components.Helpers;
@@ -23,7 +23,7 @@ public class RequestFormComponentBase : RxBaseComponent
     [Inject] public required IDocumentService DocumentService { get; set; }
     [Inject] public required ILookupsService LookupsService { get; set; }
     [Inject] public required IDataLibraryService DataLibraryService { get; set; }
-    [Inject] public required IRecordRequestsService RecordRequestsService { get; set; }
+    [Inject] public required IRequestManagementService RequestManagementService { get; set; }
     [Inject] public required IMapper Mapper { get; set; }
 
     [Parameter] public bool IsEditMode { get; set; } = false;
@@ -32,23 +32,31 @@ public class RequestFormComponentBase : RxBaseComponent
     [Parameter] public EventCallback HandleOnCancel { get; set; }
     protected CreateRecordRequest SelectedItem { get; set; } = new();
 
+    // Lists
     protected List<string> DocumentClaimants { get; set; } = new();
     protected List<GetValidIDsResult> ValidIDsList = new();
     protected List<GetAuthorizationDocumentsResult> AuthorizeDocTypeList = new();
-    protected List<GetRecordTypesResult> RecordTypesList = new();
+    protected List<GetLookupResult> IssuanceList = new();
+    protected List<GetLookupResult> EmployeeRecordList = new();
 
-    protected List<Guid> SelectedRecordTypesIdList = new();
+    protected List<Guid> SelectedIssuanceList = new();
+    protected List<Guid> SelectedEmployeeRecordList = new();
 
+    // Dropdowns
     protected TelerikDropDownList<GetValidIDsResult, string> ValidIDDropRef = new();
-    protected TelerikDropDownList<GetSecondaryIDsResult, string> SecondaryIDDropRef = new();
-    protected TelerikDropDownList<GetRecordTypesResult, string> RecordTypesDropRef = new();
+    protected TelerikDropDownList<GetAuthorizationDocumentsResult, string> AuthorizationDocumentDropRef = new();
+    protected TelerikDropDownList<GetLookupResult, string> IssuanceDropRef = new();
+    protected TelerikDropDownList<GetLookupResult, string> EmployeeRecordDropRef = new();
 
-    protected FluentValidationValidator? FluentValidationValidator;
-
+    // For Uploads
     protected Guid? SelectedValidIdTypeId { get; set; }
     protected Guid? SelectedAuthorizedDocTypeId { get; set; }
     protected UploadRecordRequestDocumentModel? SelectedValidId { get; set; }
     protected UploadRecordRequestDocumentModel? SelectedAuthorizedDocument { get; set; }
+
+    // Validator
+    protected FluentValidationValidator? FluentValidationValidator;
+
     protected UserModel CurrentUser { get; set; } = new();
     protected string UserFullname = string.Empty;
 
@@ -74,7 +82,7 @@ public class RequestFormComponentBase : RxBaseComponent
     protected async Task LoadAuthorizeDocumentTypes()
     {
         // TO be renamed
-        var suppTypeResult = await LookupsService.GetAuthorizationDocumentTypes();
+        var suppTypeResult = await LookupsService.GetAuthorizationDocuments();
 
         if (suppTypeResult.Success)
         {
@@ -85,19 +93,34 @@ public class RequestFormComponentBase : RxBaseComponent
             ToastService.ShowError("Something went wrong on loading authorize document");
         }
     }
-    protected async Task LoadRecordTypes()
+    protected async Task LoadIssuanceList()
     {
-        var recordTypesResult = await LookupsService.GetRecordTypes();
+        var res = await LookupsService.GetIssuances();
 
-        if (recordTypesResult.Success)
+        if (res.Success)
         {
-            RecordTypesList = recordTypesResult.Data.ToList();
+            IssuanceList = res.Data.ToList();
         }
         else
         {
-            ToastService.ShowError("Something went wrong on loading record types");
+            ToastService.ShowError("Something went wrong on loading issuance list.");
         }
     }
+
+    protected async Task LoadEmployeeRecordList()
+    {
+        var res = await LookupsService.GetEmployeeRecords();
+
+        if (res.Success)
+        {
+            EmployeeRecordList = res.Data.ToList();
+        }
+        else
+        {
+            ToastService.ShowError("Something went wrong on loading employee records.");
+        }
+    }
+
     protected void LoadClaimantTypes()
     {
         DocumentClaimants = Enum.GetValues(typeof(ClaimantTypes))
@@ -124,6 +147,16 @@ public class RequestFormComponentBase : RxBaseComponent
         {
             await HandleOnCancel.InvokeAsync();
         }
+    }
+
+    protected void HandleRequestRecords()
+    {
+        HashSet<Guid> set = new HashSet<Guid>();
+
+        set.UnionWith(SelectedIssuanceList);
+        set.UnionWith(SelectedEmployeeRecordList);
+
+        SelectedItem.RequestedRecords = set;
     }
     #endregion
 

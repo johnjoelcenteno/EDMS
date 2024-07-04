@@ -1,5 +1,5 @@
 ﻿using DPWH.EDMS.Api.Contracts;
-using DPWH.EDMS.Client.Shared.APIClient.Services.RecordRequests;
+using DPWH.EDMS.Client.Shared.APIClient.Services.RecordManagement;
 using DPWH.EDMS.Client.Shared.Models;
 using DPWH.EDMS.Components.Components.ReusableGrid;
 using DPWH.EDMS.Components.Helpers;
@@ -13,7 +13,7 @@ public class RecordsBase : GridBase<RecordRequestModel>
 {
     [Parameter] public required string Id { get; set; }
     [Inject] public required IUsersService UsersService { get; set; }
-    [Inject] public required IRecordRequestsService RecordRequestsService { get; set; }
+    [Inject] public required IRecordManagementService RecordManagementService { get; set; }
     [Inject] public required NavigationManager NavigationManager { get; set; }
     protected GetUserByIdResult SelectedUser { get; set; } = new();
 
@@ -69,7 +69,7 @@ public class RecordsBase : GridBase<RecordRequestModel>
 
     protected async Task LoadRequestHistoryData()
     {
-        var result = await RecordRequestsService.QueryByEmployeeId(SelectedUser.EmployeeId, DataSourceReq);
+        var result = await RecordManagementService.QueryByEmployeeId(SelectedUser.EmployeeId, DataSourceReq);
         GridData = GenericHelper.GetListByDataSource<RecordRequestModel>(result.Data);
         TotalItems = result.Total;
     }
