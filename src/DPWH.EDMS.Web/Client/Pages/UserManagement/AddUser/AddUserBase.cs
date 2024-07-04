@@ -15,13 +15,11 @@ public class AddUserBase : RxBaseComponent
             Text = "Add New User",
             Url = NavManager.Uri.ToString(),
         });
-    }
-
+    } 
     protected void OnCancel()
     {
         NavManager.NavigateTo("/user-management");
-    }
-
+    } 
     protected async Task HandleSubmit()
     {
 

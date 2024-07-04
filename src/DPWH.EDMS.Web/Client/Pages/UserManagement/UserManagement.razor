@@ -53,7 +53,7 @@
     <TelerikCard Width="100%">
         <CardBody>
             <div class="d-flex flex-row justify-content-between">
-                <CardTitle Class="mb-0">Users</CardTitle> 
+                <CardTitle Class="mb-0">Users</CardTitle>
             </div>
             <CardSeparator Class="my-2"></CardSeparator>
             <TelerikButton Class="mb-2"
@@ -65,6 +65,7 @@
             <div>
                 @if (GridData != null && !XSmall)
                 {
+                    <TelerikContextMenu @ref="@ContextMenuRef" Data="@MenuItems" OnClick="@((GridMenuItemModel item) => OnItemClick(item))"></TelerikContextMenu>
                     <TelerikGrid TItem="UserModel"
                                  @bind-PageSize="@PageSize"
                                  Height="@GridHeight"
@@ -82,39 +83,12 @@
                             <GridColumn Field=@nameof(UserModel.LastName) Title="Last Name" />
                             <GridColumn Field=@nameof(UserModel.Email) Title="Email" />
                             <GridColumn Field=@nameof(UserModel.UserAccess) Title="User Access" />
+                            <GridCommandColumn Width="50px">
+                                <TelerikButton Icon="@FontIcon.MoreVertical" OnClick="@( (MouseEventArgs e) => ShowRowOptions(e, context as UserModel) )"></TelerikButton>
+                            </GridCommandColumn>
                         </GridColumns>
                     </TelerikGrid>
                 }
-                @*  else if (GridData != null && XSmall)
-                {
-                <TelerikGrid Class="grid-no-scroll"
-                TItem="AssetModel"
-                @bind-PageSize="@PageSize"
-                Height="@GridHeight"
-                Sortable=true
-                Data="GridData"
-                OnStateChanged="@OnStateChanged">
-                <GridSettings>
-                <GridPagerSettings PageSizes="@PageSizes">
-                </GridPagerSettings>
-                </GridSettings>
-                <DetailTemplate>
-                @{
-                var prop = context as AssetModel;
-                <div class="d-flex flex-column">
-                <p><b>Property ID.:</b> @prop.PropertyId </p>
-                <p><b>Building ID:</b> @prop.BuildingId </p>
-                <p><b>Region/Implementing Office</b> @prop.ImplementingOffice </p>
-                <p><b>Agency</b> @prop.Agency </p>
-                <p><b>Created :</b> @prop.Created.DateTime.ToString("MMM dd, yyyy") </p>
-                </div>
-                }
-                </DetailTemplate>
-                <GridColumns>
-                <GridColumn Field=@nameof(AssetModel.Name) />
-                </GridColumns>
-                </TelerikGrid>
-                } *@
                 else
                 {
                     <span>No Data to display.</span>
@@ -130,7 +104,7 @@
             </TelerikPager>
         </CardBody>
     </TelerikCard>
-</div> 
+</div>
 <style>
     .um-card {
         display: flex;
