@@ -39,7 +39,7 @@ public class CommonDataBase : GridBase<DataManagementModel>
         BreadcrumbItems = new List<BreadcrumbModel>
         {
             new() { Icon = "home", Url = "/"},
-            new() { Text = "Data Library", Url = "/data-lirary"},
+            new() { Text = "Data Library", Url = "/data-library"},
             new() { Text = UriName, Url = $"/data-library/{Id}" },
 
         };
@@ -72,6 +72,10 @@ public class CommonDataBase : GridBase<DataManagementModel>
             case "purposes":
                 UriName = "Purposes";
                 DataType = "Purposes";
+                break;
+            case "issuances":
+                UriName = "DPWH Issuances";
+                DataType = "Issuances";
                 break;
             default:
                 break;
