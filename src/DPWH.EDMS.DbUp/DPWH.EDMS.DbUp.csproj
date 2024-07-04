@@ -28,6 +28,7 @@
     <EmbeddedResource Include="Scripts\01\01-Schema-Create.sql" />
     <EmbeddedResource Include="Scripts\01\02-Schema-AddChangeLogs.sql" />
     <EmbeddedResource Include="Scripts\01\02-Schema-AddRequestingOffices.sql" />
+    <EmbeddedResource Include="Scripts\01\04-Schema-AlterRequestAddFullName.sql" />
   </ItemGroup>
   
 	<ItemGroup>

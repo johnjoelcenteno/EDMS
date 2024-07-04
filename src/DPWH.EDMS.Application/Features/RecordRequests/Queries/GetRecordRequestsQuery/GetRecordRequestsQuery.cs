@@ -24,7 +24,8 @@ public class GetRecordRequestsQueryHandler(IReadRepository readRepository) : IRe
                 DateRequested = s.DateRequested,
                 Status = s.Status,
                 Purpose = s.Purpose,
-                RequestedRecords = s.RequestedRecords.Select(x => new RequestedRecordModel(x.RecordTypeId, x.RecordType))
+                RequestedRecords = s.RequestedRecords.Select(x => new RequestedRecordModel(x.RecordTypeId, x.RecordType)),
+                FullName = s.FullName,
             })
             .ToDataSourceResult(request.Request.FixSerialization());
 

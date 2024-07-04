@@ -33,7 +33,7 @@ public static class RecordRequestEndpoint
             .WithApiVersionSet(ApiVersioning.VersionSet)
             .HasApiVersion(1.0)
             .Produces<BaseApiResponse<RecordRequestModel>>()
-            .Produces(StatusCodes.Status404NotFound);            
+            .Produces(StatusCodes.Status404NotFound);
 
         app.MapPost(ApiEndpoints.RecordRequest.Query, async (DataSourceRequest request, IMediator mediator) =>
             {
@@ -45,7 +45,7 @@ public static class RecordRequestEndpoint
             .WithDescription("Get record request")
             .WithApiVersionSet(ApiVersioning.VersionSet)
             .HasApiVersion(1.0)
-            .Produces<DataSourceResult>()            
+            .Produces<DataSourceResult>()
             .Produces<ProblemDetails>(StatusCodes.Status400BadRequest)
             .Produces<ProblemDetails>(StatusCodes.Status500InternalServerError);
 
@@ -87,7 +87,7 @@ public static class RecordRequestEndpoint
             .WithDescription("Create new record request")
             .WithApiVersionSet(ApiVersioning.VersionSet)
             .HasApiVersion(1.0)
-            .Produces<CreateResponse>()            
+            .Produces<CreateResponse>()
             .Produces<ProblemDetails>(StatusCodes.Status400BadRequest)
             .Produces<ProblemDetails>(StatusCodes.Status500InternalServerError);
 
@@ -115,7 +115,7 @@ public static class RecordRequestEndpoint
         .WithApiVersionSet(ApiVersioning.VersionSet)
         .HasApiVersion(1.0)
         .Produces<DeleteResponse>(StatusCodes.Status200OK)
-        .Produces(StatusCodes.Status404NotFound)        
+        .Produces(StatusCodes.Status404NotFound)
         .Produces<ProblemDetails>(StatusCodes.Status500InternalServerError);
 
         return app;
