@@ -109,7 +109,6 @@ public class CommonDataBase : GridBase<DataManagementModel>
                     Type = propertyConditionData.Type,
                     Data = convertedData
                 };
-                Console.WriteLine(convertedData.ToString());
             }
         }
         catch (Exception ex) when (ex is ApiException<ProblemDetails> apiExtension)
