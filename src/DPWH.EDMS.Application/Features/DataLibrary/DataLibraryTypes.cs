@@ -13,5 +13,6 @@ public enum DataLibraryTypes
     RentalRates,    
     ValidIDs,    
     AuthorizationDocuments,
-    Purposes
+    Purposes,
+    EmployeeRecords
 }
