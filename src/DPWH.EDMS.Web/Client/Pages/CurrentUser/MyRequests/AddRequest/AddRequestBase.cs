@@ -13,11 +13,13 @@ public class AddRequestBase : AddRequestComponentBase
             Text = "Add New Request",
             Url = NavManager.Uri.ToString(),
         });
+
+        RedirectUri = "/my-requests";
     }
 
     protected void OnCancel()
     {
-        NavManager.NavigateTo("/my-requests");
+        HandleCancel("/my-requests");
     }
 
 }

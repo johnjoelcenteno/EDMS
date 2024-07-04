@@ -30,7 +30,11 @@
             <div class="form-group">
                 <div class="row m-0">
                     <div class="col-md-6 col-12 p-2">
-                        <label for="employeeNo">Employee No.</label>
+                        @* <label for="employeeNo">Employee No.</label> *@
+
+                        @* FOR DEMO PURPOSES ONLY!!! *@
+                        <label for="employeeNo">Employee Email</label>
+
                         <InputText id="employeeNo" class="form-control" @bind-Value="SelectedItem.EmployeeNumber" />
                         <ValidationMessage For="@(() => SelectedItem.EmployeeNumber)" class="text-danger" />
                     </div>
@@ -42,11 +46,11 @@
                 </div>
             </div>
             @* <div class="form-group p-2">
-                <label>Inactive or Active</label>
-                <div>
-                    <TelerikSwitch Class="float-right" @bind-Value="@SelectedItem.IsActiveEmployee"></TelerikSwitch>
-                </div>
-                <ValidationMessage For="@(() => SelectedItem.IsActiveEmployee)" class="text-danger" />
+            <label>Inactive or Active</label>
+            <div>
+            <TelerikSwitch Class="float-right" @bind-Value="@SelectedItem.IsActiveEmployee"></TelerikSwitch>
+            </div>
+            <ValidationMessage For="@(() => SelectedItem.IsActiveEmployee)" class="text-danger" />
             </div> *@
 
             <div class="form-group p-2">
@@ -103,7 +107,7 @@
                 <div class="form-group p-2">
                     <label for="suppDocType">Authorization Document</label>
                     <TelerikDropDownList Data="@AuthorizeDocTypeList"
-                                         @bind-Value="SelectedAuthorizedDocTypeId"
+                                         @bind-Value="SelectedPurpose"
                                          ValueField="@nameof(GetAuthorizationDocumentsResult.Id)"
                                          TextField="@nameof(GetAuthorizationDocumentsResult.Name)"
                                          DefaultText="Select" />
@@ -128,7 +132,7 @@
                 </div>
             }
 
-            <div class="form-group">                
+            <div class="form-group">
                 <div class="row m-0">
                     <label for="recordsRequested" class="px-2 pt-3">Record/s to be Requested</label>
                     <div class="col-md-6 col-12 p-2">
@@ -153,12 +157,16 @@
                         </TelerikMultiSelect>
                         <ValidationMessage For="@(() => SelectedItem.RequestedRecords)" class="text-danger" />
                     </div>
-                </div>              
+                </div>
             </div>
 
             <div class="form-group p-2">
                 <label for="remarks">Purpose/Remarks</label>
-                <InputTextArea id="remarks" class="form-control" @bind-Value="SelectedItem.Purpose" placeholder="Placeholder" />
+                <TelerikDropDownList Data="@PurposeList"
+                                     @bind-Value="SelectedItem.Purpose"
+                                     ValueField="@nameof(GetAuthorizationDocumentsResult.Name)"
+                                     TextField="@nameof(GetAuthorizationDocumentsResult.Name)"
+                                     DefaultText="Select" />
                 <ValidationMessage For="@(() => SelectedItem.Purpose)" class="text-danger" />
             </div>
         </CardBody>

@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace DPWH.EDMS.Client.Shared.Enums;
 
-public enum RecordRequestStates
+public enum RecordRequestTabStates
 {
-    Submitted = 1,
-    Cancelled = 2,
-    Assigned = 3,
-    Approved = 4,
+    All = 0,
+    Review = 1,
+    Release = 2,
+    Claimed = 3,
 }
