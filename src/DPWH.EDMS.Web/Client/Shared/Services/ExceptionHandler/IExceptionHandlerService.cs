@@ -1,4 +1,6 @@
-﻿namespace DPWH.EDMS.Web.Client.Shared.Services.ExceptionHandler;
+﻿using DPWH.EDMS.Client.Shared.Models;
+
+namespace DPWH.EDMS.Web.Client.Shared.Services.ExceptionHandler;
 
 public interface IExceptionHandlerService
 {
@@ -6,7 +8,9 @@ public interface IExceptionHandlerService
     Task HandleApiException(
         Func<Task> func,
         Action? afterSuccessCb = null,
-        string successMessage = null);
+        string successMessage = null,
+        bool? isUserManagement = false,
+        Func<bool, bool, Task>? PISException = null);
     Task<T?> HandleApiException<T>(
         Func<Task<T?>> func,
         Action? afterSuccessCb = null,

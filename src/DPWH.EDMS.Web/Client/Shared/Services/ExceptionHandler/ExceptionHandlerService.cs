@@ -1,5 +1,6 @@
 ﻿using Blazored.Toast.Services;
 using DPWH.EDMS.Api.Contracts;
+using DPWH.EDMS.Client.Shared.Models;
 using Microsoft.AspNetCore.Components;
 using Newtonsoft.Json;
 
@@ -17,7 +18,9 @@ public class ExceptionHandlerService : IExceptionHandlerService
     public async Task HandleApiException(
         Func<Task> func,
         Action? afterSuccessCb = null,
-        string? successMessage = null)
+        string? successMessage = null,
+        bool? isUserManagement = false,
+        Func<bool, bool, Task>? PISException = null)
     {
         try
         {
@@ -35,11 +38,42 @@ public class ExceptionHandlerService : IExceptionHandlerService
         }
         catch (Exception ex) when (ex is ApiException<ProblemDetails> apiEx)
         {
-            OnCatchError(apiEx);
+            if (isUserManagement == true && PISException != null)
+            {
+                if (apiEx.StatusCode == 500)
+                {
+                    //OnSearchPis = false;
+                    //OnEmpId = true;
+                    //await OnSearchEmployeeID(id);
+                    await PISException.Invoke(true, false);
+                }
+            }
+            else
+            {
+                OnCatchError(apiEx);
+            }
         }
         catch (Exception ex) when (ex is ApiException apiEx)
         {
-            OnCatchError(apiEx);
+            if (isUserManagement == true && PISException != null)
+            {
+                if (apiEx.StatusCode == 404)
+                {
+                    //ToastService.ShowError(id + " not found");
+                    //OnEmpId = false;
+                    //OnSearchPis = true;
+                    //ClearSearch();
+                    await PISException.Invoke(false, true);
+                }
+                else
+                {
+                    await PISException.Invoke(true, false);
+                }
+            }
+            else
+            {
+                OnCatchError(apiEx);
+            }
         }
         catch (Exception ex)
         {

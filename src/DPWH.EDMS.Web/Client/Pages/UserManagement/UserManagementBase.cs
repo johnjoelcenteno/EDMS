@@ -7,9 +7,11 @@ using DPWH.EDMS.Api.Contracts;
 using Microsoft.AspNetCore.Components;
 using System.ComponentModel;
 using Telerik.FontIcons;
-using DPWH.EDMS.Client.Shared.Models;
 using Telerik.Blazor.Components;
 using DPWH.EDMS.Client.Shared.APIClient.Services.DpwhIntegrations;
+using Telerik.Blazor.Components.Menu;
+using DPWH.EDMS.IDP.Core.Constants;
+using Microsoft.AspNetCore.Components.Web;
 
 namespace DPWH.EDMS.Web.Client.Pages.UserManagement;
 
@@ -23,11 +25,13 @@ public class UserManagementBase : GridBase<UserModel>
     protected double LicenseLimit = 0;
     protected double LicenseUsed = 0;
     protected double TotalUsers = 0;
-    protected string getOpenBtn = ""; 
-
+    protected string GetOpenBtn = "";
+    protected string SelectedAcord { get; set; }
+    protected UserModel SelectedItem { get; set; } = default!;
     protected ICollection<GetRequestingOfficeResult> RegionOfficeList { get; set; } = new List<GetRequestingOfficeResult>();
     protected List<GetRequestingOfficeResultItem> DEOlist { get; set; } = new List<GetRequestingOfficeResultItem>();
-
+    protected List<GridMenuItemModel> MenuItems { get; set; } = new();
+    protected TelerikContextMenu<GridMenuItemModel> ContextMenuRef { get; set; } = new();
     protected override void OnInitialized()
     {
         BreadcrumbItems.Add(new BreadcrumbModel
@@ -37,11 +41,26 @@ public class UserManagementBase : GridBase<UserModel>
             Url = "/user-management"
         });
     }
+    protected void GetGridMenuItems()
+    {
+        // context menu items
+        MenuItems = new List<GridMenuItemModel>
+        {
+        new (){ Text = "View", Icon=null!, CommandName="View" },
+        new (){ Text = "Edit", Icon=null!, CommandName="Update" },
+        };
+    }
+    protected async Task ShowRowOptions(MouseEventArgs e, UserModel row)
+    {
+        SelectedItem = row;
+
+        await ContextMenuRef.ShowAsync(e.ClientX, e.ClientY);
+    }
     protected override async Task OnInitializedAsync()
     {
         ServiceCb = UserService.Query;
         await LoadData();
-
+        GetGridMenuItems();
         await ExceptionHandlerService.HandleApiException(
             async () =>
             {
@@ -50,19 +69,48 @@ public class UserManagementBase : GridBase<UserModel>
                 if (licenseRes.Success)
                 {
                     var licenseData = licenseRes.Data;
-                    //LicenseUsed = licenseData.Limit - licenseData.Available;
-                    LicenseUsed = 1; //Temporary Value for used license
+                    LicenseUsed = licenseData.Limit - licenseData.Available;
+                    //LicenseUsed = 1; //Temporary Value for used license
                     LicenseLimit = licenseData.Limit;
                     TotalUsers = licenseData.EndUsersCount;
                 }
             });
-    } 
+    }
     protected double GetLicenseAccumulatedPercentage()
     {
         return Math.Round((LicenseUsed / LicenseLimit) * 100, 2);
     }
     protected async Task AddUser()
     {
-            NavManager.NavigateTo("user-management/add");
+        NavManager.NavigateTo("user-management/add");
+    }
+    protected void OnItemClick(GridMenuItemModel item)
+    {
+        // one way to pass handlers is to use an Action, you don't have to use this
+        if (item.Action != null)
+        {
+            item.Action.Invoke();
+        }
+        else
+        {
+            // or you can use local code to perform a task
+            // such as put a row in edit mode or select it
+            SelectedAcord = item.CommandName;
+            var guid = Guid.Parse(SelectedItem.Id);
+            switch (item.CommandName)
+            {
+
+                case "View":
+
+                    break;
+                case "Update":
+
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
     }
 }
