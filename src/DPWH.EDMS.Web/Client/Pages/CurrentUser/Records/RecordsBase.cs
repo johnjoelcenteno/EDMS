@@ -24,7 +24,7 @@ public class RecordsBase : GridBase<Document>
         });
 
         Record = MockCurrentData.GetCurrentRecord();
-        DocumentList = MockCurrentData.GetDocuments();
+        DocumentList = MockCurrentData.GetDocuments().OrderBy(d => d.DocumentName).ToList();
     }
 
     public async Task viewData(GridCommandEventArgs args)

@@ -8,15 +8,21 @@ using Telerik.SvgIcons;
 using DPWH.EDMS.IDP.Core.Constants;
 using Telerik.Blazor.Components;
 using Telerik.DataSource;
+using DPWH.EDMS.Client.Shared.APIClient.Services.RequestManagement;
+using DPWH.EDMS.Components.Helpers;
+using DPWH.EDMS.Web.Client.Pages.Home.HomeService;
 
 namespace DPWH.EDMS.Web.Client.Pages.Home;
 
 public class HomeBase : GridBase<EmployeeModel>
 {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateAsync { get; set; }
-    [Inject] public required NavigationManager NavigationManager { get; set; }    
+    [Inject] public required NavigationManager NavigationManager { get; set; }
+    [Inject] public required IRequestManagementService RequestManagementService { get; set; }
+    [Inject] public required OverviewFilterService OverviewService { get; set; }
 
     protected List<SimpleKeyValue> OverviewStatusList = new List<SimpleKeyValue>();
+    protected List<SimpleKeyValue> OverviewTotal = new List<SimpleKeyValue>();
     protected List<SimpleKeyValue> SecondStatusList = new List<SimpleKeyValue>();
     protected List<EmployeeModel> EmployeeList = new List<EmployeeModel>();
     protected List<SimpleKeyValue> PieChart = new List<SimpleKeyValue>();
@@ -38,23 +44,7 @@ public class HomeBase : GridBase<EmployeeModel>
     public string DropDownListValue { get; set; }
     protected override void OnInitialized()
     {
-        OverviewStatusList = new List<SimpleKeyValue> {
-            new SimpleKeyValue()
-            {
-                Id = "Review",
-                Name = "200",
-            },
-            new SimpleKeyValue()
-            {
-                Id = "Release",
-                Name = "130",
-            },
-            new SimpleKeyValue()
-            {
-                Id = "Claimed",
-                Name = "320",
-            }
-        };
+       
         Categories = new string[] { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"  };
         Series1Data = new List<object>() { 250, 440, 580, 660, 553, 311, 600, 580, 600, 770, 910, 820 };
 
@@ -63,9 +53,11 @@ public class HomeBase : GridBase<EmployeeModel>
         EmployeeList = GenerateEmployeeRecords(5);
     }
 
+    
     protected async override Task OnInitializedAsync()
     {
         await HandleEndUserAccess();
+        await GetRecordRequest();
     }
 
     private async Task HandleEndUserAccess()
@@ -81,7 +73,52 @@ public class HomeBase : GridBase<EmployeeModel>
             }
         }
     }
+    private async Task GetRecordRequest()
+    {
+        ServiceCb = RequestManagementService.Query;
 
+        await LoadData();
+
+        await GetOverviewTotal();
+    }
+    private async Task GetOverviewTotal()
+    {
+        var filter = OverviewService.GetFilterOverviewBanner();
+
+        var res = await RequestManagementService.Query(new Api.Contracts.DataSourceRequest() { Filter = filter });
+         
+        if (res != null)
+        {
+            var getList = GenericHelper.GetListByDataSource<EmployeeModel>(res.Data);
+
+            var reviewTotal = getList.Where(x => x.Status == "Review").Count();
+            var releaseTotal = getList.Where(x => x.Status == "Release").Count();
+            var claimTotal = getList.Where(x => x.Status == "Claimed").Count();
+
+            GetOverviewTotal(reviewTotal, releaseTotal, claimTotal);
+        }
+    }
+   
+    private void GetOverviewTotal(int review, int release, int claimed)
+    {
+        OverviewTotal = new List<SimpleKeyValue> {
+            new SimpleKeyValue()
+            {
+                Id = "Review",
+                Name = $"{review}",
+            },
+            new SimpleKeyValue()
+            {
+                Id = "Release",
+                Name = $"{release}",
+            },
+            new SimpleKeyValue()
+            {
+                Id = "Claimed",
+                Name = $"{claimed}",
+            }
+        };
+    }
     private List<EmployeeModel> GenerateEmployeeRecords(int count)
     {
         var employees = new List<EmployeeModel>();

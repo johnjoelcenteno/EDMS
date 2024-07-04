@@ -37,7 +37,7 @@
                 </ul>
             </NotAuthorized>
             <Authorized>
-                <div class="avatar-container">
+                <div class="avatar-container @(DrawerRef.Expanded ? "px-3" : "")">
                     <div class="avatar">
                         <img class="profile-img" src="_content/DPWH.EDMS.Components/images/avatar_male.jpg" />
                     </div>
@@ -335,10 +335,26 @@
                 </TelerikButton>
             </div>
         }
+        @if (DrawerRef.Expanded)
+        {
+            <div class="footer">
+                <div class="links">
+                    <p>Terms</p>
+                    <p>Privacy</p>
+                </div>
+                <div class="copyrights">
+                    <p>2022©MovementSoft inc.</p>
+                    <p>all rights reserved.</p>
+                </div>
+            </div>
+        }
+        
     </div>
+    
 </div>
 
 <style>
+
     .nav-link,
     .nav-pills .nav-link.active,
     .nav-pills .show > .nav-link {
