@@ -18,8 +18,10 @@ using Microsoft.AspNetCore.Components.Authorization;
 using DPWH.NGOBIA.Client.Shared.APIClient.Services.Users;
 using AutoMapper;
 using DPWH.EDMS.Client.Shared.APIClient.Services.DpwhIntegrations;
-using DPWH.EDMS.Client.Shared.APIClient.Services.Licenses;
+using DPWH.EDMS.Client.Shared.APIClient.Services.Licenses; 
 using DPWH.EDMS.Web.Client.Shared.Services.ExceptionHandler;
+using DPWH.EDMS.Web.Client.Shared.Services.ExceptionHandlerPIS;
+
 using DPWH.EDMS.IDP.Core.Constants;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -32,6 +34,8 @@ public class UserFormBase : RxBaseComponent
     [Inject] public required IUsersService UserService { get; set; }
     [Inject] public required ILicensesService LicensesService { get; set; }
     [Inject] public required IExceptionHandlerService ExceptionHandlerService { get; set; }
+    [Inject] public required IExceptionPISHandlerService ExceptionPISHandlerService { get; set; }
+
     [Inject] public required IDpwhIntegrationsService DpwhIntegrationService { get; set; }
     [Inject] public required IToastService ToastService { get; set; }
     [Inject] public required AuthenticationStateProvider AuthenticationStateProvider { get; set; }
@@ -138,7 +142,7 @@ public class UserFormBase : RxBaseComponent
         IsLoading = true;
         if (id != null)
         {
-            await ExceptionHandlerService.HandleApiException(
+            await ExceptionPISHandlerService.HandleApiException(
             async () =>
             {
                 var res = await DpwhIntegrationService.GetByEmployeeId(id);

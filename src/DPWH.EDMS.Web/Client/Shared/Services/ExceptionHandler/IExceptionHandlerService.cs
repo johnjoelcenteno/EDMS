@@ -8,12 +8,10 @@ public interface IExceptionHandlerService
     Task HandleApiException(
         Func<Task> func,
         Action? afterSuccessCb = null,
-        string successMessage = null,
-        bool? isUserManagement = false,
-        Func<bool, bool, Task>? PISException = null);
+        string successMessage = null);
     Task<T?> HandleApiException<T>(
         Func<Task<T?>> func,
         Action? afterSuccessCb = null,
-        string? successMessage = null);
+        string? successMessage = null); 
 }
 

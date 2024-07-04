@@ -4,21 +4,22 @@ using DPWH.EDMS.Client.Shared.Models;
 using Microsoft.AspNetCore.Components;
 using Newtonsoft.Json;
 
-namespace DPWH.EDMS.Web.Client.Shared.Services.ExceptionHandler;
+namespace DPWH.EDMS.Web.Client.Shared.Services.ExceptionHandlerPIS;
 
-public class ExceptionHandlerService : IExceptionHandlerService
+public class ExceptionPISHandlerService : IExceptionPISHandlerService
 {
     private readonly IToastService _ToastService;
 
-    public ExceptionHandlerService(IToastService toastService)
+    public ExceptionPISHandlerService(IToastService toastService)
     {
         _ToastService = toastService;
     }
-
     public async Task HandleApiException(
-        Func<Task> func,
-        Action? afterSuccessCb = null,
-        string? successMessage = null)
+     Func<Task> func,
+     Action? afterSuccessCb = null,
+     string? successMessage = null,
+     bool? isUserManagement = false,
+     Func<bool, bool, Task>? PISException = null)
     {
         try
         {
@@ -35,54 +36,47 @@ public class ExceptionHandlerService : IExceptionHandlerService
 
         }
         catch (Exception ex) when (ex is ApiException<ProblemDetails> apiEx)
-        { 
-            OnCatchError(apiEx);
-        }
-        catch (Exception ex) when (ex is ApiException apiEx)
         {
-            OnCatchError(apiEx);
-        }
-        catch (Exception ex)
-        {
-            _ToastService.ShowError(ex.Message);
-        }
-    }
-
-    public async Task<T?> HandleApiException<T>(Func<Task<T?>> func, Action? afterSuccessCb, string? successMessage = null)
-    {
-        try
-        {
-            T result = await func.Invoke();
-
-            if (afterSuccessCb != null)
+            if (isUserManagement == true && PISException != null)
             {
-                if (!string.IsNullOrEmpty(successMessage))
+                if (apiEx.StatusCode == 500)
                 {
-                    _ToastService.ShowSuccess(successMessage);
+                    //OnSearchPis = false;
+                    //OnEmpId = true;
+                    //await OnSearchEmployeeID(id);
+                    await PISException.Invoke(true, false);
                 }
-
-                afterSuccessCb.Invoke();
             }
-            if (result == null)
+            else
             {
-                _ToastService.ShowError("Object reference not set to an instance of an object");
+                OnCatchError(apiEx);
             }
-            return result;
-        }
-        catch (Exception ex) when (ex is ApiException<ProblemDetails> apiEx)
-        {
-            OnCatchError(apiEx);
-            throw;
         }
         catch (Exception ex) when (ex is ApiException apiEx)
         {
-            OnCatchError(apiEx);
-            throw;
+            if (isUserManagement == true && PISException != null)
+            {
+                if (apiEx.StatusCode == 404)
+                {
+                    //ToastService.ShowError(id + " not found");
+                    //OnEmpId = false;
+                    //OnSearchPis = true;
+                    //ClearSearch();
+                    await PISException.Invoke(false, true);
+                }
+                else
+                {
+                    await PISException.Invoke(true, false);
+                }
+            }
+            else
+            {
+                OnCatchError(apiEx);
+            }
         }
         catch (Exception ex)
         {
             _ToastService.ShowError(ex.Message);
-            throw;
         }
     }
 
@@ -130,4 +124,5 @@ public class ExceptionHandlerService : IExceptionHandlerService
             }
         }
     }
+
 }
