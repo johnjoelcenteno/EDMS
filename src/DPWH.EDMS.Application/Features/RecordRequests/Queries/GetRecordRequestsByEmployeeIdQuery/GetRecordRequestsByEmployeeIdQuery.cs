@@ -25,6 +25,7 @@ public class GetRecordRequestsByEmployeeIdQueryHandler(IReadRepository readRepos
                 DateRequested = s.DateRequested,
                 Status = s.Status,
                 Purpose = s.Purpose,
+                FullName = s.FullName,
                 RequestedRecords = s.RequestedRecords.Select(x => new RequestedRecordModel(x.RecordTypeId, x.RecordType))
             })
             .ToDataSourceResult(request.Request.FixSerialization());

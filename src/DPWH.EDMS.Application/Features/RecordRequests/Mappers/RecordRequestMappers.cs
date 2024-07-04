@@ -11,8 +11,9 @@ public static class RecordRequestMappers
         return new RecordRequestModel
         {
             Id = entity.Id,
+            FullName = entity.FullName,
             ControlNumber = entity.ControlNumber,
-            EmployeeNumber = entity.EmployeeNumber,            
+            EmployeeNumber = entity.EmployeeNumber,
             ClaimantType = entity.ClaimantType,
             DateRequested = entity.DateRequested,
             AuthorizedRepresentative = entity.AuthorizedRepresentative.ValidId is not null ? new AuthorizedRepresentativeModel

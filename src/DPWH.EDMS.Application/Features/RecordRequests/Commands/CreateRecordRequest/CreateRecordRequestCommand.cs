@@ -14,7 +14,7 @@ using System.Security.Claims;
 namespace DPWH.EDMS.Application.Features.RecordRequests.Commands.CreateRecordRequest;
 
 public record class CreateRecordRequestCommand(CreateRecordRequest Model) : IRequest<CreateResponse>;
-internal sealed class CreateRecordRequestCommandHandler(IWriteRepository writeRepository, IReadRepository readRepository, 
+internal sealed class CreateRecordRequestCommandHandler(IWriteRepository writeRepository, IReadRepository readRepository,
     ClaimsPrincipal principal, IControlNumberGeneratorService _generatorService) : IRequestHandler<CreateRecordRequestCommand, CreateResponse>
 {
     public async Task<CreateResponse> Handle(CreateRecordRequestCommand request, CancellationToken cancellationToken)
@@ -25,11 +25,11 @@ internal sealed class CreateRecordRequestCommandHandler(IWriteRepository writeRe
         var claimantType = EnumExtensions.GetValueFromDescription<ClaimantTypes>(model.Claimant);
 
         AuthorizedRepresentative? representative = null;
-        if(claimantType == ClaimantTypes.AuthorizedRepresentative)
+        if (claimantType == ClaimantTypes.AuthorizedRepresentative)
         {
             representative = AuthorizedRepresentative.Create(model.AuthorizedRepresentative, model.SupportingFileValidId, model.SupportingFileAuthorizationDocumentId);
 
-            isAuthorizedRep = true;            
+            isAuthorizedRep = true;
         }
 
         //Optional for now: Make sure requested record type is valid
@@ -51,9 +51,9 @@ internal sealed class CreateRecordRequestCommandHandler(IWriteRepository writeRe
         var requestNumber = await _generatorService.Generate(DateTimeOffset.Now, cancellationToken);
 
         var recordRequest = RecordRequest.Create(requestNumber, model.EmployeeNumber, claimantType,
-            model.DateRequested, representative, model.Purpose, principal.GetUserName());
+            model.DateRequested, representative, model.Purpose, principal.GetUserName(), model.FullName);
 
-        
+
         foreach (var providedRequestedRecord in model.RequestedRecords)
         {
             var requestedRecord = RequestedRecord.Create(recordRequest.Id, providedRequestedRecord, recordTypes.FirstOrDefault(x => x.Id == providedRequestedRecord).Name);

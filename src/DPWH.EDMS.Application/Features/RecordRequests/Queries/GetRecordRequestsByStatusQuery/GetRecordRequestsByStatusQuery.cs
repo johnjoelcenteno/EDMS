@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace DPWH.EDMS.Application.Features.RecordRequests.Queries.GetRecordRequestsByStatusQuery;
 
 public record GetRecordRequestsByStatusQuery(DataSourceRequest Request, string Status) : IRequest<DataSourceResult>;
-internal class GetRecordRequestsByStatusQueryHandler(IReadRepository readRepository) : IRequestHandler<GetRecordRequestsByStatusQuery , DataSourceResult>
+internal class GetRecordRequestsByStatusQueryHandler(IReadRepository readRepository) : IRequestHandler<GetRecordRequestsByStatusQuery, DataSourceResult>
 {
     private readonly IReadRepository _readRepository = readRepository;
 
@@ -25,6 +25,7 @@ internal class GetRecordRequestsByStatusQueryHandler(IReadRepository readReposit
                         DateRequested = s.DateRequested,
                         Status = s.Status,
                         Purpose = s.Purpose,
+                        FullName = s.FullName,
                         RequestedRecords = s.RequestedRecords.Select(x => new RequestedRecordModel(x.RecordTypeId, x.RecordType))
                     }).ToDataSourceResult(request.Request.FixSerialization());
 
