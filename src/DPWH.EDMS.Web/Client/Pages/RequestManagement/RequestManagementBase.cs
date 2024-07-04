@@ -47,7 +47,8 @@ public class RequestManagementBase : GridBase<RecordRequestModel>
 
         if (selectedItem != null)
         {
-            NavManager.NavigateTo("request-management/view/" + selectedItem.Id.ToString());
+            //NavManager.NavigateTo("request-management/view/" + selectedItem.Id.ToString());
+            NavManager.NavigateTo("request-management/view-request-form");
         }
 
         IsLoading = false;

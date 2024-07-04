@@ -1,0 +1,394 @@
+﻿@page "/request-management/view-request-form"
+@inherits ViewRequestFormBase
+@using DPWH.EDMS.Components.Helpers
+
+<EdmsBreadcrumbs Data="@BreadcrumbItems" />
+<EdmsLoader Visible="IsLoading" />
+
+<h3>View Request Form</h3>
+
+<div class="d-flex flex-row align-items-center mb-2">
+    <p>Control Number: 123456789 | Name: SANTOS, John D.G.</p>
+</div>
+
+<hr />
+<TelerikTabStrip @bind-ActiveTabIndex="@ActiveTabIndex">
+    <TabStripTab Title="Overview">
+        <div class="row">
+            <div class="col-5 vl-right">
+                @StepperFragment
+            </div>
+            <div class="col-7">
+                <div class="row my-2">
+                    <h5>Request Details</h5>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="mb-3">
+                            <p><b>Control Number</b></p>
+                            <p>123456789</p>
+                        </div>
+                        <div class="mb-3">
+                            <p><b>Last Name, First Name M.I.</b></p>
+                            <p>SANTOS, John D.G.</p>
+                        </div>
+                        <div class="mb-3">
+                            <p><b>Record(s) Requested</b></p>
+                            <p><b>RMD</b></p>
+                            <ul>
+                                <li>DOCUMENT 1</li>
+                                <li>DOCUMENT 2</li>
+                                <li>DOCUMENT 3</li>
+                            </ul>
+                            <p><b>HRMD</b></p>
+                            <ul>
+                                <li>DOCUMENT 4</li>
+                                <li>DOCUMENT 5</li>
+                                <li>DOCUMENT 6</li>
+                            </ul>
+                        </div>
+                        <div class="mb-3">
+                            <p><b>Purpose</b></p>
+                            <p>Purpose</p>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="mb-3">
+                            <p><b>Date Requested</b></p>
+                            <p>@GenericHelper.GetDateDisplay(DateTime.Now)</p>
+                        </div>
+                        <div>
+                            <p><b>Office</b></p>
+                            <p>Human Resource and Administrative Office</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </TabStripTab>
+    <TabStripTab Title="Review and Evaluate">
+        <div class="row">
+            <div class="col-5 vl-right">
+                @RequestDetailsFragment
+                <div class="d-flex gap-3 justify-content-center">
+                    <TelerikButton OnClick="OnCancel" FillMode="@ThemeConstants.Button.FillMode.Outline">Cancel</TelerikButton>
+                    <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(IsReviewed == true ? false : true)">Submit</TelerikButton>
+                </div>
+            </div>
+            <div class="col-7">
+                <div class="row my-2">
+                    <h5>Record(s) Requested</h5>
+                </div>
+                <div class="row mb-2">
+                    <p>Check availability of the documents and select available document/s:</p>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div>
+                            <input type="checkbox" />
+                            <label>Document 1</label>
+                        </div>
+                        <div>
+                            <input type="checkbox" />
+                            <label>Document 2</label>
+                        </div>
+                        <div>
+                            <input type="checkbox" />
+                            <label>Document 3</label>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div>
+                            <input type="checkbox" />
+                            <label>Document 4</label>
+                        </div>
+                        <div>
+                            <input type="checkbox" />
+                            <label>Document 5</label>
+                        </div>
+                        <div>
+                            <input type="checkbox" />
+                            <label>Document 6</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </TabStripTab>
+    <TabStripTab Title="Release">
+        <div class="row">
+            <div class="col-5 vl-right">
+                @RequestDetailsFragment
+                <div class="d-flex gap-3 justify-content-center">
+                    <TelerikButton OnClick="OnCancel" FillMode="@ThemeConstants.Button.FillMode.Outline">Cancel</TelerikButton>
+                    <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(IsReleased == true ? false : true)">Submit</TelerikButton>
+                </div>
+            </div>
+            <div class="col-7">
+                <div class="row my-2">
+                    <h5>Record(s) for Release</h5>
+                </div>
+                <div class="row mb-3">
+                    <p>Select record(s) ready for release.</p>
+                    <p>Kindly upload the Certified True Copies of the selected document/s. If document is unavailable, kindly upload the Certification of No Record in its stead.</p>
+                </div>
+                <div class="row mb-2">
+                    <p><b>Documents</b></p>
+                </div>
+                <div class="row mb-1">
+                    <div class="col">
+                        <div>
+                            <input class="align-middle" type="checkbox" />
+                            <label class="align-middle">Document 1</label>
+                        </div>
+                    </div>
+                    <div class="col text-end">
+                        <label for="files" class="btn upload-btn">Click to Upload</label>
+                        <input id="files" style="display: none;" type="file">
+                    </div>
+                </div>
+                <div class="row mb-1">
+                    <div class="col">
+                        <div>
+                            <input class="align-middle" type="checkbox" />
+                            <label class="align-middle">Document 1</label>
+                        </div>
+                    </div>
+                    <div class="col text-end">
+                        <label for="files" class="btn upload-btn">Click to Upload</label>
+                        <input id="files" style="display: none;" type="file">
+                    </div>
+                </div>
+                <div class="row mb-1">
+                    <div class="col">
+                        <div>
+                            <input class="align-middle" type="checkbox" />
+                            <label class="align-middle">Document 1</label>
+                        </div>
+                    </div>
+                    <div class="col text-end">
+                        <label for="files" class="btn upload-btn">Click to Upload</label>
+                        <input id="files" style="display: none;" type="file">
+                    </div>
+                </div>
+                <div class="row mb-1">
+                    <div class="col">
+                        <div>
+                            <input class="align-middle" type="checkbox" />
+                            <label class="align-middle">Document 1</label>
+                        </div>
+                    </div>
+                    <div class="col text-end">
+                        <label for="files" class="btn upload-btn">Click to Upload</label>
+                        <input id="files" style="display: none;" type="file">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </TabStripTab>
+    <TabStripTab Title="Claim">
+        <div class="row">
+            <div class="col-5 vl-right">
+                @StepperFragment
+                <div class="d-flex gap-3 justify-content-center">
+                    <TelerikButton OnClick="OnCancel" FillMode="@ThemeConstants.Button.FillMode.Outline">Cancel</TelerikButton>
+                    <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(IsClaimed == true ? false : true)">Submit</TelerikButton>
+                </div>
+            </div>
+            <div class="col-7">
+                <div class="row my-2">
+                    <h5>Receiving Details</h5>
+                </div>
+                <div class="d-flex mb-3">
+                    <div>
+                        <button class="toggle-button">-</button>
+                    </div>
+                    <div>
+                        <p>&emsp;Control No. 123456789</p>
+                    </div>
+                </div>
+                <div class="hl-top hl-bottom bg-light p-3">
+                    <div class="row mb-3">
+                        <div>
+                            <p><b>Control Number</b></p>
+                            <p>123456789</p>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-3 mb-3">
+                        <div>
+                            <label><b>Date Received</b></label>
+                            <TelerikDatePicker @bind-Value="@Value"></TelerikDatePicker>
+                        </div>
+                        <div>
+                            <label><b>Time Received</b></label>
+                            <TelerikTimePicker @bind-Value="@SelectedTime"></TelerikTimePicker>
+                        </div>
+                    </div>
+                    <div class="row mb-1">
+                        <div>
+                            <p class="mb-1"><b>Documents Received</b></p>
+                            <p>For pickup at HRMD</p>
+                            <ul>
+                                <li>DOCUMENT 1</li>
+                                <li>DOCUMENT 2</li>
+                                <li>DOCUMENT 3</li>
+                                <li>DOCUMENT 4</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col">
+                            <p><b>TRANSMITTAL RECEIPT</b></p>
+                        </div>
+                        <div class="d-flex col gap-2 justify-content-end">
+                            <button class="view-export-btn bg-transparent">View</button>
+                            <button class="view-export-btn bg-transparent">Export</button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <p><b>UPLOAD RECEIVED TRANSMITTAL RECEIPT</b></p>
+                        </div>
+                        <div class="d-flex col justify-content-end">
+                            <label for="files" class="btn upload-btn">Click to Upload</label>
+                            <input id="files" style="display: none;" type="file">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </TabStripTab>
+</TelerikTabStrip>
+
+<TelerikWindow Modal="true"
+               Width="400px"
+               @bind-Visible="@IsModalVisible"
+               CloseOnOverlayClick="true">
+    <WindowTitle>
+        Please Confirm
+    </WindowTitle>
+    <WindowContent>
+        @if (ActiveTabIndex == 1)
+        {
+            <div class="row mb-3">
+                <p><b>Request has been reviewed and submitted</b></p>
+                <p class="text-secondary">Kindly proceed to the next page and download the forms to be signed by your immediate supervisor</p>
+            </div>
+            <div class="d-flex gap-3 justify-content-center">
+                <TelerikButton OnClick="@(() => IsModalVisible = false)" FillMode="@ThemeConstants.Button.FillMode.Outline">Cancel</TelerikButton>
+                <TelerikButton OnClick="OnReview" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary">Confirm</TelerikButton>
+            </div>
+        }
+        else if (ActiveTabIndex == 2)
+        {
+            <div class="row mb-3">
+                <p><b>Request has been approved and ready for release</b></p>
+            </div>
+            <div class="d-flex gap-3 justify-content-center">
+                <TelerikButton OnClick="@(() => IsModalVisible = false)" FillMode="@ThemeConstants.Button.FillMode.Outline">Cancel</TelerikButton>
+                <TelerikButton OnClick="OnRelease" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary">Confirm</TelerikButton>
+            </div>
+        }
+        else if (ActiveTabIndex == 3)
+        {
+            <div class="row mb-3">
+                <p><b>Request has been completed</b></p>
+            </div>
+            <div class="d-flex gap-3 justify-content-center">
+                <TelerikButton OnClick="@(() => IsModalVisible = false)" FillMode="@ThemeConstants.Button.FillMode.Outline">Cancel</TelerikButton>
+                <TelerikButton OnClick="OnClaim" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary">Confirm</TelerikButton>
+            </div>
+        }
+
+    </WindowContent>
+    <WindowActions>
+        <WindowAction Name="Close" />
+    </WindowActions>
+</TelerikWindow>
+
+@code {
+    private RenderFragment StepperFragment =>@<div>
+        <div class="row my-2">
+            <h5>Processing Status</h5>
+        </div>
+        <TelerikStepper @bind-Value="@CurrentStepIndex" Linear="true" Orientation="StepperOrientation.Vertical">
+            <StepperSteps>
+                <StepperStep Label="Submit"></StepperStep>
+                <StepperStep Label="Review & Evaluate"></StepperStep>
+                <StepperStep Label="Release"></StepperStep>
+                <StepperStep Label="Claim"></StepperStep>
+            </StepperSteps>
+        </TelerikStepper>
+    </div>;
+
+    private RenderFragment RequestDetailsFragment => @<div>
+        <div class="row my-2">
+            <h5>Request Details</h5>
+        </div>
+        <div class="row">
+            <div class="mb-3">
+                <p><b>Control Number</b></p>
+                <p>123456789</p>
+            </div>
+            <div class="mb-3">
+                <p><b>Date Requested</b></p>
+                <p>@GenericHelper.GetDateDisplay(DateTime.Now)</p>
+            </div>
+            <div class="mb-3">
+                <p><b>Last Name, First Name M.I.</b></p>
+                <p>SANTOS, John D.G.</p>
+            </div>
+            <div class="mb-3">
+                <p><b>Office</b></p>
+                <p>Human Resource and Administrative Office</p>
+            </div>
+            <div class="mb-3">
+                <p><b>Purpose</b></p>
+                <p>Purpose</p>
+            </div>
+        </div>
+    </div>;
+}
+
+<style>
+    .vl-right {
+        border-right: 1px solid rgba(0, 0, 0, .15);
+    }
+
+    .hl-top {
+        border-top: 1px solid rgba(0, 0, 0, .05);
+    }
+
+    .hl-bottom {
+        border-bottom: 1px solid rgba(0, 0, 0, .05);
+    }
+
+    .k-stepper .k-step-label {
+        display: inline-block;
+    }
+
+    .upload-btn {
+        border: 1px solid rgba(0, 0, 0, .20);
+        border-radius: 3px;
+        padding: 3px 12px;
+    }
+
+    .toggle-button {
+        width: 20px;
+        height: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        cursor: pointer;
+        user-select: none;
+        display: inline-flex;
+        line-height: 30px;
+        text-align: center;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .view-export-btn {
+        border: none;
+        color: #005A9C;
+    }
+</style>
