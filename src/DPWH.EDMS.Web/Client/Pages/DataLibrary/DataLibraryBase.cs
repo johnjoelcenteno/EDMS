@@ -39,6 +39,13 @@ public class DataLibraryBase : RxBaseComponent
                 Name = "Purposes",
                 Url = "/data-library/purposes"
 
+            },
+             new DataLibraryModel
+            {
+                Icon = FontIcon.Gear,
+                Name = "DPWH Issuances",
+                Url = "/data-library/issuances"
+
             }
         };
 

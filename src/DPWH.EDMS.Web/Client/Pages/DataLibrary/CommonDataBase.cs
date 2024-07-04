@@ -39,7 +39,7 @@ public class CommonDataBase : GridBase<DataManagementModel>
         BreadcrumbItems = new List<BreadcrumbModel>
         {
             new() { Icon = "home", Url = "/"},
-            new() { Text = "Data Library", Url = "/data-lirary"},
+            new() { Text = "Data Library", Url = "/data-library"},
             new() { Text = UriName, Url = $"/data-library/{Id}" },
 
         };
@@ -73,6 +73,10 @@ public class CommonDataBase : GridBase<DataManagementModel>
                 UriName = "Purposes";
                 DataType = "Purposes";
                 break;
+            case "issuances":
+                UriName = "DPWH Issuances";
+                DataType = "Issuances";
+                break;
             default:
                 break;
         }
@@ -105,6 +109,7 @@ public class CommonDataBase : GridBase<DataManagementModel>
                     Type = propertyConditionData.Type,
                     Data = convertedData
                 };
+                Console.WriteLine(convertedData.ToString());
             }
         }
         catch (Exception ex) when (ex is ApiException<ProblemDetails> apiExtension)
