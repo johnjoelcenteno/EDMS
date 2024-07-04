@@ -32,6 +32,13 @@ public class DataLibraryBase : RxBaseComponent
                 Icon = FontIcon.Gear,
                 Name = "Authorization Documents",
                 Url = "/data-library/authorization-documents"
+            },
+            new DataLibraryModel
+            {
+                Icon = FontIcon.Gear,
+                Name = "Purposes",
+                Url = "/data-library/purposes"
+
             }
         };
 
