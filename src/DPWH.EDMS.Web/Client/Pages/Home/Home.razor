@@ -8,10 +8,9 @@
 <TelerikMediaQuery Media="(max-width: 960px)" OnChange="((changed) => Small = changed)"></TelerikMediaQuery>
 <TelerikMediaQuery Media="(max-width: 1280px)" OnChange="((changed) => Medium = changed)"></TelerikMediaQuery>
 <TelerikMediaQuery Media="(min-width: 1281px)" OnChange="((changed) => Large = changed)"></TelerikMediaQuery>
-@if (IsLoading)
-{
-    <TelerikLoaderContainer LoaderPosition="@LoaderPosition.End"></TelerikLoaderContainer>
-}
+
+<EdmsLoader Visible="IsLoading" />
+
 <TelerikCard Width="100%" Class="ch-card mb-4">
     <CardHeader Class="ch-card">
         <h3 class="mb-0">Overview </h3>
