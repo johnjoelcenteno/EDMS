@@ -98,53 +98,62 @@
                               Page="@Page">
                 </TelerikPager>
     </TabStripTab>
-    @* <TabStripTab Title="Records">
+    <TabStripTab Title="Records">
         <TelerikCard Width="100%">
             <CardBody>
-                <div class="mobile-property-grid">
+                <div class="d-flex flex-row mt-3">
+                    <TelerikCard Width="100%">
+                        <CardBody>
+                            <div class="d-flex flex-row justify-content-between">
+                                <CardTitle Class="mb-0">Record Lists</CardTitle>
+                            </div>
+                            <CardSeparator Class="my-2"></CardSeparator>
+                            <div class="mobile-property-grid">
 
-                    @if (DocumentList != null && !XSmall)
-                    {
-                        <TelerikGrid TItem="Document"
-                                     @bind-PageSize="@PageSize"
-                                     Height="@GridHeight"
-                                     FilterMode="GridFilterMode.FilterRow"
-                                     Sortable=true
-                                     Data="DocumentList"
-                                     OnStateChanged="@OnStateChanged"
-                                     @ref="GridRef"
-                                     Context="employee">
-                            <GridSettings>
-                                <GridPagerSettings PageSizes="@PageSizes">
-                                </GridPagerSettings>
-                            </GridSettings>
-                            <GridColumns>
-                                <GridColumn Field=@nameof(Document.DocumentName) Title="Document Name" />
-                                <GridCommandColumn Width="5%">
-                                    <GridCommandButton Class="commandButton" Command="ExportData" OnClick="@viewData">View</GridCommandButton>
-                                </GridCommandColumn>
-                                <GridCommandColumn Width="5%">
-                                    <GridCommandButton Class="commandButton">Export</GridCommandButton>
-                                </GridCommandColumn>
-                            </GridColumns>
-                        </TelerikGrid>
-                    }
-                    else
-                    {
-                        <span>No Data to display.</span>
-                    }
+                                @if (DocumentList != null && !XSmall)
+                                {
+                                    <TelerikGrid TItem="Document"
+                                                 @bind-PageSize="@PageSize"
+                                                 Height="@GridHeight"
+                                                 FilterMode="GridFilterMode.FilterRow"
+                                                 Sortable=true
+                                                 Data="DocumentList"
+                                                 Context="employee">
+                                        <GridSettings>
+                                            <GridPagerSettings PageSizes="@PageSizes">
+                                            </GridPagerSettings>
+                                        </GridSettings>
+                                        <GridColumns>
+                                            <GridColumn Field=@nameof(Document.DocumentName) Title="Document Name" />
+                                            <GridCommandColumn Width="5%">
+                                                <GridCommandButton Class="commandButton" Command="ExportData" OnClick="@viewData">View</GridCommandButton>
+                                            </GridCommandColumn>
+                                            <GridCommandColumn Width="5%">
+                                                <GridCommandButton Class="commandButton">Export</GridCommandButton>
+                                            </GridCommandColumn>
+                                        </GridColumns>
+                                    </TelerikGrid>
+                                }
+                                else
+                                {
+                                    <span>No Data to display.</span>
+                                }
+                            </div>
+                            <TelerikPager PageChanged="@PageChangedHandler"
+                                          Total="TotalItems"
+                                          ButtonCount="6"
+                                          PageSize="@PageSize"
+                                          PageSizeChanged="@PageSizeChangedHandler"
+                                          PageSizes="@(new List<int?> {5, 10, 20})"
+                                          Page="@Page">
+                            </TelerikPager>
+                        </CardBody>
+                    </TelerikCard>
                 </div>
-                <TelerikPager PageChanged="@PageChangedHandler"
-                              Total="TotalItems"
-                              ButtonCount="6"
-                              PageSize="@PageSize"
-                              PageSizeChanged="@PageSizeChangedHandler"
-                              PageSizes="@(new List<int?> {5, 10, 20})"
-                              Page="@Page">
-                </TelerikPager>
+
             </CardBody>
         </TelerikCard>
-    </TabStripTab> *@
+    </TabStripTab>
 </TelerikTabStrip>
 <style>
     .commandButton {

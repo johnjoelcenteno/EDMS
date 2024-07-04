@@ -14,14 +14,17 @@
 <hr />
 <TelerikCard Width="100%">
     <CardBody>
-        <div class="d-flex flex-row justify-content-between">
-            <CardTitle Class="headName">@Document.DocumentName</CardTitle>
-        </div>
-        <CardSeparator Class="my-2"></CardSeparator>
-        <div class="container">
-            <div class="d-flex justify-content-end mb-2">
+        <CardTitle>
+            <div class="d-flex justify-content-between">
+                <label class="headName">
+                    @Document.DocumentName
+                </label>
                 <TelerikButton Class="dlButton">Download</TelerikButton>
             </div>
+        </CardTitle>
+        <CardSeparator Class="my-2"></CardSeparator>
+        <div class="container">
+            
             <CardImage Class="pdf-placeholder" Width="100%" Src="_content/DPWH.EDMS.Components/images/pdf-placeholder.png"></CardImage>
         </div> 
     </CardBody>
@@ -46,5 +49,6 @@
     .headName{
         color: #38339B;
         margin-bottom:0;
+        align-content: center;
     }
 </style>

@@ -1,5 +1,6 @@
 ﻿using DPWH.EDMS.Api.Contracts;
 using DPWH.EDMS.Client.Shared.APIClient.Services.RecordManagement;
+using DPWH.EDMS.Client.Shared.MockModels;
 using DPWH.EDMS.Client.Shared.Models;
 using DPWH.EDMS.Components.Components.ReusableGrid;
 using DPWH.EDMS.Components.Helpers;
@@ -16,7 +17,8 @@ public class RecordsBase : GridBase<RecordRequestModel>
     [Inject] public required IRecordManagementService RecordManagementService { get; set; }
     [Inject] public required NavigationManager NavigationManager { get; set; }
     protected GetUserByIdResult SelectedUser { get; set; } = new();
-
+    protected List<Document> DocumentList = new List<Document>();
+    protected GetUserByIdResultBaseApiResponse EmployeeDetails { get; set; }
     protected async override Task OnInitializedAsync()
     {
         IsLoading = true;
@@ -45,6 +47,7 @@ public class RecordsBase : GridBase<RecordRequestModel>
         });
 
         await LoadRequestHistoryData();
+        DocumentList = MockCurrentData.GetDocuments().OrderBy(d => d.DocumentName).ToList();
         IsLoading = false;
         StateHasChanged();
     }
@@ -55,6 +58,7 @@ public class RecordsBase : GridBase<RecordRequestModel>
 
         if (getRecord.Success)
         {
+            EmployeeDetails = getRecord;
             if (onLoadCb != null)
             {
                 onLoadCb.Invoke(getRecord.Data);
@@ -86,5 +90,12 @@ public class RecordsBase : GridBase<RecordRequestModel>
         }
 
         IsLoading = false;
+    }
+    public async Task viewData(GridCommandEventArgs args)
+    {
+        Document selectedId = args.Item as Document;
+
+        //Int32.TryParse(samp, out sampNumber);
+        NavigationManager.NavigateTo($"/records-management/{EmployeeDetails.Data.EmployeeId}/{selectedId.Id}");
     }
 }

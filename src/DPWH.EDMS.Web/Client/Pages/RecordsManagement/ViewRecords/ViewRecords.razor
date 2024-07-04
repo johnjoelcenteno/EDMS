@@ -3,34 +3,40 @@
 @inherits ViewRecordsBase
 
 <EdmsBreadcrumbs Data="@BreadcrumbItems" />
+<EdmsLoader Visible="IsLoading" />
 
 <h3>Records</h3>
-<div class="d-flex flex-row align-items-center mb-2">
-    <p>Name: @Record.FirstName @Record.LastName </p>
-    @* <span class="role-chip">@Record.Role</span> *@
-</div>
-@* <span>To view associated request </span> <NavLink href="/Personal-data">Click here</NavLink> *@
-<span>
-    (Control Number: <span style="color: #38339B;">@Document.ControlNumber</span>
-    / Date Requested: <span style="color: #38339B;">@(GenericHelper.GetDateDisplay(Document.DateRequested, "MM/dd/yyyy")))</span>
-</span>
+@if(Record != null)
+{
+    <div class="d-flex flex-row align-items-center mb-2">
+        <h5 class="mb-0">Name: <span>@Record.FirstName @Record.LastName</span> </h5>
+        <span class="role-chip">@Record.Role</span>
+    </div>
+}
+  
 <hr />
-<TelerikCard Width="100%">
-    <CardBody>
-        <div class="d-flex flex-row justify-content-between">
-            <CardTitle Class="headName">@Document.DocumentName</CardTitle>
-        </div>
-        <CardSeparator Class="my-2"></CardSeparator>
-        <div class="container">
-            <div class="d-flex justify-content-end mb-2">
-                <TelerikButton Class="dlButton">Download</TelerikButton>
+@if (Document != null)
+{
+    <TelerikCard Width="100%">
+        <CardBody>
+            <CardTitle>
+                <div class="d-flex justify-content-between">
+                    <label class="headName">
+                        @Document.DocumentName
+                    </label>
+                    <TelerikButton Class="dlButton">Download</TelerikButton>
+                </div>
+            </CardTitle>
+            <CardSeparator Class="my-2"></CardSeparator>
+            <div class="container">
+
+                <CardImage Class="pdf-placeholder" Width="100%" Src="_content/DPWH.EDMS.Components/images/pdf-placeholder.png"></CardImage>
             </div>
-            <div class="pdf-placeholder">
-                <CardImage Width="100%" Src="_content/DPWH.EDMS.Components/images/pdf-placeholder.png"></CardImage>
-            </div>
-        </div>
-    </CardBody>
-</TelerikCard>
+        </CardBody>
+    </TelerikCard>
+    
+}
+ 
 
 @code {
 
@@ -56,7 +62,7 @@
     .role-chip {
         background-color: #38339b;
         color: #fff;
-        font-size: 12px;
+        font-size: 18px;
         border-radius: 25px;
         padding: 3px 16px;
         margin: 0 10px;
