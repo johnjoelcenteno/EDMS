@@ -69,7 +69,10 @@ public class CommonDataBase : GridBase<DataManagementModel>
                 UriName = "Authorization Documents";
                 DataType = "AuthorizationDocuments";
                 break;
-
+            case "purposes":
+                UriName = "Purposes";
+                DataType = "Purposes";
+                break;
             default:
                 break;
         }
