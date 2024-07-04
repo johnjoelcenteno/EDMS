@@ -1,6 +1,4 @@
-﻿using DPWH.EDMS.Client.Shared.Models;
-
-namespace DPWH.EDMS.Web.Client.Shared.Services.ExceptionHandler;
+﻿namespace DPWH.EDMS.Web.Client.Shared.Services.ExceptionHandler;
 
 public interface IExceptionHandlerService
 {
