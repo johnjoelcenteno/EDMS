@@ -20,6 +20,12 @@ public class AddRequestComponentBase : RxBaseComponent
     protected CreateRecordRequest SelectedItem { get; set; } = new();
     protected FluentValidationValidator? FluentValidationValidator;
 
+    protected string RedirectUri = "/";
+
+    protected void HandleCancel(string uri)
+    {
+        NavManager.NavigateTo(uri);
+    }
     protected async Task HandleSubmit((CreateRecordRequest, UploadRecordRequestDocumentModel, UploadRecordRequestDocumentModel) parameters)
     {
         var (currentDocRequest, validId, suppDoc) = parameters;
@@ -62,7 +68,7 @@ public class AddRequestComponentBase : RxBaseComponent
                             if (createRes.Success)
                             {
                                 ToastService.ShowSuccess("Successfully created request!");
-                                NavManager.NavigateTo("/request-management");
+                                NavManager.NavigateTo(RedirectUri);
                             }
                             else
                             {
@@ -87,7 +93,7 @@ public class AddRequestComponentBase : RxBaseComponent
                 if (createRes.Success)
                 {
                     ToastService.ShowSuccess("Successfully created request!");
-                    NavManager.NavigateTo("/request-management");
+                    NavManager.NavigateTo(RedirectUri);
                 }
                 else
                 {

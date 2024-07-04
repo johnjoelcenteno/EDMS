@@ -6,29 +6,13 @@ public class RequestFormBase : RequestFormComponentBase
 {
    protected override void OnInitialized()
     {
-        LoadClaimantTypes();
-        _SetDefaultRequestDate();
+        HandleOnInit();
     }
 
     protected override async Task OnInitializedAsync()
     {
         IsLoading = true;
-        await LoadValidIDTypes();
-        await LoadAuthorizeDocumentTypes();
-        await LoadIssuanceList();        
-        await LoadEmployeeRecordList();        
+        await HandleLoadItems();     
         IsLoading = false;
     }
-
-    #region Load Events
-    private void _SetDefaultRequestDate()
-    {
-        if (SelectedItem.DateRequested == default)
-        {
-            SelectedItem.DateRequested = DateTime.Now;
-        }
-
-        //SelectedItem.IsActiveEmployee = true;
-    }
-    #endregion
 }

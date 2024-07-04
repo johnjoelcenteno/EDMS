@@ -38,6 +38,7 @@ public class RequestFormComponentBase : RxBaseComponent
     protected List<GetAuthorizationDocumentsResult> AuthorizeDocTypeList = new();
     protected List<GetLookupResult> IssuanceList = new();
     protected List<GetLookupResult> EmployeeRecordList = new();
+    protected List<GetLookupResult> PurposeList = new();
 
     protected List<Guid> SelectedIssuanceList = new();
     protected List<Guid> SelectedEmployeeRecordList = new();
@@ -47,12 +48,16 @@ public class RequestFormComponentBase : RxBaseComponent
     protected TelerikDropDownList<GetAuthorizationDocumentsResult, string> AuthorizationDocumentDropRef = new();
     protected TelerikDropDownList<GetLookupResult, string> IssuanceDropRef = new();
     protected TelerikDropDownList<GetLookupResult, string> EmployeeRecordDropRef = new();
+    protected TelerikDropDownList<GetLookupResult, string> PurposeDropRef = new();
 
     // For Uploads
     protected Guid? SelectedValidIdTypeId { get; set; }
     protected Guid? SelectedAuthorizedDocTypeId { get; set; }
     protected UploadRecordRequestDocumentModel? SelectedValidId { get; set; }
     protected UploadRecordRequestDocumentModel? SelectedAuthorizedDocument { get; set; }
+
+    // For Purpose
+    protected string SelectedPurpose { get; set; } = string.Empty;
 
     // Validator
     protected FluentValidationValidator? FluentValidationValidator;
@@ -106,7 +111,6 @@ public class RequestFormComponentBase : RxBaseComponent
             ToastService.ShowError("Something went wrong on loading issuance list.");
         }
     }
-
     protected async Task LoadEmployeeRecordList()
     {
         var res = await LookupsService.GetEmployeeRecords();
@@ -120,13 +124,41 @@ public class RequestFormComponentBase : RxBaseComponent
             ToastService.ShowError("Something went wrong on loading employee records.");
         }
     }
+    protected async Task LoadPurposeList()
+    {
+        var res = await LookupsService.GetPurposes();
 
+        if (res.Success)
+        {
+            PurposeList = res.Data.ToList();
+        }
+        else
+        {
+            ToastService.ShowError("Something went wrong on loading purposes.");
+        }
+    }
     protected void LoadClaimantTypes()
     {
         DocumentClaimants = Enum.GetValues(typeof(ClaimantTypes))
                .Cast<ClaimantTypes>()
                .Select(e => e.ToString())
                .ToList();
+    }
+    private void _SetDefaultValues()
+    {
+        if (SelectedItem.DateRequested == default)
+        {
+            SelectedItem.DateRequested = DateTime.Now;
+        }
+    }
+
+    protected async Task HandleLoadItems()
+    {
+        await LoadValidIDTypes();
+        await LoadAuthorizeDocumentTypes();
+        await LoadIssuanceList();
+        await LoadEmployeeRecordList();
+        await LoadPurposeList();
     }
     #endregion
 
@@ -148,7 +180,6 @@ public class RequestFormComponentBase : RxBaseComponent
             await HandleOnCancel.InvokeAsync();
         }
     }
-
     protected void HandleRequestRecords()
     {
         HashSet<Guid> set = new HashSet<Guid>();
@@ -157,6 +188,11 @@ public class RequestFormComponentBase : RxBaseComponent
         set.UnionWith(SelectedEmployeeRecordList);
 
         SelectedItem.RequestedRecords = set;
+    }
+    protected void HandleOnInit()
+    {
+        LoadClaimantTypes();
+        _SetDefaultValues();
     }
     #endregion
 
@@ -175,12 +211,10 @@ public class RequestFormComponentBase : RxBaseComponent
             SelectedValidId.Document = await DocumentService.GetFileToUpload(args);
         }
     }
-
     protected void OnRemoveValidId(FileSelectEventArgs args)
     {
         SelectedValidId = null;
     }
-
     protected async void OnSelectAuthorizedDocument(FileSelectEventArgs args)
     {
         if (SelectedItem != null && GenericHelper.IsGuidHasValue(SelectedAuthorizedDocTypeId))
@@ -195,12 +229,10 @@ public class RequestFormComponentBase : RxBaseComponent
             SelectedAuthorizedDocument.Document = await DocumentService.GetFileToUpload(args);
         }
     }
-
     protected void OnRemoveAuthorizedDocument(FileSelectEventArgs args)
     {
         SelectedAuthorizedDocument = null;
     }
-
     protected bool IsValidIdValid()
     {
         return
@@ -210,7 +242,6 @@ public class RequestFormComponentBase : RxBaseComponent
             SelectedValidId.DocumentTypeId != null &&
             SelectedValidId.DocumentType != null;
     }
-
     protected bool IsAuthorizedDocumentValid()
     {
         return
