@@ -1,20 +1,21 @@
 ﻿using DPWH.EDMS.Api.Contracts;
 
-namespace DPWH.EDMS.Client.Shared.APIClient.Services.Lookups;
-
-public interface ILookupsService
+namespace DPWH.EDMS.Client.Shared.APIClient.Services.Lookups
 {
-    Task<CommonLookup> GetLookups();
-    Task<GetValidIDsResultIEnumerableBaseApiResponse> GetValidIdTypes();
-    Task<GetSecondaryIDsResultIEnumerableBaseApiResponse> GetSecondaryIdTypes();
-    Task<GetAuthorizationDocumentsResultIEnumerableBaseApiResponse> GetAuthorizationDocumentTypes();
-    Task<GetRecordTypesResultIEnumerableBaseApiResponse> GetRecordTypes();
-    //Task<AddressLookup> GetRegions();
-    //Task<AddressLookup> GetProvinces(string regionCode);
-    ////Task<AddressLookup> GetCitiesWithoutProvince(string regionCode);
-    //Task<AddressLookup> GetCities(string provinceCode);
-    //Task<AddressLookup> GetBarangays(string cityCode);
-    //Task<GetRequestingOfficeResultIEnumerableBaseApiResponse> GetRequestingOffices();
-    //Task<GetAgenciesResultIEnumerableBaseApiResponse> GetDepartmentsQuery();
-    //Task<GetBuildingComponentsResultIEnumerableBaseApiResponse> GetBuildingComponents();
+    public interface ILookupsService
+    {
+        Task<GetAgenciesResultIEnumerableBaseApiResponse> GetAgencyList();
+        Task<GetLookupResultIEnumerableBaseApiResponse> GetArchives();
+        Task<GetAuthorizationDocumentsResultIEnumerableBaseApiResponse> GetAuthorizationDocuments();
+        Task<AddressLookup> GetBarangays(string cityMunicipalityCode);
+        Task<AddressLookup> GetCityOrMunicipalities(string provinceCode);
+        Task<GetLookupResultIEnumerableBaseApiResponse> GetEmployeeRecords();
+        Task<GetLookupResultIEnumerableBaseApiResponse> GetIssuances();
+        Task<CommonLookup> GetLookups();
+        Task<AddressLookup> GetProvinces(string regionCode);
+        Task<GetLookupResultIEnumerableBaseApiResponse> GetPurposes();
+        Task<AddressLookup> GetRegions();
+        Task<GetRequestingOfficeResultIEnumerableBaseApiResponse> GetRequestingOfficeList();
+        Task<GetValidIDsResultIEnumerableBaseApiResponse> GetValidIdTypes();
+    }
 }

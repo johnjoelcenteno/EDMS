@@ -1,5 +1,5 @@
 ﻿using DPWH.EDMS.Api.Contracts;
-using DPWH.EDMS.Client.Shared.APIClient.Services.RecordRequests;
+using DPWH.EDMS.Client.Shared.APIClient.Services.RequestManagement;
 using DPWH.EDMS.Components.Components.ReusableGrid;
 using DPWH.EDMS.Components.Helpers;
 using Microsoft.AspNetCore.Components;
@@ -8,7 +8,7 @@ namespace DPWH.EDMS.Web.Client.Pages.CurrentUser.MyRequests.GridBaseExtension;
 
 public class MyRequestGridBase : GridBase<RecordRequestModel>
 {
-    [Inject] public required IRecordRequestsService RecordRequestsService { get; set; }
+    [Inject] public required IRequestManagementService RequestManagementService { get; set; }
 
     protected string EmployeeId { get; set; } = string.Empty;
 
@@ -36,7 +36,7 @@ public class MyRequestGridBase : GridBase<RecordRequestModel>
         try
         {
             // Retrieve data from the BookingService based on the filter requests
-            var result = await RecordRequestsService.QueryByEmployeeId(EmployeeId, DataSourceReq);
+            var result = await RequestManagementService.QueryByEmployeeId(EmployeeId, DataSourceReq);
 
             // Convert the retrieved data to a list of BookingModel objects
             GridData = GenericHelper.GetListByDataSource<RecordRequestModel>(result.Data);

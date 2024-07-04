@@ -135,16 +135,32 @@
                 </div>
             }
 
-            <div class="form-group p-2">
-                <label for="recordsRequested">Document/s to be Requested</label>
-                <TelerikMultiSelect Data="@RecordTypesList"
-                                    @bind-Value="@SelectedRecordTypesIdList"
-                                    ValueField="@nameof(GetRecordTypesResult.Id)"                                    
-                                    TextField="@nameof(GetRecordTypesResult.Name)"
-                                    OnChange="() => SelectedItem.RequestedRecords = SelectedRecordTypesIdList"
-                                    Placeholder="-">
-                </TelerikMultiSelect>
-                <ValidationMessage For="@(() => SelectedItem.RequestedRecords)" class="text-danger" />
+            <div class="form-group">
+                <div class="row m-0">
+                    <label for="recordsRequested" class="px-2 pt-3">Record/s to be Requested</label>
+                    <div class="col-md-6 col-12 p-2">
+                        <label for="recordsRequested">DPWH Issuance</label>
+                        <TelerikMultiSelect Data="@IssuanceList"
+                                            @bind-Value="@SelectedIssuanceList"
+                                            ValueField="@nameof(GetLookupResult.Id)"
+                                            TextField="@nameof(GetLookupResult.Name)"
+                                            OnChange="HandleRequestRecords"
+                                            Placeholder="-">
+                        </TelerikMultiSelect>
+                        <ValidationMessage For="@(() => SelectedItem.RequestedRecords)" class="text-danger" />
+                    </div>
+                    <div class="col-md-6 col-12 p-2">
+                        <label for="recordsRequested">Employee Record</label>
+                        <TelerikMultiSelect Data="@EmployeeRecordList"
+                                            @bind-Value="@SelectedEmployeeRecordList"
+                                            ValueField="@nameof(GetLookupResult.Id)"
+                                            TextField="@nameof(GetLookupResult.Name)"
+                                            OnChange="HandleRequestRecords"
+                                            Placeholder="-">
+                        </TelerikMultiSelect>
+                        <ValidationMessage For="@(() => SelectedItem.RequestedRecords)" class="text-danger" />
+                    </div>
+                </div>
             </div>
 
             <div class="form-group p-2">

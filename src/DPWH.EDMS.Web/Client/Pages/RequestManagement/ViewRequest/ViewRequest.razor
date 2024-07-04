@@ -45,10 +45,10 @@
                             <p><b>Representative Name: </b>&nbsp; @SelectedRecordRequest.AuthorizedRepresentative.RepresentativeName</p>
                         }
                     </div>
-                    <div class="detail-flex">
+                   @*  <div class="detail-flex">
                         <p><b>Active or Inactive Employee:</b>&nbsp; @(SelectedRecordRequest.IsActiveEmployee ? "Yes" : "No") </p>
                         <p><b>Date Requested:</b>&nbsp; @GenericHelper.GetDateTimeDisplay(SelectedRecordRequest.DateRequested)</p>
-                    </div>
+                    </div> *@
                     <div class="detail-flex">
                         <p><b>Purpose:</b>&nbsp;@SelectedRecordRequest.Purpose</p>
                     </div>
@@ -81,7 +81,7 @@
                             </li>
                             <li>
                                 <strong>Authorized Document:</strong>
-                                <a href="@SelectedRecordRequest.AuthorizedRepresentative.SupportingDocumentUri" target="_blank">
+                                <a href="@SelectedRecordRequest.AuthorizedRepresentative.AuthorizationDocumentUri" target="_blank">
                                     @GetSupportingDocTextDisplay()
                                 </a>
                             </li>

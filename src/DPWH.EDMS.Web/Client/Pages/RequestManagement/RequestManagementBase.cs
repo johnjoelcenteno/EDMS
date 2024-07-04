@@ -1,5 +1,5 @@
 ﻿using DPWH.EDMS.Api.Contracts;
-using DPWH.EDMS.Client.Shared.APIClient.Services.RecordRequests;
+using DPWH.EDMS.Client.Shared.APIClient.Services.RequestManagement;
 using DPWH.EDMS.Client.Shared.Enums;
 using DPWH.EDMS.Client.Shared.Models;
 using DPWH.EDMS.Components.Components.ReusableGrid;
@@ -13,7 +13,7 @@ namespace DPWH.EDMS.Web.Client.Pages.RequestManagement;
 public class RequestManagementBase : GridBase<RecordRequestModel>
 {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateAsync { get; set; }
-    [Inject] public required IRecordRequestsService RecordRequestsService { get; set; }
+    [Inject] public required IRequestManagementService RequestManagementService { get; set; }
     protected int ActiveTabIndex { get; set; } = 1;
     protected List<string> RequestStates = new List<string>();
 
@@ -31,7 +31,7 @@ public class RequestManagementBase : GridBase<RecordRequestModel>
 
     protected async override Task OnInitializedAsync()
     {
-        ServiceCb = RecordRequestsService.Query;
+        ServiceCb = RequestManagementService.Query;
         await LoadData();
     }
 

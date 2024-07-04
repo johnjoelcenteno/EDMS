@@ -1,19 +1,18 @@
 ﻿using Blazored.Toast.Services;
-using DPWH.EDMS.Client.Shared.APIClient.Services.Lookups;
-using DPWH.EDMS.Client.Shared.APIClient.Services.RecordRequests;
-using DPWH.EDMS.Client.Shared.Models;
-using DPWH.EDMS.Components.Helpers;
-using DPWH.EDMS.Components;
-using Microsoft.AspNetCore.Components;
 using DPWH.EDMS.Api.Contracts;
-using DPWH.EDMS.Shared.Enums;
+using DPWH.EDMS.Client.Shared.APIClient.Services.RequestManagement;
+using DPWH.EDMS.Components;
+using DPWH.EDMS.Components.Helpers;
+using DPWH.EDMS.Web.Client.Shared.Services.ExceptionHandler;
+using Microsoft.AspNetCore.Components;
 
 namespace DPWH.EDMS.Web.Client.Shared.RecordRequest.View.RequestDetailsOverview;
 
 public class RequestDetailsOverviewBase : RxBaseComponent
 {
     [Parameter] public required string RequestId { get; set; }
-    [Inject] public required IRecordRequestsService RecordRequestsService { get; set; }
+    [Inject] public required IRequestManagementService RequestManagementService { get; set; }
+    [Inject] public required IExceptionHandlerService ExceptionHandlerService { get; set; }
     [Inject] public required IToastService ToastService { get; set; }
 
     protected RecordRequestModel SelectedRecordRequest { get; set; } = new();
@@ -30,20 +29,22 @@ public class RequestDetailsOverviewBase : RxBaseComponent
 
     protected async Task LoadData(Action<RecordRequestModel> onLoadCb)
     {
-        var recordReq = await RecordRequestsService.GetById(Guid.Parse(RequestId));
+        await ExceptionHandlerService.HandleApiException( async () => {
+            var recordReq = await RequestManagementService.GetById(Guid.Parse(RequestId));
 
-        if (recordReq.Success)
-        {
-            if(onLoadCb != null)
+            if (recordReq.Success)
             {
-                onLoadCb.Invoke(recordReq.Data);
+                if (onLoadCb != null)
+                {
+                    onLoadCb.Invoke(recordReq.Data);
+                }
             }
-        }
-        else
-        {
-            ToastService.ShowError("Something went wrong on loading record request.");
-            NavManager.NavigateTo("/my-requests");
-        }
+            else
+            {
+                ToastService.ShowError("Something went wrong on loading record request.");
+                NavManager.NavigateTo("/my-requests");
+            }
+        });        
     }
 
     protected string GetValidIdTextDisplay()
@@ -61,9 +62,9 @@ public class RequestDetailsOverviewBase : RxBaseComponent
     {
         return
             SelectedRecordRequest.AuthorizedRepresentative != null &&
-            GenericHelper.IsGuidHasValue(SelectedRecordRequest.AuthorizedRepresentative.SupportingDocument) &&
-            !string.IsNullOrEmpty(SelectedRecordRequest.AuthorizedRepresentative.SupportingDocumentUri)
-                ? SelectedRecordRequest.AuthorizedRepresentative.SupportingDocumentName
+            GenericHelper.IsGuidHasValue(SelectedRecordRequest.AuthorizedRepresentative.AuthorizationDocumentId) &&
+            !string.IsNullOrEmpty(SelectedRecordRequest.AuthorizedRepresentative.AuthorizationDocumentUri)
+                ? SelectedRecordRequest.AuthorizedRepresentative.AuthorizationDocumentName
                 : "No Document attached.";
 
     }
