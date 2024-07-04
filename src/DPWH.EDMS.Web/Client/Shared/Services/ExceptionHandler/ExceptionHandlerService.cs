@@ -34,7 +34,7 @@ public class ExceptionHandlerService : IExceptionHandlerService
 
         }
         catch (Exception ex) when (ex is ApiException<ProblemDetails> apiEx)
-        { 
+        {
             OnCatchError(apiEx);
         }
         catch (Exception ex) when (ex is ApiException apiEx)
