@@ -18,8 +18,8 @@ public class DataLibraryBase : RxBaseComponent
             new DataLibraryModel
             {
                 Icon = FontIcon.Gear,
-                Name = "Record Types",
-                Url = "/data-library/record-types"
+                Name = "Personal Records",
+                Url = "/data-library/personal-records"
             },
             new DataLibraryModel
             {
