@@ -55,9 +55,9 @@ public class CommonDataBase : GridBase<DataManagementModel>
     {
         switch (Id)
         {
-            case "record-types":
-                UriName = "Record Types";
-                DataType = "RecordTypes";
+            case "personal-records":
+                UriName = "Personal Records";
+                DataType = "PersonalRecords";
                 break;
 
             case "valid-ids":
