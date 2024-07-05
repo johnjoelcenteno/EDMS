@@ -30,7 +30,8 @@
                                  OnStateChanged="@OnStateChanged"
                                  @ref="GridRef"
                                  Context="record"
-                                 OnRowClick="GoToSelectedItemDocuments">
+                                 OnRowClick="GoToSelectedItemDocuments"
+                                 Class="pointer-hover">
                         <GridSettings>
                             <GridPagerSettings PageSizes="@PageSizes">
                             </GridPagerSettings>
@@ -60,3 +61,9 @@
         </CardBody>
     </TelerikCard>
 </div>
+
+<style>
+    .pointer-hover tr:hover td {
+        cursor: pointer;
+    }
+</style>

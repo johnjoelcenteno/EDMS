@@ -62,7 +62,7 @@ public class ViewRecordsBase : GridBase<RecordModel>
             {
                 Record.FirstName = res.Data.FirstName;
                 Record.LastName = res.Data.LastName;
-                Record.Role = res.Data.Role;
+                Record.Role = res.Data.UserAccess;
             }
         }
         StateHasChanged();
