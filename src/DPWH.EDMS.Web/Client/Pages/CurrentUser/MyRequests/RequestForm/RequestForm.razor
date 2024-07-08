@@ -147,7 +147,6 @@
                                             OnChange="HandleRequestRecords"
                                             Placeholder="-">
                         </TelerikMultiSelect>
-                        <ValidationMessage For="@(() => SelectedItem.RequestedRecords)" class="text-danger" />
                     </div>
                     <div class="col-md-6 col-12 p-2">
                         <label for="recordsRequested">Employee Record</label>
@@ -158,6 +157,8 @@
                                             OnChange="HandleRequestRecords"
                                             Placeholder="-">
                         </TelerikMultiSelect>
+                    </div>
+                    <div class="col-12 p-2 pt-0">
                         <ValidationMessage For="@(() => SelectedItem.RequestedRecords)" class="text-danger" />
                     </div>
                 </div>
@@ -165,7 +166,11 @@
 
             <div class="form-group p-2">
                 <label for="remarks">Purpose/Remarks</label>
-                <InputTextArea id="remarks" class="form-control" @bind-Value="SelectedItem.Purpose" placeholder="Placeholder" />
+                <TelerikDropDownList Data="@PurposeList"
+                                     @bind-Value="SelectedItem.Purpose"
+                                     ValueField="@nameof(GetAuthorizationDocumentsResult.Name)"
+                                     TextField="@nameof(GetAuthorizationDocumentsResult.Name)"
+                                     DefaultText="Select" />
                 <ValidationMessage For="@(() => SelectedItem.Purpose)" class="text-danger" />
             </div>
         </CardBody>
