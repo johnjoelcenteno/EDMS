@@ -1,5 +1,6 @@
 ﻿using DPWH.EDMS.Application.Features.RecordRequests.Commands.CreateRecordRequest;
 using DPWH.EDMS.Application.Features.RecordRequests.Queries;
+using DPWH.EDMS.Application.Features.RecordRequests.Queries.GetCountRecordsByStatusQuery;
 using DPWH.EDMS.Application.Features.RecordRequests.Queries.GetRecordRequestById;
 using DPWH.EDMS.Application.Features.RecordRequests.Queries.GetRecordRequestsByEmployeeIdQuery;
 using DPWH.EDMS.Application.Features.RecordRequests.Queries.GetRecordRequestsByStatusQuery;
@@ -46,6 +47,19 @@ public static class RecordRequestEndpoint
             .WithApiVersionSet(ApiVersioning.VersionSet)
             .HasApiVersion(1.0)
             .Produces<DataSourceResult>()
+            .Produces<ProblemDetails>(StatusCodes.Status400BadRequest)
+            .Produces<ProblemDetails>(StatusCodes.Status500InternalServerError);
+        app.MapGet(ApiEndpoints.RecordRequest.Count, async (string status, IMediator mediator) =>
+        {
+            var result = await mediator.Send(new GetCountRecordsByStatusQuery(status));
+            return result;
+        })
+            .WithName("CountRecordRequestsByStatus")
+            .WithTags(TagName)
+            .WithDescription("Count the Record Request base on Status")
+            .WithApiVersionSet(ApiVersioning.VersionSet)
+            .HasApiVersion(1.0)
+            .Produces<BaseApiResponse<int>>()
             .Produces<ProblemDetails>(StatusCodes.Status400BadRequest)
             .Produces<ProblemDetails>(StatusCodes.Status500InternalServerError);
 
