@@ -48,6 +48,7 @@ public static class RecordTypeEndpoints
        {
            var result = await mediator.Send(new QueryRecordTypesByCategoryRequest(category));
            var data = new BaseApiResponse<List<QueryRecordTypesModel>>(result);
+           return data is null ? Results.NotFound() : Results.Ok(data);
        })
        .WithName("Query record types by category")
        .WithTags(TagName)
