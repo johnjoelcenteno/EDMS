@@ -13,7 +13,7 @@ public class CreateDocumentRequestModelValidator : AbstractValidator<CreateRecor
         //    .MaximumLength(50).WithMessage("Control Number must not exceed 50 characters.");
 
         RuleFor(x => x.RequestedRecords)
-            .NotEmpty().WithMessage("At least one record must be requested.");
+            .NotEmpty().WithMessage("At least one DPWH issuance or at least one employee record must be selected.");
 
         RuleFor(x => x.DateRequested)
             .LessThanOrEqualTo(DateTime.Now).WithMessage("Date Requested cannot be in the future.");
