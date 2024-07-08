@@ -1,5 +1,6 @@
 ﻿@page "/"
 @using DPWH.EDMS.Api.Contracts
+@using DPWH.EDMS.Components.Helpers
 
 @attribute [Authorize(Roles = "dpwh_superadmin, system_admin, dpwh_enduser")]
 @inherits HomeBase
@@ -46,13 +47,99 @@
             </div>
             <CardSeparator Class="my-2"></CardSeparator>
             <div class="mobile-property-grid">
+                @if (XSmall)
+                {
+                    <div class="col mx-2 my-3">
+                        <div class="row mb-2">
+                            <input class="form-control" @bind-value="TextSearchControlNumber" @onchange="async() => await SearchFilter()" @bind-value:event="oninput" placeholder="Search Control No." />
+                        </div>
+                       
+                        <div class="row mb-2">
+                            <input class="form-control" @bind-value="TextSearchFullName" @onchange="async() => await SearchFilter()" @bind-value:event="oninput" placeholder="Search Full Name" />
+                        </div>
+                        <div class="row mb-2">
+                            
+                            <div class="d-flex justify-content-start mb-2">
+                                Search Date Requested
+                            </div>
+                            <CardSeparator Class="my-2"></CardSeparator>
+                            <div class="d-flex justify-content-center">
+                                <TelerikDatePicker @bind-Value="@SelectedDate"
+                                                   Format="MMMM dd, yyyy"
+                                                   OnChange="@SearchFilter"
+                                                   ShowWeekNumbers="true">
+                                    <DatePickerFormatPlaceholder Day="day" Month="month" Year="year" />
+                                </TelerikDatePicker>
+                                 
+                            </div>
+                        </div>
+                        <div class="row mb-2">
+                           
+                            <div class="d-flex justify-content-center">
+                                <TelerikDropDownList @bind-Value="@TextSearchStatus"
+                                                     OnChange="@OnStatusFilterChangeHandler"
+                                                     Data="@StatusList"
+                                                     TItem="string"
+                                                     TValue="string" 
+                                                     DefaultText="Select Status">
+                                </TelerikDropDownList>
+                            </div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="col-md-12 p-0 my-3">
+                        <div class="d-flex flex-row gap-3">
+                            <div class="form-control">
+                                <div class="d-flex justify-content-start mb-2">
+                                    Search Control Number
+                                </div>
+                                <input class="form-control" @bind-value="TextSearchControlNumber" @onchange="async() => await SearchFilter()" @bind-value:event="oninput" />
+                            </div>
+                            <div class="form-control">
+                                <div class="d-flex justify-content-start mb-2">
+                                    Search Full Name
+                                </div>
+                                <input class="form-control" @bind-value="TextSearchFullName" @onchange="async() => await SearchFilter()" @bind-value:event="oninput" />
+                            </div>
+                            <div class="form-control">
+                                <div class="d-flex justify-content-start mb-2">
+                                    Select Date Requested
+                                </div>
+                                <CardSeparator Class="my-2"></CardSeparator>
+                                <div class="d-flex justify-content-center">
+                                    <TelerikDatePicker @bind-Value="@SelectedDate"
+                                                       Format="MMMM dd, yyyy"
+                                                       OnChange="@SearchFilter"
+                                                       ShowWeekNumbers="true">
+                                        <DatePickerFormatPlaceholder Day="day" Month="month" Year="year" />
+                                    </TelerikDatePicker>
 
+                                </div>
+                            </div>
+                           <div class="form-control">
+                                <div class="d-flex justify-content-start mb-2">
+                                    Select Status
+                                </div>
+                                <div class="d-flex justify-content-center">
+                                    <TelerikDropDownList @bind-Value="@TextSearchStatus"
+                                                         OnChange="@OnStatusFilterChangeHandler"
+                                                         Data="@StatusList"
+                                                         TItem="string"
+                                                         TValue="string"
+                                                         DefaultText="Select Status">
+                                    </TelerikDropDownList>
+                                </div>
+                           </div>
+                        </div>
+                    </div>
+                }
                 @if (GridData != null && !XSmall)
                 {
                     <TelerikGrid TItem="EmployeeModel"
                                  @bind-PageSize="@PageSize"
-                                 Height="@GridHeight"
-                                 FilterMode="GridFilterMode.FilterRow"
+                                 Height="@GridHeight" 
                                  Sortable=true
                                  Data="GridData"
                                  OnStateChanged="@OnStateChanged"
@@ -65,41 +152,42 @@
                         <GridColumns>
                             <GridColumn Field=@nameof(EmployeeModel.ControlNumber) Title="Control No." Filterable = "false" />
                             <GridColumn Field=@nameof(EmployeeModel.FullName) Title="Full Name" />
-                            <GridColumn Field=@nameof(EmployeeModel.DateRequested) Title="Date Requested" />
+                            <GridColumn Field=@nameof(EmployeeModel.DateRequested) DisplayFormat="{0:MMMM dd, yyyy}" Title="Date Requested" />
                             <GridColumn Field=@nameof(EmployeeModel.Status) Title="Status" />
                         </GridColumns>
                     </TelerikGrid>
                 }
-               @*  else if (GridData != null && XSmall)
+                else if (GridData != null && XSmall)
                 {
-                    <TelerikGrid Class="grid-no-scroll"
-                                 TItem="AssetModel"
+                    <TelerikGrid TItem="EmployeeModel"
                                  @bind-PageSize="@PageSize"
-                                 Height="@GridHeight"
+                                 Height="@GridHeight" 
                                  Sortable=true
                                  Data="GridData"
-                                 OnStateChanged="@OnStateChanged">
+                                 OnStateChanged="@OnStateChanged"
+                                 @ref="GridRef"
+                                Context="employee">
                         <GridSettings>
                             <GridPagerSettings PageSizes="@PageSizes">
                             </GridPagerSettings>
                         </GridSettings>
                         <DetailTemplate>
                             @{
-                                var prop = context as AssetModel;
+                                var prop = employee as EmployeeModel;
                                 <div class="d-flex flex-column">
-                                    <p><b>Property ID.:</b> @prop.PropertyId </p>
-                                    <p><b>Building ID:</b> @prop.BuildingId </p>
-                                    <p><b>Region/Implementing Office</b> @prop.ImplementingOffice </p>
-                                    <p><b>Agency</b> @prop.Agency </p>
-                                    <p><b>Created :</b> @prop.Created.DateTime.ToString("MMM dd, yyyy") </p>
+                                    <p><b>Control Number :</b> @prop.ControlNumber </p>
+                                    <p><b>Full Name :</b> @prop.FullName </p>
+                                    <p><b>Date Requested :</b> @GenericHelper.GetDateDisplay(prop.DateRequested) </p>
+                                    <p><b>Status :</b> @prop.Status </p>
+ 
                                 </div>
                             }
                         </DetailTemplate>
                         <GridColumns>
-                            <GridColumn Field=@nameof(AssetModel.Name) />
+                            <GridColumn Field=@nameof(EmployeeModel.FullName) />
                         </GridColumns>
                     </TelerikGrid>
-                } *@
+                }
                 else
                 {
                     <span>No Data to display.</span>

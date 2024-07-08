@@ -11,6 +11,8 @@ using Telerik.DataSource;
 using DPWH.EDMS.Client.Shared.APIClient.Services.RequestManagement;
 using DPWH.EDMS.Components.Helpers;
 using DPWH.EDMS.Web.Client.Pages.Home.HomeService;
+using DPWH.EDMS.Client.Shared.Models;
+using Telerik.Blazor;
 
 namespace DPWH.EDMS.Web.Client.Pages.Home;
 
@@ -30,8 +32,20 @@ public class HomeBase : GridBase<EmployeeModel>
     public string[] Categories;
     public TelerikChart FullfilledChartRef { get; set; }
     public TelerikChart RequstChartRef { get; set; }
+     
+    protected string TextSearchControlNumber = string.Empty;
+    protected string TextSearchFullName = string.Empty;
+    protected string TextSearchDateRequested = string.Empty;
+    protected string TextSearchStatus = string.Empty;
+    public FilterOperator filterOperator { get; set; } = FilterOperator.Contains;
+    protected DateTime? SelectedDate { get; set; }
 
-    public FilterOperator filterOperator { get; set; } = FilterOperator.StartsWith;
+    protected List<string> StatusList = new List<string>
+    {
+        "Review",
+        "Release",
+        "Claimed"
+    };
 
     public List<FilterOperator> filterOperators { get; set; } = new List<FilterOperator>()
     {
@@ -143,5 +157,53 @@ public class HomeBase : GridBase<EmployeeModel>
         }
 
         return employees;
+    }
+
+    protected async Task SearchFilter()
+    {
+        var filters = new List<Api.Contracts.Filter>(); 
+        if (!string.IsNullOrEmpty(TextSearchControlNumber))
+        {
+            AddTextSearchFilter(filters, nameof(EmployeeModel.ControlNumber), TextSearchControlNumber, "eq");
+        }
+
+        if (!string.IsNullOrEmpty(TextSearchFullName))
+        {
+            AddTextSearchFilter(filters, nameof(EmployeeModel.FullName), TextSearchFullName.ToLower());
+        }
+
+        if (SelectedDate.HasValue)
+        {
+            AddTextSearchFilter(filters, "DateRequested", SelectedDate.Value.ToString("yyyy-MM-dd"), "gte");
+            AddTextSearchFilter(filters, "DateRequested", SelectedDate.Value.AddDays(1).ToString("yyyy-MM-dd"), "lte");
+        }
+
+        if (!string.IsNullOrEmpty(TextSearchStatus))
+        {
+            AddTextSearchFilter(filters, nameof(EmployeeModel.Status), TextSearchStatus.ToLower());
+        }
+
+        SearchFilterRequest.Logic = DataSourceHelper.AND_LOGIC;
+
+        SearchFilterRequest.Filters = filters;
+
+        await LoadData();
+    }
+    protected string LastOnChangeValue { get; set; } 
+    protected async Task OnStatusFilterChangeHandler(object input)
+    {
+        string CurrentValue = input as string;
+
+        if (CurrentValue != LastOnChangeValue && string.IsNullOrEmpty(CurrentValue))
+        {
+            TextSearchStatus = string.Empty;
+            LastOnChangeValue = string.Empty;
+            await SearchFilter();
+        }
+        else if (!CurrentValue.Equals(LastOnChangeValue))
+        {
+            LastOnChangeValue = CurrentValue;
+            await SearchFilter();
+        }
     }
 }

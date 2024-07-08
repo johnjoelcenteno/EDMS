@@ -18,13 +18,45 @@
                 <CardTitle Class="mb-0">Employee Records</CardTitle>
             </div>
             <CardSeparator Class="my-2"></CardSeparator>
-            <div>
+            <div class="mobile-property-grid">
+                @if (XSmall)
+                {
+                    <div class="col mx-2 my-3">
+                        <div class="row mb-2">
+                            <input class="form-control" @bind-value="TextSearchFirstName" @onchange="async() => await SearchFilter()" @bind-value:event="oninput" placeholder="Search First Name" />
+                        </div>
+                        <div class="row mb-2">
+                            <input class="form-control" @bind-value="TextSearcLastName" @onchange="async() => await SearchFilter()" @bind-value:event="oninput" placeholder="Search Last Name" />
+                        </div>
+                        <div class="row mb-2">
+                            <input class="form-control" @bind-value="TextSearchMiddlename" @onchange="async() => await SearchFilter()" @bind-value:event="oninput" placeholder="Search Middle Name" />
+                        </div>
+                        <div class="row mb-2">
+                            <input class="form-control" @bind-value="TextSearchRegionalOffice" @onchange="async() => await SearchFilter()" @bind-value:event="oninput" placeholder="Search Office" />
+                        </div>
+                        <div class="row mb-2">
+                            <input class="form-control" @bind-value="TextSearchDepartment" @onchange="async() => await SearchFilter()" @bind-value:event="oninput" placeholder="Search Department" />
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="col-md-12 p-0 my-3">
+                        <div class="d-flex flex-row gap-3">
+                            <input class="form-control" @bind-value="TextSearchFirstName" @onchange="async() => await SearchFilter()" @bind-value:event="oninput" placeholder="Search First Name" />
+                            <input class="form-control" @bind-value="TextSearcLastName" @onchange="async() => await SearchFilter()" @bind-value:event="oninput" placeholder="Search Last Name" />
+                            <input class="form-control" @bind-value="TextSearchMiddlename" @onchange="async() => await SearchFilter()" @bind-value:event="oninput" placeholder="Search Middle Name" />
+                            <input class="form-control" @bind-value="TextSearchRegionalOffice" @onchange="async() => await SearchFilter()" @bind-value:event="oninput" placeholder="Search Office" />
+                            <input class="form-control" @bind-value="TextSearchDepartment" @onchange="async() => await SearchFilter()" @bind-value:event="oninput" placeholder="Search Department" />
+                        </div>
+                    </div>
+                }
+
                 @if (GridData != null && !XSmall)
                 {
                     <TelerikGrid TItem="UserModel"
                                  @bind-PageSize="@PageSize"
                                  Height="@GridHeight"
-                                 FilterMode="GridFilterMode.FilterRow"
                                  Sortable=true
                                  Data="GridData"
                                  OnStateChanged="@OnStateChanged"
@@ -36,12 +68,49 @@
                             <GridPagerSettings PageSizes="@PageSizes">
                             </GridPagerSettings>
                         </GridSettings>
+                      
                         <GridColumns>
                             <GridColumn Field=@nameof(UserModel.FirstName) Title="First Name" />
                             <GridColumn Field=@nameof(UserModel.LastName) Title="Last Name" />
                             <GridColumn Field=@nameof(UserModel.MiddleInitial) Title="Middle Name" />
                             <GridColumn Field=@nameof(UserModel.RegionalOfficeRegion) Title="Office" />
                             <GridColumn Field=@nameof(UserModel.Department) Title="Bureau/Service/Division/Section/Unit" />
+                        </GridColumns>
+                    </TelerikGrid>
+                }
+                else if (GridData != null && XSmall)
+                {
+                    
+                    <TelerikGrid TItem="UserModel"
+                                 @bind-PageSize="@PageSize"
+                                 Height="@GridHeight"
+                                 Sortable=true
+                                 Data="GridData"
+                                 OnStateChanged="@OnStateChanged"
+                                 @ref="GridRef"
+                                 Context="record"
+                                 OnRowClick="GoToSelectedItemDocuments"
+                                 Class="pointer-hover">
+                        <GridSettings>
+                            <GridPagerSettings PageSizes="@PageSizes">
+                            </GridPagerSettings>
+                        </GridSettings>
+                        <DetailTemplate>
+                            @{
+                                var prop = record as UserModel;
+                                <div class="d-flex flex-column">
+                                    <p><b>First Name :</b> @prop.FirstName </p>
+                                    <p><b>Middle Name :</b> @prop.MiddleInitial </p>
+                                    <p><b>Office :</b> @prop.RegionalOfficeRegion </p>
+                                    <p><b>Department :</b> @prop.Department </p>
+                                   
+                                </div>
+                            }
+                        </DetailTemplate>
+                        <GridColumns>
+                          
+                            <GridColumn Field=@nameof(UserModel.LastName) Title="Last Name" />
+                           
                         </GridColumns>
                     </TelerikGrid>
                 }
@@ -63,6 +132,15 @@
 </div>
 
 <style>
+    .mobile-property-grid .k-hierarchy-cell .k-svg-i-plus svg path {
+        d: path('M352 256 160 384V128l192 128z');
+        fill: #7f56d9;
+    }
+
+    .mobile-property-grid .k-hierarchy-cell .k-svg-i-minus svg path {
+        d: path('M256 352 128 160h256L256 352z');
+        fill: #7f56d9;
+    }
     .pointer-hover tr:hover td {
         cursor: pointer;
     }
