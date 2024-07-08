@@ -42,7 +42,7 @@ public class RequestDetailsOverviewBase : RxBaseComponent
             else
             {
                 ToastService.ShowError("Something went wrong on loading record request.");
-                NavManager.NavigateTo("/my-requests");
+                NavManager.NavigateTo(CancelReturnUrl);
             }
         });        
     }

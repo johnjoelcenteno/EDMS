@@ -13,9 +13,6 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
     protected string Status { get; set; } = "Submitted";
     protected DateTime? DateReceived { get; set; } = DateTime.Now;
     protected DateTime? TimeReceived { get; set; } = DateTime.Now;
-    protected bool IsReviewed { get; set; }
-    protected bool IsReleased { get; set; }
-    protected bool IsClaimed { get; set; }
     protected bool IsModalVisible { get; set; }
     protected async override Task OnInitializedAsync()
     {
@@ -62,7 +59,6 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
         IsModalVisible = false;
         CurrentStepIndex = 1;
         ActiveTabIndex = 2;
-        IsReviewed = true;
         Status = RecordRequestStates.Review.ToString();
         IsLoading = false;
     }
@@ -73,7 +69,6 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
         IsModalVisible = false;
         CurrentStepIndex = 2;
         ActiveTabIndex = 3;
-        IsReleased = true;
         Status = RecordRequestStates.Release.ToString();
         IsLoading = false;
     }
@@ -83,7 +78,6 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
         IsLoading = true;
         IsModalVisible = false;
         CurrentStepIndex = 3;
-        IsClaimed = true;
         Status = RecordRequestStates.Claimed.ToString();
         NavigationManager.NavigateTo("/request-management");
         IsLoading = false;
