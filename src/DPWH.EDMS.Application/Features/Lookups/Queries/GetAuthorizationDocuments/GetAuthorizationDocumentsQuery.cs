@@ -11,7 +11,7 @@ internal sealed class GetGetAuthorizationDocumentsQueryHandler(IReadRepository r
     public async Task<IEnumerable<GetAuthorizationDocumentsResult>> Handle(GetAuthorizationDocumentsQuery request, CancellationToken cancellationToken)
     {
         var recordTypes = await repository.DataLibrariesView
-            .Where(d => d.Type == DataLibraryTypes.AuthorizationDocuments.ToString())
+            .Where(d => d.Type == DataLibraryTypes.AuthorizationDocuments.ToString() && !d.IsDeleted)
             .Select(d => new GetAuthorizationDocumentsResult(d.Id, d.Value))
             .ToListAsync(cancellationToken);
 

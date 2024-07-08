@@ -12,7 +12,7 @@ internal sealed class GetPurposesQueryHandler(IReadRepository repository) : IReq
     public async Task<IEnumerable<GetLookupResult>> Handle(GetPurposesQuery request, CancellationToken cancellationToken)
     {
         var purposes = await repository.DataLibrariesView
-         .Where(d => d.Type == DataLibraryTypes.Purposes.ToString())
+         .Where(d => d.Type == DataLibraryTypes.Purposes.ToString() && !d.IsDeleted)
          .Select(d => new GetLookupResult(d.Id, d.Value))
          .ToListAsync(cancellationToken);
 
