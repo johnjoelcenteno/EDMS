@@ -2487,6 +2487,56 @@
         }
       }
     },
+    "/api/recordrequests/count/{status}": {
+      "get": {
+        "tags": [
+          "Requests Management"
+        ],
+        "operationId": "CountRecordRequestsByStatus",
+        "parameters": [
+          {
+            "name": "status",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/Int32BaseApiResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/recordrequests/query/{employeeId}": {
       "post": {
         "tags": [
@@ -5309,6 +5359,19 @@
               "$ref": "#/components/schemas/ImplementingOffice"
             },
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Int32BaseApiResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false

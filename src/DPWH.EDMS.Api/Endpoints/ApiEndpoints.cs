@@ -41,7 +41,7 @@ public static class ApiEndpoints
         public const string Create = $"{Base}/create";
         public const string Update = $"{Base}/update";
         public const string Delete = $"{Base}/delete";
-
+        public const string Count = $"{Base}/count/{{status}}";
         public static class Documents
         {
             public const string DeleteDocument = $"{Base}/{{id:guid}}/documents/delete";
