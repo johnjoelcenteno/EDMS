@@ -27,6 +27,6 @@ public class RequestManagementBase : RecordRequestGridComponentBase
     }
     protected void GoToSelectedItemOverview(GridRowClickEventArgs args)
     {
-        HandleSelectedItemOverview(args, "request-management/view-request-form");
+        HandleSelectedItemOverview(args, "request-management/view-request-form/");
     }
 }

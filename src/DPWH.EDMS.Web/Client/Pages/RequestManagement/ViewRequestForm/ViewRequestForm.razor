@@ -1,6 +1,7 @@
-﻿@page "/request-management/view-request-form"
+﻿@page "/request-management/view-request-form/{RequestId}"
 @inherits ViewRequestFormBase
 @using DPWH.EDMS.Components.Helpers
+@using DPWH.EDMS.Shared.Enums
 
 <EdmsBreadcrumbs Data="@BreadcrumbItems" />
 <EdmsLoader Visible="IsLoading" />
@@ -8,7 +9,7 @@
 <h3>View Request Form</h3>
 
 <div class="d-flex flex-row align-items-center mb-2">
-    <p>Control Number: 123456789 | Name: SANTOS, John D.G.</p>
+    <p>Control Number: @SelectedRecordRequest.ControlNumber | Name: @SelectedRecordRequest.FullName</p>
 </div>
 
 <hr />
@@ -22,45 +23,67 @@
                 <div class="row my-2">
                     <h5>Request Details</h5>
                 </div>
-                <div class="row">
+                <div class="row mb-3">
                     <div class="col">
-                        <div class="mb-3">
-                            <p><b>Control Number</b></p>
-                            <p>123456789</p>
-                        </div>
-                        <div class="mb-3">
-                            <p><b>Last Name, First Name M.I.</b></p>
-                            <p>SANTOS, John D.G.</p>
-                        </div>
-                        <div class="mb-3">
-                            <p><b>Record(s) Requested</b></p>
-                            <p><b>RMD</b></p>
-                            <ul>
-                                <li>DOCUMENT 1</li>
-                                <li>DOCUMENT 2</li>
-                                <li>DOCUMENT 3</li>
-                            </ul>
-                            <p><b>HRMD</b></p>
-                            <ul>
-                                <li>DOCUMENT 4</li>
-                                <li>DOCUMENT 5</li>
-                                <li>DOCUMENT 6</li>
-                            </ul>
-                        </div>
-                        <div class="mb-3">
-                            <p><b>Purpose</b></p>
-                            <p>Purpose</p>
-                        </div>
+                        <p><b>Status</b></p>
+                        <p>@SelectedRecordRequest.Status</p>
                     </div>
                     <div class="col">
-                        <div class="mb-3">
-                            <p><b>Date Requested</b></p>
-                            <p>@GenericHelper.GetDateDisplay(DateTime.Now)</p>
-                        </div>
-                        <div>
-                            <p><b>Office</b></p>
-                            <p>Human Resource and Administrative Office</p>
-                        </div>
+                        <p><b>Control Number</b></p>
+                        <p>@SelectedRecordRequest.ControlNumber</p>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col">
+                        <p><b>Employee Number</b></p>
+                        <p>@SelectedRecordRequest.EmployeeNumber</p>
+                    </div>
+                    <div class="col">
+                        <p><b>Employee Name</b></p>
+                        <p>@SelectedRecordRequest.FullName</p>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col">
+                        <p><b>Office</b></p>
+                        <p>Human Resource and Administrative Office</p>
+                    </div>
+                    <div class="col">
+                        <p><b>Date Requested</b></p>
+                        <p>@GenericHelper.GetDateDisplay(@SelectedRecordRequest.DateRequested)</p>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col">
+                        <p><b>Record(s) Requested</b></p>
+                        @* <p><b>RMD</b></p>
+                        <ul>
+                        <li>DOCUMENT 1</li>
+                        <li>DOCUMENT 2</li>
+                        <li>DOCUMENT 3</li>
+                        </ul>
+                        <p><b>HRMD</b></p>
+                        <ul>
+                        <li>DOCUMENT 4</li>
+                        <li>DOCUMENT 5</li>
+                        <li>DOCUMENT 6</li>
+                        </ul> *@
+
+                        @if (SelectedRecordRequest.RequestedRecords != null && SelectedRecordRequest.RequestedRecords.Count > 0)
+                        {
+                            <ul>
+                                @foreach (var record in SelectedRecordRequest.RequestedRecords)
+                                {
+                                    <li>
+                                        @record.RecordType
+                                    </li>
+                                }
+                            </ul>
+                        }
+                    </div>
+                    <div class="row">
+                        <p><b>Purpose</b></p>
+                        <p>@SelectedRecordRequest.Purpose</p>
                     </div>
                 </div>
             </div>
@@ -69,10 +92,10 @@
     <TabStripTab Title="Review and Evaluate">
         <div class="row">
             <div class="col-5 vl-right">
-                @RequestDetailsFragment
+                @StepperFragment
                 <div class="d-flex gap-3 justify-content-center">
                     <TelerikButton OnClick="OnCancel" FillMode="@ThemeConstants.Button.FillMode.Outline">Cancel</TelerikButton>
-                    <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(IsReviewed == true ? false : true)">Submit</TelerikButton>
+                    <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(Status == "Submitted")">Submit</TelerikButton>
                 </div>
             </div>
             <div class="col-7">
@@ -84,32 +107,13 @@
                 </div>
                 <div class="row">
                     <div class="col">
-                        <div>
-                            <input type="checkbox" />
-                            <label>Document 1</label>
-                        </div>
-                        <div>
-                            <input type="checkbox" />
-                            <label>Document 2</label>
-                        </div>
-                        <div>
-                            <input type="checkbox" />
-                            <label>Document 3</label>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div>
-                            <input type="checkbox" />
-                            <label>Document 4</label>
-                        </div>
-                        <div>
-                            <input type="checkbox" />
-                            <label>Document 5</label>
-                        </div>
-                        <div>
-                            <input type="checkbox" />
-                            <label>Document 6</label>
-                        </div>
+                        @foreach (var record in SelectedRecordRequest.RequestedRecords)
+                        {
+                            <div>
+                                <input type="checkbox" />
+                                <label>@record.RecordType</label>
+                            </div>
+                        }
                     </div>
                 </div>
             </div>
@@ -118,10 +122,10 @@
     <TabStripTab Title="Release">
         <div class="row">
             <div class="col-5 vl-right">
-                @RequestDetailsFragment
+                @StepperFragment
                 <div class="d-flex gap-3 justify-content-center">
                     <TelerikButton OnClick="OnCancel" FillMode="@ThemeConstants.Button.FillMode.Outline">Cancel</TelerikButton>
-                    <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(IsReleased == true ? false : true)">Submit</TelerikButton>
+                    <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(Status == RecordRequestStates.Review.ToString())">Submit</TelerikButton>
                 </div>
             </div>
             <div class="col-7">
@@ -135,54 +139,21 @@
                 <div class="row mb-2">
                     <p><b>Documents</b></p>
                 </div>
-                <div class="row mb-1">
+                @foreach (var record in SelectedRecordRequest.RequestedRecords)
+                {
+                    <div class="row mb-1">
                     <div class="col">
                         <div>
                             <input class="align-middle" type="checkbox" />
-                            <label class="align-middle">Document 1</label>
+                            <label class="align-middle">@record.RecordType</label>
                         </div>
                     </div>
                     <div class="col text-end">
-                        <label for="files" class="btn upload-btn">Click to Upload</label>
-                        <input id="files" style="display: none;" type="file">
+                        <label for="document" class="btn upload-btn">Click to Upload</label>
+                            <input id="document" style="display: none;" type="file">
                     </div>
-                </div>
-                <div class="row mb-1">
-                    <div class="col">
-                        <div>
-                            <input class="align-middle" type="checkbox" />
-                            <label class="align-middle">Document 1</label>
-                        </div>
-                    </div>
-                    <div class="col text-end">
-                        <label for="files" class="btn upload-btn">Click to Upload</label>
-                        <input id="files" style="display: none;" type="file">
-                    </div>
-                </div>
-                <div class="row mb-1">
-                    <div class="col">
-                        <div>
-                            <input class="align-middle" type="checkbox" />
-                            <label class="align-middle">Document 1</label>
-                        </div>
-                    </div>
-                    <div class="col text-end">
-                        <label for="files" class="btn upload-btn">Click to Upload</label>
-                        <input id="files" style="display: none;" type="file">
-                    </div>
-                </div>
-                <div class="row mb-1">
-                    <div class="col">
-                        <div>
-                            <input class="align-middle" type="checkbox" />
-                            <label class="align-middle">Document 1</label>
-                        </div>
-                    </div>
-                    <div class="col text-end">
-                        <label for="files" class="btn upload-btn">Click to Upload</label>
-                        <input id="files" style="display: none;" type="file">
-                    </div>
-                </div>
+                </div>                    
+                }
             </div>
         </div>
     </TabStripTab>
@@ -192,7 +163,7 @@
                 @StepperFragment
                 <div class="d-flex gap-3 justify-content-center">
                     <TelerikButton OnClick="OnCancel" FillMode="@ThemeConstants.Button.FillMode.Outline">Cancel</TelerikButton>
-                    <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(IsClaimed == true ? false : true)">Submit</TelerikButton>
+                    <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(Status == RecordRequestStates.Release.ToString())">Submit</TelerikButton>
                 </div>
             </div>
             <div class="col-7">
@@ -204,24 +175,24 @@
                         <button class="toggle-button">-</button>
                     </div>
                     <div>
-                        <p>&emsp;Control No. 123456789</p>
+                        <p>&emsp;Control No. @SelectedRecordRequest.ControlNumber</p>
                     </div>
                 </div>
                 <div class="hl-top hl-bottom bg-light p-3">
                     <div class="row mb-3">
                         <div>
                             <p><b>Control Number</b></p>
-                            <p>123456789</p>
+                            <p>@SelectedRecordRequest.ControlNumber</p>
                         </div>
                     </div>
                     <div class="d-flex gap-3 mb-3">
                         <div>
                             <label><b>Date Received</b></label>
-                            <TelerikDatePicker @bind-Value="@Value"></TelerikDatePicker>
+                            <TelerikDatePicker @bind-Value="@DateReceived"></TelerikDatePicker>
                         </div>
                         <div>
                             <label><b>Time Received</b></label>
-                            <TelerikTimePicker @bind-Value="@SelectedTime"></TelerikTimePicker>
+                            <TelerikTimePicker @bind-Value="@TimeReceived"></TelerikTimePicker>
                         </div>
                     </div>
                     <div class="row mb-1">
@@ -229,10 +200,10 @@
                             <p class="mb-1"><b>Documents Received</b></p>
                             <p>For pickup at HRMD</p>
                             <ul>
-                                <li>DOCUMENT 1</li>
-                                <li>DOCUMENT 2</li>
-                                <li>DOCUMENT 3</li>
-                                <li>DOCUMENT 4</li>
+                                @foreach (var record in SelectedRecordRequest.RequestedRecords)
+                                {
+                                    <li>@record.RecordType</li>
+                                }
                             </ul>
                         </div>
                     </div>
@@ -268,38 +239,39 @@
         Please Confirm
     </WindowTitle>
     <WindowContent>
-        @if (ActiveTabIndex == 1)
+        @switch (ActiveTabIndex)
         {
-            <div class="row mb-3">
-                <p><b>Request has been reviewed and submitted</b></p>
-                <p class="text-secondary">Kindly proceed to the next page and download the forms to be signed by your immediate supervisor</p>
-            </div>
-            <div class="d-flex gap-3 justify-content-center">
-                <TelerikButton OnClick="@(() => IsModalVisible = false)" FillMode="@ThemeConstants.Button.FillMode.Outline">Cancel</TelerikButton>
-                <TelerikButton OnClick="OnReview" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary">Confirm</TelerikButton>
-            </div>
+            case 1:
+                <div class="row mb-3">
+                    <p><b>Request has been reviewed and submitted</b></p>
+                    <p class="text-secondary">Kindly proceed to the next page and download the forms to be signed by your immediate supervisor</p>
+                </div>
+                <div class="d-flex gap-3 justify-content-center">
+                    <TelerikButton OnClick="@(() => IsModalVisible = false)" FillMode="@ThemeConstants.Button.FillMode.Outline">Cancel</TelerikButton>
+                    <TelerikButton OnClick="OnReview" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary">Confirm</TelerikButton>
+                </div>
+                break;
+            case 2:
+                <div class="row mb-3">
+                    <p>Request has been approved and ready for release</p>
+                </div>
+                <div class="d-flex gap-3 justify-content-center">
+                    <TelerikButton OnClick="@(() => IsModalVisible = false)" FillMode="@ThemeConstants.Button.FillMode.Outline">Cancel</TelerikButton>
+                    <TelerikButton OnClick="OnRelease" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary">Confirm</TelerikButton>
+                </div>
+                break;
+            case 3:
+                <div class="row mb-3">
+                    <p>Request has been completed</p>
+                </div>
+                <div class="d-flex gap-3 justify-content-center">
+                    <TelerikButton OnClick="@(() => IsModalVisible = false)" FillMode="@ThemeConstants.Button.FillMode.Outline">Cancel</TelerikButton>
+                    <TelerikButton OnClick="OnClaim" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary">Confirm</TelerikButton>
+                </div>
+                break;
+            default:
+                break;
         }
-        else if (ActiveTabIndex == 2)
-        {
-            <div class="row mb-3">
-                <p><b>Request has been approved and ready for release</b></p>
-            </div>
-            <div class="d-flex gap-3 justify-content-center">
-                <TelerikButton OnClick="@(() => IsModalVisible = false)" FillMode="@ThemeConstants.Button.FillMode.Outline">Cancel</TelerikButton>
-                <TelerikButton OnClick="OnRelease" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary">Confirm</TelerikButton>
-            </div>
-        }
-        else if (ActiveTabIndex == 3)
-        {
-            <div class="row mb-3">
-                <p><b>Request has been completed</b></p>
-            </div>
-            <div class="d-flex gap-3 justify-content-center">
-                <TelerikButton OnClick="@(() => IsModalVisible = false)" FillMode="@ThemeConstants.Button.FillMode.Outline">Cancel</TelerikButton>
-                <TelerikButton OnClick="OnClaim" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary">Confirm</TelerikButton>
-            </div>
-        }
-
     </WindowContent>
     <WindowActions>
         <WindowAction Name="Close" />
@@ -311,7 +283,7 @@
         <div class="row my-2">
             <h5>Processing Status</h5>
         </div>
-        <TelerikStepper @bind-Value="@CurrentStepIndex" Linear="true" Orientation="StepperOrientation.Vertical">
+        <TelerikStepper Value="@CurrentStepIndex" ValueChanged="@ValueChangeHandler" Linear="true" Orientation="StepperOrientation.Vertical">
             <StepperSteps>
                 <StepperStep Label="Submit"></StepperStep>
                 <StepperStep Label="Review & Evaluate"></StepperStep>
@@ -328,15 +300,15 @@
         <div class="row">
             <div class="mb-3">
                 <p><b>Control Number</b></p>
-                <p>123456789</p>
+                <p>@SelectedRecordRequest.ControlNumber</p>
             </div>
             <div class="mb-3">
                 <p><b>Date Requested</b></p>
-                <p>@GenericHelper.GetDateDisplay(DateTime.Now)</p>
+                <p>@GenericHelper.GetDateDisplay(@SelectedRecordRequest.DateRequested)</p>
             </div>
             <div class="mb-3">
                 <p><b>Last Name, First Name M.I.</b></p>
-                <p>SANTOS, John D.G.</p>
+                <p>@SelectedRecordRequest.FullName</p>
             </div>
             <div class="mb-3">
                 <p><b>Office</b></p>
@@ -344,7 +316,7 @@
             </div>
             <div class="mb-3">
                 <p><b>Purpose</b></p>
-                <p>Purpose</p>
+                <p>@SelectedRecordRequest.Purpose</p>
             </div>
         </div>
     </div>;

@@ -1,25 +1,28 @@
 ﻿using DPWH.EDMS.Client.Shared.Models;
-using DPWH.EDMS.Components;
+using DPWH.EDMS.Shared.Enums;
+using DPWH.EDMS.Web.Client.Shared.RecordRequest.View.RequestDetailsOverview;
 using Microsoft.AspNetCore.Components;
 
 namespace DPWH.EDMS.Web.Client.Pages.RequestManagement.ViewRequestForm;
 
-public class ViewRequestFormBase : RxBaseComponent
+public class ViewRequestFormBase : RequestDetailsOverviewBase
 {
-    [Parameter] public required string Id { get; set; }
-    [Inject] NavigationManager NavigationManager { get; set; }
+    [Inject] public required NavigationManager NavigationManager { get; set; }
     protected int ActiveTabIndex { get; set; } = 0;
-    protected int CurrentStepIndex { get; set; } = 0;
-    protected DateTime? Value { get; set; } = DateTime.Now;
-    protected DateTime? SelectedTime { get; set; } = DateTime.Now;
-    protected bool IsReviewed { get; set; } = false;
-    protected bool IsReleased { get; set; } = false;
-    protected bool IsClaimed { get; set; } = false;
-    protected bool IsModalVisible { get; set; } = false;
-
-    protected override void OnInitialized()
+    protected int CurrentStepIndex { get; set; }
+    protected string Status { get; set; } = "Submitted";
+    protected DateTime? DateReceived { get; set; } = DateTime.Now;
+    protected DateTime? TimeReceived { get; set; } = DateTime.Now;
+    protected bool IsModalVisible { get; set; }
+    protected async override Task OnInitializedAsync()
     {
-        BreadcrumbItems.AddRange(new List<BreadcrumbModel>
+
+        IsLoading = true;
+
+        await LoadData((res) =>
+        {
+            SelectedRecordRequest = res;
+            BreadcrumbItems.AddRange(new List<BreadcrumbModel>
             {
                 new BreadcrumbModel
                 {
@@ -34,11 +37,20 @@ public class ViewRequestFormBase : RxBaseComponent
                     Url = NavManager.Uri.ToString(),
                 },
             });
+        });
+
+        IsLoading = false;
+        StateHasChanged();
     }
 
-    protected void OnCancel()
+    public void ValueChangeHandler(int newStep)
     {
-        NavigationManager.NavigateTo("/request-management");
+
+    }
+
+    protected override void OnParametersSet()
+    {
+        CancelReturnUrl = "/request-management";
     }
 
     protected void OnReview()
@@ -47,7 +59,7 @@ public class ViewRequestFormBase : RxBaseComponent
         IsModalVisible = false;
         CurrentStepIndex = 1;
         ActiveTabIndex = 2;
-        IsReviewed = true;
+        Status = RecordRequestStates.Review.ToString();
         IsLoading = false;
     }
 
@@ -57,7 +69,7 @@ public class ViewRequestFormBase : RxBaseComponent
         IsModalVisible = false;
         CurrentStepIndex = 2;
         ActiveTabIndex = 3;
-        IsReleased = true;
+        Status = RecordRequestStates.Release.ToString();
         IsLoading = false;
     }
 
@@ -66,7 +78,7 @@ public class ViewRequestFormBase : RxBaseComponent
         IsLoading = true;
         IsModalVisible = false;
         CurrentStepIndex = 3;
-        IsClaimed = true;
+        Status = RecordRequestStates.Claimed.ToString();
         NavigationManager.NavigateTo("/request-management");
         IsLoading = false;
     }
