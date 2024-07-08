@@ -27,6 +27,7 @@ public record CreateUserWithRoleCommand : IRequest<CreateUserWithRoleResult>
     public string? RegionalOfficeProvince { get; set; }
     public string? DistrictEngineeringOffice { get; set; }
     public string? DesignationTitle { get; set; }
+    public string? Office { get; set; }
 }
 
 internal sealed class CreateUserWithRoleHandler : IRequestHandler<CreateUserWithRoleCommand, CreateUserWithRoleResult>
@@ -79,7 +80,8 @@ internal sealed class CreateUserWithRoleHandler : IRequestHandler<CreateUserWith
                     command.RegionalOfficeRegion,
                     command.RegionalOfficeProvince,
                     command.DistrictEngineeringOffice,
-                    command.DesignationTitle);
+                    command.DesignationTitle,
+                    command.Office);
 
                 user.Update(
                     userBasicInfo,
@@ -131,7 +133,8 @@ internal sealed class CreateUserWithRoleHandler : IRequestHandler<CreateUserWith
                 command.RegionalOfficeRegion,
                 command.RegionalOfficeProvince,
                 command.DistrictEngineeringOffice,
-                command.DesignationTitle);
+                command.DesignationTitle,
+                command.Office);
 
             var newUser = ApplicationUser.Create(
                     command.Email,

@@ -4133,6 +4133,10 @@
           "designationTitle": {
             "type": "string",
             "nullable": true
+          },
+          "office": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -4267,6 +4271,10 @@
             "nullable": true
           },
           "designationTitle": {
+            "type": "string",
+            "nullable": true
+          },
+          "office": {
             "type": "string",
             "nullable": true
           }
@@ -4660,6 +4668,10 @@
             "nullable": true
           },
           "designationStartEnd": {
+            "type": "string",
+            "nullable": true
+          },
+          "office": {
             "type": "string",
             "nullable": true
           }
@@ -6077,6 +6089,10 @@
             "nullable": true
           },
           "designationTitle": {
+            "type": "string",
+            "nullable": true
+          },
+          "office": {
             "type": "string",
             "nullable": true
           }

@@ -67,7 +67,8 @@ internal sealed class SyncUserHandler : IRequestHandler<SyncUserCommand, SyncUse
                     model.CentralOrRegionName,
                     model.BureauServiceRoDeoName,
                     model.BureauServiceRoDeoName,
-                    model.DesignationTitle);
+                    model.DesignationTitle,
+                    model.Office);
 
                 user.Email = $"{model.NetworkId}@dpwh.gov.ph";
                 user.Update(

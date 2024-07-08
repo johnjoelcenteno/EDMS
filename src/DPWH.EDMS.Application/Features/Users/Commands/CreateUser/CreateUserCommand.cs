@@ -22,6 +22,7 @@ public record CreateUserCommand : IRequest<CreateUserResult>
     public string? RegionalOfficeProvince { get; set; }
     public string? DistrictEngineeringOffice { get; set; }
     public string? DesignationTitle { get; set; }
+    public string? Office { get; set; }
 }
 
 internal sealed class CreateUserHandler : IRequestHandler<CreateUserCommand, CreateUserResult>
@@ -56,7 +57,8 @@ internal sealed class CreateUserHandler : IRequestHandler<CreateUserCommand, Cre
             command.RegionalOfficeRegion,
             command.RegionalOfficeProvince,
             command.DistrictEngineeringOffice,
-            command.DesignationTitle);
+            command.DesignationTitle,
+            command.Office);
 
         var user = ApplicationUser.Create(
               command.Email,

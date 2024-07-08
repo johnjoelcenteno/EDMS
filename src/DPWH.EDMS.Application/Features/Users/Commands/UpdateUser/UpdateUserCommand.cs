@@ -23,6 +23,7 @@ public record UpdateUserCommand : IRequest<UpdateUserResult>
     public string? RegionalOfficeProvince { get; set; }
     public string? DistrictEngineeringOffice { get; set; }
     public string? DesignationTitle { get; set; }
+    public string? Office { get; set; }
 }
 
 internal sealed class UpdateUserHandler : IRequestHandler<UpdateUserCommand, UpdateUserResult>
@@ -63,7 +64,8 @@ internal sealed class UpdateUserHandler : IRequestHandler<UpdateUserCommand, Upd
             command.RegionalOfficeRegion,
             command.RegionalOfficeProvince,
             command.DistrictEngineeringOffice,
-            command.DesignationTitle);
+            command.DesignationTitle,
+            command.Office);
 
         user.Update(
             userBasicInfo,
