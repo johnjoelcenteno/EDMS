@@ -21,4 +21,7 @@ public class ConfigModel
     [Display(Name = "Value*:")]
     [Required(ErrorMessage = "You must specify Value.")]
     public string Value { get; set; }
+    public string Id { get; set; }
+    public string Section { get; set; }
+    public string Office { get; set; }
 }

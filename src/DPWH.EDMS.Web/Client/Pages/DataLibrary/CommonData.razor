@@ -92,7 +92,7 @@
 </div>
 
 <div class="modal">
-    <TelerikDialog @ref="dialogReference" @bind-Visible="@IsOpen" Title="@($"{getOpenbtn} Config")">
+    <TelerikDialog @ref="dialogReference" @bind-Visible="@IsOpen" Title="@($"{getOpenbtn} Config")" Width="50%">
         <DialogContent>
             <TelerikForm Model="@NewConfig" @ref="FormRef">
                 <FormValidation>
@@ -107,6 +107,30 @@
                                     <TelerikTextBox Size="@ThemeConstants.Button.Size.Large" Id="Value" @bind-Value="@NewConfig.Value" PlaceHolder="Value"></TelerikTextBox>
                                     <TelerikValidationMessage For="@(() => NewConfig.Value)" />
                                 </div>
+                                @if (DataType == "EmployeeRecords")
+                                {
+                                    <div class="col-md-12">
+                                    <label class="mb-2" for="Section">Section*</label>
+                                    <TelerikDropDownList Data="@SectionList"
+                                                         @bind-Value="NewConfig.Section"
+                                                         ValueField="string"
+                                                         TextField="string"
+                                                         DefaultText="Select" 
+                                                         OnChange="SectionDropdownErrorChecker" />
+                                    <label class="@(IsSectionEmpty ? "errorMessage" : "hide")">Please specify the Section</label>
+                                </div>
+                                <div class="col-md-12">
+                                    <label class="mb-2" for="Name">Office*</label>
+                                    <TelerikDropDownList Data="@OfficeList"
+                                                         @bind-Value="NewConfig.Office"
+                                                         ValueField="string"
+                                                         TextField="string"
+                                                         DefaultText="Select" 
+                                                         OnChange="OfficeDropdownErrorChecker" />
+                                    <label class="@(IsOfficeEmpty ? "errorMessage" : "hide")">Please specify the Office</label>
+                                </div>
+                                }
+                                
                                 <div class="col-md-12">
                                 </div>
                             </div>
@@ -141,3 +165,14 @@
         <TelerikButton ThemeColor="@(ThemeConstants.Button.ThemeColor.Primary)" OnClick="@(() => OnDeleteItem(ItemId))">Yes</TelerikButton>
     </DialogButtons>
 </TelerikDialog>
+
+<style>
+    .hide {
+        display: none;
+    }
+
+    .errorMessage {
+        font-size: 12px;
+        color: #dc3545;
+    }
+</style>
