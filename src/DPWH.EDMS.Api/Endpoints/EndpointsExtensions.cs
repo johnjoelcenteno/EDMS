@@ -20,7 +20,7 @@ public static class EndpointsExtensions
         {
                 // new endpoints
                 app.MapRecordRequestsEndpoints();
-                app.MapEmployeeRequestEndpointExtensions();
+                // app.MapEmployeeRequestEndpointExtensions();
                 app.MapRecordTypeExtensions();
                 app.MapSignatoryEndpointExtensions();
 
