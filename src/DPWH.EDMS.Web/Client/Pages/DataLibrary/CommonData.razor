@@ -105,34 +105,31 @@
                                 <div class="col-md-12">
                                     <label class="mb-2" for="Name">Value*</label>
                                     <TelerikTextBox Size="@ThemeConstants.Button.Size.Large" Id="Value" @bind-Value="@NewConfig.Value" PlaceHolder="Value"></TelerikTextBox>
-                                    <TelerikValidationMessage For="@(() => NewConfig.Value)" />
+                                    <ValidationMessage Class="text-danger" For="@(() => NewConfig.Value)" />
                                 </div>
                                 @if (DataType == "EmployeeRecords")
                                 {
                                     <div class="col-md-12">
-                                    <label class="mb-2" for="Section">Section*</label>
-                                    <TelerikDropDownList Data="@SectionList"
-                                                         @bind-Value="NewConfig.Section"
-                                                         ValueField="string"
-                                                         TextField="string"
-                                                         DefaultText="Select" 
-                                                         OnChange="SectionDropdownErrorChecker" />
-                                    <label class="@(IsSectionEmpty ? "errorMessage" : "hide")">Please specify the Section</label>
-                                </div>
-                                <div class="col-md-12">
-                                    <label class="mb-2" for="Name">Office*</label>
-                                    <TelerikDropDownList Data="@OfficeList"
-                                                         @bind-Value="NewConfig.Office"
-                                                         ValueField="string"
-                                                         TextField="string"
-                                                         DefaultText="Select" 
-                                                         OnChange="OfficeDropdownErrorChecker" />
-                                    <label class="@(IsOfficeEmpty ? "errorMessage" : "hide")">Please specify the Office</label>
-                                </div>
+                                        <label class="mb-2" for="Section">Section*</label>
+                                        <TelerikDropDownList Data="@SectionList"
+                                                             @bind-Value="NewConfig.Section"
+                                                             ValueField="string"
+                                                             TextField="string"
+                                                             DefaultText="Select"
+                                                             OnChange="SectionDropdownErrorChecker" />
+                                        <label class="@(IsSectionEmpty ? "text-danger" : "d-none")">Please specify the Section</label>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <label class="mb-2" for="Name">Office*</label>
+                                        <TelerikDropDownList Data="@OfficeList"
+                                                             @bind-Value="NewConfig.Office"
+                                                             ValueField="string"
+                                                             TextField="string"
+                                                             DefaultText="Select"
+                                                             OnChange="OfficeDropdownErrorChecker" />
+                                        <label class="@(IsOfficeEmpty ? "text-danger" : "d-none")">Please specify the Office</label>
+                                    </div>
                                 }
-                                
-                                <div class="col-md-12">
-                                </div>
                             </div>
                         </Template>
                     </FormItem>
@@ -167,12 +164,6 @@
 </TelerikDialog>
 
 <style>
-    .hide {
-        display: none;
-    }
 
-    .errorMessage {
-        font-size: 12px;
-        color: #dc3545;
-    }
+
 </style>

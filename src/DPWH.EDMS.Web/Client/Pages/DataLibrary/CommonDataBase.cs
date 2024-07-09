@@ -5,6 +5,7 @@ using DPWH.EDMS.Client.Shared.APIClient.Services.RecordTypes;
 using DPWH.EDMS.Client.Shared.APIClient.Services.RequestManagement;
 using DPWH.EDMS.Client.Shared.Models;
 using DPWH.EDMS.Components.Components.ReusableGrid;
+using DPWH.EDMS.Web.Client.Pages.DataLibrary.Common.Enum;
 using DPWH.EDMS.Web.Client.Shared.Services.ExceptionHandler;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
@@ -69,29 +70,29 @@ public class CommonDataBase : GridBase<DataManagementModel>
         {
             case "personal-records":
                 UriName = "Personal Records";
-                DataType = "PersonalRecords";
+                DataType = DataLibraryEnum.PersonalRecords.ToString();
                 break;
 
             case "valid-ids":
                 UriName = "Valid IDs";
-                DataType = "ValidIDs";
+                DataType = DataLibraryEnum.ValidIDs.ToString();
                 break;
 
             case "authorization-documents":
                 UriName = "Authorization Documents";
-                DataType = "AuthorizationDocuments";
+                DataType = DataLibraryEnum.AuthorizationDocuments.ToString();
                 break;
             case "purposes":
                 UriName = "Purposes";
-                DataType = "Purposes";
+                DataType = DataLibraryEnum.Purposes.ToString();
                 break;
             case "issuances":
                 UriName = "DPWH Issuances";
-                DataType = "Issuances";
+                DataType = DataLibraryEnum.Issuances.ToString();
                 break;
             case "employee-records":
                 UriName = "Employee Records";
-                DataType = "EmployeeRecords";
+                DataType = DataLibraryEnum.EmployeeRecords.ToString();
                 break;
             default:
                 break;
@@ -102,9 +103,10 @@ public class CommonDataBase : GridBase<DataManagementModel>
     {
         IsLoading = true;
         FindDataLibraries(Id);
-        try
+
+        await ExceptionHandlerService.HandleApiException(async () =>
         {
-            if (DataType == "EmployeeRecords")
+            if (DataType == DataLibraryEnum.EmployeeRecords.ToString())
             {
                 var dataLibraryResults = await RecordTypesService.QueryByCategoryRecordTypesAsync(UriName);
                 if (dataLibraryResults.Success)
@@ -129,12 +131,12 @@ public class CommonDataBase : GridBase<DataManagementModel>
                         "Employee Welfare and Benefits Section",
                         "Current Section",
                         "Non-Current Section"
-                    };
+                };
                     OfficeList = new List<string>
-                    {
+                {
                         "HRMD",
                         "RMD"
-                    };
+                };
                 }
             }
             else
@@ -162,14 +164,10 @@ public class CommonDataBase : GridBase<DataManagementModel>
                     };
                 }
             }
+        });
 
-        }
-        catch (Exception ex) when (ex is ApiException<ProblemDetails> apiExtension)
-        {
-            var problemDetails = apiExtension.Result;
-            var error = problemDetails.AdditionalProperties.ContainsKey("error") ? problemDetails.AdditionalProperties["error"].ToString() : problemDetails.AdditionalProperties["errors"].ToString();
-            ToastService.ShowError(error);
-        }
+
+
 
         IsLoading = false;
     }
@@ -206,16 +204,16 @@ public class CommonDataBase : GridBase<DataManagementModel>
                 case "Edit":
                     getOpenbtn = "Edit";
                     NewConfig.Value = SelectedItem.Value;
-                    if (DataType == "EmployeeRecords" && QueryRecordTypesModels.Count >0)
+                    if (DataType == DataLibraryEnum.EmployeeRecords.ToString() && QueryRecordTypesModels.Count > 0)
                     {
                         var checkItem = QueryRecordTypesModels.FirstOrDefault(dt => dt.Name == SelectedItem.Value);
-                        if(checkItem != null)
+                        if (checkItem != null)
                         {
                             NewConfig.Section = checkItem.Section;
                             NewConfig.Office = checkItem.Office;
                         }
                     }
-                        
+
 
                     IsOpen = true;
                     dialogReference.Refresh();
@@ -228,7 +226,7 @@ public class CommonDataBase : GridBase<DataManagementModel>
 
                 case "Delete":
                     NewConfig.Value = SelectedItem.Value;
-                    if (DataType == "EmployeeRecords" && QueryRecordTypesModels.Count > 0)
+                    if (DataType == DataLibraryEnum.EmployeeRecords.ToString() && QueryRecordTypesModels.Count > 0)
                     {
                         var checkItem = QueryRecordTypesModels.FirstOrDefault(dt => dt.Name == SelectedItem.Value);
                         if (checkItem != null)
@@ -263,11 +261,12 @@ public class CommonDataBase : GridBase<DataManagementModel>
     {
         IsConfirm = false;
         IsLoading = true;
-        if (DataType == "EmployeeRecords"){
+        if (DataType == DataLibraryEnum.EmployeeRecords.ToString())
+        {
             await ExceptionHandlerService.HandleApiException(async () =>
             {
                 var res = await RecordTypesService.DeleteRecordTypesAsync(Guid.Parse(id));
-            },null, $"{NewConfig.Value} Successfully Deleted!");
+            }, null, $"{NewConfig.Value} Successfully Deleted!");
         }
         else
         {
@@ -275,7 +274,7 @@ public class CommonDataBase : GridBase<DataManagementModel>
             {
                 var res = await DataLibraryService.DeleteDataLibraries(Guid.Parse(id));
             }, null, $"{NewConfig.Value} Successfully Deleted!");
-            
+
             //try
             //{
             //    var res = await DataLibraryService.DeleteDataLibraries(Guid.Parse(id));
@@ -293,7 +292,7 @@ public class CommonDataBase : GridBase<DataManagementModel>
             //}
         }
 
-        
+
 
         await LoadLibraryData();
         IsLoading = false;
@@ -314,7 +313,7 @@ public class CommonDataBase : GridBase<DataManagementModel>
         }
         if (valid)
         {
-            if (DataType == "EmployeeRecords")
+            if (DataType == DataLibraryEnum.EmployeeRecords.ToString())
             {
                 if (string.IsNullOrEmpty(item.Section) || string.IsNullOrEmpty(item.Office))
                 {
@@ -339,7 +338,7 @@ public class CommonDataBase : GridBase<DataManagementModel>
                         {
                             IsOpen = false;
                         }
-                        
+
                     }, null, $"{data.Name} Successfully Updated!");
                 }
             }
@@ -354,14 +353,14 @@ public class CommonDataBase : GridBase<DataManagementModel>
                 if (id != null)
                 {
 
-                        await ExceptionHandlerService.HandleApiException(async () =>
+                    await ExceptionHandlerService.HandleApiException(async () =>
+                    {
+                        var res = await DataLibraryService.UpdateDataLibraries(newitem);
+                        if (res.Success)
                         {
-                            var res = await DataLibraryService.UpdateDataLibraries(newitem);
-                            if (res.Success)
-                            {
-                                IsOpen = false;
-                            }
-                        }, null, $"{newitem.Value} Successfully Updated!");
+                            IsOpen = false;
+                        }
+                    }, null, $"{newitem.Value} Successfully Updated!");
                     //try
                     //{
                     //    var res = await DataLibraryService.UpdateDataLibraries(newitem);
@@ -404,7 +403,7 @@ public class CommonDataBase : GridBase<DataManagementModel>
         {
             if (valid)
             {
-                
+
                 if (Enum.TryParse<DataLibraryTypes>(DataType, out DataLibraryTypes dataTypeEnum))
                 {
                     var data = new AddDataLibraryCommand
@@ -439,7 +438,7 @@ public class CommonDataBase : GridBase<DataManagementModel>
                     //}
 
                 }
-                else if (DataType == "EmployeeRecords")
+                else if (DataType == DataLibraryEnum.EmployeeRecords.ToString())
                 {
                     if (string.IsNullOrEmpty(model.Section) || string.IsNullOrEmpty(model.Office))
                     {
@@ -465,7 +464,7 @@ public class CommonDataBase : GridBase<DataManagementModel>
                     }
                 }
             }
-            
+
         }
         dialogReference.Refresh();
         IsLoading = false;
@@ -474,7 +473,7 @@ public class CommonDataBase : GridBase<DataManagementModel>
 
     protected async Task SectionDropdownErrorChecker()
     {
-            IsSectionEmpty = string.IsNullOrEmpty(NewConfig.Section);
+        IsSectionEmpty = string.IsNullOrEmpty(NewConfig.Section);
 
         dialogReference.Refresh();
     }
