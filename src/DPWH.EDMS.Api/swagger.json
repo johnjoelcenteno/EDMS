@@ -2597,6 +2597,46 @@
         }
       }
     },
+    "/api/recordrequests/monthlyrequests": {
+      "post": {
+        "tags": [
+          "Requests Management"
+        ],
+        "operationId": "GetMonthlyRequestsTotalCount",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetMonthlyRequestModel"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/recordrequests/query/status/{status}": {
       "post": {
         "tags": [
@@ -5102,6 +5142,20 @@
               "$ref": "#/components/schemas/GetLookupResult"
             },
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetMonthlyRequestModel": {
+        "type": "object",
+        "properties": {
+          "month": {
+            "type": "string",
+            "nullable": true
+          },
+          "count": {
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false
