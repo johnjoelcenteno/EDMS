@@ -3,6 +3,7 @@
 @attribute [Authorize(Policy = "RequireActiveRoles")]
 @using DPWH.EDMS.Api.Contracts
 @using DPWH.EDMS.Client.Shared.Models
+@using DPWH.EDMS.Web.Client.Pages.DataLibrary.DataLibraryRequestForm
 
 <TelerikMediaQuery Media="(max-width: 480px)" OnChange="((changed) => XSmall = changed)"></TelerikMediaQuery>
 
@@ -11,7 +12,7 @@
 <EdmsLoader Visible="@IsLoading" />
 
 <h3>@UriName</h3>
-<hr />
+<CardSeparator Class="mb-3" />
 
 <div class="container-fluid">
     <div class="d-flex flex-row">
@@ -92,9 +93,21 @@
 </div>
 
 <div class="modal">
-    <TelerikDialog @ref="dialogReference" @bind-Visible="@IsOpen" Title="@($"{getOpenbtn} Config")">
+    <TelerikDialog @ref="dialogReference" @bind-Visible="@IsOpen" Title="@($"{getOpenbtn} Config")" Width="50%"  >
         <DialogContent>
-            <TelerikForm Model="@NewConfig" @ref="FormRef">
+            @switch (getOpenbtn)
+            {
+                case "Add":
+                    <DataLibraryRequestForm HandleOnCancel="OnCancel" HandleCreateOnSubmit="OnSave" DataType="@DataType" Type="Add" EditItem="@NewConfig" />
+                    break;
+                case "Edit":
+                    <DataLibraryRequestForm HandleOnCancel="OnCancel" HandleCreateOnSubmit="OnUpdateItem" DataType="@DataType" Type="Edit" EditItem="@NewConfig" />
+                    break;
+                default:
+                    break;
+            }
+            
+            @* <TelerikForm Model="@NewConfig" @ref="FormRef">
                 <FormValidation>
                     <DataAnnotationsValidator></DataAnnotationsValidator>
                 </FormValidation>
@@ -105,30 +118,39 @@
                                 <div class="col-md-12">
                                     <label class="mb-2" for="Name">Value*</label>
                                     <TelerikTextBox Size="@ThemeConstants.Button.Size.Large" Id="Value" @bind-Value="@NewConfig.Value" PlaceHolder="Value"></TelerikTextBox>
-                                    <TelerikValidationMessage For="@(() => NewConfig.Value)" />
+                                    <ValidationMessage Class="text-danger" For="@(() => NewConfig.Value)" />
                                 </div>
-                                <div class="col-md-12">
-                                </div>
+                                @if (DataType == "EmployeeRecords")
+                                {
+                                    <div class="col-md-12">
+                                        <label class="mb-2" for="Section">Section*</label>
+                                        <TelerikDropDownList Data="@SectionList"
+                                                             @bind-Value="NewConfig.Section"
+                                                             ValueField="string"
+                                                             TextField="string"
+                                                             DefaultText="Select"
+                                                             OnChange="SectionDropdownErrorChecker" />
+                                        <label class="@(IsSectionEmpty ? "text-danger" : "d-none")">Please specify the Section</label>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <label class="mb-2" for="Name">Office*</label>
+                                        <TelerikDropDownList Data="@OfficeList"
+                                                             @bind-Value="NewConfig.Office"
+                                                             ValueField="string"
+                                                             TextField="string"
+                                                             DefaultText="Select"
+                                                             OnChange="OfficeDropdownErrorChecker" />
+                                        <label class="@(IsOfficeEmpty ? "text-danger" : "d-none")">Please specify the Office</label>
+                                    </div>
+                                }
                             </div>
                         </Template>
                     </FormItem>
                 </FormItems>
                 <FormButtons></FormButtons>
-            </TelerikForm>
+            </TelerikForm> *@
         </DialogContent>
-        <DialogButtons>
-            @if (getOpenbtn == "Edit")
-            {
-                <TelerikButton OnClick="@(() => { IsOpen = false;})">Cancel</TelerikButton>
-                <TelerikButton ThemeColor="@(ThemeConstants.Button.ThemeColor.Primary)" OnClick="@(() => OnUpdateItem(ItemId, NewConfig))">Update</TelerikButton>
-            }
-            else
-            {
-                <TelerikButton OnClick="@(() => { IsOpen = false;})">Cancel</TelerikButton>
-                <TelerikButton ThemeColor="@(ThemeConstants.Button.ThemeColor.Primary)" OnClick="@(() => OnSave(NewConfig))">Submit</TelerikButton>
-            }
 
-        </DialogButtons>
     </TelerikDialog>
 </div>
 
@@ -141,3 +163,9 @@
         <TelerikButton ThemeColor="@(ThemeConstants.Button.ThemeColor.Primary)" OnClick="@(() => OnDeleteItem(ItemId))">Yes</TelerikButton>
     </DialogButtons>
 </TelerikDialog>
+
+<style>
+    .datalibrary .k-dialog > .k-dialog-actions {
+        display: none;
+    }
+</style>

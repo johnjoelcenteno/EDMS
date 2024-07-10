@@ -25,6 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Pages\DataLibrary\Common\Models\" />
     <Folder Include="wwwroot\fonts\" />
   </ItemGroup>
 
