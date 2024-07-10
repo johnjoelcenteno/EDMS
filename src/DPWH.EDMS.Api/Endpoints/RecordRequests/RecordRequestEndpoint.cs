@@ -7,6 +7,7 @@ using DPWH.EDMS.Application.Features.RecordRequests.Queries.GetRecordRequestsByS
 using DPWH.EDMS.Application.Features.RecordRequests.Queries.GetRecordRequestsQuery;
 using DPWH.EDMS.Application.Models;
 using DPWH.EDMS.Application.Models.DpwhResponses;
+using DPWH.EDMS.Application.Models.RecordRequests;
 using KendoNET.DynamicLinq;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -49,17 +50,19 @@ public static class RecordRequestEndpoint
             .Produces<DataSourceResult>()
             .Produces<ProblemDetails>(StatusCodes.Status400BadRequest)
             .Produces<ProblemDetails>(StatusCodes.Status500InternalServerError);
-        app.MapGet(ApiEndpoints.RecordRequest.Count, async (string status, IMediator mediator) =>
+        app.MapGet(ApiEndpoints.RecordRequest.Count, async (string status,IMediator mediator) =>
         {
             var result = await mediator.Send(new GetCountRecordsByStatusQuery(status));
-            return result;
+            var data = new BaseApiResponse<RecordRequestStatusCountModel>(result);
+
+            return Results.Ok(data);
         })
             .WithName("CountRecordRequestsByStatus")
             .WithTags(TagName)
             .WithDescription("Count the Record Request base on Status")
             .WithApiVersionSet(ApiVersioning.VersionSet)
             .HasApiVersion(1.0)
-            .Produces<BaseApiResponse<int>>()
+            .Produces<BaseApiResponse<RecordRequestStatusCountModel>>()
             .Produces<ProblemDetails>(StatusCodes.Status400BadRequest)
             .Produces<ProblemDetails>(StatusCodes.Status500InternalServerError);
 
