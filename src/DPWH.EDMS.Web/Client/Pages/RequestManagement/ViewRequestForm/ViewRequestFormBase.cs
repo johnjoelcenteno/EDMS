@@ -2,6 +2,7 @@
 using DPWH.EDMS.Shared.Enums;
 using DPWH.EDMS.Web.Client.Shared.RecordRequest.View.RequestDetailsOverview;
 using Microsoft.AspNetCore.Components;
+using Telerik.Blazor.Components;
 
 namespace DPWH.EDMS.Web.Client.Pages.RequestManagement.ViewRequestForm;
 
@@ -14,6 +15,10 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
     protected DateTime? DateReceived { get; set; } = DateTime.Now;
     protected DateTime? TimeReceived { get; set; } = DateTime.Now;
     protected bool IsModalVisible { get; set; }
+    public int MinFileSize { get; set; } = 1024;
+    public int MaxFileSize { get; set; } = 4 * 1024 * 1024;
+    public List<string> AllowedExtensions { get; set; } = new List<string>() { ".docx", ".pdf" };
+
     protected async override Task OnInitializedAsync()
     {
 
@@ -81,5 +86,25 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
         Status = RecordRequestStates.Claimed.ToString();
         NavigationManager.NavigateTo("/request-management");
         IsLoading = false;
+    }
+
+    protected async void OnSelectDocument(FileSelectEventArgs args)
+    {
+
+    }
+
+    protected async void OnRemoveDocument(FileSelectEventArgs args)
+    {
+
+    }
+
+    protected async void OnSelectTransmittal(FileSelectEventArgs args)
+    {
+
+    }
+
+    protected async void OnRemoveTransmittal(FileSelectEventArgs args)
+    {
+
     }
 }

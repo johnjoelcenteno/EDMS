@@ -3,6 +3,7 @@
 @using DPWH.EDMS.Components.Helpers
 @using DPWH.EDMS.Shared.Enums
 
+<TelerikMediaQuery Media="(max-width: 480px)" OnChange="((changed) => XSmall = changed)"></TelerikMediaQuery>
 <EdmsBreadcrumbs Data="@BreadcrumbItems" />
 <EdmsLoader Visible="IsLoading" />
 
@@ -16,10 +17,20 @@
 <TelerikTabStrip @bind-ActiveTabIndex="@ActiveTabIndex">
     <TabStripTab Title="Overview">
         <div class="row">
-            <div class="col-5 vl-right">
-                @StepperFragment
-            </div>
-            <div class="col-7">
+            @if (!XSmall)
+            {
+                <div class="col-5 vl-right">
+                    @StepperFragment
+                </div>
+            }
+            <div class="col">
+                @if (XSmall)
+                {
+                    <div class="row mb-3">
+                        @StepperFragment
+                    </div>
+                    <hr />
+                }
                 <div class="row my-2">
                     <h5>Request Details</h5>
                 </div>
@@ -56,19 +67,6 @@
                 <div class="row mb-3">
                     <div class="col">
                         <p><b>Record(s) Requested</b></p>
-                        @* <p><b>RMD</b></p>
-                        <ul>
-                        <li>DOCUMENT 1</li>
-                        <li>DOCUMENT 2</li>
-                        <li>DOCUMENT 3</li>
-                        </ul>
-                        <p><b>HRMD</b></p>
-                        <ul>
-                        <li>DOCUMENT 4</li>
-                        <li>DOCUMENT 5</li>
-                        <li>DOCUMENT 6</li>
-                        </ul> *@
-
                         @if (SelectedRecordRequest.RequestedRecords != null && SelectedRecordRequest.RequestedRecords.Count > 0)
                         {
                             <ul>
@@ -91,14 +89,24 @@
     </TabStripTab>
     <TabStripTab Title="Review and Evaluate">
         <div class="row">
-            <div class="col-5 vl-right">
-                @StepperFragment
-                <div class="d-flex gap-3 justify-content-center">
-                    <TelerikButton OnClick="OnCancel" FillMode="@ThemeConstants.Button.FillMode.Outline">Cancel</TelerikButton>
-                    <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(Status == "Submitted")">Submit</TelerikButton>
+            @if (!XSmall)
+            {
+                <div class="col-5 vl-right">
+                    @StepperFragment
+                    <div class="d-flex gap-3 justify-content-center">
+                        <TelerikButton OnClick="OnCancel" FillMode="@ThemeConstants.Button.FillMode.Outline">Cancel</TelerikButton>
+                        <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(Status == "Submitted")">Submit</TelerikButton>
+                    </div>
                 </div>
-            </div>
-            <div class="col-7">
+            }
+            <div class="col">
+                @if (XSmall)
+                {
+                    <div class="row mb-3">
+                        @StepperFragment
+                    </div>
+                    <hr />
+                }
                 <div class="row my-2">
                     <h5>Record(s) Requested</h5>
                 </div>
@@ -117,18 +125,37 @@
                     </div>
                 </div>
             </div>
+            @if (XSmall)
+            {
+                <div class="row mt-3">
+                    <div class="d-flex gap-3 justify-content-center">
+                        <TelerikButton OnClick="OnCancel" FillMode="@ThemeConstants.Button.FillMode.Outline">Cancel</TelerikButton>
+                        <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(Status == "Submitted")">Submit</TelerikButton>
+                    </div>
+                </div>
+            }
         </div>
     </TabStripTab>
     <TabStripTab Title="Release">
         <div class="row">
-            <div class="col-5 vl-right">
-                @StepperFragment
-                <div class="d-flex gap-3 justify-content-center">
-                    <TelerikButton OnClick="OnCancel" FillMode="@ThemeConstants.Button.FillMode.Outline">Cancel</TelerikButton>
-                    <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(Status == RecordRequestStates.Review.ToString())">Submit</TelerikButton>
+            @if (!XSmall)
+            {
+                <div class="col-5 vl-right">
+                    @StepperFragment
+                    <div class="d-flex gap-3 justify-content-center">
+                        <TelerikButton OnClick="OnCancel" FillMode="@ThemeConstants.Button.FillMode.Outline">Cancel</TelerikButton>
+                        <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(Status == RecordRequestStates.Review.ToString())">Submit</TelerikButton>
+                    </div>
                 </div>
-            </div>
-            <div class="col-7">
+            }
+            <div class="col">
+                @if (XSmall)
+                {
+                    <div class="row mb-3">
+                        @StepperFragment
+                    </div>
+                    <hr />
+                }
                 <div class="row my-2">
                     <h5>Record(s) for Release</h5>
                 </div>
@@ -142,31 +169,58 @@
                 @foreach (var record in SelectedRecordRequest.RequestedRecords)
                 {
                     <div class="row mb-1">
-                    <div class="col">
-                        <div>
-                            <input class="align-middle" type="checkbox" />
-                            <label class="align-middle">@record.RecordType</label>
+                        <div class="d-flex col">
+                            <input type="checkbox" />
+                            <label class="align-content-center ms-2">@record.RecordType</label>
+                        </div>
+                        <div class="col">
+                            <TelerikFileSelect Class="@(XSmall ? "mb-3" : "")"
+                                               AllowedExtensions="@AllowedExtensions"
+                                               OnSelect="@OnSelectDocument"
+                                               OnRemove="@OnRemoveDocument"
+                                               MaxFileSize="@MaxFileSize"
+                                               MinFileSize="@MinFileSize"
+                                               Multiple="false">
+                                <SelectFilesButtonTemplate>
+                                    <TelerikSvgIcon Icon="@SvgIcon.Upload" />
+                                    Click to Upload
+                                </SelectFilesButtonTemplate>
+                            </TelerikFileSelect>
                         </div>
                     </div>
-                    <div class="col text-end">
-                        <label for="document" class="btn upload-btn">Click to Upload</label>
-                            <input id="document" style="display: none;" type="file">
+                }
+                @if (XSmall)
+                {
+                    <div class="row mt-3">
+                        <div class="d-flex gap-3 justify-content-center">
+                            <TelerikButton OnClick="OnCancel" FillMode="@ThemeConstants.Button.FillMode.Outline">Cancel</TelerikButton>
+                            <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(Status == RecordRequestStates.Review.ToString())">Submit</TelerikButton>
+                        </div>
                     </div>
-                </div>                    
                 }
             </div>
         </div>
     </TabStripTab>
     <TabStripTab Title="Claim">
         <div class="row">
-            <div class="col-5 vl-right">
-                @StepperFragment
-                <div class="d-flex gap-3 justify-content-center">
-                    <TelerikButton OnClick="OnCancel" FillMode="@ThemeConstants.Button.FillMode.Outline">Cancel</TelerikButton>
-                    <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(Status == RecordRequestStates.Release.ToString())">Submit</TelerikButton>
+            @if (!XSmall)
+            {
+                <div class="col-5 vl-right">
+                    @StepperFragment
+                    <div class="d-flex gap-3 justify-content-center">
+                        <TelerikButton OnClick="OnCancel" FillMode="@ThemeConstants.Button.FillMode.Outline">Cancel</TelerikButton>
+                        <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(Status == RecordRequestStates.Release.ToString())">Submit</TelerikButton>
+                    </div>
                 </div>
-            </div>
-            <div class="col-7">
+            }
+            <div class="col">
+                @if (XSmall)
+                {
+                    <div class="row mb-3">
+                        @StepperFragment
+                    </div>
+                    <hr />
+                }
                 <div class="row my-2">
                     <h5>Receiving Details</h5>
                 </div>
@@ -217,15 +271,33 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col">
+                        <div class="col align-content-center">
                             <p><b>UPLOAD RECEIVED TRANSMITTAL RECEIPT</b></p>
                         </div>
-                        <div class="d-flex col justify-content-end">
-                            <label for="files" class="btn upload-btn">Click to Upload</label>
-                            <input id="files" style="display: none;" type="file">
+                        <div class="col">
+                            <TelerikFileSelect AllowedExtensions="@AllowedExtensions"
+                                               OnSelect="@OnSelectTransmittal"
+                                               OnRemove="@OnRemoveTransmittal"
+                                               MaxFileSize="@MaxFileSize"
+                                               MinFileSize="@MinFileSize"
+                                               Multiple="false">
+                                <SelectFilesButtonTemplate>
+                                    <TelerikSvgIcon Icon="@SvgIcon.Upload" />
+                                    Click to Upload
+                                </SelectFilesButtonTemplate>
+                            </TelerikFileSelect>
                         </div>
                     </div>
                 </div>
+                @if (XSmall)
+                {
+                    <div class="row mt-3">
+                        <div class="d-flex gap-3 justify-content-center">
+                            <TelerikButton OnClick="OnCancel" FillMode="@ThemeConstants.Button.FillMode.Outline">Cancel</TelerikButton>
+                            <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(Status == RecordRequestStates.Release.ToString())">Submit</TelerikButton>
+                        </div>
+                    </div>
+                }
             </div>
         </div>
     </TabStripTab>
@@ -283,42 +355,14 @@
         <div class="row my-2">
             <h5>Processing Status</h5>
         </div>
-        <TelerikStepper Value="@CurrentStepIndex" ValueChanged="@ValueChangeHandler" Linear="true" Orientation="StepperOrientation.Vertical">
+        <TelerikStepper Value="@CurrentStepIndex" ValueChanged="@ValueChangeHandler" Linear="true" Orientation="@(!XSmall ? StepperOrientation.Vertical: StepperOrientation.Horizontal)">
             <StepperSteps>
                 <StepperStep Label="Submit"></StepperStep>
-                <StepperStep Label="Review & Evaluate"></StepperStep>
+                <StepperStep Label=@(XSmall ? "Review" : "Review & Evaluate")></StepperStep>
                 <StepperStep Label="Release"></StepperStep>
                 <StepperStep Label="Claim"></StepperStep>
             </StepperSteps>
         </TelerikStepper>
-    </div>;
-
-    private RenderFragment RequestDetailsFragment => @<div>
-        <div class="row my-2">
-            <h5>Request Details</h5>
-        </div>
-        <div class="row">
-            <div class="mb-3">
-                <p><b>Control Number</b></p>
-                <p>@SelectedRecordRequest.ControlNumber</p>
-            </div>
-            <div class="mb-3">
-                <p><b>Date Requested</b></p>
-                <p>@GenericHelper.GetDateDisplay(@SelectedRecordRequest.DateRequested)</p>
-            </div>
-            <div class="mb-3">
-                <p><b>Last Name, First Name M.I.</b></p>
-                <p>@SelectedRecordRequest.FullName</p>
-            </div>
-            <div class="mb-3">
-                <p><b>Office</b></p>
-                <p>Human Resource and Administrative Office</p>
-            </div>
-            <div class="mb-3">
-                <p><b>Purpose</b></p>
-                <p>@SelectedRecordRequest.Purpose</p>
-            </div>
-        </div>
     </div>;
 }
 
