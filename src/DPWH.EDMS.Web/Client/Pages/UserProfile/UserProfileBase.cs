@@ -29,7 +29,9 @@ public class UserProfileBase : RxBaseComponent
 
     protected async override Task OnInitializedAsync()
     {
+        IsLoading = true;
         await GetUser();
+        IsLoading = false;
     }
     private async Task GetUser()
     {
