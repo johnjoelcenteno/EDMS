@@ -34,37 +34,37 @@
                 <div class="row my-2">
                     <h5>Request Details</h5>
                 </div>
-                <div class="row mb-3">
-                    <div class="col">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
                         <p><b>Status</b></p>
                         <p>@SelectedRecordRequest.Status</p>
                     </div>
-                    <div class="col">
+                    <div class="col-md-6 mb-3">
                         <p><b>Control Number</b></p>
                         <p>@SelectedRecordRequest.ControlNumber</p>
                     </div>
                 </div>
-                <div class="row mb-3">
-                    <div class="col">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
                         <p><b>Employee Number</b></p>
                         <p>@SelectedRecordRequest.EmployeeNumber</p>
                     </div>
-                    <div class="col">
+                    <div class="col-md-6 mb-3">
                         <p><b>Employee Name</b></p>
                         <p>@SelectedRecordRequest.FullName</p>
                     </div>
                 </div>
-                <div class="row mb-3">
-                    <div class="col">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
                         <p><b>Office</b></p>
                         <p>Human Resource and Administrative Office</p>
                     </div>
-                    <div class="col">
+                    <div class="col-md-6 mb-3">
                         <p><b>Date Requested</b></p>
                         <p>@GenericHelper.GetDateDisplay(@SelectedRecordRequest.DateRequested)</p>
                     </div>
                 </div>
-                <div class="row mb-3">
+                <div class="row">
                     <div class="col">
                         <p><b>Record(s) Requested</b></p>
                         @if (SelectedRecordRequest.RequestedRecords != null && SelectedRecordRequest.RequestedRecords.Count > 0)
@@ -79,15 +79,15 @@
                             </ul>
                         }
                     </div>
-                    <div class="row">
-                        <p><b>Purpose</b></p>
-                        <p>@SelectedRecordRequest.Purpose</p>
-                    </div>
+                </div>
+                <div class="row">
+                    <p><b>Purpose</b></p>
+                    <p>@SelectedRecordRequest.Purpose</p>
                 </div>
             </div>
         </div>
     </TabStripTab>
-    <TabStripTab Title="Review and Evaluate">
+    <TabStripTab Title="@(!XSmall ? "Review and Evaluate" : "Review")">
         <div class="row">
             @if (!XSmall)
             {
@@ -125,15 +125,6 @@
                     </div>
                 </div>
             </div>
-            @if (XSmall)
-            {
-                <div class="row mt-3">
-                    <div class="d-flex gap-3 justify-content-center">
-                        <TelerikButton OnClick="OnCancel" FillMode="@ThemeConstants.Button.FillMode.Outline">Cancel</TelerikButton>
-                        <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(Status == "Submitted")">Submit</TelerikButton>
-                    </div>
-                </div>
-            }
         </div>
     </TabStripTab>
     <TabStripTab Title="Release">
@@ -186,15 +177,6 @@
                                     Click to Upload
                                 </SelectFilesButtonTemplate>
                             </TelerikFileSelect>
-                        </div>
-                    </div>
-                }
-                @if (XSmall)
-                {
-                    <div class="row mt-3">
-                        <div class="d-flex gap-3 justify-content-center">
-                            <TelerikButton OnClick="OnCancel" FillMode="@ThemeConstants.Button.FillMode.Outline">Cancel</TelerikButton>
-                            <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(Status == RecordRequestStates.Review.ToString())">Submit</TelerikButton>
                         </div>
                     </div>
                 }
@@ -289,19 +271,43 @@
                         </div>
                     </div>
                 </div>
-                @if (XSmall)
-                {
-                    <div class="row mt-3">
-                        <div class="d-flex gap-3 justify-content-center">
-                            <TelerikButton OnClick="OnCancel" FillMode="@ThemeConstants.Button.FillMode.Outline">Cancel</TelerikButton>
-                            <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(Status == RecordRequestStates.Release.ToString())">Submit</TelerikButton>
-                        </div>
-                    </div>
-                }
             </div>
         </div>
     </TabStripTab>
 </TelerikTabStrip>
+
+@if (XSmall)
+{
+    @switch (ActiveTabIndex)
+    {
+        case 1:
+            <div class="row my-3">
+                <div class="d-flex gap-3 justify-content-center">
+                    <TelerikButton OnClick="OnCancel" FillMode="@ThemeConstants.Button.FillMode.Outline">Cancel</TelerikButton>
+                    <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(Status == "Submitted")">Submit</TelerikButton>
+                </div>
+            </div>
+            break;
+        case 2:
+            <div class="row my-3">
+                <div class="d-flex gap-3 justify-content-center">
+                    <TelerikButton OnClick="OnCancel" FillMode="@ThemeConstants.Button.FillMode.Outline">Cancel</TelerikButton>
+                    <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(Status == RecordRequestStates.Review.ToString())">Submit</TelerikButton>
+                </div>
+            </div>
+            break;
+        case 3:
+            <div class="row my-3">
+                <div class="d-flex gap-3 justify-content-center">
+                    <TelerikButton OnClick="OnCancel" FillMode="@ThemeConstants.Button.FillMode.Outline">Cancel</TelerikButton>
+                    <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(Status == RecordRequestStates.Release.ToString())">Submit</TelerikButton>
+                </div>
+            </div>
+            break;
+        default:
+            break;
+    }
+}
 
 <TelerikWindow Modal="true"
                Width="400px"
@@ -351,7 +357,7 @@
 </TelerikWindow>
 
 @code {
-    private RenderFragment StepperFragment =>@<div>
+    private RenderFragment StepperFragment => @<div>
         <div class="row my-2">
             <h5>Processing Status</h5>
         </div>

@@ -10,7 +10,7 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
 {
     [Inject] public required NavigationManager NavigationManager { get; set; }
     protected int ActiveTabIndex { get; set; } = 0;
-    protected int CurrentStepIndex { get; set; }
+    protected int CurrentStepIndex { get; set; } = 1;
     protected string Status { get; set; } = "Submitted";
     protected DateTime? DateReceived { get; set; } = DateTime.Now;
     protected DateTime? TimeReceived { get; set; } = DateTime.Now;
@@ -62,7 +62,7 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
     {
         IsLoading = true;
         IsModalVisible = false;
-        CurrentStepIndex = 1;
+        CurrentStepIndex = 2;
         ActiveTabIndex = 2;
         Status = RecordRequestStates.Review.ToString();
         IsLoading = false;
@@ -72,7 +72,7 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
     {
         IsLoading = true;
         IsModalVisible = false;
-        CurrentStepIndex = 2;
+        CurrentStepIndex = 3;
         ActiveTabIndex = 3;
         Status = RecordRequestStates.Release.ToString();
         IsLoading = false;
@@ -82,7 +82,6 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
     {
         IsLoading = true;
         IsModalVisible = false;
-        CurrentStepIndex = 3;
         Status = RecordRequestStates.Claimed.ToString();
         NavigationManager.NavigateTo("/request-management");
         IsLoading = false;
