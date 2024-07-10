@@ -6,6 +6,8 @@
 
 @attribute [Authorize(Policy = "RequireActiveRoles")]
 
+<TelerikMediaQuery Media="(max-width: 480px)" OnChange="((changed) => XSmall = changed)"></TelerikMediaQuery>
+
 <EdmsBreadcrumbs Data="@BreadcrumbItems" />
 <EdmsLoader Visible="@IsLoading" />
 
@@ -42,51 +44,83 @@
     {
         return @<div>        
         @if (GridData != null && !XSmall)
-            {
-                <TelerikGrid TItem="RecordRequestModel"
-                             @bind-PageSize="@PageSize"
-                             Height="@GridHeight"
-                             FilterMode="GridFilterMode.None"
-                             Sortable=true
-                             Data="GridData"
-                             OnStateChanged="@OnStateChanged"
-                             @ref="GridRef"
-                             Context="item"
-                             OnRowClick="GoToSelectedItemOverview">
-                    <GridSettings>
-                        <GridPagerSettings PageSizes="@PageSizes">
-                        </GridPagerSettings>
-                    </GridSettings>
-                    <GridColumns>
-                        <GridColumn Field=@nameof(RecordRequestModel.ControlNumber) Title="Control No." Filterable="false" />
+        {
+            <TelerikGrid TItem="RecordRequestModel"
+                         @bind-PageSize="@PageSize"
+                         Height="@GridHeight"
+                         FilterMode="GridFilterMode.None"
+                         Sortable=true
+                         Data="GridData"
+                         OnStateChanged="@OnStateChanged"
+                         @ref="GridRef"
+                         Context="item"
+                         OnRowClick="GoToSelectedItemOverview">
+                <GridSettings>
+                    <GridPagerSettings PageSizes="@PageSizes">
+                    </GridPagerSettings>
+                </GridSettings>
+                <GridColumns>
+                    <GridColumn Field=@nameof(RecordRequestModel.ControlNumber) Title="Control No." Filterable="false" />
                 <GridColumn Field=@nameof(RecordRequestModel.FullName) Title="Fullname" Filterable="false" />
                 <GridColumn Field=@nameof(RecordRequestModel.DateRequested) Title="Date Requested">
-                            <Template>
-                                @{
-                            var req = context as RecordRequestModel;
-                            string dt = GenericHelper.GetDateTimeDisplay(req!.DateRequested);
-                                }
-                                <p class="mb-0">@dt</p>
-                            </Template>
-                        </GridColumn>
-                        <GridColumn Field=@nameof(RecordRequestModel.Purpose) Title="Purpose" />
-                        <GridColumn Field=@nameof(RecordRequestModel.Status) Title="Status" />
-                    </GridColumns>
-                </TelerikGrid>
-            }
-            else
-            {
-                <span>No Data to display.</span>
-            }
-                <TelerikPager PageChanged="@PageChangedHandler"
-                              Total="TotalItems"
-                              ButtonCount="6"
-                              PageSize="@PageSize"
-                              PageSizeChanged="@PageSizeChangedHandler"
-                              PageSizes="@(new List<int?> {5, 10, 20})"
-                              Page="@Page">
-                </TelerikPager>
-            </div>;
+                        <Template>
+                            @{
+                        var req = context as RecordRequestModel;
+                        string dt = GenericHelper.GetDateTimeDisplay(req!.DateRequested);
+                            }
+                            <p class="mb-0">@dt</p>
+                        </Template>
+                </GridColumn>
+                <GridColumn Field=@nameof(RecordRequestModel.Purpose) Title="Purpose" />
+                <GridColumn Field=@nameof(RecordRequestModel.Status) Title="Status" />
+                </GridColumns>
+            </TelerikGrid>
+        }
+        else if (GridData != null && XSmall)
+        {
+        <TelerikGrid TItem="RecordRequestModel"
+                     @bind-PageSize="@PageSize"
+                     Height="@GridHeight"
+                     FilterMode="GridFilterMode.None"
+                     Sortable=true
+                     Data="GridData"
+                     OnStateChanged="@OnStateChanged"
+                     @ref="GridRef"
+                     Context="item"
+                     OnRowClick="GoToSelectedItemOverview">
+            <GridSettings>
+                <GridPagerSettings PageSizes="@PageSizes">
+                </GridPagerSettings>
+            </GridSettings>
+            <DetailTemplate>
+                @{
+                    var prop = item as RecordRequestModel;
+                    <div class="d-flex flex-column">
+                        <p><b>Status: </b>@item.Status</p>
+                        <p><b>Control Number: </b>@item.ControlNumber</p>
+                        <p><b>Purpose: </b>@item.Purpose</p>
+                        <p><b>Date Requested: </b>@(GenericHelper.GetDateDisplay(item.DateRequested))</p>
+                    </div>
+                }
+            </DetailTemplate>
+            <GridColumns>
+                <GridColumn Field=@nameof(RecordRequestModel.FullName) Title="Full Name" />
+            </GridColumns>
+        </TelerikGrid>
+        }
+        else
+        {
+            <span>No Data to display.</span>
+        }
+        <TelerikPager PageChanged="@PageChangedHandler"
+                        Total="TotalItems"
+                        ButtonCount="6"
+                        PageSize="@PageSize"
+                        PageSizeChanged="@PageSizeChangedHandler"
+                        PageSizes="@(new List<int?> {5, 10, 20})"
+                        Page="@Page">
+        </TelerikPager>
+        </div>;
     }
 }
 
