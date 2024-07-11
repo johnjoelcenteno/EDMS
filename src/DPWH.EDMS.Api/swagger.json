@@ -997,318 +997,6 @@
         }
       }
     },
-    "/api/EmployeeRecords/Query": {
-      "post": {
-        "tags": [
-          "EmployeeRecords"
-        ],
-        "operationId": "Query employee request",
-        "requestBody": {
-          "content": {
-            "application/json; api-version=1.0": {
-              "schema": {
-                "$ref": "#/components/schemas/DataSourceRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json; api-version=1.0": {
-                "schema": {
-                  "$ref": "#/components/schemas/EmployeeBaseApiResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json; api-version=1.0": {
-                "schema": {
-                  "$ref": "#/components/schemas/DataSourceResult"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json; api-version=1.0": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Server Error",
-            "content": {
-              "application/json; api-version=1.0": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/EmployeeRecords/{id}": {
-      "get": {
-        "tags": [
-          "EmployeeRecords"
-        ],
-        "operationId": "Query employee request by id",
-        "parameters": [
-          {
-            "name": "employeeRecordId",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json; api-version=1.0": {
-                "schema": {
-                  "$ref": "#/components/schemas/EmployeeBaseApiResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "text/plain; api-version=1.0": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json; api-version=1.0": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Server Error",
-            "content": {
-              "application/json; api-version=1.0": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          }
-        }
-      },
-      "put": {
-        "tags": [
-          "EmployeeRecords"
-        ],
-        "operationId": "Update employee",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json; api-version=1.0": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateUpdateEmployeeModel"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json; api-version=1.0": {
-                "schema": {
-                  "$ref": "#/components/schemas/EmployeeBaseApiResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json; api-version=1.0": {
-                "schema": {
-                  "type": "string",
-                  "format": "uuid"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json; api-version=1.0": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Server Error",
-            "content": {
-              "application/json; api-version=1.0": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          }
-        }
-      },
-      "delete": {
-        "tags": [
-          "EmployeeRecords"
-        ],
-        "operationId": "Delete Employee",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json; api-version=1.0": {
-                "schema": {
-                  "$ref": "#/components/schemas/EmployeeBaseApiResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json; api-version=1.0": {
-                "schema": {
-                  "type": "string",
-                  "format": "uuid"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json; api-version=1.0": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Server Error",
-            "content": {
-              "application/json; api-version=1.0": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/EmployeeRecords": {
-      "post": {
-        "tags": [
-          "EmployeeRecords"
-        ],
-        "operationId": "Create Employee",
-        "requestBody": {
-          "content": {
-            "application/json; api-version=1.0": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateUpdateEmployeeModel"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json; api-version=1.0": {
-                "schema": {
-                  "$ref": "#/components/schemas/EmployeeBaseApiResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json; api-version=1.0": {
-                "schema": {
-                  "type": "string",
-                  "format": "uuid"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json; api-version=1.0": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Server Error",
-            "content": {
-              "application/json; api-version=1.0": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/api/licenses/status": {
       "get": {
         "tags": [
@@ -2598,7 +2286,7 @@
       }
     },
     "/api/recordrequests/monthlyrequests": {
-      "post": {
+      "get": {
         "tags": [
           "Requests Management"
         ],
@@ -2609,7 +2297,7 @@
             "content": {
               "application/json; api-version=1.0": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetMonthlyRequestModel"
+                  "$ref": "#/components/schemas/GetMonthlyRequestModelIEnumerableBaseApiResponse"
                 }
               }
             }
@@ -4091,88 +3779,6 @@
         },
         "additionalProperties": false
       },
-      "CreateUpdateEmployeeModel": {
-        "type": "object",
-        "properties": {
-          "firstName": {
-            "type": "string",
-            "nullable": true
-          },
-          "middleName": {
-            "type": "string",
-            "nullable": true
-          },
-          "lastName": {
-            "type": "string",
-            "nullable": true
-          },
-          "office": {
-            "type": "string",
-            "nullable": true
-          },
-          "email": {
-            "type": "string",
-            "nullable": true
-          },
-          "mobileNumber": {
-            "type": "string",
-            "nullable": true
-          },
-          "employeeNumber": {
-            "type": "string",
-            "nullable": true
-          },
-          "regionCentralOffice": {
-            "type": "string",
-            "nullable": true
-          },
-          "districtBureauService": {
-            "type": "string",
-            "nullable": true
-          },
-          "position": {
-            "type": "string",
-            "nullable": true
-          },
-          "designation": {
-            "type": "string",
-            "nullable": true
-          },
-          "employeeId": {
-            "type": "string",
-            "nullable": true
-          },
-          "role": {
-            "type": "string",
-            "nullable": true
-          },
-          "userAccess": {
-            "type": "string",
-            "nullable": true
-          },
-          "department": {
-            "type": "string",
-            "nullable": true
-          },
-          "regionalOfficeRegion": {
-            "type": "string",
-            "nullable": true
-          },
-          "regionalOfficeProvince": {
-            "type": "string",
-            "nullable": true
-          },
-          "districtEngineeringOffice": {
-            "type": "string",
-            "nullable": true
-          },
-          "designationTitle": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
       "CreateUserCommand": {
         "type": "object",
         "properties": {
@@ -5168,6 +4774,22 @@
           "count": {
             "type": "integer",
             "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetMonthlyRequestModelIEnumerableBaseApiResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GetMonthlyRequestModel"
+            },
+            "nullable": true
           }
         },
         "additionalProperties": false

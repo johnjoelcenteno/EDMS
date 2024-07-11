@@ -82,17 +82,20 @@ public static class RecordRequestEndpoint
             .Produces<ProblemDetails>(StatusCodes.Status400BadRequest)
             .Produces<ProblemDetails>(StatusCodes.Status500InternalServerError);
 
-        app.MapPost(ApiEndpoints.RecordRequest.GetMonthlyRequests, async (IMediator mediator) =>
+        app.MapGet(ApiEndpoints.RecordRequest.GetMonthlyRequests, async (IMediator mediator) =>
         {
             var result = await mediator.Send(new GetMonthlyRequestQuery());
-            return result;
+
+            var data = new BaseApiResponse<IEnumerable<GetMonthlyRequestModel>>(result);
+
+            return result is null ? Results.NotFound() : Results.Ok(data);
         })
             .WithName("GetMonthlyRequestsTotalCount")
             .WithTags(TagName)
             .WithDescription("Get monthly requests count")
             .WithApiVersionSet(ApiVersioning.VersionSet)
             .HasApiVersion(1.0)
-            .Produces<GetMonthlyRequestModel>()
+            .Produces<BaseApiResponse<IEnumerable<GetMonthlyRequestModel>>>()
             .Produces<ProblemDetails>(StatusCodes.Status400BadRequest)
             .Produces<ProblemDetails>(StatusCodes.Status500InternalServerError);
 
