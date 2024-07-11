@@ -11,7 +11,8 @@ public class EmployeeInfo
         string? regionalOfficeRegion,
         string? regionalOfficeProvince,
         string? districtEngineeringOffice,
-        string? designationTitle)
+        string? designationTitle,
+        string? office)
     {
         EmployeeId = employeeId;
         Department = department;
@@ -20,6 +21,7 @@ public class EmployeeInfo
         RegionalOfficeProvince = regionalOfficeProvince;
         DistrictEngineeringOffice = districtEngineeringOffice;
         DesignationTitle = designationTitle;
+        Office = office;
     }
 
     public static EmployeeInfo Create(
@@ -29,7 +31,8 @@ public class EmployeeInfo
         string? regionalOfficeRegion,
         string? regionalOfficeProvince,
         string? districtEngineeringOffice,
-        string? designationTitle)
+        string? designationTitle,
+        string? office)
     {
         return new EmployeeInfo(
             employeeId,
@@ -38,7 +41,7 @@ public class EmployeeInfo
             regionalOfficeRegion,
             regionalOfficeProvince,
             districtEngineeringOffice,
-            designationTitle);
+            designationTitle, office);
     }
 
     public string? Id { get; private set; }
@@ -68,4 +71,6 @@ public class EmployeeInfo
     public string? DesignationOfficeId { get; private set; }
     [StringLength(100)]
     public string? DesignationOffice { get; private set; }
+    [StringLength(100)]
+    public string? Office { get; private set; }
 }

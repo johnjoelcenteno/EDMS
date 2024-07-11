@@ -65,4 +65,5 @@ public class Employee
     public string? DesignationStartDate { get; set; }
     [XmlElement(ElementName = "designation_end_date")]
     public string? DesignationStartEnd { get; set; }
+    public string? Office { get; set; }
 }
