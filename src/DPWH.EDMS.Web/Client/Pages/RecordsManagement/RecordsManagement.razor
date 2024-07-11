@@ -19,49 +19,19 @@
             </div>
             <CardSeparator Class="my-2"></CardSeparator>
             <div class="mobile-property-grid">
-                @if (XSmall)
-                {
-                    <div class="col mx-2 my-3">
-                        <div class="row mb-2">
-                            <input class="form-control" @bind-value="TextSearchFirstName" @onchange="async() => await SearchFilter()" @bind-value:event="oninput" placeholder="Search First Name" />
-                        </div>
-                        <div class="row mb-2">
-                            <input class="form-control" @bind-value="TextSearcLastName" @onchange="async() => await SearchFilter()" @bind-value:event="oninput" placeholder="Search Last Name" />
-                        </div>
-                        <div class="row mb-2">
-                            <input class="form-control" @bind-value="TextSearchMiddlename" @onchange="async() => await SearchFilter()" @bind-value:event="oninput" placeholder="Search Middle Name" />
-                        </div>
-                        <div class="row mb-2">
-                            <input class="form-control" @bind-value="TextSearchRegionalOffice" @onchange="async() => await SearchFilter()" @bind-value:event="oninput" placeholder="Search Office" />
-                        </div>
-                        <div class="row mb-2">
-                            <input class="form-control" @bind-value="TextSearchDepartment" @onchange="async() => await SearchFilter()" @bind-value:event="oninput" placeholder="Search Department" />
-                        </div>
-                    </div>
-                }
-                else
-                {
-                    <div class="col-md-12 p-0 my-3">
-                        <div class="d-flex flex-row gap-3">
-                            <input class="form-control" @bind-value="TextSearchFirstName" @onchange="async() => await SearchFilter()" @bind-value:event="oninput" placeholder="Search First Name" />
-                            <input class="form-control" @bind-value="TextSearcLastName" @onchange="async() => await SearchFilter()" @bind-value:event="oninput" placeholder="Search Last Name" />
-                            <input class="form-control" @bind-value="TextSearchMiddlename" @onchange="async() => await SearchFilter()" @bind-value:event="oninput" placeholder="Search Middle Name" />
-                            <input class="form-control" @bind-value="TextSearchRegionalOffice" @onchange="async() => await SearchFilter()" @bind-value:event="oninput" placeholder="Search Office" />
-                            <input class="form-control" @bind-value="TextSearchDepartment" @onchange="async() => await SearchFilter()" @bind-value:event="oninput" placeholder="Search Department" />
-                        </div>
-                    </div>
-                }
-
+                
                 @if (GridData != null && !XSmall)
                 {
                     <TelerikGrid TItem="UserModel"
                                  @bind-PageSize="@PageSize"
                                  Height="@GridHeight"
                                  Sortable=true
-                                 Data="GridData"
+                                 Pageable=true
+                                 Data="UserRecords"
                                  OnStateChanged="@OnStateChanged"
                                  @ref="GridRef"
                                  Context="record"
+                                 FilterMode="@GridFilterMode.FilterRow"
                                  OnRowClick="GoToSelectedItemDocuments"
                                  Class="pointer-hover">
                         <GridSettings>
@@ -85,7 +55,9 @@
                                  @bind-PageSize="@PageSize"
                                  Height="@GridHeight"
                                  Sortable=true
-                                 Data="GridData"
+                                 Pageable=true
+                                 Data="UserRecords"
+                                 FilterMode="@GridFilterMode.FilterRow"
                                  OnStateChanged="@OnStateChanged"
                                  @ref="GridRef"
                                  Context="record"
@@ -119,14 +91,7 @@
                     <span>No data to display</span>
                 }
             </div>
-            <TelerikPager PageChanged="@PageChangedHandler"
-                          Total="TotalItems"
-                          ButtonCount="6"
-                          PageSize="@PageSize"
-                          PageSizeChanged="@PageSizeChangedHandler"
-                          PageSizes="@(new List<int?> {5, 10, 20})"
-                          Page="@Page">
-            </TelerikPager>
+          
         </CardBody>
     </TelerikCard>
 </div>

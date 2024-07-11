@@ -21,7 +21,7 @@
     <div class="row">
         <div class="col-lg-8">
             <div class="col d-flex flex-row flex-wrap gap-3">
-                @foreach (var status in OverviewTotal)
+                @foreach (var status in OverviewTotalTopBar)
                 {
                     <TelerikCard Class="ch-card-flex flex-grow-1">
                         <CardHeader Class="ch-card-flex">
@@ -47,104 +47,20 @@
             </div>
             <CardSeparator Class="my-2"></CardSeparator>
             <div class="mobile-property-grid">
-                @if (XSmall)
-                {
-                    <div class="col mx-2 my-3">
-                        <div class="row mb-2">
-                            <input class="form-control" @bind-value="TextSearchControlNumber" @onchange="async() => await SearchFilter()" @bind-value:event="oninput" placeholder="Search Control No." />
-                        </div>
-                       
-                        <div class="row mb-2">
-                            <input class="form-control" @bind-value="TextSearchFullName" @onchange="async() => await SearchFilter()" @bind-value:event="oninput" placeholder="Search Full Name" />
-                        </div>
-                        <div class="row mb-2">
-                            
-                            <div class="d-flex justify-content-start mb-2">
-                                Search Date Requested
-                            </div>
-                            <CardSeparator Class="my-2"></CardSeparator>
-                            <div class="d-flex justify-content-center">
-                                <TelerikDatePicker @bind-Value="@SelectedDate"
-                                                   Format="MMMM dd, yyyy"
-                                                   OnChange="@SearchFilter"
-                                                   ShowWeekNumbers="true">
-                                    <DatePickerFormatPlaceholder Day="day" Month="month" Year="year" />
-                                </TelerikDatePicker>
-                                 
-                            </div>
-                        </div>
-                        <div class="row mb-2">
-                           
-                            <div class="d-flex justify-content-center">
-                                <TelerikDropDownList @bind-Value="@TextSearchStatus"
-                                                     OnChange="@OnStatusFilterChangeHandler"
-                                                     Data="@StatusList"
-                                                     TItem="string"
-                                                     TValue="string" 
-                                                     DefaultText="Select Status">
-                                </TelerikDropDownList>
-                            </div>
-                        </div>
-                    </div>
-                }
-                else
-                {
-                    <div class="col-md-12 p-0 my-3">
-                        <div class="d-flex flex-row gap-3">
-                            <div class="form-control">
-                                <div class="d-flex justify-content-start mb-2">
-                                    Search Control Number
-                                </div>
-                                <input class="form-control" @bind-value="TextSearchControlNumber" @onchange="async() => await SearchFilter()" @bind-value:event="oninput" />
-                            </div>
-                            <div class="form-control">
-                                <div class="d-flex justify-content-start mb-2">
-                                    Search Full Name
-                                </div>
-                                <input class="form-control" @bind-value="TextSearchFullName" @onchange="async() => await SearchFilter()" @bind-value:event="oninput" />
-                            </div>
-                            <div class="form-control">
-                                <div class="d-flex justify-content-start mb-2">
-                                    Select Date Requested
-                                </div>
-                                <CardSeparator Class="my-2"></CardSeparator>
-                                <div class="d-flex justify-content-center">
-                                    <TelerikDatePicker @bind-Value="@SelectedDate"
-                                                       Format="MMMM dd, yyyy"
-                                                       OnChange="@SearchFilter"
-                                                       ShowWeekNumbers="true">
-                                        <DatePickerFormatPlaceholder Day="day" Month="month" Year="year" />
-                                    </TelerikDatePicker>
-
-                                </div>
-                            </div>
-                           <div class="form-control">
-                                <div class="d-flex justify-content-start mb-2">
-                                    Select Status
-                                </div>
-                                <div class="d-flex justify-content-center">
-                                    <TelerikDropDownList @bind-Value="@TextSearchStatus"
-                                                         OnChange="@OnStatusFilterChangeHandler"
-                                                         Data="@StatusList"
-                                                         TItem="string"
-                                                         TValue="string"
-                                                         DefaultText="Select Status">
-                                    </TelerikDropDownList>
-                                </div>
-                           </div>
-                        </div>
-                    </div>
-                }
+               
                 @if (GridData != null && !XSmall)
                 {
                     <TelerikGrid TItem="EmployeeModel"
                                  @bind-PageSize="@PageSize"
                                  Height="@GridHeight" 
                                  Sortable=true
-                                 Data="GridData"
+                                 Pageable=true
+                                 Data="EmployeeRecords"
                                  OnStateChanged="@OnStateChanged"
+                              
                                  @ref="GridRef"
-                                Context="employee">
+                                 FilterMode="@GridFilterMode.FilterRow"
+                                 Context="employee">
                         <GridSettings>
                             <GridPagerSettings PageSizes="@PageSizes">
                             </GridPagerSettings>
@@ -152,7 +68,10 @@
                         <GridColumns>
                             <GridColumn Field=@nameof(EmployeeModel.ControlNumber) Title="Control No." Filterable = "false" />
                             <GridColumn Field=@nameof(EmployeeModel.FullName) Title="Full Name" />
-                            <GridColumn Field=@nameof(EmployeeModel.DateRequested) DisplayFormat="{0:MMMM dd, yyyy}" Title="Date Requested" />
+                            <GridColumn Field=@nameof(EmployeeModel.DateRequested)
+                                        FilterEditorType="@GridFilterEditorType.DatePicker"
+                                     
+                                        FilterEditorFormat="MMMM dd, yyy" DisplayFormat="{0:MMMM dd, yyyy}" Title="Date Requested" />
                             <GridColumn Field=@nameof(EmployeeModel.Status) Title="Status" />
                         </GridColumns>
                     </TelerikGrid>
@@ -161,12 +80,14 @@
                 {
                     <TelerikGrid TItem="EmployeeModel"
                                  @bind-PageSize="@PageSize"
-                                 Height="@GridHeight" 
+                                 Height="@GridHeight"
                                  Sortable=true
-                                 Data="GridData"
+                                 Pageable=true
+                                 Data="EmployeeRecords"
                                  OnStateChanged="@OnStateChanged"
                                  @ref="GridRef"
-                                Context="employee">
+                                 FilterMode="@GridFilterMode.FilterRow"
+                                 Context="employee">
                         <GridSettings>
                             <GridPagerSettings PageSizes="@PageSizes">
                             </GridPagerSettings>
@@ -193,14 +114,7 @@
                     <span>No Data to display.</span>
                 }
             </div>
-            <TelerikPager PageChanged="@PageChangedHandler"
-                          Total="TotalItems"
-                          ButtonCount="6"
-                          PageSize="@PageSize"
-                          PageSizeChanged="@PageSizeChangedHandler"
-                          PageSizes="@(new List<int?> {5, 10, 20})"
-                          Page="@Page">
-            </TelerikPager>
+          
         </CardBody>
     </TelerikCard>
 </div>
@@ -213,7 +127,7 @@
                 <div class="container">
                     <TelerikChart Class="PieChart" @ref="FullfilledChartRef">
                         <ChartSeriesItems>
-                        <ChartSeries Type="ChartSeriesType.Pie" Data="@OverviewTotal"
+                        <ChartSeries Type="ChartSeriesType.Pie" Data="@OverviewTotalChart"
                                      Field="@nameof(SimpleKeyValue.Name)" CategoryField="@nameof(SimpleKeyValue.Id)">
                             <ChartSeriesTooltip Visible="true">
                                 <Template>

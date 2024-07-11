@@ -1,4 +1,5 @@
-﻿using DPWH.EDMS.Client.Shared.MockModels;
+﻿using DPWH.EDMS.Client.Shared.APIClient.Services.Lookups;
+using DPWH.EDMS.Client.Shared.MockModels;
 using DPWH.EDMS.Client.Shared.Models;
 using DPWH.EDMS.Components.Components.ReusableGrid;
 using DPWH.NGOBIA.Client.Shared.APIClient.Services.Users;
@@ -11,26 +12,29 @@ public class ViewRecordsBase : GridBase<RecordModel>
     [Parameter]
     public string Id { get; set; }
     [Parameter]
-    public int DocumentId { get; set; }
+    public string DocumentId { get; set; }
     [Inject] public required IUsersService UsersService { get; set; }
+    [Inject] public required ILookupsService LookupsService { get; set; }
     protected RecordModel Record { get; set; } = new RecordModel();
     protected Document Document { get; set; } = new Document();
-    protected List<RecordModel> RecordsList = new List<RecordModel>();
-     
+   
+    protected Api.Contracts.GetLookupResult EmployeeRecord { get; set; } = new Api.Contracts.GetLookupResult();
     protected override async Task OnInitializedAsync()
     {
         IsLoading = true;
         await GetEmployeeDetails();
-        if (Record != null)
-        {
-            Document = MockData.GenerateDocuments().FirstOrDefault(x => x.Id == DocumentId);
-            if (Document == null)
-            {
-                Console.WriteLine($"No document found with Id: {DocumentId}");
-            }
-
-        }
+        await GetEmployeeRecords();
         IsLoading = false;
+    }
+    protected async Task GetEmployeeRecords()
+    {
+        var res = await LookupsService.GetEmployeeRecords();
+        if (res.Success && res.Data != null)
+        {
+            var docId = Guid.Parse(DocumentId);
+            EmployeeRecord = res.Data?.FirstOrDefault(x => x.Id == docId) ?? null;
+             
+        } 
     }
     protected override void OnParametersSet()
     {
