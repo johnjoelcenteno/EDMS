@@ -5,6 +5,7 @@
 @using DPWH.EDMS.Components.Helpers
 
 @inherits UserManagementBase
+@inject NavigationManager nav
 @attribute [Authorize(Roles = "dpwh_superadmin, system_admin")]
 
 <EdmsLoader Visible="@IsLoading" />
@@ -69,11 +70,14 @@
                     <TelerikGrid TItem="UserModel"
                                  @bind-PageSize="@PageSize"
                                  Height="@GridHeight"
+                                 FilterMode="GridFilterMode.FilterRow"
                                  Sortable=true
                                  Data="GridData"
                                  OnStateChanged="@OnStateChanged"
                                  @ref="GridRef"
+                                 Pageable = "true"
                                  Context="user">
+
                         <GridSettings>
                             <GridPagerSettings PageSizes="@PageSizes">
                             </GridPagerSettings>
@@ -93,18 +97,11 @@
                 {
                     <span>No Data to display.</span>
                 }
-            </div>
-            <TelerikPager PageChanged="@PageChangedHandler"
-                          Total="TotalItems"
-                          ButtonCount="6"
-                          PageSize="@PageSize"
-                          PageSizeChanged="@PageSizeChangedHandler"
-                          PageSizes="@(new List<int?> {5, 10, 20})"
-                          Page="@Page">
-            </TelerikPager>
+            </div> 
         </CardBody>
     </TelerikCard>
 </div>
+
 <style>
     .um-card {
         display: flex;
