@@ -21,30 +21,63 @@
                 <div class="mobile-property-grid">
                     @if (GridData != null && !XSmall)
                     {
-                        <TelerikContextMenu @ref="@ContextMenuRef" Data="@MenuItems" OnClick="@((GridMenuItemModel item) => OnItemClick(item))"></TelerikContextMenu>
-                        <TelerikGrid TItem="GetDataLibraryResultValue"
-                                     @bind-PageSize="@PageSize"
-                                     Height="@GridHeight"
-                                     Sortable=true
-                                     Pageable=true
-                                     FilterMode="@GridFilterMode.FilterRow"
-                                     Data="GetDataLibrary.Data">
-                            <GridSettings>
-                                <GridPagerSettings PageSizes="@PageSizes">
-                                </GridPagerSettings>
-                            </GridSettings>
-                            <GridToolBarTemplate>
-                                <span class="k-toolbar-spacer"></span>
-                                <TelerikButton Icon="@FontIcon.Plus" ThemeColor="@(ThemeConstants.Button.ThemeColor.Primary)" OnClick="@AddUser">Add</TelerikButton>
-                            </GridToolBarTemplate>
-                            <GridColumns>
-                                <GridColumn Field=@nameof(DataManagementModel.Value) Title="Value" />
-                                <GridColumn Field=@nameof(DataManagementModel.CreatedBy) Title="Created By" />
-                                <GridCommandColumn Width="50px">
-                                    <TelerikButton Icon="@FontIcon.MoreVertical" OnClick="@( (MouseEventArgs e) => ShowRowOptions(e, context as GetDataLibraryResultValue) )"></TelerikButton>
-                                </GridCommandColumn>
-                            </GridColumns>
-                        </TelerikGrid>
+                        if (checkRecordType == false)
+                        {
+                            <TelerikContextMenu @ref="@ContextMenuRef" Data="@MenuItems" OnClick="@((GridMenuItemModel item) => OnItemClick(item))"></TelerikContextMenu>
+                            <TelerikGrid TItem="GetDataLibraryResultValue"
+                                         @bind-PageSize="@PageSize"
+                                         Height="@GridHeight"
+                                         Sortable=true
+                                         Pageable=true
+                                         FilterMode="@GridFilterMode.FilterRow"
+                                         Data="GetDataLibrary.Data">
+                                <GridSettings>
+                                    <GridPagerSettings PageSizes="@PageSizes">
+                                    </GridPagerSettings>
+                                </GridSettings>
+                                <GridToolBarTemplate>
+                                    <span class="k-toolbar-spacer"></span>
+                                    <TelerikButton Icon="@FontIcon.Plus" ThemeColor="@(ThemeConstants.Button.ThemeColor.Primary)" OnClick="@AddUser">Add</TelerikButton>
+                                </GridToolBarTemplate>
+                                <GridColumns>
+                                    <GridColumn Field=@nameof(DataManagementModel.Value) Title="Value" />
+                                    <GridColumn Field=@nameof(DataManagementModel.CreatedBy) Title="Created By" />
+                                    <GridCommandColumn Width="50px">
+                                        <TelerikButton Icon="@FontIcon.MoreVertical" OnClick="@( (MouseEventArgs e) => ShowRowOptions(e, context as GetDataLibraryResultValue) )"></TelerikButton>
+                                    </GridCommandColumn>
+                                </GridColumns>
+                            </TelerikGrid>
+                        }
+                        else
+                        {
+                            <TelerikContextMenu @ref="@ContextMenuRef" Data="@MenuItems" OnClick="@((GridMenuItemModel item) => OnItemClick(item))"></TelerikContextMenu>
+                            <TelerikGrid TItem="QueryRecordTypesModel"
+                                         @bind-PageSize="@PageSize"
+                                         Height="@GridHeight"
+                                         Sortable=true
+                                         Pageable=true
+                                         FilterMode="@GridFilterMode.FilterRow"
+                                         Data="GetRecordType">
+                                <GridSettings>
+                                    <GridPagerSettings PageSizes="@PageSizes">
+                                    </GridPagerSettings>
+                                </GridSettings>
+                                <GridToolBarTemplate>
+                                    <span class="k-toolbar-spacer"></span>
+                                    <TelerikButton Icon="@FontIcon.Plus" ThemeColor="@(ThemeConstants.Button.ThemeColor.Primary)" OnClick="@AddUser">Add</TelerikButton>
+                                </GridToolBarTemplate>
+                                <GridColumns>
+                                    <GridColumn Field=@nameof(QueryRecordTypesModel.Name) Title="Value" />
+                                    <GridColumn Field=@nameof(QueryRecordTypesModel.Category) Title="Created By" />
+                                    <GridColumn Field=@nameof(QueryRecordTypesModel.Section) Title="Section" />
+                                    <GridColumn Field=@nameof(QueryRecordTypesModel.Office) Title="Office" />
+                                    <GridCommandColumn Width="50px">
+                                        <TelerikButton Icon="@FontIcon.MoreVertical" OnClick="@( (MouseEventArgs e) => ShowRecordRowOptions(e, context as QueryRecordTypesModel) )"></TelerikButton>
+                                    </GridCommandColumn>
+                                </GridColumns>
+                            </TelerikGrid>
+                        }
+                        
                     }
                     else if (GridData != null && XSmall)
                     {
