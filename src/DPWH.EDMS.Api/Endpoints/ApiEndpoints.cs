@@ -39,7 +39,7 @@ public static class ApiEndpoints
         public const string QueryByEmployeeId = $"{Base}/query/{{employeeId}}";
         public const string QueryByStatus = $"{Query}/status/{{status}}";
         public const string Create = $"{Base}/create";
-        public const string Update = $"{Base}/update";
+        public const string UpdateStatus = $"{Base}/update/status";
         public const string Delete = $"{Base}/delete";
         public const string Count = $"{Base}/count/{{status}}";
         public static class Documents

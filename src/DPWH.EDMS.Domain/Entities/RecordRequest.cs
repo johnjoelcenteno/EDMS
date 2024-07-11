@@ -34,6 +34,13 @@ public class RecordRequest : EntityBase
         entity.SetCreated(createdBy);
         return entity;
     }
+
+    public void UpdateStatus(RecordRequestStates status, string modifiedBy)
+    {
+        Status = status.ToString(); 
+
+        SetModified(modifiedBy);
+    }
     public int ControlNumber { get; private set; }
     public string EmployeeNumber { get; private set; }
     public string ClaimantType { get; private set; }

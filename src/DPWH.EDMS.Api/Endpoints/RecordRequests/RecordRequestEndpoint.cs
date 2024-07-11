@@ -1,4 +1,5 @@
 ﻿using DPWH.EDMS.Application.Features.RecordRequests.Commands.CreateRecordRequest;
+using DPWH.EDMS.Application.Features.RecordRequests.Commands.UpdateRecordRequestStatus;
 using DPWH.EDMS.Application.Features.RecordRequests.Queries;
 using DPWH.EDMS.Application.Features.RecordRequests.Queries.GetCountRecordsByStatusQuery;
 using DPWH.EDMS.Application.Features.RecordRequests.Queries.GetRecordRequestById;
@@ -105,16 +106,17 @@ public static class RecordRequestEndpoint
             .Produces<ProblemDetails>(StatusCodes.Status400BadRequest)
             .Produces<ProblemDetails>(StatusCodes.Status500InternalServerError);
 
-        app.MapPut(ApiEndpoints.RecordRequest.Update, async (string employeeId, IMediator mediator) =>
+        app.MapPut(ApiEndpoints.RecordRequest.UpdateStatus, async (UpdateRecordRequestStatus model, IMediator mediator, CancellationToken cancellationToken) =>
             {
-                return "Ok";
+                var result = await mediator.Send(new UpdateRecordRequestStatusCommand(model), cancellationToken);
+                return result;
             })
-            .WithName("Update document request")
+            .WithName("UpdateRecordRequestStatus")
             .WithTags(TagName)
-            .WithDescription("Update document requests")
+            .WithDescription("Update record request status")
             .WithApiVersionSet(ApiVersioning.VersionSet)
             .HasApiVersion(1.0)
-            .Produces<BaseApiResponse<Employee>>()
+            .Produces<BaseApiResponse<UpdateResponse>>()
             .Produces(StatusCodes.Status404NotFound)
             .Produces<ProblemDetails>(StatusCodes.Status400BadRequest)
             .Produces<ProblemDetails>(StatusCodes.Status500InternalServerError);

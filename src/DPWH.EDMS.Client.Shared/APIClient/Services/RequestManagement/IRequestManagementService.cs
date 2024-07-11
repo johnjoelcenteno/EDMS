@@ -10,6 +10,6 @@ namespace DPWH.EDMS.Client.Shared.APIClient.Services.RequestManagement
         Task<DataSourceResult> Query(DataSourceRequest body);
         Task<DataSourceResult> QueryByEmployeeId(string employeeId, DataSourceRequest body);
         Task<DataSourceResult> QueryByStatus(string status, DataSourceRequest body);
-        Task<EmployeeBaseApiResponse> Update(string employeeId);
+        Task<UpdateResponseBaseApiResponse> UpdateStatus(UpdateRecordRequestStatus req);
     }
 }
