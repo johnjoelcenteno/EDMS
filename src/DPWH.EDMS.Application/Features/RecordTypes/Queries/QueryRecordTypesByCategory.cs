@@ -18,6 +18,7 @@ public class QueryRecordTypesByCategory : IRequestHandler<QueryRecordTypesByCate
     {
         var result = _readRepository.RecordTypesView
                     .Where(x => x.Category == request.category)
+                    .OrderByDescending(x => x.Created)
                     .Select(x => RecordTypeMappers.Map(x))
                     .ToListAsync();
         return result;

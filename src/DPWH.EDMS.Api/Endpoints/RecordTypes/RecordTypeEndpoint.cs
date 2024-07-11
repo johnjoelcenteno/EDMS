@@ -77,7 +77,7 @@ public static class RecordTypeEndpoints
         {
             var result = await mediator.Send(new UpdateRecordTypeRequest(Id, model));
             var data = new BaseApiResponse<Guid?>(result);
-            return result is null ? Results.NotFound() : Results.Ok(result);
+            return result is null ? Results.NotFound() : Results.Ok(data);
         })
         .WithName("Update record type")
         .WithTags(TagName)
