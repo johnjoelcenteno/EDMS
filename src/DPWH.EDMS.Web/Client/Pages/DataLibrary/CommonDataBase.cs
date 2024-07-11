@@ -109,7 +109,8 @@ public class CommonDataBase : GridBase<DataManagementModel>
 
         await ExceptionHandlerService.HandleApiException(async () =>
         {
-            if (DataType == DataLibraryEnum.EmployeeRecords.ToString() || DataType == DataLibraryEnum.Issuances.ToString())
+            if (DataType == DataLibraryEnum.EmployeeRecords.ToString() || DataType == DataLibraryEnum.Issuances.ToString() || 
+            DataType == DataLibraryEnum.PersonalRecords.ToString())
             {
                 checkRecordType = true;
                 var dataLibraryResults = await RecordTypesService.QueryByCategoryRecordTypesAsync(UriName);
@@ -130,6 +131,7 @@ public class CommonDataBase : GridBase<DataManagementModel>
 
                     SectionList = new List<string> {
                         "Employee Welfare and Benefits Section",
+                        "Records Management Section",
                         "Current Section",
                         "Non-Current Section"
                     };
@@ -211,8 +213,7 @@ public class CommonDataBase : GridBase<DataManagementModel>
                 case "Edit":
                     getOpenbtn = "Edit";
                     
-                    if (DataType == DataLibraryEnum.EmployeeRecords.ToString() && QueryRecordTypesModels.Count > 0 ||
-                        DataType == DataLibraryEnum.Issuances.ToString() && QueryRecordTypesModels.Count > 0)
+                    if (checkRecordType && QueryRecordTypesModels.Count > 0)
                     {
                         NewConfig.Value = SelectedRecordItem.Name;
                         NewConfig.Id = SelectedRecordItem.Id.ToString();
@@ -240,8 +241,7 @@ public class CommonDataBase : GridBase<DataManagementModel>
                     break;
 
                 case "Delete":
-                    if (DataType == DataLibraryEnum.EmployeeRecords.ToString() && QueryRecordTypesModels.Count > 0 ||
-                        DataType == DataLibraryEnum.Issuances.ToString() && QueryRecordTypesModels.Count > 0)
+                    if (checkRecordType && QueryRecordTypesModels.Count > 0)
                     {
                         NewConfig.Value = SelectedRecordItem.Name;
                         var checkItem = QueryRecordTypesModels.FirstOrDefault(dt => dt.Name == SelectedRecordItem.Name);
@@ -281,7 +281,7 @@ public class CommonDataBase : GridBase<DataManagementModel>
     {
         IsConfirm = false;
         IsLoading = true;
-        if (DataType == DataLibraryEnum.EmployeeRecords.ToString() || DataType == DataLibraryEnum.Issuances.ToString())
+        if (checkRecordType)
         {
             await ExceptionHandlerService.HandleApiException(async () =>
             {
@@ -330,7 +330,7 @@ public class CommonDataBase : GridBase<DataManagementModel>
             return;
         }
 
-        if (DataType == DataLibraryEnum.EmployeeRecords.ToString() || DataType == DataLibraryEnum.Issuances.ToString())
+        if (checkRecordType)
         {
             if (string.IsNullOrEmpty(item.Section) || string.IsNullOrEmpty(item.Office))
             {
@@ -413,7 +413,7 @@ public class CommonDataBase : GridBase<DataManagementModel>
         if (string.IsNullOrEmpty(model.Value))
         {
             IsLoading = false;
-            if (DataType == DataLibraryEnum.EmployeeRecords.ToString() || DataType == DataLibraryEnum.Issuances.ToString())
+            if (checkRecordType)
             {
                 IsSectionEmpty = string.IsNullOrEmpty(model.Section);
                 IsOfficeEmpty = string.IsNullOrEmpty(model.Office);
@@ -455,7 +455,7 @@ public class CommonDataBase : GridBase<DataManagementModel>
                 //}
 
             }
-            else if (DataType == DataLibraryEnum.EmployeeRecords.ToString() || DataType == DataLibraryEnum.Issuances.ToString())
+            else if (checkRecordType)
             {
 
                 if (string.IsNullOrEmpty(model.Section) || string.IsNullOrEmpty(model.Office))
