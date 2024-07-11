@@ -57,7 +57,7 @@
                                  Pageable=true
                                  Data="EmployeeRecords"
                                  OnStateChanged="@OnStateChanged"
-                              
+                                
                                  @ref="GridRef"
                                  FilterMode="@GridFilterMode.FilterRow"
                                  Context="employee">
@@ -66,12 +66,34 @@
                             </GridPagerSettings>
                         </GridSettings>
                         <GridColumns>
-                            <GridColumn Field=@nameof(EmployeeModel.ControlNumber) Title="Control No." Filterable = "false" />
+                            <GridColumn Field=@nameof(EmployeeModel.ControlNumber) Title="Control No." />
                             <GridColumn Field=@nameof(EmployeeModel.FullName) Title="Full Name" />
                             <GridColumn Field=@nameof(EmployeeModel.DateRequested)
+                                        Title="Date Requested" 
                                         FilterEditorType="@GridFilterEditorType.DatePicker"
-                                     
-                                        FilterEditorFormat="MMMM dd, yyy" DisplayFormat="{0:MMMM dd, yyyy}" Title="Date Requested" />
+                                        DisplayFormat="{0:MMMM dd, yyyy}">
+
+                                            <FilterCellTemplate>
+                                               <TelerikDatePicker Value="@SelectedDate"
+                                                                   ShowWeekNumbers="true" ValueChanged="@(async (DateTime? val) =>
+                                                                    {
+                                                                        SelectedDate = val;
+
+                                                                        if (SelectedDate != null)
+                                                                        {
+                                                                             await context.ClearFilterAsync();
+                                                                        } 
+
+                                                                        SetDateFilter(context.FilterDescriptor); 
+
+                                                                        await context.FilterAsync();
+
+                                                                    })">
+                                                 
+                                                </TelerikDatePicker>
+                                            </FilterCellTemplate>
+
+                                        </GridColumn>
                             <GridColumn Field=@nameof(EmployeeModel.Status) Title="Status" />
                         </GridColumns>
                     </TelerikGrid>

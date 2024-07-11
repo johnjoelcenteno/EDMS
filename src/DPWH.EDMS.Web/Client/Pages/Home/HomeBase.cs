@@ -12,6 +12,8 @@ using DPWH.EDMS.Components.Helpers;
 using DPWH.EDMS.Web.Client.Pages.Home.HomeService;
 using DPWH.EDMS.Client.Shared.Models;
 using Telerik.Blazor;
+using Telerik.DataSource;
+using Telerik.Blazor.Components.Grid;
 
 namespace DPWH.EDMS.Web.Client.Pages.Home;
 
@@ -47,13 +49,11 @@ public class HomeBase : GridBase<EmployeeModel>
         "Release",
         "Claimed"
     };
- 
+   
     public string DropDownListValue { get; set; }
     protected override void OnInitialized()
     {
        
-        
-
         DropDownListValue = "All";
 
         EmployeeList = GenerateEmployeeRecords(5);
@@ -69,7 +69,21 @@ public class HomeBase : GridBase<EmployeeModel>
         await GetMonthlyRequestTotal();
         IsLoading = false;
     }
+    protected void SetDateFilter(CompositeFilterDescriptor filterDescriptor)
+    {
+        filterDescriptor.FilterDescriptors.Clear();
+        if (SelectedDate.HasValue)
+        {
+            var selectedDatePickerFrom = new FilterDescriptor(nameof(EmployeeModel.DateRequested), FilterOperator.IsGreaterThan, SelectedDate);
+            var selectedDatePickerTo = new FilterDescriptor(nameof(EmployeeModel.DateRequested), FilterOperator.IsLessThan, SelectedDate.Value.AddDays(1));
+             
 
+            filterDescriptor.FilterDescriptors.Add(selectedDatePickerFrom);
+            filterDescriptor.FilterDescriptors.Add(selectedDatePickerTo);
+        }
+
+        StateHasChanged();
+    }
     private async Task HandleEndUserAccess()
     {
         var authState = await AuthenticationStateAsync!;
@@ -101,7 +115,7 @@ public class HomeBase : GridBase<EmployeeModel>
     {
         var res = await RequestManagementService.Query(DataSourceReq);
  
-        if(res.Data != null )
+        if(res.Data != null)
         {
             var getData = GenericHelper.GetListByDataSource<EmployeeModel>(res.Data);
             EmployeeRecords = getData;
