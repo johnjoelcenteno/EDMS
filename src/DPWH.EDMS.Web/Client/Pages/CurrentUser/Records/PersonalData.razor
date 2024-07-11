@@ -1,4 +1,4 @@
-﻿@page "/my-records/{Id:int}"
+﻿@page "/my-records/{Id}"
 @using DPWH.EDMS.Components.Helpers
 @inherits RecordsPersonalData
 
@@ -17,7 +17,7 @@
         <CardTitle>
             <div class="d-flex justify-content-between">
                 <label class="headName">
-                    @Document.DocumentName
+                    @EmployeeRecord.Name
                 </label>
                 <TelerikButton Class="dlButton">Download</TelerikButton>
             </div>

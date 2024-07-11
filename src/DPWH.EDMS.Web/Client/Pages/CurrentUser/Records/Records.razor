@@ -1,9 +1,11 @@
 ﻿@page "/my-records"
+@using DPWH.EDMS.Api.Contracts
 @inherits RecordsBase
 @inject NavigationManager Navigation
 @attribute [Authorize(Policy = "RequireActiveRoles")]
 
 <EdmsBreadcrumbs Data="@BreadcrumbItems" />
+<EdmsLoader Visible="IsLoading" />
 
 <h3>My Records</h3>
 <div class="d-flex flex-row align-items-center mb-2">
@@ -20,14 +22,15 @@
             <CardSeparator Class="my-2"></CardSeparator>
             <div class="mobile-property-grid">
 
-                @if (DocumentList != null && !XSmall)
+                @if (GetEmployeeRecords.Data != null && !XSmall)
                 {
-                    <TelerikGrid TItem="Document"
+                    <TelerikGrid TItem="GetLookupResult"
                                  @bind-PageSize="@PageSize"
                                  Height="@GridHeight"
                                  FilterMode="GridFilterMode.FilterRow"
                                  Sortable=true
-                                 Data="DocumentList"
+                                 Pageable=true
+                                 Data="GetEmployeeRecords.Data"
                                  OnStateChanged="@OnStateChanged"
                                  @ref="GridRef"
                                  Context="employee">
@@ -36,7 +39,7 @@
                             </GridPagerSettings>
                         </GridSettings>
                         <GridColumns>
-                            <GridColumn Field=@nameof(Document.DocumentName) Title="Document Name" />
+                            <GridColumn Field=@nameof(GetLookupResult.Name) Title="Document Name" />
                             <GridCommandColumn Width="5%">
                                 <GridCommandButton Class="commandButton" Command="ExportData" OnClick="@viewData">View</GridCommandButton>
                             </GridCommandColumn>
@@ -46,19 +49,39 @@
                         </GridColumns>
                     </TelerikGrid>
                 }
+                else if (GetEmployeeRecords.Data != null && XSmall)
+                {
+                    <TelerikGrid TItem="GetLookupResult"
+                                 @bind-PageSize="@PageSize"
+                                 Height="@GridHeight"
+                                 FilterMode="GridFilterMode.FilterRow"
+                                 Sortable=true
+                                 Pageable=true
+                                 Data="GetEmployeeRecords.Data"
+                                 Context="employee">
+                        <GridSettings>
+                            <GridPagerSettings PageSizes="@PageSizes">
+                            </GridPagerSettings>
+                        </GridSettings>
+                        <DetailTemplate>
+                            @{
+                                var prop = employee as GetLookupResult;
+                                <div class="d-flex flex-column">
+                                    <p><b>Document Name :</b> @prop.Name </p>
+                                </div>
+                            }
+                        </DetailTemplate>
+                        <GridColumns>
+                            <GridColumn Field=@nameof(GetLookupResult.Name) />
+                        </GridColumns>
+                    </TelerikGrid>
+                }
                 else
                 {
                     <span>No Data to display.</span>
                 }
             </div>
-            <TelerikPager PageChanged="@PageChangedHandler"
-                          Total="TotalItems"
-                          ButtonCount="6"
-                          PageSize="@PageSize"
-                          PageSizeChanged="@PageSizeChangedHandler"
-                          PageSizes="@(new List<int?> {5, 10, 20})"
-                          Page="@Page">
-            </TelerikPager>
+           
         </CardBody>
     </TelerikCard>
 </div>
