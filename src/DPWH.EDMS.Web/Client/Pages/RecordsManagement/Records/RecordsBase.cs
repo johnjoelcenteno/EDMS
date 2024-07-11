@@ -1,4 +1,5 @@
 ﻿using DPWH.EDMS.Api.Contracts;
+using DPWH.EDMS.Client.Shared.APIClient.Services.Lookups;
 using DPWH.EDMS.Client.Shared.APIClient.Services.RecordManagement;
 using DPWH.EDMS.Client.Shared.MockModels;
 using DPWH.EDMS.Client.Shared.Models;
@@ -14,11 +15,13 @@ public class RecordsBase : GridBase<RecordRequestModel>
 {
     [Parameter] public required string Id { get; set; }
     [Inject] public required IUsersService UsersService { get; set; }
+    [Inject] public required ILookupsService LookupsService { get; set; }  
     [Inject] public required IRecordManagementService RecordManagementService { get; set; }
     [Inject] public required NavigationManager NavigationManager { get; set; }
     protected GetUserByIdResult SelectedUser { get; set; } = new();
     protected List<Document> DocumentList = new List<Document>();
     protected GetUserByIdResultBaseApiResponse EmployeeDetails { get; set; }
+    protected GetLookupResultIEnumerableBaseApiResponse GetEmployeeRecords { get; set; } = new GetLookupResultIEnumerableBaseApiResponse();
     protected async override Task OnInitializedAsync()
     {
         IsLoading = true;
@@ -47,11 +50,18 @@ public class RecordsBase : GridBase<RecordRequestModel>
         });
 
         await LoadRequestHistoryData();
-        DocumentList = MockCurrentData.GetDocuments().OrderBy(d => d.DocumentName).ToList();
+        await GetDocumentRecords();
         IsLoading = false;
         StateHasChanged();
     }
-
+    protected async Task GetDocumentRecords()
+    {
+        var res = await LookupsService.GetEmployeeRecords();
+        if (res.Success)
+        {
+            GetEmployeeRecords = res;
+        }
+    }
     protected async Task LoadData(Action<GetUserByIdResult> onLoadCb)
     {
         var getRecord = await UsersService.GetById(Guid.Parse(Id));
@@ -74,8 +84,11 @@ public class RecordsBase : GridBase<RecordRequestModel>
     protected async Task LoadRequestHistoryData()
     {
         var result = await RecordManagementService.QueryByEmployeeId(SelectedUser.EmployeeId, DataSourceReq);
-        GridData = GenericHelper.GetListByDataSource<RecordRequestModel>(result.Data);
-        TotalItems = result.Total;
+        if(result.Data != null)
+        {
+            GridData = GenericHelper.GetListByDataSource<RecordRequestModel>(result.Data);
+            TotalItems = result.Total;
+        }
     }
 
     protected void GoToSelectedItemOverview(GridRowClickEventArgs args)
@@ -93,7 +106,7 @@ public class RecordsBase : GridBase<RecordRequestModel>
     }
     public async Task viewData(GridCommandEventArgs args)
     {
-        Document selectedId = args.Item as Document;
+        GetLookupResult selectedId = args.Item as GetLookupResult;
 
         //Int32.TryParse(samp, out sampNumber);
         NavigationManager.NavigateTo($"/records-management/{EmployeeDetails.Data.EmployeeId}/{selectedId.Id}");

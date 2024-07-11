@@ -19,7 +19,7 @@ public class RecordsManagementBase : GridBase<UserModel>
     protected string TextSearchMiddlename = string.Empty;
     protected string TextSearchRegionalOffice = string.Empty;
     protected string TextSearchDepartment = string.Empty;
-
+    protected List<UserModel> UserRecords = new List<UserModel>();
     protected override void OnInitialized()
     {
         BreadcrumbItems.Add(new BreadcrumbModel
@@ -32,45 +32,22 @@ public class RecordsManagementBase : GridBase<UserModel>
 
     protected async override Task OnInitializedAsync()
     {
-        ServiceCb = UsersService.Query;
-        await LoadData();
+        IsLoading = true;
+
+        await LoadRecordsManagementData();
+
+        IsLoading = false;
     }
-    protected async Task SearchFilter()
+    protected async Task LoadRecordsManagementData()
     {
-        var filters = new List<Filter>();
+        var res = await UsersService.Query(DataSourceReq);
 
-        // Add the search term filter
-        if (!string.IsNullOrEmpty(TextSearchFirstName))
+        if(res.Data != null)
         {
-            AddTextSearchFilter(filters, nameof(UserModel.FirstName), TextSearchFirstName.ToLower());
+            var getData = GenericHelper.GetListByDataSource<UserModel>(res.Data);
+            UserRecords = getData;
         }
-        if (!string.IsNullOrEmpty(TextSearcLastName))
-        {
-            AddTextSearchFilter(filters, nameof(UserModel.LastName), TextSearcLastName.ToLower());
-        }
-        if (!string.IsNullOrEmpty(TextSearchMiddlename))
-        {
-            AddTextSearchFilter(filters, nameof(UserModel.MiddleInitial), TextSearchMiddlename.ToLower());
-        }
-        if (!string.IsNullOrEmpty(TextSearchRegionalOffice))
-        {
-            AddTextSearchFilter(filters, nameof(UserModel.RegionalOfficeRegion), TextSearchRegionalOffice.ToLower());
-        }
-        if (!string.IsNullOrEmpty(TextSearchDepartment))
-        {
-            AddTextSearchFilter(filters, nameof(UserModel.Department), TextSearchDepartment.ToLower());
-        }
-
-        // Set the logic for combining the filters (OR logic in this case)
-        SearchFilterRequest.Logic = DataSourceHelper.AND_LOGIC;
-
-        // Set the filters
-        SearchFilterRequest.Filters = filters;
-
-        // Load data with the updated filters
-        await LoadData();
     }
-
     protected void GoToSelectedItemDocuments(GridRowClickEventArgs args)
     {
         IsLoading = true;

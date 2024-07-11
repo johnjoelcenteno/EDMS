@@ -47,4 +47,12 @@ public class RequestManagementService : IRequestManagementService
     {
         return await _client.DeleteRecordRequestAsync(id);
     }
+    public async Task<RecordRequestStatusCountModelBaseApiResponse> GetTotalOverviewStatus(string status)
+    {
+        return await _client.CountRecordRequestsByStatusAsync(status);
+    }
+    public async Task<GetMonthlyRequestModelIEnumerableBaseApiResponse> GetMonthlyRequestTotal()
+    {
+        return await _client.GetMonthlyRequestsTotalCountAsync();
+    }
 }

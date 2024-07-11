@@ -11,5 +11,7 @@ namespace DPWH.EDMS.Client.Shared.APIClient.Services.RequestManagement
         Task<DataSourceResult> QueryByEmployeeId(string employeeId, DataSourceRequest body);
         Task<DataSourceResult> QueryByStatus(string status, DataSourceRequest body);
         Task<UpdateResponseBaseApiResponse> UpdateStatus(UpdateRecordRequestStatus req);
+        Task<RecordRequestStatusCountModelBaseApiResponse> GetTotalOverviewStatus(string status);
+        Task<GetMonthlyRequestModelIEnumerableBaseApiResponse> GetMonthlyRequestTotal();
     }
 }

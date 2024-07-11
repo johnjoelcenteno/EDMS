@@ -1,10 +1,10 @@
-﻿@page "/records-management/{Id}/{DocumentId:int}"
+﻿@page "/records-management/{Id}/{DocumentId}"
 @using DPWH.EDMS.Components.Helpers
 @inherits ViewRecordsBase
 
 <EdmsBreadcrumbs Data="@BreadcrumbItems" />
 <EdmsLoader Visible="IsLoading" />
-
+ 
 <h3>Records</h3>
 @if(Record != null)
 {
@@ -15,14 +15,14 @@
 }
   
 <hr />
-@if (Document != null)
+@if (EmployeeRecord != null)
 {
     <TelerikCard Width="100%">
         <CardBody>
             <CardTitle>
                 <div class="d-flex justify-content-between">
                     <label class="headName">
-                        @Document.DocumentName
+                        @EmployeeRecord.Name
                     </label>
                     <TelerikButton Class="dlButton">Download</TelerikButton>
                 </div>
