@@ -40,7 +40,7 @@ public class RequestManagementService : IRequestManagementService
 
     public async Task<UpdateResponseBaseApiResponse> UpdateStatus(UpdateRecordRequestStatus req)
     {
-        return await _client.Update_document_requestAsync(req);
+        return await _client.UpdateRecordRequestStatusAsync(req);
     }
 
     public async Task<DeleteResponse> Delete(Guid id)
