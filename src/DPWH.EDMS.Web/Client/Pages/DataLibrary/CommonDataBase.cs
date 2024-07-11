@@ -132,6 +132,7 @@ public class CommonDataBase : GridBase<DataManagementModel>
                     SectionList = new List<string> {
                         "Employee Welfare and Benefits Section",
                         "Records Management Section",
+                        "Integrated Payroll and Personnel Information",
                         "Current Section",
                         "Non-Current Section"
                     };
