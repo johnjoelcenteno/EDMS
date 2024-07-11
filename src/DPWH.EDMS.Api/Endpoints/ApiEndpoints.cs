@@ -35,6 +35,7 @@ public static class ApiEndpoints
         private const string Base = $"{ApiBase}/recordrequests";
 
         public const string Get = $"{Base}/{{id:guid}}";
+        public const string GetMonthlyRequests = $"{Base}/monthlyrequests";
         public const string Query = $"{Base}/query";
         public const string QueryByEmployeeId = $"{Base}/query/{{employeeId}}";
         public const string QueryByStatus = $"{Query}/status/{{status}}";

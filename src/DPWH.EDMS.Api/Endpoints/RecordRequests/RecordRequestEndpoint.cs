@@ -2,6 +2,7 @@
 using DPWH.EDMS.Application.Features.RecordRequests.Commands.UpdateRecordRequestStatus;
 using DPWH.EDMS.Application.Features.RecordRequests.Queries;
 using DPWH.EDMS.Application.Features.RecordRequests.Queries.GetCountRecordsByStatusQuery;
+using DPWH.EDMS.Application.Features.RecordRequests.Queries.GetMonthlyRequests;
 using DPWH.EDMS.Application.Features.RecordRequests.Queries.GetRecordRequestById;
 using DPWH.EDMS.Application.Features.RecordRequests.Queries.GetRecordRequestsByEmployeeIdQuery;
 using DPWH.EDMS.Application.Features.RecordRequests.Queries.GetRecordRequestsByStatusQuery;
@@ -75,6 +76,20 @@ public static class RecordRequestEndpoint
             .WithApiVersionSet(ApiVersioning.VersionSet)
             .HasApiVersion(1.0)
             .Produces<DataSourceResult>()
+            .Produces<ProblemDetails>(StatusCodes.Status400BadRequest)
+            .Produces<ProblemDetails>(StatusCodes.Status500InternalServerError);
+
+        app.MapPost(ApiEndpoints.RecordRequest.GetMonthlyRequests, async (IMediator mediator) =>
+        {
+            var result = await mediator.Send(new GetMonthlyRequestQuery());
+            return result;
+        })
+            .WithName("GetMonthlyRequestsTotalCount")
+            .WithTags(TagName)
+            .WithDescription("Get monthly requests count")
+            .WithApiVersionSet(ApiVersioning.VersionSet)
+            .HasApiVersion(1.0)
+            .Produces<GetMonthlyRequestModel>()
             .Produces<ProblemDetails>(StatusCodes.Status400BadRequest)
             .Produces<ProblemDetails>(StatusCodes.Status500InternalServerError);
 
