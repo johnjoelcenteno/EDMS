@@ -12,11 +12,13 @@ using DPWH.EDMS.Client.Shared.APIClient.Services.DpwhIntegrations;
 using Telerik.Blazor.Components.Menu;
 using DPWH.EDMS.IDP.Core.Constants;
 using Microsoft.AspNetCore.Components.Web;
+using DPWH.EDMS.Components.Helpers;
 
 namespace DPWH.EDMS.Web.Client.Pages.UserManagement;
 
 public class UserManagementBase : GridBase<UserModel>
 {
+    [Inject] protected NavigationManager Nav { get; set; } = default!;
     [Inject] public required IUsersService UserService { get; set; }
     [Inject] public required ILicensesService LicensesService { get; set; }
     [Inject] public required IExceptionHandlerService ExceptionHandlerService { get; set; }
@@ -28,6 +30,7 @@ public class UserManagementBase : GridBase<UserModel>
     protected string GetOpenBtn = "";
     protected string SelectedAcord { get; set; }
     protected UserModel SelectedItem { get; set; } = default!;
+    protected UserModel UserList { get; set; } = new UserModel();
     protected ICollection<GetRequestingOfficeResult> RegionOfficeList { get; set; } = new List<GetRequestingOfficeResult>();
     protected List<GetRequestingOfficeResultItem> DEOlist { get; set; } = new List<GetRequestingOfficeResultItem>();
     protected List<GridMenuItemModel> MenuItems { get; set; } = new();
@@ -47,7 +50,7 @@ public class UserManagementBase : GridBase<UserModel>
         MenuItems = new List<GridMenuItemModel>
         {
         new (){ Text = "View", Icon=null!, CommandName="View" },
-        new (){ Text = "Edit", Icon=null!, CommandName="Update" },
+        new (){ Text = "Edit", Icon=null!, CommandName="Edit" }
         };
     }
     protected async Task ShowRowOptions(MouseEventArgs e, UserModel row)
@@ -58,8 +61,9 @@ public class UserManagementBase : GridBase<UserModel>
     }
     protected override async Task OnInitializedAsync()
     {
-        ServiceCb = UserService.Query;
-        await LoadData();
+        //ServiceCb = UserService.Query;
+        //await LoadData();
+        await LoadUserData();
         GetGridMenuItems();
         await ExceptionHandlerService.HandleApiException(
             async () =>
@@ -75,6 +79,17 @@ public class UserManagementBase : GridBase<UserModel>
                     TotalUsers = licenseData.EndUsersCount;
                 }
             });
+    }
+
+    protected async Task LoadUserData()
+    {
+        var result = await UserService.Query(DataSourceReq);
+        if (result.Data != null)
+        {
+            var getData = GenericHelper.GetListByDataSource<UserModel>(result.Data);
+            GridData = getData;
+        }
+       
     }
     protected double GetLicenseAccumulatedPercentage()
     {
@@ -101,10 +116,11 @@ public class UserManagementBase : GridBase<UserModel>
             {
 
                 case "View":
-
+                    //var viewUrl = $"{Nav.BaseUri}user-management/view-layout/{SelectedItem.Id}";
+                    //Nav.NavigateTo(viewUrl);
                     break;
                 case "Update":
-
+                    //Nav.NavigateTo($"{Nav.BaseUri}user-management/edit/{Id}");
                     break;
 
                 default:
