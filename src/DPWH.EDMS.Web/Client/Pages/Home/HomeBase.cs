@@ -71,12 +71,12 @@ public class HomeBase : GridBase<EmployeeModel>
     }
     protected void SetDateFilter(CompositeFilterDescriptor filterDescriptor)
     {
-
+        filterDescriptor.FilterDescriptors.Clear();
         if (SelectedDate.HasValue)
         {
             var selectedDatePickerFrom = new FilterDescriptor(nameof(EmployeeModel.DateRequested), FilterOperator.IsGreaterThan, SelectedDate);
             var selectedDatePickerTo = new FilterDescriptor(nameof(EmployeeModel.DateRequested), FilterOperator.IsLessThan, SelectedDate.Value.AddDays(1));
-            filterDescriptor.FilterDescriptors.Clear();
+             
 
             filterDescriptor.FilterDescriptors.Add(selectedDatePickerFrom);
             filterDescriptor.FilterDescriptors.Add(selectedDatePickerTo);

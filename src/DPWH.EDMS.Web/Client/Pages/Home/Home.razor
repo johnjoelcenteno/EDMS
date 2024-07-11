@@ -79,7 +79,13 @@
                                                                     {
                                                                         SelectedDate = val;
 
+                                                                        if (SelectedDate != null)
+                                                                        {
+                                                                             await context.ClearFilterAsync();
+                                                                        } 
+
                                                                         SetDateFilter(context.FilterDescriptor); 
+
                                                                         await context.FilterAsync();
 
                                                                     })">
