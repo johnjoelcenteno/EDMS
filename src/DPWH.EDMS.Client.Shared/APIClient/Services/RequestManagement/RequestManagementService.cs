@@ -38,9 +38,9 @@ public class RequestManagementService : IRequestManagementService
         return await _client.CreateRecordRequestAsync(req);
     }
 
-    public async Task<EmployeeBaseApiResponse> Update(string employeeId)
+    public async Task<UpdateResponseBaseApiResponse> UpdateStatus(UpdateRecordRequestStatus req)
     {
-        return await _client.Update_document_requestAsync(employeeId);
+        return await _client.UpdateRecordRequestStatusAsync(req);
     }
 
     public async Task<DeleteResponse> Delete(Guid id)
