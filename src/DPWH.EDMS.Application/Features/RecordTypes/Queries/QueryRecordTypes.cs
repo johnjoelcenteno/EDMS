@@ -21,6 +21,7 @@ public class QueryRecordTypes : IRequestHandler<QueryRecordTypesRequest, DataSou
     {
         var result = _readRepository
             .RecordTypesView
+            .OrderByDescending(x => x.Created)
             .Select(x => RecordTypeMappers.Map(x))
             .ToDataSourceResult(request.DataSourceRequest.FixSerialization());
 
