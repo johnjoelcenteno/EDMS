@@ -36,9 +36,9 @@
             <img class="inspectionBanner" src="_content/DPWH.EDMS.Components/images/inspection-banner.svg" alt="inspection-banner" />
         </div>
     </div>
-    
+
 </TelerikCard>
-<div class="d-flex flex-row mt-3">
+<div class="d-flex flex-row mt-3 mb-4">
     <TelerikCard Width="100%">
         <CardBody>
             <div class="d-flex flex-row justify-content-between">
@@ -47,17 +47,16 @@
             </div>
             <CardSeparator Class="my-2"></CardSeparator>
             <div class="mobile-property-grid">
-               
+
                 @if (GridData != null && !XSmall)
                 {
                     <TelerikGrid TItem="EmployeeModel"
                                  @bind-PageSize="@PageSize"
-                                 Height="@GridHeight" 
+                                 Height="@GridHeight"
                                  Sortable=true
                                  Pageable=true
                                  Data="EmployeeRecords"
                                  OnStateChanged="@OnStateChanged"
-                                
                                  @ref="GridRef"
                                  FilterMode="@GridFilterMode.FilterRow"
                                  Context="employee">
@@ -69,32 +68,85 @@
                             <GridColumn Field=@nameof(EmployeeModel.ControlNumber) Title="Control No." />
                             <GridColumn Field=@nameof(EmployeeModel.FullName) Title="Full Name" />
                             <GridColumn Field=@nameof(EmployeeModel.DateRequested)
-                                        Title="Date Requested" 
+                                        Title="Date Requested"
                                         FilterEditorType="@GridFilterEditorType.DatePicker"
                                         DisplayFormat="{0:MMMM dd, yyyy}">
 
-                                            <FilterCellTemplate>
-                                               <TelerikDatePicker Value="@SelectedDate"
-                                                                   ShowWeekNumbers="true" ValueChanged="@(async (DateTime? val) =>
+                                <FilterCellTemplate>
+                                    <TelerikDatePicker Value="@SelectedDate"
+                                                       ShowWeekNumbers="true" ValueChanged="@(async (DateTime? val) =>
                                                                     {
                                                                         SelectedDate = val;
 
                                                                         if (SelectedDate != null)
                                                                         {
                                                                              await context.ClearFilterAsync();
-                                                                        } 
+                                                                        }
 
-                                                                        SetDateFilter(context.FilterDescriptor); 
+                                                                        SetDateFilter(context.FilterDescriptor);
 
                                                                         await context.FilterAsync();
 
                                                                     })">
-                                                 
-                                                </TelerikDatePicker>
-                                            </FilterCellTemplate>
 
-                                        </GridColumn>
-                            <GridColumn Field=@nameof(EmployeeModel.Status) Title="Status" />
+                                    </TelerikDatePicker>
+
+                                    <TelerikButton ButtonType="ButtonType.Button"
+                                                   Class="k-clear-button-visible ml-sm"
+                                                   Icon="@SvgIcon.FilterClear"
+                                                   Enabled="@(SelectedDate.HasValue)"
+                                                   OnClick="@(async () =>
+                                                               {
+                                                                  SelectedDate = null;
+
+                                                                  SetDateFilter(context.FilterDescriptor);
+
+                                                                  await context.ClearFilterAsync();
+                                                               })">
+                                    </TelerikButton>
+                                </FilterCellTemplate>
+
+                            </GridColumn>
+                            <GridColumn Field=@nameof(EmployeeModel.Status) Title="Status">
+                                <FilterCellTemplate>
+                                    <TelerikDropDownList Data="@StatusList"
+                                                         Value="@SelectedStatus"
+                                                         ValueField="string"
+                                                         TextField="string"
+                                                         DefaultText="Select Status"
+                                                         Width="100%"
+                                                         FilterOperator="@StringFilterOperator.Contains"
+                                                         ValueChanged="@(async (string val) =>
+                                                                    {
+                                                                        SelectedStatus = val;
+
+                                                                        if (SelectedDate != null)
+                                                                        {
+                                                                             await context.ClearFilterAsync();
+                                                                        }
+
+                                                                        SetStatusFilter(context.FilterDescriptor);
+
+                                                                        await context.FilterAsync();
+
+                                                                    })">
+                                    </TelerikDropDownList>
+                                    <TelerikButton ButtonType="ButtonType.Button"
+                                                   Class="k-clear-button-visible ml-sm"
+                                                   Icon="@SvgIcon.FilterClear"
+                                                   Enabled="@(!string.IsNullOrEmpty(SelectedStatus))"
+                                                   OnClick="@(async () =>
+                                                               {
+                                                                  SelectedStatus = string.Empty;
+
+                                                                  SetStatusFilter(context.FilterDescriptor);
+
+                                                                  await context.ClearFilterAsync();
+
+                                                               })">
+                                    </TelerikButton>
+                                </FilterCellTemplate>
+                            </GridColumn>
                         </GridColumns>
                     </TelerikGrid>
                 }
@@ -122,7 +174,7 @@
                                     <p><b>Full Name :</b> @prop.FullName </p>
                                     <p><b>Date Requested :</b> @GenericHelper.GetDateDisplay(prop.DateRequested) </p>
                                     <p><b>Status :</b> @prop.Status </p>
- 
+
                                 </div>
                             }
                         </DetailTemplate>
@@ -136,19 +188,19 @@
                     <span>No Data to display.</span>
                 }
             </div>
-          
+
         </CardBody>
     </TelerikCard>
 </div>
-<div class="d-flex flex-lg-row flex-column mt-3 gap-3">
-        <div class="col">
-            <TelerikCard Width="100%">
-                <CardHeader Class="ch-card">
-                    <h5 class="mb-0">Overview Status </h5>
-                </CardHeader>
-                <div class="container">
-                    <TelerikChart Class="PieChart" @ref="FullfilledChartRef">
-                        <ChartSeriesItems>
+<div class="d-flex flex-lg-row flex-column mt-3 gap-3 mb-4">
+    <div class="col">
+        <TelerikCard Width="100%">
+            <CardHeader Class="ch-card">
+                <h5 class="mb-0">Overview Status </h5>
+            </CardHeader>
+            <div class="container">
+                <TelerikChart Class="PieChart" @ref="FullfilledChartRef">
+                    <ChartSeriesItems>
                         <ChartSeries Type="ChartSeriesType.Pie" Data="@OverviewTotalChart"
                                      Field="@nameof(SimpleKeyValue.Name)" CategoryField="@nameof(SimpleKeyValue.Id)">
                             <ChartSeriesTooltip Visible="true">
@@ -156,35 +208,35 @@
                                     @((context.DataItem as SimpleKeyValue).Id) for @((context.DataItem as SimpleKeyValue).Name)
                                 </Template>
                             </ChartSeriesTooltip>
-                                <ChartSeriesLabels Position="ChartSeriesLabelsPosition.Center"
-                                                   Visible="true"
-                                                   Font="16px 'Times New Roman'"
-                                                   Background="transparent"></ChartSeriesLabels>
-                            </ChartSeries>
-                        </ChartSeriesItems>
-                        @if (XSmall)
-                        {
-                            <ChartLegend Position="ChartLegendPosition.Bottom">
+                            <ChartSeriesLabels Position="ChartSeriesLabelsPosition.Center"
+                                               Visible="true"
+                                               Font="16px 'Times New Roman'"
+                                               Background="transparent"></ChartSeriesLabels>
+                        </ChartSeries>
+                    </ChartSeriesItems>
+                    @if (XSmall)
+                    {
+                        <ChartLegend Position="ChartLegendPosition.Bottom">
 
-                            </ChartLegend>
-                        }
-                        else
-                        {
-                            FullfilledChartRef.Refresh();
-                            <ChartLegend Position="ChartLegendPosition.Right">
+                        </ChartLegend>
+                    }
+                    else
+                    {
+                        FullfilledChartRef.Refresh();
+                        <ChartLegend Position="ChartLegendPosition.Right">
 
-                            </ChartLegend>
-                        }
+                        </ChartLegend>
+                    }
                 </TelerikChart>
-                </div>
-            </TelerikCard>
-        </div>
-        <div class="col">
-            <TelerikCard Width="100%">
-                <CardHeader Class="ch-card">
-                    <h5 class="mb-0">Monthly Requests </h5>
-                </CardHeader>
-                <div class="container">
+            </div>
+        </TelerikCard>
+    </div>
+    <div class="col">
+        <TelerikCard Width="100%">
+            <CardHeader Class="ch-card">
+                <h5 class="mb-0">Monthly Requests </h5>
+            </CardHeader>
+            <div class="container">
                 <TelerikChart>
                     <ChartTooltip Visible="true"></ChartTooltip>
                     <ChartLegend Visible="false"></ChartLegend>
@@ -203,32 +255,34 @@
                     </ChartCategoryAxes>
 
                 </TelerikChart>
-                </div>
-            </TelerikCard>
-        </div>
+            </div>
+        </TelerikCard>
     </div>
+</div>
 
 <style>
     .ch-card {
         background-color: transparent;
         border-width: 0px 0px 1px 0px;
     }
+
         .ch-card .k-card-header {
             border-style: none;
             background-color: transparent;
         }
 
-    .ch-card-flex{
+    .ch-card-flex {
         border: none;
         background-color: transparent;
     }
-    h1{
+
+    h1 {
         color: #38339B;
     }
 
-    .ov-circle{
+    .ov-circle {
         color: white;
-        border:1px black;
+        border: 1px black;
         text-align: center;
         padding: .20rem .5rem .20rem .5rem;
         margin-left: .50rem;
@@ -237,7 +291,7 @@
         font-weight: 400;
     }
 
-    .inspectionBanner{
+    .inspectionBanner {
         padding-right: 4rem
     }
 </style>

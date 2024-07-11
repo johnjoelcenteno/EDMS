@@ -36,11 +36,8 @@ public class HomeBase : GridBase<EmployeeModel>
     public string[] Categories;
     public TelerikChart FullfilledChartRef { get; set; }
     public TelerikChart RequstChartRef { get; set; }
-     
-    protected string TextSearchControlNumber = string.Empty;
-    protected string TextSearchFullName = string.Empty;
-    protected string TextSearchDateRequested = string.Empty;
-    protected string TextSearchStatus = string.Empty;
+
+    protected string SelectedStatus = string.Empty;
     protected DateTime? SelectedDate { get; set; }
 
     protected List<string> StatusList = new List<string>
@@ -49,17 +46,17 @@ public class HomeBase : GridBase<EmployeeModel>
         "Release",
         "Claimed"
     };
-   
+
     public string DropDownListValue { get; set; }
     protected override void OnInitialized()
     {
-       
+
         DropDownListValue = "All";
 
         EmployeeList = GenerateEmployeeRecords(5);
     }
 
-    
+
     protected async override Task OnInitializedAsync()
     {
         IsLoading = true;
@@ -76,10 +73,24 @@ public class HomeBase : GridBase<EmployeeModel>
         {
             var selectedDatePickerFrom = new FilterDescriptor(nameof(EmployeeModel.DateRequested), FilterOperator.IsGreaterThan, SelectedDate);
             var selectedDatePickerTo = new FilterDescriptor(nameof(EmployeeModel.DateRequested), FilterOperator.IsLessThan, SelectedDate.Value.AddDays(1));
-             
+
 
             filterDescriptor.FilterDescriptors.Add(selectedDatePickerFrom);
             filterDescriptor.FilterDescriptors.Add(selectedDatePickerTo);
+        }
+
+        StateHasChanged();
+    }
+    protected void SetStatusFilter(CompositeFilterDescriptor filterDescriptor)
+    {
+        filterDescriptor.FilterDescriptors.Clear();
+
+        if (!string.IsNullOrEmpty(SelectedStatus))
+        {
+            var selectedDatePickerFrom = new FilterDescriptor(nameof(EmployeeModel.Status), FilterOperator.IsEqualTo, SelectedStatus);
+
+            filterDescriptor.FilterDescriptors.Add(selectedDatePickerFrom);
+
         }
 
         StateHasChanged();
@@ -104,9 +115,9 @@ public class HomeBase : GridBase<EmployeeModel>
         if (res.Success && res.Data != null)
         {
             GetMonthlyRequestData = res.Data.ToList();
-             
+
             Categories = GetMonthlyRequestData.Select(d => d.Month).ToArray();
-             
+
             Series1Data = GetMonthlyRequestData.Select(d => (object)d.Count).ToList();
         }
     }
@@ -114,13 +125,13 @@ public class HomeBase : GridBase<EmployeeModel>
     private async Task GetRecordRequest()
     {
         var res = await RequestManagementService.Query(DataSourceReq);
- 
-        if(res.Data != null)
+
+        if (res.Data != null)
         {
             var getData = GenericHelper.GetListByDataSource<EmployeeModel>(res.Data);
             EmployeeRecords = getData;
         }
-        
+
     }
 
     private async Task GetOverviewTotal()
@@ -197,6 +208,6 @@ public class HomeBase : GridBase<EmployeeModel>
 
         return employees;
     }
- 
-   
+
+
 }
