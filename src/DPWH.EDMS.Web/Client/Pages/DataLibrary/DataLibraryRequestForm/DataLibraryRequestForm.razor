@@ -11,7 +11,7 @@
             <TelerikTextBox Size="@ThemeConstants.Button.Size.Large" Id="Value" @bind-Value="@NewConfig.Value" PlaceHolder="Value"></TelerikTextBox>
             <ValidationMessage Class="text-danger" For="@(() => NewConfig.Value)" />
         </div>
-        @if (DataType == DataLibraryEnum.EmployeeRecords.ToString())
+        @if (DataType == DataLibraryEnum.EmployeeRecords.ToString() || DataType == DataLibraryEnum.Issuances.ToString())
         {
             <div class="col-md-12">
                 <label class="mb-2" for="Section">Section*</label>

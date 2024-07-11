@@ -25,7 +25,7 @@ public class DataLibraryRequestFormBase : DataLibraryRequestFormComponentBase
        {
             NewConfig.Value = EditItem.Value;
             NewConfig.Id = EditItem.Id.ToString();
-            if (DataType == DataLibraryEnum.EmployeeRecords.ToString())
+            if (DataType == DataLibraryEnum.EmployeeRecords.ToString() || DataType == DataLibraryEnum.Issuances.ToString())
             {
                     NewConfig.Section = EditItem.Section;
                     NewConfig.Office = EditItem.Office;

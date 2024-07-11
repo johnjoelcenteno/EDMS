@@ -22,7 +22,7 @@ public class CommonDataBase : GridBase<DataManagementModel>
     [Inject] public required IDataLibraryService DataLibraryService { get; set; }
     [Inject] public required IRecordTypesService RecordTypesService { get; set; }
     [Inject] public required IExceptionHandlerService ExceptionHandlerService { get; set; }
-
+    public bool checkRecordType = false;
     protected string UriName { get; set; }
     protected string DataType { get; set; }
     protected string SelectedAcord { get; set; }
@@ -40,10 +40,12 @@ public class CommonDataBase : GridBase<DataManagementModel>
     protected TelerikForm FormRef { get; set; } = new TelerikForm();
     protected ConfigModel NewConfig = new ConfigModel();
     protected GetDataLibraryResultValue SelectedItem { get; set; } = default!;
+    protected QueryRecordTypesModel SelectedRecordItem { get; set; } = default!;
     protected TelerikContextMenu<GridMenuItemModel> ContextMenuRef { get; set; } = new();
     protected List<GridMenuItemModel> MenuItems { get; set; } = new();
     protected List<string> SectionList { get; set; } = new();
     protected List<string> OfficeList { get; set; } = new();
+    protected List<QueryRecordTypesModel> GetRecordType { get; set; } = new List<QueryRecordTypesModel>();
     protected List<QueryRecordTypesModel> QueryRecordTypesModels { get; set; } = new List<QueryRecordTypesModel>();
 
     protected override void OnParametersSet()
@@ -107,37 +109,35 @@ public class CommonDataBase : GridBase<DataManagementModel>
 
         await ExceptionHandlerService.HandleApiException(async () =>
         {
-            if (DataType == DataLibraryEnum.EmployeeRecords.ToString())
+            if (DataType == DataLibraryEnum.EmployeeRecords.ToString() || DataType == DataLibraryEnum.Issuances.ToString())
             {
+                checkRecordType = true;
                 var dataLibraryResults = await RecordTypesService.QueryByCategoryRecordTypesAsync(UriName);
                 if (dataLibraryResults.Success)
                 {
                     QueryRecordTypesModels = dataLibraryResults.Data.ToList();
                     var convertedData = dataLibraryResults.Data.Where(item => item.IsActive)
-                        .Select(item => new GetDataLibraryResultValue
+                        .Select(item => new QueryRecordTypesModel
                         {
                             Id = item.Id,
-                            Value = item.Name,
-                            Created = DateTime.Now,
-                            CreatedBy = "system",
-                            IsDeleted = !item.IsActive
+                            Name = item.Name,
+                            Section = item.Section,
+                            Category = "System", //temporary until CreatedBy is created
+                            Office = item.Office,
+                            IsActive = !item.IsActive,
                         }).ToList();
-                    GetDataLibrary = new GetDataLibraryResult
-                    {
-                        Type = UriName,
-                        Data = convertedData
-                    };
+                    GetRecordType = convertedData;
 
                     SectionList = new List<string> {
                         "Employee Welfare and Benefits Section",
                         "Current Section",
                         "Non-Current Section"
-                };
+                    };
                     OfficeList = new List<string>
-                {
+                    {
                         "HRMD",
                         "RMD"
-                };
+                    };
                 }
             }
             else
@@ -188,6 +188,12 @@ public class CommonDataBase : GridBase<DataManagementModel>
         ItemId = row.Id.ToString();
         await ContextMenuRef.ShowAsync(e.ClientX, e.ClientY);
     }
+    protected async Task ShowRecordRowOptions(MouseEventArgs e, QueryRecordTypesModel row)
+    {
+        SelectedRecordItem = row;
+        ItemId = row.Id.ToString();
+        await ContextMenuRef.ShowAsync(e.ClientX, e.ClientY);
+    }
 
     protected void OnItemClick(GridMenuItemModel item)
     {
@@ -204,16 +210,23 @@ public class CommonDataBase : GridBase<DataManagementModel>
 
                 case "Edit":
                     getOpenbtn = "Edit";
-                    NewConfig.Value = SelectedItem.Value;
-                    NewConfig.Id = SelectedItem.Id.ToString();
-                    if (DataType == DataLibraryEnum.EmployeeRecords.ToString() && QueryRecordTypesModels.Count > 0)
+                    
+                    if (DataType == DataLibraryEnum.EmployeeRecords.ToString() && QueryRecordTypesModels.Count > 0 ||
+                        DataType == DataLibraryEnum.Issuances.ToString() && QueryRecordTypesModels.Count > 0)
                     {
-                        var checkItem = QueryRecordTypesModels.FirstOrDefault(dt => dt.Name == SelectedItem.Value);
+                        NewConfig.Value = SelectedRecordItem.Name;
+                        NewConfig.Id = SelectedRecordItem.Id.ToString();
+                        var checkItem = QueryRecordTypesModels.FirstOrDefault(dt => dt.Name == SelectedRecordItem.Name);
                         if (checkItem != null)
                         {
                             NewConfig.Section = checkItem.Section;
                             NewConfig.Office = checkItem.Office;
                         }
+                    }
+                    else
+                    {
+                        NewConfig.Value = SelectedItem.Value;
+                        NewConfig.Id = SelectedItem.Id.ToString();
                     }
 
 
@@ -227,15 +240,20 @@ public class CommonDataBase : GridBase<DataManagementModel>
                     break;
 
                 case "Delete":
-                    NewConfig.Value = SelectedItem.Value;
-                    if (DataType == DataLibraryEnum.EmployeeRecords.ToString() && QueryRecordTypesModels.Count > 0)
+                    if (DataType == DataLibraryEnum.EmployeeRecords.ToString() && QueryRecordTypesModels.Count > 0 ||
+                        DataType == DataLibraryEnum.Issuances.ToString() && QueryRecordTypesModels.Count > 0)
                     {
-                        var checkItem = QueryRecordTypesModels.FirstOrDefault(dt => dt.Name == SelectedItem.Value);
+                        NewConfig.Value = SelectedRecordItem.Name;
+                        var checkItem = QueryRecordTypesModels.FirstOrDefault(dt => dt.Name == SelectedRecordItem.Name);
                         if (checkItem != null)
                         {
                             NewConfig.Section = checkItem.Section;
                             NewConfig.Office = checkItem.Office;
                         }
+                    }
+                    else
+                    {
+                        NewConfig.Value = SelectedItem.Value;
                     }
                     IsConfirm = true;
                     dialogReference.Refresh();
@@ -263,7 +281,7 @@ public class CommonDataBase : GridBase<DataManagementModel>
     {
         IsConfirm = false;
         IsLoading = true;
-        if (DataType == DataLibraryEnum.EmployeeRecords.ToString())
+        if (DataType == DataLibraryEnum.EmployeeRecords.ToString() || DataType == DataLibraryEnum.Issuances.ToString())
         {
             await ExceptionHandlerService.HandleApiException(async () =>
             {
@@ -312,7 +330,7 @@ public class CommonDataBase : GridBase<DataManagementModel>
             return;
         }
 
-        if (DataType == DataLibraryEnum.EmployeeRecords.ToString())
+        if (DataType == DataLibraryEnum.EmployeeRecords.ToString() || DataType == DataLibraryEnum.Issuances.ToString())
         {
             if (string.IsNullOrEmpty(item.Section) || string.IsNullOrEmpty(item.Office))
             {
@@ -325,7 +343,7 @@ public class CommonDataBase : GridBase<DataManagementModel>
                 var data = new UpdateRecordTypeModel
                 {
                     IsActive = true,
-                    Category = "Employee Records",
+                    Category = UriName,
                     Name = item.Value,
                     Section = item.Section,
                     Office = item.Office
@@ -395,7 +413,7 @@ public class CommonDataBase : GridBase<DataManagementModel>
         if (string.IsNullOrEmpty(model.Value))
         {
             IsLoading = false;
-            if (DataType == DataLibraryEnum.EmployeeRecords.ToString())
+            if (DataType == DataLibraryEnum.EmployeeRecords.ToString() || DataType == DataLibraryEnum.Issuances.ToString())
             {
                 IsSectionEmpty = string.IsNullOrEmpty(model.Section);
                 IsOfficeEmpty = string.IsNullOrEmpty(model.Office);
@@ -437,7 +455,7 @@ public class CommonDataBase : GridBase<DataManagementModel>
                 //}
 
             }
-            else if (DataType == DataLibraryEnum.EmployeeRecords.ToString())
+            else if (DataType == DataLibraryEnum.EmployeeRecords.ToString() || DataType == DataLibraryEnum.Issuances.ToString())
             {
 
                 if (string.IsNullOrEmpty(model.Section) || string.IsNullOrEmpty(model.Office))
@@ -451,7 +469,7 @@ public class CommonDataBase : GridBase<DataManagementModel>
                     var data = new CreateRecordTypeModel
                     {
                         IsActive = true,
-                        Category = "Employee Records",
+                        Category = UriName,
                         Name = model.Value,
                         Section = model.Section,
                         Office = model.Office
