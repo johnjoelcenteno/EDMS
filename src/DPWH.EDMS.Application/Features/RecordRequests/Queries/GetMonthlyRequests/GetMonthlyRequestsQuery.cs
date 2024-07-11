@@ -4,14 +4,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DPWH.EDMS.Application.Features.RecordRequests.Queries.GetMonthlyRequests;
 
-public record GetMonthlyRequestQuery() : IRequest<List<GetMonthlyRequestModel>>;
-internal sealed class GetMonthlyRequestsHandler(IReadRepository readRepository) : IRequestHandler<GetMonthlyRequestQuery, List<GetMonthlyRequestModel>>
+public record GetMonthlyRequestQuery() : IRequest<IEnumerable<GetMonthlyRequestModel>>;
+internal sealed class GetMonthlyRequestsHandler(IReadRepository readRepository) : IRequestHandler<GetMonthlyRequestQuery, IEnumerable<GetMonthlyRequestModel>>
 {
     private readonly IReadRepository _readRepository = readRepository;
     private static readonly string[] MonthNames =
         [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
 
-    public async Task<List<GetMonthlyRequestModel>> Handle(GetMonthlyRequestQuery request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<GetMonthlyRequestModel>> Handle(GetMonthlyRequestQuery request, CancellationToken cancellationToken)
     {
         var monthlyRequestsCount = await _readRepository.RecordRequestsView
                 .GroupBy(x => x.DateRequested.Month)
