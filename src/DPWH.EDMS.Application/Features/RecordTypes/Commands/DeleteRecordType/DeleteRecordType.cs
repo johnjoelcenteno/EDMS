@@ -2,24 +2,19 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace DPWH.EDMS.Application.Features.RecordTypes.Commands;
+namespace DPWH.EDMS.Application.Features.RecordTypes.Commands.DeleteRecordType;
 
-public record class DeleteRecordTypeRequest(Guid Id) : IRequest<Guid?>;
-public class DeleteRecordType : IRequestHandler<DeleteRecordTypeRequest, Guid?>
-{
-    public IWriteRepository WriteRepository { get; }
-    public DeleteRecordType(IWriteRepository writeRepository)
+public record class DeleteRecordTypeCommand(Guid Id) : IRequest<Guid>;
+internal sealed class DeleteRecordTypeCommandHandler(IWriteRepository writeRepository): IRequestHandler<DeleteRecordTypeCommand, Guid>
+{    
+    public async Task<Guid> Handle(DeleteRecordTypeCommand request, CancellationToken cancellationToken)
     {
-        WriteRepository = writeRepository;
-    }
+        var recordType = await writeRepository.RecordTypes.FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken: cancellationToken);
+        if (recordType is null) return request.Id;
 
-    public async Task<Guid?> Handle(DeleteRecordTypeRequest request, CancellationToken cancellationToken)
-    {
-        var recordType = await WriteRepository.RecordTypes.FirstOrDefaultAsync(x => x.Id == request.Id);
-        if (recordType is null) return null;
+        writeRepository.RecordTypes.Remove(recordType);
+        await writeRepository.SaveChangesAsync(cancellationToken);
 
-        WriteRepository.RecordTypes.Remove(recordType);
-        await WriteRepository.SaveChangesAsync(cancellationToken);
-        return recordType.Id;
+        return request.Id;
     }
 }

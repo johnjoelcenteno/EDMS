@@ -1,6 +1,7 @@
 ﻿using DPWH.EDMS.Api.Endpoints;
 using DPWH.EDMS.Application;
 using DPWH.EDMS.Application.Features.RecordTypes.Commands;
+using DPWH.EDMS.Application.Features.RecordTypes.Commands.DeleteRecordType;
 using DPWH.EDMS.Application.Features.RecordTypes.Queries;
 using DPWH.EDMS.Application.Models;
 using KendoNET.DynamicLinq;
@@ -79,7 +80,7 @@ public static class RecordTypeEndpoints
             var data = new BaseApiResponse<Guid?>(result);
             return result is null ? Results.NotFound() : Results.Ok(data);
         })
-        .WithName("Update record type")
+        .WithName("UpdateRecordType")
         .WithTags(TagName)
         .WithDescription("Updates record type")
         .WithApiVersionSet(ApiVersioning.VersionSet)
@@ -90,16 +91,15 @@ public static class RecordTypeEndpoints
 
         builder.MapDelete(ApiEndpoints.RecordTypes.Delete, async (Guid Id, IMediator mediator) =>
         {
-            var result = await mediator.Send(new DeleteRecordTypeRequest(Id));
-            var data = new BaseApiResponse<Guid?>(result);
-            return result is null ? Results.NotFound() : Results.Ok(result);
+            var result = await mediator.Send(new DeleteRecordTypeCommand(Id));            
+            return new DeleteResponse(result);
         })
-        .WithName("Delete record type")
+        .WithName("DeleteRecordType")
         .WithTags(TagName)
         .WithDescription("Deletes record type")
         .WithApiVersionSet(ApiVersioning.VersionSet)
         .HasApiVersion(1.0)
-        .Produces<BaseApiResponse<Guid?>>()
+        .Produces<DeleteResponse>(StatusCodes.Status200OK)
         .Produces<ProblemDetails>(StatusCodes.Status400BadRequest)
         .Produces<ProblemDetails>(StatusCodes.Status500InternalServerError);
 
