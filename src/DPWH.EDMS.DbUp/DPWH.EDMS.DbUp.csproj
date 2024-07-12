@@ -14,6 +14,7 @@
     <None Remove="Scripts\01\02-Schema-AddChangeLogs.sql" />
     <None Remove="Scripts\01\02-Schema-AddRequestingOffices.sql" />
     <None Remove="Scripts\01\03-Seed.sql" />
+    <None Remove="Scripts\01\05-Schema-UpdateRequestedRecords.sql" />
   </ItemGroup>
 
   <ItemGroup>
@@ -28,6 +29,7 @@
     <EmbeddedResource Include="Scripts\01\01-Schema-Create.sql" />
     <EmbeddedResource Include="Scripts\01\02-Schema-AddChangeLogs.sql" />
     <EmbeddedResource Include="Scripts\01\02-Schema-AddRequestingOffices.sql" />
+    <EmbeddedResource Include="Scripts\01\05-Schema-UpdateRequestedRecords.sql" />
     <EmbeddedResource Include="Scripts\01\04-Schema-AlterRequestAddFullName.sql" />
   </ItemGroup>
   

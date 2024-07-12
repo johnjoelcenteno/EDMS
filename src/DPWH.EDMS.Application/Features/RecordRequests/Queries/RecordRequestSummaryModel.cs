@@ -7,6 +7,6 @@ public record RecordRequestSummaryModel
     public DateTimeOffset? DateRequested { get; set; }
     public string Purpose { get; set; }
     public string Status { get; set; }
-    public IEnumerable<RequestedRecordModel> RequestedRecords { get; set; } = [];
+    public IEnumerable<RequestedRecordSummaryModel> RequestedRecords { get; set; } = [];
     public string? FullName { get; set; }
 }

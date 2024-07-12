@@ -28,7 +28,7 @@ public static class RecordRequestMappers
                 AuthorizationDocumentName = (entity.Files?.FirstOrDefault(predicate: f => f.Type == RecordRequestProvidedDocumentTypes.AuthorizationDocument.ToString())) == null ? null : entity.Files?.FirstOrDefault(predicate: f => f.Type == RecordRequestProvidedDocumentTypes.AuthorizationDocument.ToString()).Name,
                 AuthorizationDocumentUri = (entity.Files?.FirstOrDefault(f => f.Type == RecordRequestProvidedDocumentTypes.AuthorizationDocument.ToString())) == null ? null : entity.Files?.FirstOrDefault(predicate: f => f.Type == RecordRequestProvidedDocumentTypes.AuthorizationDocument.ToString()).Uri
             } : new(),
-            RequestedRecords = entity.RequestedRecords.Select(rr => new RequestedRecordModel(rr.RecordTypeId, rr.RecordType)).ToList(),
+            RequestedRecords = entity.RequestedRecords.Select(rr => new RequestedRecordModel(rr.Id, rr.RecordTypeId, rr.RecordType, rr.Office, rr.Status, rr.IsAvailable, rr.Uri)).ToList(),
             Purpose = entity.Purpose,
             Status = entity.Status,
             Files = entity.Files?.Select(entityFile => new RecordRequestDocumentModel
