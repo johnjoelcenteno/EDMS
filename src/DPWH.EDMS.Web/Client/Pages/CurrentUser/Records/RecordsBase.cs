@@ -3,13 +3,17 @@ using DPWH.EDMS.Client.Shared.APIClient.Services.Lookups;
 using DPWH.EDMS.Client.Shared.MockModels;
 using DPWH.EDMS.Client.Shared.Models;
 using DPWH.EDMS.Components.Components.ReusableGrid;
+using DPWH.EDMS.Components.Helpers;
+using DPWH.EDMS.IDP.Core.Constants;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using Telerik.Blazor.Components;
 
 namespace DPWH.EDMS.Web.Client.Pages.CurrentUser.Records;
 
 public class RecordsBase : GridBase<GetLookupResult>
 {
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateAsync { get; set; }
     [Parameter] public required string Id { get; set; }
     [Inject] public required NavigationManager NavigationManager { get; set; }
     [Inject] public required ILookupsService LookupsService { get; set; }
@@ -17,6 +21,9 @@ public class RecordsBase : GridBase<GetLookupResult>
     protected MockCurrentData CurrentData { get; set; }
     protected List<Document> DocumentList = new List<Document>();
     protected GetLookupResultIEnumerableBaseApiResponse GetEmployeeRecords { get; set; } = new GetLookupResultIEnumerableBaseApiResponse();
+
+    protected string DisplayName = "---";
+    protected string Role = string.Empty;
     protected override void OnInitialized()
     { 
         BreadcrumbItems.Add(new BreadcrumbModel
@@ -27,13 +34,42 @@ public class RecordsBase : GridBase<GetLookupResult>
         });
 
         Record = MockCurrentData.GetCurrentRecord();
-        DocumentList = MockCurrentData.GetDocuments().OrderBy(d => d.DocumentName).ToList();
-         
+       
     }
+
     protected async override Task OnInitializedAsync()
     {
+        IsLoading = true;
+
         await GetDocumentRecords();
+        await GetUserInfo();
+
+        IsLoading = false;
     }
+
+    private async Task GetUserInfo()
+    {
+        if (AuthenticationStateAsync is null)
+            return;
+
+        
+        var authState = await AuthenticationStateAsync;
+        var user = authState.User;
+
+        if (user.Identity is not null && user.Identity.IsAuthenticated)
+        {
+            var roleValue = user.Claims.FirstOrDefault(c => c.Type == "role")!.Value;
+            DisplayName = !string.IsNullOrEmpty(user.Identity.Name) ? GenericHelper.CapitalizeFirstLetter(user.Identity.Name) : "---";
+            Role = GetRoleLabel(roleValue);
+           
+        }
+    }
+
+    private string GetRoleLabel(string roleValue)
+    {
+        return ApplicationRoles.GetDisplayRoleName(roleValue, "Unknown Role");
+    }
+
     protected async Task GetDocumentRecords()
     {
         IsLoading = true;

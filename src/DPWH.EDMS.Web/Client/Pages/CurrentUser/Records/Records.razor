@@ -9,8 +9,8 @@
 
 <h3>My Records</h3>
 <div class="d-flex flex-row align-items-center mb-2">
-    <p>@Record.FirstName @Record.LastName</p>
-    <span class="role-chip">Super Admin</span>
+    <p class="fs-5">@DisplayName</p>
+    <span class="role-chip">@Role</span>
 </div>
 <hr />
 <div class="d-flex flex-row mt-3">
@@ -95,7 +95,7 @@
     .role-chip {
         background-color: #38339b;
         color: #fff;
-        font-size: 12px;
+        font-size: 16px;
         border-radius: 25px;
         padding: 3px 16px;
         margin: 0 10px;
