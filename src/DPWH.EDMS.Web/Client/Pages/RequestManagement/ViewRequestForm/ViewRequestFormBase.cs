@@ -1,4 +1,5 @@
-﻿using DPWH.EDMS.Client.Shared.Models;
+﻿using DPWH.EDMS.Api.Contracts;
+using DPWH.EDMS.Client.Shared.Models;
 using DPWH.EDMS.Shared.Enums;
 using DPWH.EDMS.Web.Client.Shared.RecordRequest.View.RequestDetailsOverview;
 using Microsoft.AspNetCore.Components;
@@ -9,15 +10,20 @@ namespace DPWH.EDMS.Web.Client.Pages.RequestManagement.ViewRequestForm;
 public class ViewRequestFormBase : RequestDetailsOverviewBase
 {
     [Inject] public required NavigationManager NavigationManager { get; set; }
+    protected UpdateResponseBaseApiResponse? updateResponse;
     protected int ActiveTabIndex { get; set; } = 0;
-    protected int CurrentStepIndex { get; set; } = 1;
-    protected string Status { get; set; } = "Submitted";
+    protected int CurrentStepIndex { get; set; }
     protected DateTime? DateReceived { get; set; } = DateTime.Now;
     protected DateTime? TimeReceived { get; set; } = DateTime.Now;
     protected bool IsModalVisible { get; set; }
     public int MinFileSize { get; set; } = 1024;
     public int MaxFileSize { get; set; } = 4 * 1024 * 1024;
     public List<string> AllowedExtensions { get; set; } = new List<string>() { ".docx", ".pdf" };
+
+    protected override void OnParametersSet()
+    {
+        CancelReturnUrl = "/request-management";
+    }
 
     protected async override Task OnInitializedAsync()
     {
@@ -44,47 +50,49 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
             });
         });
 
+        UpdateCurrentStepIndex();
         IsLoading = false;
+    }
+
+    protected async Task OnSubmit(string newStatus, int tabIndex)
+    {
+        IsLoading = true;
+        IsModalVisible = false;
+
+        var request = new UpdateRecordRequestStatus
+        {
+            Id = SelectedRecordRequest.Id,
+            Status = newStatus
+        };
+
+        updateResponse = await RequestManagementService.UpdateStatus(request);
+        if (updateResponse.Success)
+        {
+            SelectedRecordRequest.Status = newStatus;
+            UpdateCurrentStepIndex();
+        }
+
+        ActiveTabIndex = tabIndex;
         StateHasChanged();
-    }
-
-    public void ValueChangeHandler(int newStep)
-    {
-
-    }
-
-    protected override void OnParametersSet()
-    {
-        CancelReturnUrl = "/request-management";
-    }
-
-    protected void OnReview()
-    {
-        IsLoading = true;
-        IsModalVisible = false;
-        CurrentStepIndex = 2;
-        ActiveTabIndex = 2;
-        Status = RecordRequestStates.Review.ToString();
         IsLoading = false;
     }
 
-    protected void OnRelease()
+    private void UpdateCurrentStepIndex()
     {
-        IsLoading = true;
-        IsModalVisible = false;
-        CurrentStepIndex = 3;
-        ActiveTabIndex = 3;
-        Status = RecordRequestStates.Release.ToString();
-        IsLoading = false;
-    }
+        switch (SelectedRecordRequest.Status)
+        {
+            case var status when status == RecordRequestStates.Review.ToString():
+                CurrentStepIndex = 1;
+                break;
 
-    protected void OnClaim()
-    {
-        IsLoading = true;
-        IsModalVisible = false;
-        Status = RecordRequestStates.Claimed.ToString();
-        NavigationManager.NavigateTo("/request-management");
-        IsLoading = false;
+            case var status when status == RecordRequestStates.Release.ToString():
+                CurrentStepIndex = 2;
+                break;
+
+            default:
+                CurrentStepIndex = 3;
+                break;
+        }
     }
 
     protected async void OnSelectDocument(FileSelectEventArgs args)
@@ -103,6 +111,11 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
     }
 
     protected async void OnRemoveTransmittal(FileSelectEventArgs args)
+    {
+
+    }
+
+    public void ValueChangeHandler(int newStep)
     {
 
     }
