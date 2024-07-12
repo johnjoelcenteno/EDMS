@@ -23,9 +23,9 @@ public class RecordTypesService : IRecordTypesService
         return await _client.Create_record_typeAsync(model);
     }
 
-    public async Task<GuidNullableBaseApiResponse> DeleteRecordTypesAsync(Guid id)
+    public async Task<DeleteResponse> DeleteRecordTypesAsync(Guid id)
     {
-        return await _client.Delete_record_typeAsync(id);
+        return await _client.DeleteRecordTypeAsync(id);
     }
 
     public async Task<QueryRecordTypesModelListBaseApiResponse> QueryByCategoryRecordTypesAsync(string category)
@@ -45,7 +45,7 @@ public class RecordTypesService : IRecordTypesService
 
     public async Task<GuidNullableBaseApiResponse> UpdateRecordTypesAsync(Guid id, UpdateRecordTypeModel model)
     {
-        return await _client.Update_record_typeAsync(id, model);
+        return await _client.UpdateRecordTypeAsync(id, model);
     }
 }
 

@@ -19,6 +19,6 @@ public interface IRecordTypesService
 
     Task<GuidNullableBaseApiResponse> UpdateRecordTypesAsync(Guid id,UpdateRecordTypeModel model);
 
-    Task<GuidNullableBaseApiResponse> DeleteRecordTypesAsync(Guid id);
+    Task<DeleteResponse> DeleteRecordTypesAsync(Guid id);
 }
 

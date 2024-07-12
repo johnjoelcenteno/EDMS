@@ -1986,7 +1986,7 @@
         "tags": [
           "RecordTypes"
         ],
-        "operationId": "Update record type",
+        "operationId": "UpdateRecordType",
         "parameters": [
           {
             "name": "id",
@@ -2045,7 +2045,7 @@
         "tags": [
           "RecordTypes"
         ],
-        "operationId": "Delete record type",
+        "operationId": "DeleteRecordType",
         "parameters": [
           {
             "name": "id",
@@ -2063,7 +2063,7 @@
             "content": {
               "application/json; api-version=1.0": {
                 "schema": {
-                  "$ref": "#/components/schemas/GuidNullableBaseApiResponse"
+                  "$ref": "#/components/schemas/DeleteResponse"
                 }
               }
             }
