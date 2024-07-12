@@ -411,7 +411,8 @@ public class UserFormBase : RxBaseComponent
                     DesignationTitle = user.DesignationTitle,
                     MobileNumber = string.Empty,
                     Department = user.Department,
-                    Position = user.Position
+                    Position = user.Position,
+                    Office = user.Office
                 };
                 try
                 {
