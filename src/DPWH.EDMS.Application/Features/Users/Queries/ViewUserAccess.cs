@@ -20,5 +20,6 @@ public record ViewUserAccess(
     string? RegionalOfficeProvince,
     string? DistrictEngineeringOffice,
     string? DesignationTitle,
+    string? Office,
     DateTimeOffset? Created,
     string? CreatedBy);

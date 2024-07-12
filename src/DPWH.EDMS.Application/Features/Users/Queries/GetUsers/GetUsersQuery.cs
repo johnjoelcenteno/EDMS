@@ -33,6 +33,7 @@ internal sealed class GetUsersHandler(IReadAppIdpRepository repository) : IReque
                 RegionalOfficeProvince = p.RegionalOfficeProvince,
                 DistrictEngineeringOffice = p.DistrictEngineeringOffice,
                 DesignationTitle = p.DesignationTitle,
+                Office = p.Office,
                 Created = p.Created,
                 CreatedBy = p.CreatedBy
             })
