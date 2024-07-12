@@ -27,4 +27,6 @@ public record AuthorizedRepresentativeModel
     public string? AuthorizationDocumentUri { get; set; }
 }
 
-public record RequestedRecordModel(Guid RecordTypeId, string RecordType);
+public record RequestedRecordModel(Guid Id, Guid RecordTypeId, string RecordType, string Office, string Status, bool IsAvailable, string? Uri);
+
+public record RequestedRecordSummaryModel(Guid RecordTypeId, string RecordType);

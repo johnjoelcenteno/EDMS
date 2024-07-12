@@ -5482,11 +5482,30 @@
       "RequestedRecordModel": {
         "type": "object",
         "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
           "recordTypeId": {
             "type": "string",
             "format": "uuid"
           },
           "recordType": {
+            "type": "string",
+            "nullable": true
+          },
+          "office": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "isAvailable": {
+            "type": "boolean"
+          },
+          "uri": {
             "type": "string",
             "nullable": true
           }

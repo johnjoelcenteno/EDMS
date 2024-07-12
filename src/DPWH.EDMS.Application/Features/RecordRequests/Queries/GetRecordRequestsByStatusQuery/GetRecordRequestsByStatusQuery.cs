@@ -26,7 +26,7 @@ internal class GetRecordRequestsByStatusQueryHandler(IReadRepository readReposit
                         Status = s.Status,
                         Purpose = s.Purpose,
                         FullName = s.FullName,
-                        RequestedRecords = s.RequestedRecords.Select(x => new RequestedRecordModel(x.RecordTypeId, x.RecordType))
+                        RequestedRecords = s.RequestedRecords.Select(x => new RequestedRecordSummaryModel(x.RecordTypeId, x.RecordType))
                     }).ToDataSourceResult(request.Request.FixSerialization());
 
         return await Task.FromResult(result);

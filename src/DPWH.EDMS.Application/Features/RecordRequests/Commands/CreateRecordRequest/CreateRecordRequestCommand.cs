@@ -36,7 +36,7 @@ internal sealed class CreateRecordRequestCommandHandler(IWriteRepository writeRe
         var recordTypes = readRepository.RecordTypesView
             .Where(d => d.Category == RecordTypesCategory.Issuances.GetDescription() ||
                         d.Category == RecordTypesCategory.EmployeeRecords.GetDescription())
-            .Select(d => new GetLookupResult(d.Id, d.Name))
+            //.Select(d => new GetLookupResult(d.Id, d.Name))
             .ToList();
 
         var inputRecordTypes = model.RequestedRecords;
@@ -56,7 +56,9 @@ internal sealed class CreateRecordRequestCommandHandler(IWriteRepository writeRe
 
         foreach (var providedRequestedRecord in model.RequestedRecords)
         {
-            var requestedRecord = RequestedRecord.Create(recordRequest.Id, providedRequestedRecord, recordTypes.FirstOrDefault(x => x.Id == providedRequestedRecord).Name);
+            var recordType = recordTypes.FirstOrDefault(x => x.Id == providedRequestedRecord);
+
+            var requestedRecord = RequestedRecord.Create(recordRequest.Id, providedRequestedRecord, recordType.Name, recordType.Office);
             recordRequest.RequestedRecords.Add(requestedRecord);
         }
 
