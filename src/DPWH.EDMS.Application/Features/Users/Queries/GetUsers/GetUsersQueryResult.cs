@@ -18,6 +18,7 @@ public record GetUsersQueryResult
     public string? RegionalOfficeProvince { get; set; }
     public string? DistrictEngineeringOffice { get; set; }
     public string? DesignationTitle { get; set; }
+    public string? Office { get; set; }
     public DateTimeOffset? Created { get; set; }
     public string? CreatedBy { get; set; }
 }
