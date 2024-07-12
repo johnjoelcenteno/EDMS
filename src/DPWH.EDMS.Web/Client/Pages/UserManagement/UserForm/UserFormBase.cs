@@ -42,6 +42,7 @@ public class UserFormBase : RxBaseComponent
     //[Inject] public required IAddressManagerService AddressManagerService { get; set; }
     [Parameter] public EventCallback HandleCreateOnSubmit { get; set; }
     [Parameter] public EventCallback HandleOnCancel { get; set; }
+    [Parameter] public string Type { get; set; }
     protected UserManagementModel User { get; set; } = new();
     protected UserManagementModel UserModel { get; set; }
     protected TelerikForm FormRef { get; set; } = new();
@@ -75,11 +76,25 @@ public class UserFormBase : RxBaseComponent
     protected TelerikDropDownList<GetRequestingOfficeResultItem, string> ImplementRef = new();
     protected TelerikDropDownList<UserAccessRoles, string> DropDownListRef { get; set; } = new();
     protected List<UserAccessRoles> UserAccessList { get; set; } = new List<UserAccessRoles>();
-
+    [Parameter] public string Id { get; set; }
+    protected Guid UserId = new Guid();
 
     protected override async Task OnInitializedAsync()
     {
-        SelectedAcord = "add";
+
+        if (Type == "View")
+        {
+            if (Guid.TryParse($"{Id}", out var id))
+            {
+                UserId = id;
+            }
+
+            var selectedUser = await UserService.GetById(id);
+            if (selectedUser.Success)
+            {
+                User.FullName = $"{selectedUser.Data.LastName}, {selectedUser.Data.FirstName} {selectedUser.Data.MiddleInitial}";
+            }
+        }
 
         await ExceptionHandlerService.HandleApiException(
             async () =>
@@ -191,6 +206,7 @@ public class UserFormBase : RxBaseComponent
 
         }
         IsLoading = false;
+        await LoadUserRegion();
     }
     protected void ClearNotif()
     {
@@ -318,7 +334,7 @@ public class UserFormBase : RxBaseComponent
                 "This role consumes a license";
 
         }
-        if (User.Role == ApplicationRoles.Manager)
+        if (Role == ApplicationRoles.Manager)
         {
             var selectedRegion = RegionOfficeList.FirstOrDefault(item => item.RegionName == SelectedRegionalOffice);
             if (User.Role == "dpwh_manager")
@@ -494,6 +510,59 @@ public class UserFormBase : RxBaseComponent
         {
             IsLoading = false;
             IsSaving = false;
+        }
+    }
+
+    private async Task LoadUserRegion()
+    { 
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        UserName = user.Identity.Name;
+
+        if (user.Identity!.IsAuthenticated)
+        {
+            var claims = user.Claims.ToList();
+
+            var roleClaim = claims.FirstOrDefault(x => x.Type == "role");
+            Role = roleClaim?.Value ?? string.Empty;
+
+            var regionalOfficeClaim = claims.FirstOrDefault(x => x.Type == "regional_office");
+            RegionOffice = regionalOfficeClaim?.Value ?? string.Empty;
+
+            var districtOfficeClaim = claims.FirstOrDefault(x => x.Type == "implementing_office");
+            DistrictOffice = districtOfficeClaim?.Value ?? string.Empty;
+
+            var filteredRegionalOfficeProvinces = claims.FirstOrDefault(x => x.Type == "implementing_office");
+
+            if (filteredRegionalOfficeProvinces != null)
+            {
+                User.DistrictEngineeringOffice = filteredRegionalOfficeProvinces.Value;
+            }
+            if (RegionOffice != null)
+            {
+                await GetRegionList();
+                SelectedRegionalOffice = RegionOffice;
+                await OnRegionOfficeChanged();
+            }
+        }
+
+        if (Role == ApplicationRoles.Manager)
+        {
+            UserAccessList = ApplicationRoles.AssignableRoles
+                .Where(ar => ar.Key != ApplicationRoles.SuperAdmin && ar.Key != ApplicationRoles.ITSupport)
+                .Select(ar => new UserAccessRoles
+                {
+                    idRole = ar.Key,
+                    UserAccess = ar.Value
+                }).ToList();
+        }
+        else
+        {
+            UserAccessList = ApplicationRoles.AssignableRoles.Select(ar => new UserAccessRoles
+            {
+                idRole = ar.Key,
+                UserAccess = ar.Value
+            }).ToList();
         }
     }
 }
