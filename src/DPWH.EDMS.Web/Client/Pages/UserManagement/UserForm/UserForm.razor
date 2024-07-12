@@ -173,7 +173,7 @@
                             {
                                 <div class="form-group col-md-12 mb-1">
                                     <label class="regionalDetails">Office</label>
-                                    <TelerikDropDownList @bind-Value="@SelectedOffice"
+                                    <TelerikDropDownList @bind-Value="User.Office"
                                                          Id="roleCateg"
                                                          Data="@Offices"
                                                          DefaultText="Select"
@@ -181,7 +181,7 @@
                                                          AdaptiveMode="@AdaptiveMode.None"
                                                          Enabled="true">
                                     </TelerikDropDownList>
-                                    <TelerikValidationMessage For="@(() => SelectedOffice)" />
+                                    <TelerikValidationMessage For="@(() => User.Office)" />
                                 </div>
                             }
                         }

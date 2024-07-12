@@ -30,5 +30,6 @@ public record UserManagementModel
     public string? CreatedBy { get; set; }
     public DateTimeOffset? Created { get; set; }
     public string FullName { get; set; }
+    public string Office { get; set; }
 }
 
