@@ -11,10 +11,7 @@ public record GetAuditLogByEntityIdResult
 public record GetAuditLogByEntityIdResultDetail
 {
     public GetAuditLogByEntityIdResultDetail(ChangeLog entity)
-    {
-        PropertyId = entity.PropertyId;
-        BuildingId = entity.BuildingId;
-        BuildingName = entity.PropertyName;
+    {        
         Model = new GetAuditLogByEntityIdResultItemModel(entity);
     }
 

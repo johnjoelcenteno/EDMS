@@ -1,4 +1,5 @@
 ﻿using DPWH.EDMS.Domain.Common;
+using UUIDNext;
 
 namespace DPWH.EDMS.Domain;
 
@@ -18,7 +19,7 @@ public class Signatory : EntityBase
     {
         var entity = new Signatory
         {
-            Id = Guid.NewGuid(),
+            Id = Uuid.NewDatabaseFriendly(Database.SqlServer),
             DocumentType = documentType,
             Name = name,
             Position = position,

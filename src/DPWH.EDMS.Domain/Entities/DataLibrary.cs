@@ -1,4 +1,5 @@
 using DPWH.EDMS.Domain.Common;
+using UUIDNext;
 
 namespace DPWH.EDMS.Domain.Entities;
 
@@ -6,6 +7,7 @@ public class DataLibrary : EntityBase
 {
     private DataLibrary(string type, string value, string createdBy)
     {
+        Id = Uuid.NewDatabaseFriendly(Database.SqlServer);
         Type = type;
         Value = value;
         SetCreated(createdBy);

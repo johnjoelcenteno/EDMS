@@ -1,4 +1,6 @@
-﻿namespace DPWH.EDMS.Domain.Entities;
+﻿using UUIDNext;
+
+namespace DPWH.EDMS.Domain.Entities;
 
 public class SystemLog
 {
@@ -8,6 +10,7 @@ public class SystemLog
     {
         var config = new SystemLog
         {
+            Id = Uuid.NewDatabaseFriendly(Database.SqlServer),
             Version = version,
             Description = description,
             Created = date,

@@ -23,8 +23,7 @@ public static class EndpointsExtensions
                 // app.MapEmployeeRequestEndpointExtensions();
                 app.MapRecordTypeExtensions();
                 app.MapSignatoryEndpointExtensions();
-
-                //app.MapAssetEndpoints();
+                
                 app.MapRecordsEndpoints();
                 app.MapRootEndpoints();
                 app.MapLookupsEndpoints();
@@ -35,8 +34,7 @@ public static class EndpointsExtensions
                 //app.MapReportsEndpoints();
                 app.MapAuditLogsEndpoints();
                 app.MapSystemLogsEndpoints();
-                app.MapDpwhIntegrationsEndpoints();
-                //app.MapArcGisIntegrationsEndpoints();
+                app.MapDpwhIntegrationsEndpoints();                
                 app.MapDataLibrariesEndpoints();
                 app.MapDataSyncEndpoints();
 

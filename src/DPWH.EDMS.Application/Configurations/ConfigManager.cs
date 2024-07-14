@@ -8,8 +8,7 @@ public class ConfigManager
     {
         Security = new SecuritySettings();
         ConnectionStrings = new ConnectionStrings();
-        DpwhIntegration = new DpwhIntegrationSettings();
-        ArcGisIntegration = new ArcGisIntegrationSettings();
+        DpwhIntegration = new DpwhIntegrationSettings();        
     }
 
     public static ConfigManager Instance(IConfiguration configuration)
@@ -24,7 +23,6 @@ public class ConfigManager
     public ConnectionStrings ConnectionStrings { get; set; }
     public bool IsDebug { get; set; }
     public bool EnableSwaggerUI { get; set; }
-    public DpwhIntegrationSettings DpwhIntegration { get; set; }
-    public ArcGisIntegrationSettings ArcGisIntegration { get; set; }
+    public DpwhIntegrationSettings DpwhIntegration { get; set; }    
 }
 

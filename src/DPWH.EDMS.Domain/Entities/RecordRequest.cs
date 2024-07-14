@@ -1,5 +1,6 @@
 ﻿using DPWH.EDMS.Domain.Common;
 using DPWH.EDMS.Shared.Enums;
+using UUIDNext;
 
 namespace DPWH.EDMS.Domain.Entities;
 
@@ -17,10 +18,10 @@ public class RecordRequest : EntityBase
        string createdBy,
        string fullName
     )
-    {
+    {        
         var entity = new RecordRequest
         {
-            Id = Guid.NewGuid(),
+            Id = Uuid.NewDatabaseFriendly(Database.SqlServer),
             ControlNumber = controlNumber,
             EmployeeNumber = employeeNumber,
             ClaimantType = claimantType.ToString(),
