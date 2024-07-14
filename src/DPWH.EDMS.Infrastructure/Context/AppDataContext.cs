@@ -1,9 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using DPWH.EDMS.Application.Contracts.Persistence;
 using DPWH.EDMS.Domain.Entities;
-using DPWH.EDMS.Domain.Enums;
 using DPWH.EDMS.Domain;
-using DPWH.EDMS.IDP.Core.Entities;
 
 namespace DPWH.EDMS.Infrastructure.Context;
 
@@ -24,28 +22,6 @@ public class AppDataContext : DbContext, IReadRepository, IWriteRepository
 
     public DbSet<EmployeeRecord> EmployeeRecords { get; set; }
     public IQueryable<EmployeeRecord> EmployeeRecordsView => EmployeeRecords.AsNoTracking();
-
-    public DbSet<Asset> Assets { get; set; }
-    public IQueryable<Asset> AssetsView => Assets.AsNoTracking();
-
-    public DbSet<FinancialDetails> FinancialDetails { get; set; }
-
-    public DbSet<FinancialDetailsDocuments> FinancialDetailsDocuments { get; set; }
-    public IQueryable<FinancialDetailsDocuments> FinancialDetailsDocumentsView => FinancialDetailsDocuments.AsNoTracking();
-
-    public DbSet<AssetImageDocument> AssetImages { get; set; }
-    public IQueryable<AssetImageDocument> AssetImagesView => AssetImages.AsNoTracking();
-
-    public DbSet<BuildingComponent> BuildingComponents { get; set; }
-    public IQueryable<BuildingComponent> BuildingComponentsView => BuildingComponents.AsNoTracking();
-
-    public DbSet<InspectionRequest> InspectionRequests { get; set; }
-    public IQueryable<InspectionRequest> InspectionRequestsView => InspectionRequests.AsNoTracking();
-    public DbSet<MaintenanceRequest> MaintenanceRequests { get; set; }
-    public IQueryable<MaintenanceRequest> MaintenanceRequestsView => MaintenanceRequests.AsNoTracking();
-
-    public DbSet<AssetFileDocument> AssetFiles { get; set; }
-    public IQueryable<AssetFileDocument> AssetFilesView => AssetFiles.AsNoTracking();
 
     public DbSet<GeoLocation> Geolocations { get; set; }
     public IQueryable<GeoLocation> GeolocationsView => Geolocations.AsNoTracking();
@@ -70,44 +46,9 @@ public class AppDataContext : DbContext, IReadRepository, IWriteRepository
 
     public DbSet<Agency> Agencies { get; set; }
     public IQueryable<Agency> AgenciesView => Agencies.AsNoTracking();
-
-    public DbSet<InspectionRequestBuildingComponent> InspectionRequestBuildingComponents { get; set; }
-    public IQueryable<InspectionRequestBuildingComponent> InspectionRequestBuildingComponentsView => InspectionRequestBuildingComponents.AsNoTracking();
-
-    public DbSet<InspectionRequestBuildingComponentImage> InspectionRequestBuildingComponentImage { get; set; }
-    public IQueryable<InspectionRequestBuildingComponentImage> InspectionRequestBuildingComponentImageView => InspectionRequestBuildingComponentImage.AsNoTracking();
-    public DbSet<MaintenanceRequestBuildingComponent> MaintenanceRequestBuildingComponents { get; set; }
-    public IQueryable<MaintenanceRequestBuildingComponent> MaintenanceRequestBuildingComponentsView => MaintenanceRequestBuildingComponents.AsNoTracking();
-    public DbSet<ProjectMonitoring> ProjectMonitoring { get; set; }
-    public IQueryable<ProjectMonitoring> ProjectMonitoringView => ProjectMonitoring.AsNoTracking();
-    public DbSet<ProjectMonitoringScope> ProjectMonitoringScopes { get; set; }
-    public IQueryable<ProjectMonitoringScope> ProjectMonitoringScopesView => ProjectMonitoringScopes.AsNoTracking();
-    public DbSet<ProjectMonitoringDocument> ProjectMonitoringDocuments { get; set; }
-    public IQueryable<ProjectMonitoringDocument> ProjectMonitoringDocumentView => ProjectMonitoringDocuments.AsNoTracking();
-    public DbSet<InspectionRequestProjectMonitoringScopesImage> InspectionRequestProjectMonitoringScopesImage { get; set; }
-    public IQueryable<InspectionRequestProjectMonitoringScopesImage> InspectionRequestProjectMonitoringScopesImageView => InspectionRequestProjectMonitoringScopesImage.AsNoTracking();
+    
     public DbSet<DataSyncLog> DataSyncLogs { get; set; }
-    public IQueryable<DataSyncLog> DataSyncLogsView => DataSyncLogs.AsNoTracking();
-    public DbSet<RentalRate> RentalRates { get; set; }
-    public IQueryable<RentalRate> RentalRatesView => RentalRates.AsNoTracking();
-    public DbSet<RentalRateProperty> RentalRateProperty { get; set; }
-    public IQueryable<RentalRateProperty> RentalRatePropertyView => RentalRateProperty.AsNoTracking();
-    public DbSet<RentalRatePropertyDocument> RentalRatePropertyDocuments { get; set; }
-    public IQueryable<RentalRatePropertyDocument> RentalRatePropertyDocumentsView => RentalRatePropertyDocuments.AsNoTracking();
-
-    public DbSet<RentalRateImageDocument> RentalRatesImages { get; set; }
-    public IQueryable<RentalRateImageDocument> RentalRatesImagesView => RentalRatesImages.AsNoTracking();
-    public DbSet<RentalRateFileDocument> RentalRatesFiles { get; set; }
-    public IQueryable<RentalRateFileDocument> RentalRatesFilesView => RentalRatesFiles.AsNoTracking();
-    public DbSet<MaintenanceRequestDocument> MaintenanceRequestDocuments { get; set; }
-    public IQueryable<MaintenanceRequestDocument> MaintenanceRequestDocumentsView => MaintenanceRequestDocuments.AsNoTracking();
-    public DbSet<InspectionRequestDocument> InspectionRequestDocuments { get; set; }
-    public IQueryable<InspectionRequestDocument> InspectionRequestDocumentsView => InspectionRequestDocuments.AsNoTracking();
-    public DbSet<InspectionRequestProjectMonitoringScope> InspectionRequestProjectMonitoringScopes { get; set; }
-    public IQueryable<InspectionRequestProjectMonitoringScope> InspectionRequestProjectMonitoringScopesView => InspectionRequestProjectMonitoringScopes.AsNoTracking();
-    public DbSet<InspectionRequestProjectMonitoring> InspectionRequestProjectMonitoring { get; set; }
-    public IQueryable<InspectionRequestProjectMonitoring> InspectionRequestProjectMonitoringView => InspectionRequestProjectMonitoring.AsNoTracking();
-
+    public IQueryable<DataSyncLog> DataSyncLogsView => DataSyncLogs.AsNoTracking();    
     public DbSet<RecordType> RecordTypes { get; set; }
     public IQueryable<RecordType> RecordTypesView => RecordTypes.AsNoTracking();
 

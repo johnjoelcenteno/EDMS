@@ -1,5 +1,6 @@
 ﻿using DPWH.EDMS.Shared.Enums;
 using System.ComponentModel.DataAnnotations.Schema;
+using UUIDNext;
 
 namespace DPWH.EDMS.Domain.Entities;
 
@@ -11,6 +12,7 @@ public class RequestedRecord
     {
         var entity = new RequestedRecord
         {
+            Id = Uuid.NewDatabaseFriendly(Database.SqlServer),
             RecordRequestId = recordRequestId,
             RecordTypeId = recordTypeId,
             RecordType = recordType,

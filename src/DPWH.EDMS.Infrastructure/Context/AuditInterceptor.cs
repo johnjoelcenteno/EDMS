@@ -39,10 +39,7 @@ internal sealed class AuditInterceptor : SaveChangesInterceptor
             .Where(e => e.State is not (EntityState.Detached or EntityState.Unchanged))
             .Select(e => ChangeLog.Create(
                     GetEntityId(e),
-                    e.Entity.GetType().Name,
-                    GetPropertyId(e),
-                    GetBuildingId(e),
-                    GetPropertyName(e),
+                    e.Entity.GetType().Name,                    
                     e.State.ToString(),
                     _principal.GetUserId().ToString(),
                     _principal.GetUserName(),
@@ -81,48 +78,6 @@ internal sealed class AuditInterceptor : SaveChangesInterceptor
         decimal => decimal.Compare(original.SafeDecimalParse(), current.SafeDecimalParse()) == decimal.Zero,
         _ => original == current
     };
-
-    private static string? GetPropertyId(EntityEntry<EntityBase> entry)
-    {
-        if (entry.Entity.GetType().Name != nameof(Asset))
-        {
-            return null;
-        }
-
-        var propertyId = entry.Properties
-            .First(p => p.Metadata.Name == nameof(Asset.PropertyId))
-            .CurrentValue;
-
-        return propertyId?.ToString();
-    }
-
-    private static string? GetBuildingId(EntityEntry<EntityBase> entry)
-    {
-        if (entry.Entity.GetType().Name != nameof(Asset))
-        {
-            return null;
-        }
-
-        var buildingId = entry.Properties
-            .First(p => p.Metadata.Name == nameof(Asset.BuildingId))
-            .CurrentValue;
-
-        return buildingId?.ToString();
-    }
-
-    private static string? GetPropertyName(EntityEntry<EntityBase> entry)
-    {
-        if (entry.Entity.GetType().Name != nameof(Asset))
-        {
-            return null;
-        }
-
-        var propertyName = entry.Properties
-            .First(p => p.Metadata.Name == nameof(Asset.Name))
-            .CurrentValue;
-
-        return propertyName?.ToString();
-    }
 
     private static IEnumerable<ChangeLogItem> BuildChangeLog(EntityEntry<EntityBase> entry)
     {

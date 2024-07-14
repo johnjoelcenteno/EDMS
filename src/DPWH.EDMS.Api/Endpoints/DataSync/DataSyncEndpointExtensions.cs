@@ -9,8 +9,7 @@ public static class DataSyncEndpointExtensions
         app.MapRequestingOfficeSync();
         app.MapGeoRegionSync();
         app.MapEmployeeSync();
-        app.MapAgenciesSync();
-        app.MapArcgisSync();
+        app.MapAgenciesSync();        
         app.MapPisLocationsSyncEndpoint();
 
         return app;

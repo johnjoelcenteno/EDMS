@@ -649,64 +649,6 @@
         }
       }
     },
-    "/api/datasync/arcgis": {
-      "post": {
-        "tags": [
-          "DataSync"
-        ],
-        "operationId": "ArcgisSync",
-        "parameters": [
-          {
-            "name": "EnableCleanup",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "serviceName",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "layerId",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "regionId",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success"
-          },
-          "500": {
-            "description": "Server Error",
-            "content": {
-              "application/json; api-version=1.0": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/api/datasync/pis-locations": {
       "get": {
         "tags": [

@@ -7,10 +7,7 @@ public record GetAuditLogsQueryResult
     public GetAuditLogsQueryResult(ChangeLog entity, IEnumerable<ApplicationUser>? targetUsers)
     {
         EntityId = entity.EntityId;
-        Entity = entity.Entity;
-        PropertyId = entity.PropertyId;
-        BuildingId = entity.BuildingId;
-        PropertyName = entity.PropertyName;
+        Entity = entity.Entity;        
         Action = entity.ActionType;
         CreatedBy = entity.UserName;
         FirstName = entity.FirstName;

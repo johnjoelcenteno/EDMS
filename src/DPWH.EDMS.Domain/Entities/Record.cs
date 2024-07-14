@@ -1,4 +1,5 @@
 ﻿using DPWH.EDMS.Domain.Common;
+using UUIDNext;
 
 namespace DPWH.EDMS.Domain.Entities;
 
@@ -10,7 +11,7 @@ public class Record : EntityBase
     {
         var entity = new Record
         {
-            Id = Guid.NewGuid(),
+            Id = Uuid.NewDatabaseFriendly(Database.SqlServer),
             EmployeeId = employeeId,
             RecordTypeId = recordTypeId,
             RecordName = recordName,
