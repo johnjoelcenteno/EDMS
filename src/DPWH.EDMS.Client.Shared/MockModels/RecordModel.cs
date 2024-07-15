@@ -28,6 +28,12 @@ public class Document
     public DateTime DateRequested { get; set; }
 }
 
+public class PersonalRecordDocument
+{
+    public string Id { get; set; }
+    public string DocumentName { get; set; }
+}
+
 public class MockData
 {
     public static RecordModel[] GetRecords()
@@ -163,5 +169,41 @@ public class MockCurrentData
             new Document { Id = 14, DocumentName = "Memo (Designation, Directive)", ControlNumber = "CN2024000000", DateRequested = DateTime.Now.AddDays(-17) },
             new Document { Id = 15, DocumentName = "Daily Wage Appointment/Plantilla", ControlNumber = "CN2024000000", DateRequested = DateTime.Now.AddDays(-16) },
         };
+    }
+
+    public static List<PersonalRecordDocument> GenerateCurrentDocuments()
+    {
+        return new List<PersonalRecordDocument>
+    {
+        new PersonalRecordDocument { Id = "1", DocumentName = "Administrative Case / Civil case Decisions" },
+        new PersonalRecordDocument { Id = "2", DocumentName = "Appointment/Oath of Office" },
+        new PersonalRecordDocument { Id = "3", DocumentName = "Approved Appointments" },
+        new PersonalRecordDocument { Id = "4", DocumentName = "Authority to Travel for Personal Reason" },
+        new PersonalRecordDocument { Id = "5", DocumentName = "Certificate of Employer-Employee Relationship" },
+        new PersonalRecordDocument { Id = "6", DocumentName = "Certificate of Employment" },
+        new PersonalRecordDocument { Id = "7", DocumentName = "Certificate of Employment and Compensation" },
+        new PersonalRecordDocument { Id = "8", DocumentName = "Certificate of Last Day in Service" },
+        new PersonalRecordDocument { Id = "9", DocumentName = "Certificate of Leave Balance" },
+        new PersonalRecordDocument { Id = "10", DocumentName = "Certificate of Leave Without Pay" },
+        new PersonalRecordDocument { Id = "11", DocumentName = "Certificate of Transfer of Leave Credits" },
+        new PersonalRecordDocument { Id = "12", DocumentName = "Certification of No Loan Deductions" },
+        new PersonalRecordDocument { Id = "13", DocumentName = "Certification Under Oath for unavailable documents" },
+        new PersonalRecordDocument { Id = "14", DocumentName = "Contract of Service" },
+        new PersonalRecordDocument { Id = "15", DocumentName = "Daily Wage Appointment / Plantilla" },
+        new PersonalRecordDocument { Id = "16", DocumentName = "Employee Leave Card" },
+        new PersonalRecordDocument { Id = "17", DocumentName = "GSIS Forms (Retirement Information for Membership)" },
+        new PersonalRecordDocument { Id = "18", DocumentName = "Leave Application (Terminal Leave only)" },
+        new PersonalRecordDocument { Id = "19", DocumentName = "Memo (Designation, Directive)" },
+        new PersonalRecordDocument { Id = "20", DocumentName = "Memorandum Receipt for Equipment (MT)" },
+        new PersonalRecordDocument { Id = "21", DocumentName = "Notice of Salary Adjustment (NOSA)" },
+        new PersonalRecordDocument { Id = "22", DocumentName = "Personal Data Sheet (PDS) / Information Sheet (Must be latest)" },
+        new PersonalRecordDocument { Id = "23", DocumentName = "Position Description Form (PDF)" },
+        new PersonalRecordDocument { Id = "24", DocumentName = "RA 5830 Certification" },
+        new PersonalRecordDocument { Id = "25", DocumentName = "Salary Index" },
+        new PersonalRecordDocument { Id = "26", DocumentName = "Service Record (Active)" },
+        new PersonalRecordDocument { Id = "27", DocumentName = "Service Record (Retired)" },
+        new PersonalRecordDocument { Id = "28", DocumentName = "Training Certificates / Ratings" },
+        new PersonalRecordDocument { Id = "29", DocumentName = "Travel Directive, Certificate of Appearance" },
+    };
     }
 }
