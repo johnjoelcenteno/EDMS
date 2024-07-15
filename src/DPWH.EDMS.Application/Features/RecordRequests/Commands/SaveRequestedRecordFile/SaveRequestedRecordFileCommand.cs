@@ -19,7 +19,6 @@ internal sealed class SaveRequestedRecordFileHandler(IWriteRepository writeRepos
 
         requestedRecord.Update(model.Uri);
 
-        writeRepository.RequestedRecords.Update(requestedRecord);
         await writeRepository.SaveChangesAsync(cancellationToken);
 
         return new CreateResponse(requestedRecord.Id);

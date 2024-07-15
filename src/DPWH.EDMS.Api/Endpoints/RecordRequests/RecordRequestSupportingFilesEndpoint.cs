@@ -73,7 +73,7 @@ public static class RecordRequestSupportingFilesEndpoint
             .Produces<CreateResponse>(StatusCodes.Status200OK)
             .Produces<ValidationFailureResponse>(StatusCodes.Status400BadRequest);
 
-        app.MapPut(ApiEndpoints.RecordRequest.Documents.UploadRequestedRecordFile, async (
+        app.MapPost(ApiEndpoints.RecordRequest.Documents.UploadRequestedRecordFile, async (
         [AsParameters] UploadRequestedRecordFile model,
         IMediator mediator,
         IBlobService blobService,
