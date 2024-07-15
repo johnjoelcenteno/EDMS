@@ -74,7 +74,7 @@ public class RecordsBase : GridBase<PersonalRecordDocument>
     {
         IsLoading = true;
 
-        var res = await LookupsService.GetEmployeeRecords();
+        var res = await LookupsService.GetEmployeeDocuments();
         if (res.Success)
         {
             GetEmployeeRecords = res;

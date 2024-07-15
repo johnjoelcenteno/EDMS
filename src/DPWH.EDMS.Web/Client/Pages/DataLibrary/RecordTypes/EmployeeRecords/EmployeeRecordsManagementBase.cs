@@ -66,7 +66,7 @@ public class EmployeeRecordsManagementBase : RecordTypesFormComponentBase
 
         await ExceptionHandlerService.HandleApiException(async () =>
         {
-            var dataLibraryResults = await RecordTypesService.QueryByCategoryRecordTypesAsync("Employee Records");
+            var dataLibraryResults = await RecordTypesService.QueryByCategoryRecordTypesAsync("Employee Documents");
             if (dataLibraryResults.Success)
             {
                 var convertedData = dataLibraryResults.Data.Where(item => item.IsActive)
@@ -191,7 +191,7 @@ public class EmployeeRecordsManagementBase : RecordTypesFormComponentBase
                 var data = new CreateRecordTypeModel
                 {
                     IsActive = true,
-                    Category = "Employee Records",
+                    Category = "Employee Documents",
                     Name = model.Name,
                     Section = model.Section,
                     Office = model.Office
@@ -234,7 +234,7 @@ public class EmployeeRecordsManagementBase : RecordTypesFormComponentBase
                 var data = new UpdateRecordTypeModel
                 {
                     IsActive = true,
-                    Category = "Employee Records",
+                    Category = "Employee Documents",
                     Name = item.Name,
                     Section = item.Section,
                     Office = item.Office

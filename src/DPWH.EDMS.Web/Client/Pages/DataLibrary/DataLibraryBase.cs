@@ -50,8 +50,8 @@ public class DataLibraryBase : RxBaseComponent
             new DataLibraryModel
             {
                 Icon = FontIcon.Gear,
-                Name = "Employee Records",
-                Url = "/data-library/employee-records"
+                Name = "Employee Documents",
+                Url = "/data-library/employee-documents"
 
             }
         };

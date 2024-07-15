@@ -113,7 +113,7 @@ public class RequestFormComponentBase : RxBaseComponent
     }
     protected async Task LoadEmployeeRecordList()
     {
-        var res = await LookupsService.GetEmployeeRecords();
+        var res = await LookupsService.GetEmployeeDocuments();
 
         if (res.Success)
         {

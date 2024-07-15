@@ -317,21 +317,21 @@ namespace DPWH.EDMS.Api.Contracts
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<GetLookupResultIEnumerableBaseApiResponse> GetEmployeeRecordsAsync();
+        System.Threading.Tasks.Task<GetLookupResultIEnumerableBaseApiResponse> GetPersonalRecordsAsync();
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<GetLookupResultIEnumerableBaseApiResponse> GetEmployeeRecordsAsync(System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<GetLookupResultIEnumerableBaseApiResponse> GetPersonalRecordsAsync(System.Threading.CancellationToken cancellationToken);
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<GetLookupResultIEnumerableBaseApiResponse> GetArchivesAsync();
+        System.Threading.Tasks.Task<GetLookupResultIEnumerableBaseApiResponse> GetEmployeeDocumentsAsync();
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<GetLookupResultIEnumerableBaseApiResponse> GetArchivesAsync(System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<GetLookupResultIEnumerableBaseApiResponse> GetEmployeeDocumentsAsync(System.Threading.CancellationToken cancellationToken);
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -532,6 +532,15 @@ namespace DPWH.EDMS.Api.Contracts
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<RecordRequestStatusCountModelBaseApiResponse> CountRecordRequestsByStatusAsync(string status, System.Threading.CancellationToken cancellationToken);
+
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<GuidNullableBaseApiResponse> UpdateRequestedRecordIsAvailableAsync(bool isActive, System.Collections.Generic.IEnumerable<System.Guid> body);
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<GuidNullableBaseApiResponse> UpdateRequestedRecordIsAvailableAsync(bool isActive, System.Collections.Generic.IEnumerable<System.Guid> body, System.Threading.CancellationToken cancellationToken);
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
