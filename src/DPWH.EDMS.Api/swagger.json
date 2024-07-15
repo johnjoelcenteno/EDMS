@@ -1436,6 +1436,66 @@
         }
       }
     },
+    "/api/recordrequests/requestedrecordfiles": {
+      "post": {
+        "tags": [
+          "RecordRequestSupportingFiles"
+        ],
+        "operationId": "UploadRequestedRecordFile",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "required": [
+                  "Id"
+                ],
+                "type": "object",
+                "properties": {
+                  "Document": {
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "Id": {
+                    "type": "string",
+                    "format": "uuid"
+                  }
+                }
+              },
+              "encoding": {
+                "Document": {
+                  "style": "form"
+                },
+                "Id": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationFailureResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/recordrequests/supportingfiles/{id}": {
       "get": {
         "tags": [
@@ -4851,6 +4911,10 @@
             "nullable": true
           },
           "designationTitle": {
+            "type": "string",
+            "nullable": true
+          },
+          "office": {
             "type": "string",
             "nullable": true
           },

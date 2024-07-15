@@ -6,6 +6,8 @@ using DPWH.EDMS.Application.Features.RecordRequests.Commands.SaveUploadedFile;
 using DPWH.EDMS.Application;
 using DPWH.EDMS.Application.Features.RecordRequests.Queries;
 using DPWH.EDMS.Application.Features.DataLibrary.Queries.GetDataLibraryById;
+using DPWH.EDMS.Application.Features.RecordRequests.Commands.SaveRequestedRecordFile;
+using DPWH.EDMS.Application.Features.RecordTypes.Queries;
 
 namespace DPWH.EDMS.Api.Endpoints.RecordRequests;
 
@@ -71,6 +73,41 @@ public static class RecordRequestSupportingFilesEndpoint
             .Produces<CreateResponse>(StatusCodes.Status200OK)
             .Produces<ValidationFailureResponse>(StatusCodes.Status400BadRequest);
 
+        app.MapPost(ApiEndpoints.RecordRequest.Documents.UploadRequestedRecordFile, async (
+        [AsParameters] UploadRequestedRecordFile model,
+        IMediator mediator,
+        IBlobService blobService,
+        CancellationToken token,
+        ILogger<Program> logger) =>
+        {
+            var request = new
+            {
+                model.Id,
+                File = model.Document,
+                Filename = model.Document?.FileName
+            };
+
+            var metadata = new Dictionary<string, string>();
+
+            byte[] data;
+            using (var memoryStream = new MemoryStream())
+            {
+                await model.Document.CopyToAsync(memoryStream);
+                data = memoryStream.ToArray();
+            }
+
+            var uri = await blobService.Put(WellKnownContainers.RequestedRecordFiles, request.Id.ToString(), data, request.File.ContentType, metadata);
+            var command = new SaveRequestedRecordFileCommand(model.Id, uri);
+            var response = await mediator.Send(command, token);
+
+            return TypedResults.Ok(response);
+        })
+            .WithName("UploadRequestedRecordFile")
+            .WithTags(TagName)
+            .WithDescription("Upload requested record file.")
+            .DisableAntiforgery()
+            .Produces<CreateResponse>(StatusCodes.Status200OK)
+            .Produces<ValidationFailureResponse>(StatusCodes.Status400BadRequest);
 
         app.MapGet(ApiEndpoints.RecordRequest.Documents.GetSupportingFileById, async (Guid id, IMediator mediator) =>
         {
@@ -83,7 +120,6 @@ public static class RecordRequestSupportingFilesEndpoint
         .WithTags(TagName)
         .WithDescription("Get supporting file by id")
         .DisableAntiforgery()
-        //.Accepts<IFormFile>("multipart/form-data")
         .Produces<BaseApiResponse<RecordRequestDocumentModel>>(StatusCodes.Status200OK)
         .Produces<ValidationFailureResponse>(StatusCodes.Status400BadRequest); ;
 

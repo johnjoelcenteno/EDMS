@@ -1,6 +1,7 @@
 ﻿using DPWH.EDMS.Domain.Common;
 using DPWH.EDMS.Shared.Enums;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Runtime.CompilerServices;
 using UUIDNext;
 
 namespace DPWH.EDMS.Domain.Entities;
@@ -27,6 +28,10 @@ public class RequestedRecord
     public void UpdateIsAvailable(bool isAvailable)
     {
         IsAvailable = isAvailable;
+    }
+    public void Update(string uri)
+    {
+        Uri = uri;
     }
     public Guid Id { get; private set; }
 

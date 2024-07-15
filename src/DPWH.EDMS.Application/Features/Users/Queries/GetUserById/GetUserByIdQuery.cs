@@ -49,6 +49,7 @@ internal sealed class GetUserByIdHandler(
             RegionalOfficeProvince = user.EmployeeInfo?.RegionalOfficeProvince,
             DistrictEngineeringOffice = user.EmployeeInfo?.DistrictEngineeringOffice,
             DesignationTitle = user.EmployeeInfo?.DesignationTitle,
+            Office = user.EmployeeInfo?.Office,
             CreatedBy = user.CreatedBy,
             CreatedDate = user.Created
         };
