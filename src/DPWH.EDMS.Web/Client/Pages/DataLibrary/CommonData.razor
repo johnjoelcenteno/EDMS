@@ -1,4 +1,4 @@
-﻿@page "/data-library/{Id}"
+﻿
 @inherits CommonDataBase
 @attribute [Authorize(Policy = "RequireActiveRoles")]
 @using DPWH.EDMS.Api.Contracts
@@ -193,7 +193,7 @@
     </DialogContent>
     <DialogButtons>
         <TelerikButton OnClick="@(() => { IsConfirm = false; })">Cancel</TelerikButton>
-        <TelerikButton ThemeColor="@(ThemeConstants.Button.ThemeColor.Primary)" OnClick="@(() => OnDeleteItem(ItemId))">Yes</TelerikButton>
+        <TelerikButton ThemeColor="@(ThemeConstants.Button.ThemeColor.Primary)" OnClick="@(() => OnDeleteItem(ItemId.ToString()))">Yes</TelerikButton>
     </DialogButtons>
 </TelerikDialog>
 
