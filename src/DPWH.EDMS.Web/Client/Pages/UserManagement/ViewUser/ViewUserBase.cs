@@ -15,9 +15,7 @@ public class ViewUserBase : RxBaseComponent
     protected Guid UserId = new Guid();
     protected override async Task OnParametersSetAsync()
     {
-        IsLoading = true;
-        try
-        {
+        IsLoading = true; 
             if (Guid.TryParse($"{Id}", out var id))
             {
                 UserId = id;
@@ -35,15 +33,7 @@ public class ViewUserBase : RxBaseComponent
                 Icon = "search",
                 Text = "View User",
                 Url = NavManager.Uri.ToString(),
-            });
-
-        }
-        catch (Exception ex) when (ex is ApiException<ProblemDetails> apiExtension)
-        {
-            var problemDetails = apiExtension.Result;
-            var error = problemDetails.AdditionalProperties.ContainsKey("error") ? problemDetails.AdditionalProperties["error"].ToString() : problemDetails.AdditionalProperties["errors"].ToString();
-            _ToastService.ShowError(error);
-        }
+            }); 
         IsLoading = false;
     }
 }

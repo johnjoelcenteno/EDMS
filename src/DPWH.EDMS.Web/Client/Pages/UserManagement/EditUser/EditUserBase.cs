@@ -17,8 +17,7 @@ public class EditUserBase : RxBaseComponent
     protected override async Task OnParametersSetAsync()
     {
         IsLoading = true;
-        try
-        {
+      
             if (Guid.TryParse($"{Id}", out var id))
             {
                 UserId = id;
@@ -37,13 +36,7 @@ public class EditUserBase : RxBaseComponent
                 Text = "Edit User",
                 Url = NavManager.Uri.ToString(),
             });
-        }
-        catch (Exception ex) when (ex is ApiException<ProblemDetails> apiExtension)
-        {
-            var problemDetails = apiExtension.Result;
-            var error = problemDetails.AdditionalProperties.ContainsKey("error") ? problemDetails.AdditionalProperties["error"].ToString() : problemDetails.AdditionalProperties["errors"].ToString();
-            _ToastService.ShowError(error);
-        }
+        
         IsLoading = false;
     }
 }
