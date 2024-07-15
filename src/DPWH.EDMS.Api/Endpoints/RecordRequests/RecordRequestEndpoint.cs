@@ -8,6 +8,7 @@ using DPWH.EDMS.Application.Features.RecordRequests.Queries.GetRecordRequestById
 using DPWH.EDMS.Application.Features.RecordRequests.Queries.GetRecordRequestsByEmployeeIdQuery;
 using DPWH.EDMS.Application.Features.RecordRequests.Queries.GetRecordRequestsByStatusQuery;
 using DPWH.EDMS.Application.Features.RecordRequests.Queries.GetRecordRequestsQuery;
+using DPWH.EDMS.Application.Features.RecordRequests.Queries.GetTopRequestQuery;
 using DPWH.EDMS.Application.Models;
 using DPWH.EDMS.Application.Models.DpwhResponses;
 using DPWH.EDMS.Application.Models.RecordRequests;
@@ -122,6 +123,19 @@ public static class RecordRequestEndpoint
             .Produces<BaseApiResponse<IEnumerable<GetMonthlyRequestModel>>>()
             .Produces<ProblemDetails>(StatusCodes.Status400BadRequest)
             .Produces<ProblemDetails>(StatusCodes.Status500InternalServerError);
+
+        app.MapGet(ApiEndpoints.RecordRequest.GetTopRequest, async (IMediator mediator) =>
+        {
+            var result = await mediator.Send(new GetTopRequestQuery());
+            var data = new BaseApiResponse<IEnumerable<GetTopRequestQueryModel>>(result);
+            return Results.Ok(data);
+        }).WithName("QueryTopRequestRecords")
+            .WithTags(TagName)
+            .WithDescription("Query Top Request Records")
+            .WithApiVersionSet(ApiVersioning.VersionSet)
+            .HasApiVersion(1.0)
+            .Produces<BaseApiResponse<IEnumerable<GetTopRequestQueryModel>>>()
+            .Produces<ProblemDetails>(StatusCodes.Status500InternalServerError); ;
 
         app.MapPost(ApiEndpoints.RecordRequest.QueryByStatus, async (DataSourceRequest request, string status, IMediator mediator) =>
         {
