@@ -63,7 +63,6 @@ public class RequestFormComponentBase : RxBaseComponent
     protected FluentValidationValidator? FluentValidationValidator;
 
     protected UserModel CurrentUser { get; set; } = new();
-    protected string UserFullname = string.Empty;
 
     public int MinFileSize { get; set; } = 1024;
     public int MaxFileSize { get; set; } = 4 * 1024 * 1024;
@@ -113,7 +112,7 @@ public class RequestFormComponentBase : RxBaseComponent
     }
     protected async Task LoadEmployeeRecordList()
     {
-        var res = await LookupsService.GetEmployeeDocuments();
+        var res = await LookupsService.GetPersonalRecords();
 
         if (res.Success)
         {

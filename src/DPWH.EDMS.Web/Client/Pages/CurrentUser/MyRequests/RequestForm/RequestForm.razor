@@ -36,7 +36,12 @@
                     </div>
                     <div class="col-md-6 col-12 p-2">
                         <label for="employeeNo">Employee Name</label>
-                        <input id="employeeName" class="form-control" value="@UserFullname" disabled />
+                        <input id="employeeName" class="form-control" value="@SelectedItem.FullName" disabled />
+                        @* <ValidationMessage For="@(() => SelectedItem.EmployeeNumber)" class="text-danger" /> *@
+                    </div> 
+                    <div class="col-12 p-2">
+                        <label for="employeeEmail">Employee Email</label>
+                        <input id="employeeEmail" class="form-control" value="@SelectedItem.Email" disabled />
                         @* <ValidationMessage For="@(() => SelectedItem.EmployeeNumber)" class="text-danger" /> *@
                     </div>
                 </div>
@@ -165,13 +170,19 @@
             </div>
 
             <div class="form-group p-2">
-                <label for="remarks">Purpose/Remarks</label>
+                <label for="remarks">Purpose</label>
                 <TelerikDropDownList Data="@PurposeList"
                                      @bind-Value="SelectedItem.Purpose"
                                      ValueField="@nameof(GetAuthorizationDocumentsResult.Name)"
                                      TextField="@nameof(GetAuthorizationDocumentsResult.Name)"
                                      DefaultText="Select" />
                 <ValidationMessage For="@(() => SelectedItem.Purpose)" class="text-danger" />
+            </div>
+
+            <div class="form-group p-2">
+                <label for="remarks">Remarks</label>
+                <TelerikTextArea Rows="2" @bind-Value="SelectedItem.Remarks" />
+                <ValidationMessage For="@(() => SelectedItem.Remarks)" class="text-danger" />
             </div>
         </CardBody>
     </TelerikCard>

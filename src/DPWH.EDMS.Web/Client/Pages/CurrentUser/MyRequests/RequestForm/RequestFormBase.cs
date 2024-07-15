@@ -40,13 +40,14 @@ public class RequestFormBase : RequestFormComponentBase
             {
                 CurrentUser = Mapper.Map<UserModel>(userRes.Data);
                 SelectedItem.EmployeeNumber = CurrentUser.EmployeeId;
-                UserFullname = _GetUserFullname();
+                SelectedItem.Email = CurrentUser.Email;
+                SelectedItem.FullName = _GetUserFullname();
             }
         }
     }
     private string _GetUserFullname()
-    {   
-        if(!string.IsNullOrEmpty(CurrentUser.LastName) || !string.IsNullOrEmpty(CurrentUser.FirstName) || !string.IsNullOrEmpty(CurrentUser.MiddleInitial))
+    {
+        if (!string.IsNullOrEmpty(CurrentUser.LastName) || !string.IsNullOrEmpty(CurrentUser.FirstName) || !string.IsNullOrEmpty(CurrentUser.MiddleInitial))
         {
             var name = $"{GenericHelper.GetDisplayValue(CurrentUser.LastName, " ")}, {CurrentUser.FirstName} {CurrentUser.MiddleInitial}";
             return name;

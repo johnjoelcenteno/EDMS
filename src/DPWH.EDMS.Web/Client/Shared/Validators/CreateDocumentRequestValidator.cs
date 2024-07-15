@@ -26,9 +26,12 @@ public class CreateDocumentRequestModelValidator : AbstractValidator<CreateRecor
         //    .NotEmpty().WithMessage("Status is required.")
         //    .MaximumLength(50).WithMessage("Status must not exceed 50 characters.");
 
-        //RuleFor(x => x.EmployeeNumber)
-        //    .NotEmpty().WithMessage("Employee Number is required.")
-        //    .MaximumLength(20).WithMessage("Employee Number must not exceed 20 characters.");
+        RuleFor(x => x.FullName)
+            .NotEmpty().WithMessage("Employee Name is required.");
+
+        RuleFor(x => x.Email)
+            .NotEmpty().WithMessage("Employee Email is required.")
+            .EmailAddress();
 
         RuleFor(x => x.Claimant)
             .NotEmpty().WithMessage("Document Claimant is invalid.");
@@ -47,7 +50,10 @@ public class CreateDocumentRequestModelValidator : AbstractValidator<CreateRecor
         //.MaximumLength(50).WithMessage("Supporting Document Type must not exceed 50 characters.");
 
         RuleFor(x => x.Purpose)
-            .NotEmpty().WithMessage("Purpose/Remarks is required.");
+            .NotEmpty().WithMessage("Purpose is required.");
+
+        RuleFor(x => x.Remarks);
+            //.NotEmpty().WithMessage("Purpose/Remarks is required.");
 
         //RuleFor(x => x.IsValidIdAccepted)
         //    .Equal(true)
