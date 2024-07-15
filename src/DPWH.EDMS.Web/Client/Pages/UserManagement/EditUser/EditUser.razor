@@ -1,0 +1,12 @@
+﻿@page "/user-management/edit/{Id}"
+@using DPWH.EDMS.Web.Client.Pages.UserManagement.UserForm
+
+@inherits EditUserBase
+@attribute [Authorize(Policy = "RequireActiveRoles")]
+
+<EdmsBreadcrumbs Data="@BreadcrumbItems" />
+<EdmsLoader Visible="IsLoading" />
+
+<h3>Edit User</h3>
+<hr />
+<UserForm Type="Edit" Id="@Id" />

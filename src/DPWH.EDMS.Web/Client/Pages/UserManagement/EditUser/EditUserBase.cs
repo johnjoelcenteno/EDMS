@@ -5,14 +5,15 @@ using DPWH.EDMS.Components;
 using DPWH.NGOBIA.Client.Shared.APIClient.Services.Users;
 using Microsoft.AspNetCore.Components;
 
-namespace DPWH.EDMS.Web.Client.Pages.UserManagement.ViewUser;
+namespace DPWH.EDMS.Web.Client.Pages.UserManagement.EditUser;
 
-public class ViewUserBase : RxBaseComponent
+public class EditUserBase : RxBaseComponent
 {
     [Inject] public required IUsersService UserService { get; set; }
     [Inject] public required IToastService _ToastService { get; set; }
     [Parameter] public string Id { get; set; }
     protected Guid UserId = new Guid();
+
     protected override async Task OnParametersSetAsync()
     {
         IsLoading = true;
@@ -33,9 +34,9 @@ public class ViewUserBase : RxBaseComponent
             BreadcrumbItems.Add(new BreadcrumbModel
             {
                 Icon = "search",
-                Text = "View User",
+                Text = "Edit User",
                 Url = NavManager.Uri.ToString(),
-            }); 
+            });
         }
         catch (Exception ex) when (ex is ApiException<ProblemDetails> apiExtension)
         {

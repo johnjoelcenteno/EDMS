@@ -18,7 +18,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 using DPWH.NGOBIA.Client.Shared.APIClient.Services.Users;
 using AutoMapper;
 using DPWH.EDMS.Client.Shared.APIClient.Services.DpwhIntegrations;
-using DPWH.EDMS.Client.Shared.APIClient.Services.Licenses; 
+using DPWH.EDMS.Client.Shared.APIClient.Services.Licenses;
 using DPWH.EDMS.Web.Client.Shared.Services.ExceptionHandler;
 using DPWH.EDMS.Web.Client.Shared.Services.ExceptionHandlerPIS;
 
@@ -55,7 +55,7 @@ public class UserFormBase : RxBaseComponent
     protected string RegionOffice { get; set; }
     protected string DistrictOffice { get; set; }
     protected string CentralOffice = "Central Office";
-    protected string SelectedOffice { get; set; }
+    //protected string SelectedOffice { get; set; }
     protected string LicenseInfo { get; set; }
     protected string UserName { get; set; }
     protected bool OnEmpRole { get; set; } = true;
@@ -81,8 +81,8 @@ public class UserFormBase : RxBaseComponent
 
     protected override async Task OnInitializedAsync()
     {
-
-        if (Type == "View")
+        IsLoading = true;
+        if (Type == "View" || Type == "Edit")
         {
             if (Guid.TryParse($"{Id}", out var id))
             {
@@ -93,9 +93,20 @@ public class UserFormBase : RxBaseComponent
             if (selectedUser.Success)
             {
                 User.FullName = $"{selectedUser.Data.LastName}, {selectedUser.Data.FirstName} {selectedUser.Data.MiddleInitial}";
+                User.FirstName = selectedUser.Data.FirstName;
+                User.MiddleName = selectedUser.Data.MiddleInitial;
+                User.LastName = selectedUser.Data.LastName;
+                User.EmployeeId = selectedUser.Data.EmployeeId;
+                User.Email = selectedUser.Data.Email;
+                User.Position = selectedUser.Data.Position;
+                User.DesignationTitle = selectedUser.Data.DesignationTitle;
+                User.RegionalOffice = selectedUser.Data.RegionalOfficeRegion;
+                User.DistrictEngineeringOffice = selectedUser.Data.DistrictEngineeringOffice;
+                User.Role = selectedUser.Data.UserAccess;
+                User.Created = selectedUser.Data.CreatedDate;
+                User.CreatedBy = selectedUser.Data.CreatedBy; 
             }
-        }
-
+        }  
         await ExceptionHandlerService.HandleApiException(
             async () =>
             {
@@ -118,6 +129,7 @@ public class UserFormBase : RxBaseComponent
             });
 
         await GetRegionList();
+        IsLoading = false;
     }
     protected List<string> Offices = new List<string>()
         {
@@ -377,6 +389,10 @@ public class UserFormBase : RxBaseComponent
             await HandleOnCancel.InvokeAsync();
         }
     }
+    protected void OnCancel()
+    {
+        NavManager.NavigateTo("/user-management");
+    }
     protected async Task AddUser(UserManagementModel user)
     {
         IsLoading = true;
@@ -513,9 +529,75 @@ public class UserFormBase : RxBaseComponent
             IsSaving = false;
         }
     }
+    protected async Task EditUser(UserManagementModel editedUser)
+    {
+        IsLoading = true;
+        validateRegion();
+        if (OnRegion != false && OnDistrict != false)
+        {
+            if (string.IsNullOrEmpty(User.RegionalOffice) || User.RegionalOffice == "Select")
+            {
+                editedUser.RegionalOffice = string.Empty;
+            }
 
-    private async Task LoadUserRegion()
-    { 
+            editedUser.Department = string.Empty;
+
+            if (string.IsNullOrEmpty(User.DistrictEngineeringOffice) || User.DistrictEngineeringOffice == "Select")
+            {
+                editedUser.DistrictEngineeringOffice = string.Empty;
+            }
+             
+            IsSaving = true;
+            IsLoading = true;
+
+            if (LicenseLimit <= 0 )
+            { 
+                ToastService.ShowWarning("Insufficient License!");
+                IsSaving = false;
+                IsLoading = false;
+                return;
+            }
+            var update = new UpdateUserCommand
+            {
+                UserId = UserId,
+                FirstName = editedUser.FirstName,
+                LastName = editedUser.LastName,
+                MobileNumber = string.Empty,
+                EmployeeId = editedUser.EmployeeId,
+                Department = string.Empty,
+                Position = editedUser.Position,
+                Role = editedUser.Role,
+                RegionalOfficeRegion = editedUser.RegionalOffice,
+                RegionalOfficeProvince = editedUser.RegionalOffice,
+                DistrictEngineeringOffice = editedUser.DistrictEngineeringOffice,
+                DesignationTitle = string.Empty,
+                Office = editedUser.Office
+            };
+
+            if (update != null)
+            { 
+                try
+                {
+                    var res = await UserService.Update(UserId, update); 
+                    ToastService.ShowSuccess("User Updated successfully!");
+                    User.EmployeeId = string.Empty;
+                    NavManager.NavigateTo("/user-management");
+                }
+                catch (Exception ex) when (ex is ApiException<ProblemDetails> apiExtension)
+                {
+                    var problemDetails = apiExtension.Result;
+                    var error = problemDetails.AdditionalProperties.ContainsKey("error") ? problemDetails.AdditionalProperties["error"].ToString() : problemDetails.AdditionalProperties["errors"].ToString();
+                    ToastService.ShowError(error);
+                }
+
+            }
+        }
+        //await LoadUser();
+        IsSaving = false;
+        IsLoading = false;
+    }
+        private async Task LoadUserRegion()
+    {
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         var user = authState.User;
         UserName = user.Identity.Name;
@@ -565,6 +647,17 @@ public class UserFormBase : RxBaseComponent
                 UserAccess = ar.Value
             }).ToList();
         }
+    }
+    protected void validateRegion()
+    {
+        if (string.IsNullOrEmpty(User.RegionalOffice) || User.RegionalOffice == "Select")
+        {
+            OnRegion = false;
+        }
+        if (string.IsNullOrEmpty(User.DistrictEngineeringOffice) || User.DistrictEngineeringOffice == "Select")
+        {
+            OnDistrict = false;
+        } 
     }
 }
 

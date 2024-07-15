@@ -102,6 +102,19 @@
     </TelerikCard>
 </div>
 
+<div class="modal">
+    <TelerikDialog @bind-Visible="@IsVisibleDeact" Width="@RespSizer" Title="Confirmation">
+        <DialogContent>
+            <p class="text-center">Are you sure you want to deactivate <span class="username">@userName.UserName</span> account?</p>
+        </DialogContent>
+        <DialogButtons>
+            <TelerikButton OnClick="@(() => { IsVisibleDeact = false; })">No</TelerikButton>
+            <TelerikButton ThemeColor="@(ThemeConstants.Button.ThemeColor.Primary)" OnClick="@(() => OnSelectUser(userName))">Yes</TelerikButton>
+        </DialogButtons>
+    </TelerikDialog>
+</div>
+
+
 <style>
     .um-card {
         display: flex;
