@@ -5,7 +5,7 @@ namespace DPWH.EDMS.Client.Shared.APIClient.Services.Lookups
     public interface ILookupsService
     {
         Task<GetAgenciesResultIEnumerableBaseApiResponse> GetAgencyList();
-        Task<GetLookupResultIEnumerableBaseApiResponse> GetArchives();
+        Task<GetLookupResultIEnumerableBaseApiResponse> GetPersonalRecords();
         Task<GetAuthorizationDocumentsResultIEnumerableBaseApiResponse> GetAuthorizationDocuments();
         Task<AddressLookup> GetBarangays(string cityMunicipalityCode);
         Task<AddressLookup> GetCityOrMunicipalities(string provinceCode);

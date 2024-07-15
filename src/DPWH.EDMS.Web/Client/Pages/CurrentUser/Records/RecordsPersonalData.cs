@@ -18,8 +18,8 @@ namespace DPWH.EDMS.Web.Client.Pages.CurrentUser.Records
         protected async override Task OnInitializedAsync()
         {
             IsLoading = true;
-            Record = MockCurrentData.GenerateCurrentDocuments().FirstOrDefault(x => x.Id == Id);
-            //await GetEmployeeRecords();
+            //Record = MockCurrentData.GenerateCurrentDocuments().FirstOrDefault(x => x.Id == Id);
+            await GetEmployeeRecords();
 
             BreadcrumbItems.Add(new BreadcrumbModel
             {
@@ -30,23 +30,23 @@ namespace DPWH.EDMS.Web.Client.Pages.CurrentUser.Records
             BreadcrumbItems.Add(new BreadcrumbModel
             {
                 Icon = "menu",
-                Text = Record.DocumentName,
+                Text = EmployeeRecord.Name,
                 Url = "/record"
             });
 
             IsLoading = false;
         }
-      
 
-        //protected async Task GetEmployeeRecords()
-        //{
-        //    var res = await LookupsService.GetEmployeeRecords();
-        //    if (res.Success && res.Data != null)
-        //    {
-        //        var docId = Guid.Parse(Id);
-        //        EmployeeRecord = res.Data?.FirstOrDefault(x => x.Id == docId) ?? null;
 
-        //    }
-        //}
+        protected async Task GetEmployeeRecords()
+        {
+            var res = await LookupsService.GetPersonalRecords();
+            if (res.Success && res.Data != null)
+            {
+                var docId = Guid.Parse(Id);
+                EmployeeRecord = res.Data?.FirstOrDefault(x => x.Id == docId) ?? null;
+
+            }
+        }
     }
 }
