@@ -51,13 +51,13 @@ public class LookupsService : ILookupsService
         return await _client.GetIssuancesAsync();
     }
 
-    public async Task<GetLookupResultIEnumerableBaseApiResponse> GetEmployeeRecords()
+    public async Task<GetLookupResultIEnumerableBaseApiResponse> GetEmployeeDocuments()
     {
-        return await _client.GetEmployeeRecordsAsync();
+        return await _client.GetEmployeeDocumentsAsync();
     }
-    public async Task<GetLookupResultIEnumerableBaseApiResponse> GetArchives()
+    public async Task<GetLookupResultIEnumerableBaseApiResponse> GetPersonalRecords()
     {
-        return await _client.GetArchivesAsync();
+        return await _client.GetPersonalRecordsAsync();
     }
 
     public async Task<GetValidIDsResultIEnumerableBaseApiResponse> GetValidIdTypes()

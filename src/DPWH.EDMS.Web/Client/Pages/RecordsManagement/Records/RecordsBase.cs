@@ -56,7 +56,7 @@ public class RecordsBase : GridBase<RecordRequestModel>
     }
     protected async Task GetDocumentRecords()
     {
-        var res = await LookupsService.GetEmployeeRecords();
+        var res = await LookupsService.GetEmployeeDocuments();
         if (res.Success)
         {
             GetEmployeeRecords = res;

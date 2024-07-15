@@ -28,7 +28,7 @@ public class ViewRecordsBase : GridBase<RecordModel>
     }
     protected async Task GetEmployeeRecords()
     {
-        var res = await LookupsService.GetEmployeeRecords();
+        var res = await LookupsService.GetEmployeeDocuments();
         if (res.Success && res.Data != null)
         {
             var docId = Guid.Parse(DocumentId);
