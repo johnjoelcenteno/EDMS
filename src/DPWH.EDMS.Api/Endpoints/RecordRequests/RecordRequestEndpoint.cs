@@ -104,7 +104,7 @@ public static class RecordRequestEndpoint
         {
             var result = await mediator.Send(new GetTopRequestQuery());
             var data = new BaseApiResponse<IEnumerable<GetTopRequestQueryModel>>(result);
-            return result is null ? Results.NotFound() : Results.Ok(data);
+            return result is null ? Results.BadRequest() : Results.Ok(data);
         }).WithName("QueryTopRequestRecords")
             .WithTags(TagName)
             .WithDescription("Query Top Request Records")
