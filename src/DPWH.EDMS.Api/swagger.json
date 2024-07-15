@@ -3643,6 +3643,10 @@
             "type": "string",
             "nullable": true
           },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
           "claimant": {
             "type": "string",
             "nullable": true
@@ -3678,6 +3682,10 @@
             "nullable": true
           },
           "fullName": {
+            "type": "string",
+            "nullable": true
+          },
+          "remarks": {
             "type": "string",
             "nullable": true
           }

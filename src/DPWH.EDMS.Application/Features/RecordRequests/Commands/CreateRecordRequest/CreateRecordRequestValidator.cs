@@ -15,10 +15,6 @@ public sealed class CreateRecordRequestValidator : AbstractValidator<CreateRecor
                     .NotEmpty()
                     .WithMessage("Purpose must not be empty or null.");
 
-                v.RuleFor(param => param.EmployeeNumber)
-                    .NotEmpty()
-                    .WithMessage("EmployeeNumber must not be empty or null.");
-
                 v.RuleFor(param => param.Claimant)
                     .Must(i => Enum.IsDefined(typeof(ClaimantTypes), i))
                     .WithMessage("Claimant must be either Requestor or AuthorizedRepresentative");
