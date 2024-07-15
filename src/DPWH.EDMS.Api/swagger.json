@@ -1249,12 +1249,12 @@
         }
       }
     },
-    "/api/lookups/archives": {
+    "/api/lookups/employeedocuments": {
       "get": {
         "tags": [
           "Lookups"
         ],
-        "operationId": "GetArchives",
+        "operationId": "GetEmployeeDocuments",
         "responses": {
           "200": {
             "description": "Success",
@@ -2404,16 +2404,6 @@
               "application/json; api-version=1.0": {
                 "schema": {
                   "$ref": "#/components/schemas/GetTopRequestQueryModelIEnumerableBaseApiResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json; api-version=1.0": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -6167,8 +6157,8 @@
         "type": "oauth2",
         "flows": {
           "authorizationCode": {
-            "authorizationUrl": "https://app-idp-ngobia-dpwh-dev.azurewebsites.net/connect/authorize",
-            "tokenUrl": "https://app-idp-ngobia-dpwh-dev.azurewebsites.net/connect/token",
+            "authorizationUrl": "https://localhost:5001/connect/authorize",
+            "tokenUrl": "https://localhost:5001/connect/token",
             "scopes": {
               "dpwhedmsapi.write": "api read & write access"
             }

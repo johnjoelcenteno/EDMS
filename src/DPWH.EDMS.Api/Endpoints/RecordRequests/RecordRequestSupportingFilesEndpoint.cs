@@ -7,7 +7,6 @@ using DPWH.EDMS.Application;
 using DPWH.EDMS.Application.Features.RecordRequests.Queries;
 using DPWH.EDMS.Application.Features.DataLibrary.Queries.GetDataLibraryById;
 using DPWH.EDMS.Application.Features.RecordRequests.Commands.SaveRequestedRecordFile;
-using DPWH.EDMS.Application.Features.RecordTypes.Queries;
 
 namespace DPWH.EDMS.Api.Endpoints.RecordRequests;
 

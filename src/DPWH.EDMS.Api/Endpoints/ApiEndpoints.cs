@@ -107,8 +107,8 @@ public static class ApiEndpoints
         public const string RecordTypes = $"{Base}/recordtypes";
         public const string Purposes = $"{Base}/purposes";
         public const string Issuances = $"{Base}/issuances";
-        public const string EmployeeRecords = $"{Base}/employeerecords";
-        public const string Archives = $"{Base}/archives";
+        public const string EmployeeRecords = $"{Base}/employeerecords";        
+        public const string EmployeeDocuments = $"{Base}/employeedocuments";
 
         public const string ValidIDs = $"{Base}/validids";
         public const string SecondaryIDs = $"{Base}/secondaryids";

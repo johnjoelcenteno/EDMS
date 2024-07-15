@@ -1,5 +1,5 @@
 using DPWH.EDMS.Application.Features.Lookups.Queries;
-using DPWH.EDMS.Application.Features.Lookups.Queries.GetArchives;
+using DPWH.EDMS.Application.Features.Lookups.Queries.GetEmployeeDocuments;
 using DPWH.EDMS.Application.Features.Lookups.Queries.GetEmployeeRecords;
 using DPWH.EDMS.Application.Features.Lookups.Queries.GetIssuances;
 using DPWH.EDMS.Application.Models;
@@ -12,6 +12,7 @@ public static class RecordTypesEndpoint
 {    
     public const string IssuanceCacheTag = "IssuanceCacheTag";
     public const string EmployeeRecordCacheTag = "EmployeeRecordCacheTag";
+    public const string EmployeeDocumentCacheTag = "EmployeeDocumentCacheTag";
 
 
     public static IEndpointRouteBuilder MapRecordTypes(this IEndpointRouteBuilder app)
@@ -48,21 +49,21 @@ public static class RecordTypesEndpoint
             .Produces<ProblemDetails>(StatusCodes.Status500InternalServerError)
             .CacheOutput(builder => builder.Tag(EmployeeRecordCacheTag));
 
-        app.MapGet(ApiEndpoints.Lookups.Archives, async (IMediator mediator, CancellationToken token) =>
+        app.MapGet(ApiEndpoints.Lookups.EmployeeDocuments, async (IMediator mediator, CancellationToken token) =>
         {
-            var result = await mediator.Send(new GetArchivesQuery(), token);
+            var result = await mediator.Send(new GetEmployeeDocumentsQuery(), token);
 
             var data = new BaseApiResponse<IEnumerable<GetLookupResult>>(result);
 
             return Results.Ok(data);
         })
-            .WithName("GetArchives")
+            .WithName("GetEmployeeDocuments")
             .WithTags(CommonLookupsEndpointExtensions.Tag)
             .WithApiVersionSet(ApiVersioning.VersionSet)
             .HasApiVersion(1.0)
             .Produces<BaseApiResponse<IEnumerable<GetLookupResult>>>()
             .Produces<ProblemDetails>(StatusCodes.Status500InternalServerError)
-            .CacheOutput(builder => builder.Tag(EmployeeRecordCacheTag));
+            .CacheOutput(builder => builder.Tag(EmployeeDocumentCacheTag));
 
         return app;
     }
