@@ -1,0 +1,133 @@
+﻿@page "/data-library/personal-records"
+
+@using DPWH.EDMS.Client.Shared.Models
+@using DPWH.EDMS.Web.Client.Pages.DataLibrary.RecordTypes.Common.Components.RequestForm
+@using DPWH.EDMS.Web.Client.Pages.DataLibrary.RecordTypes.Common.Model
+@attribute [Authorize(Policy = "RequireActiveRoles")]
+@inherits PersonalRecordsManagementBase
+
+<TelerikMediaQuery Media="(max-width: 480px)" OnChange="((changed) => XSmall = changed)"></TelerikMediaQuery>
+
+<EdmsBreadcrumbs Data="@BreadcrumbItems" />
+
+<EdmsLoader Visible="@IsLoading" />
+
+<h3>Personal Records</h3>
+<CardSeparator Class="mb-3" />
+<div class="container-fluid">
+    <div class="d-flex flex-row">
+        <TelerikCard Width="100%">
+            <CardBody>
+                <div class="mobile-property-grid">
+                    @if (GetRecordType != null && !XSmall)
+                    {
+
+                        <TelerikContextMenu @ref="@ContextMenuRef" Data="@MenuItems" OnClick="@((GridMenuItemModel item) => OnItemClick(item))"></TelerikContextMenu>
+                        <TelerikGrid TItem="RecordsLibraryModel"
+                                     @bind-PageSize="@PageSize"
+                                     Height="@GridHeight"
+                                     Sortable=true
+                                     Pageable=true
+                                     FilterMode="@GridFilterMode.FilterRow"
+                                     Data="GetRecordType">
+                            <GridSettings>
+                                <GridPagerSettings PageSizes="@PageSizes">
+                                </GridPagerSettings>
+                            </GridSettings>
+                            <GridToolBarTemplate>
+                                <span class="k-toolbar-spacer"></span>
+                                <TelerikButton Icon="@FontIcon.Plus" ThemeColor="@(ThemeConstants.Button.ThemeColor.Primary)" OnClick="@( () => { GetOpenbtn = "Add"; IsOpen = true;})">Add</TelerikButton>
+                            </GridToolBarTemplate>
+                            <GridColumns>
+                                <GridColumn Field=@nameof(RecordsLibraryModel.Name) Title="Value" />
+                                <GridColumn Field=@nameof(RecordsLibraryModel.Category) Title="Created By" />
+                                <GridColumn Field=@nameof(RecordsLibraryModel.Section) Title="Section" />
+                                <GridColumn Field=@nameof(RecordsLibraryModel.Office) Title="Office" />
+                                <GridCommandColumn Width="50px">
+                                    <TelerikButton Icon="@FontIcon.MoreVertical" OnClick="@( (MouseEventArgs e) => ShowRecordRowOptions(e, context as RecordsLibraryModel) )"></TelerikButton>
+                                </GridCommandColumn>
+                            </GridColumns>
+                        </TelerikGrid>
+                    }
+                    else if (GetRecordType != null && XSmall)
+                    {
+                        <TelerikContextMenu @ref="@ContextMenuRef" Data="@MenuItems" OnClick="@((GridMenuItemModel item) => OnItemClick(item))"></TelerikContextMenu>
+                        <TelerikGrid TItem="RecordsLibraryModel"
+                                     @bind-PageSize="@PageSize"
+                                     Height="@GridHeight"
+                                     FilterMode="@GridFilterMode.FilterRow"
+                                     Sortable=true
+                                     Pageable=true
+                                     Data="GetRecordType">
+                            <GridSettings>
+                                <GridPagerSettings PageSizes="@PageSizes">
+                                </GridPagerSettings>
+                            </GridSettings>
+                            <GridToolBarTemplate>
+                                <span class="k-toolbar-spacer"></span>
+
+                                <TelerikButton Icon="@FontIcon.Plus">Add</TelerikButton>
+                            </GridToolBarTemplate>
+                            <DetailTemplate>
+                                @{
+                                    var prop = context as RecordsLibraryModel;
+                                    <div class="d-flex flex-column">
+                                        <p><b>Name:</b> @prop.Name </p>
+                                        <p><b>Created By:</b> System </p>
+                                    </div>
+                                }
+                            </DetailTemplate>
+                            <GridColumns>
+                                <GridColumn Field=@nameof(RecordsLibraryModel.Name) />
+                                <GridCommandColumn Width="50px">
+                                    <TelerikButton Icon="@FontIcon.MoreVertical" OnClick="@( (MouseEventArgs e) => ShowRowOptions(e, context as RecordsLibraryModel) )"></TelerikButton>
+                                </GridCommandColumn>
+                            </GridColumns>
+                        </TelerikGrid>
+                    }
+                    else
+                    {
+                        <span>No Data to display.</span>
+                    }
+                </div>
+            </CardBody>
+        </TelerikCard>
+    </div>
+</div>
+
+
+
+@if (IsOpen)
+{
+    <div class="modal">
+        1   <TelerikDialog @ref="DialogReference" @bind-Visible="@IsOpen" Title="@($"{GetOpenbtn} Config")" Width="50%">
+            <DialogContent>
+                @switch (GetOpenbtn)
+                {
+                    case "Add":
+                        <RecordTypesRequestForm HandleOnCancel="OnCancel" HandleCreateOnSubmit="OnSave" Type="Add" EditItem="@NewConfig" />
+                        break;
+                    case "Edit":
+                        <RecordTypesRequestForm HandleOnCancel="OnCancel" HandleCreateOnSubmit="OnUpdateItem" Type="Edit" EditItem="@NewConfig" />
+
+                        break;
+                    default:
+                        break;
+                }
+            </DialogContent>
+
+        </TelerikDialog>
+    </div>
+}
+
+<TelerikDialog @bind-Visible="@IsConfirm" Title="Confirmation">
+    <DialogContent>
+        <p class="text-center">Are you sure you want to <span class="delete">delete</span>  <span class="name">@NewConfig.Name</span></p>
+    </DialogContent>
+    <DialogButtons>
+        <TelerikButton OnClick="@(() => { IsConfirm = false; })">Cancel</TelerikButton>
+        <TelerikButton ThemeColor="@(ThemeConstants.Button.ThemeColor.Primary)" OnClick="@(() => OnDeleteItem(NewConfig.Id.ToString()))">Yes</TelerikButton>
+    </DialogButtons>
+</TelerikDialog>
+
+
