@@ -1,5 +1,6 @@
 ﻿using DPWH.EDMS.Application.Features.RecordRequests.Commands.CreateRecordRequest;
 using DPWH.EDMS.Application.Features.RecordRequests.Commands.UpdateRecordRequestStatus;
+using DPWH.EDMS.Application.Features.RecordRequests.Commands.UpdateRequestedRecordIsAvailable;
 using DPWH.EDMS.Application.Features.RecordRequests.Queries;
 using DPWH.EDMS.Application.Features.RecordRequests.Queries.GetCountRecordsByStatusQuery;
 using DPWH.EDMS.Application.Features.RecordRequests.Queries.GetMonthlyRequests;
@@ -52,7 +53,7 @@ public static class RecordRequestEndpoint
             .Produces<DataSourceResult>()
             .Produces<ProblemDetails>(StatusCodes.Status400BadRequest)
             .Produces<ProblemDetails>(StatusCodes.Status500InternalServerError);
-        app.MapGet(ApiEndpoints.RecordRequest.Count, async (string status,IMediator mediator) =>
+        app.MapGet(ApiEndpoints.RecordRequest.Count, async (string status, IMediator mediator) =>
         {
             var result = await mediator.Send(new GetCountRecordsByStatusQuery(status));
             var data = new BaseApiResponse<RecordRequestStatusCountModel>(result);
@@ -65,6 +66,29 @@ public static class RecordRequestEndpoint
             .WithApiVersionSet(ApiVersioning.VersionSet)
             .HasApiVersion(1.0)
             .Produces<BaseApiResponse<RecordRequestStatusCountModel>>()
+            .Produces<ProblemDetails>(StatusCodes.Status400BadRequest)
+            .Produces<ProblemDetails>(StatusCodes.Status500InternalServerError);
+
+        app.MapPost(ApiEndpoints.RecordRequest.UpdateRequestedRecordIsAvailable, async ([FromBody] List<Guid> id, bool isActive, IMediator mediator) =>
+        {
+            try
+            {
+                var result = await mediator.Send(new UpdateRequestedRecordIsAvailableRequest(id, isActive));
+                var data = new BaseApiResponse<List<Guid>?>(result);
+
+                return Results.Ok(data);
+            }
+            catch (Exception ex)
+            {
+                return Results.BadRequest("Invalid requestRecord Ids");
+            }
+        })
+            .WithName("UpdateRequestedRecordIsAvailable")
+            .WithTags(TagName)
+            .WithDescription("Update requested record is available")
+            .WithApiVersionSet(ApiVersioning.VersionSet)
+            .HasApiVersion(1.0)
+            .Produces<BaseApiResponse<Guid?>>()
             .Produces<ProblemDetails>(StatusCodes.Status400BadRequest)
             .Produces<ProblemDetails>(StatusCodes.Status500InternalServerError);
 

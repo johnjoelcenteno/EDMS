@@ -1,4 +1,5 @@
-﻿using DPWH.EDMS.Shared.Enums;
+﻿using DPWH.EDMS.Domain.Common;
+using DPWH.EDMS.Shared.Enums;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.CompilerServices;
 using UUIDNext;
@@ -24,12 +25,16 @@ public class RequestedRecord
         return entity;
     }
 
+    public void UpdateIsAvailable(bool isAvailable)
+    {
+        IsAvailable = isAvailable;
+    }
     public void Update(string uri)
     {
         Uri = uri;
     }
     public Guid Id { get; private set; }
-    
+
     [ForeignKey(nameof(RecordRequestId))]
     public Guid RecordRequestId { get; private set; }
     /// <summary>
