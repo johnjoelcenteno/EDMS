@@ -62,12 +62,12 @@ public class RecordTypesFormComponentBase : RxBaseComponent
     #region Load Events
     protected async Task LoadSection()
     {
-        SectionList = ConfigManager.SectionDataLibray.ToList();
+        SectionList = ConfigManager.SectionDataLibrary.ToList();
     }
 
     protected async Task LoadOffice()
     {
-        OfficeList = ConfigManager.OfficeDataLibray.ToList();
+        OfficeList = ConfigManager.OfficeDataLibrary.ToList();
     }
 
     protected async Task LoadCurrentValues()
