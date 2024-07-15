@@ -13,6 +13,7 @@ using Telerik.Blazor.Components.Menu;
 using DPWH.EDMS.IDP.Core.Constants;
 using Microsoft.AspNetCore.Components.Web;
 using DPWH.EDMS.Components.Helpers;
+using System.Runtime.InteropServices;
 
 namespace DPWH.EDMS.Web.Client.Pages.UserManagement;
 
@@ -23,14 +24,19 @@ public class UserManagementBase : GridBase<UserModel>
     [Inject] public required ILicensesService LicensesService { get; set; }
     [Inject] public required IExceptionHandlerService ExceptionHandlerService { get; set; }
     [Inject] public required IDpwhIntegrationsService DpwhIntegrationService { get; set; }
+    [Parameter] public UserModel ViewItem { get; set; } = default!;
+
 
     protected double LicenseLimit = 0;
     protected double LicenseUsed = 0;
     protected double TotalUsers = 0;
     protected string GetOpenBtn = "";
+    protected bool IsVisibleDeact = false;
     protected string SelectedAcord { get; set; }
+    protected string RespSizer { get; set; }
     protected UserModel SelectedItem { get; set; } = default!;
     protected UserModel UserList { get; set; } = new UserModel();
+    protected UserModel userName { get; set; } = new();
     protected ICollection<GetRequestingOfficeResult> RegionOfficeList { get; set; } = new List<GetRequestingOfficeResult>();
     protected List<GetRequestingOfficeResultItem> DEOlist { get; set; } = new List<GetRequestingOfficeResultItem>();
     protected List<GridMenuItemModel> MenuItems { get; set; } = new();
@@ -50,7 +56,8 @@ public class UserManagementBase : GridBase<UserModel>
         MenuItems = new List<GridMenuItemModel>
         {
         new (){ Text = "View", Icon=null!, CommandName="View" },
-        new (){ Text = "Edit", Icon=null!, CommandName="Edit" }
+        new (){ Text = "Edit", Icon=null!, CommandName="Edit" },
+        new (){ Text = "Deactivate", Icon=null!, CommandName="Deactivate" }
         };
     }
     protected async Task ShowRowOptions(MouseEventArgs e, UserModel row)
@@ -83,11 +90,13 @@ public class UserManagementBase : GridBase<UserModel>
 
     protected async Task LoadUserData()
     {
+        IsLoading = true;
         var result = await UserService.Query(DataSourceReq);
         if (result.Data != null)
         {
             var getData = GenericHelper.GetListByDataSource<UserModel>(result.Data);
             GridData = getData;
+            IsLoading = false;
         }
        
     }
@@ -112,21 +121,53 @@ public class UserManagementBase : GridBase<UserModel>
             // such as put a row in edit mode or select it
             SelectedAcord = item.CommandName;
             var guid = Guid.Parse(SelectedItem.Id);
+
             switch (item.CommandName)
             {
 
                 case "View":
-                    //var viewUrl = $"{Nav.BaseUri}user-management/view-layout/{SelectedItem.Id}";
-                    //Nav.NavigateTo(viewUrl);
+                    var viewUrl = $"{Nav.BaseUri}user-management/view-layout/{SelectedItem.Id}";
+                    Nav.NavigateTo(viewUrl);
                     break;
-                case "Update":
-                    //Nav.NavigateTo($"{Nav.BaseUri}user-management/edit/{Id}");
+                case "Edit":
+                    var EditUrl = $"{Nav.BaseUri}user-management/edit/{SelectedItem.Id}";
+                    Nav.NavigateTo(EditUrl);
                     break;
-
+                case "Deactivate":
+                    IsVisibleDeact = true; 
+                    userName = SelectedItem; 
+                    break;
                 default:
                     break;
             }
         }
+
+    }
+    protected async Task OnSelectUser(UserModel user)
+    {
+        var guid = Guid.Parse(user.Id);
+        var req = new DeactivateUserCommand
+        {
+            UserId = guid,
+            Reason = "Reason placeholder"
+        };
+        //try
+        //{
+
+        var result = await ExceptionHandlerService.HandleApiException<DeactivateUserResultBaseApiResponse>(async () => await UserService.DeactivateUser(req), null);
+        if (result != null && result.Success)
+        {
+            await OnInitializedAsync();
+            ToastService.ShowSuccess($"{user.UserName} Account Deactivated");
+            IsVisibleDeact = false;
+        }
+        //}
+        //catch (Exception ex) when (ex is ApiException<ProblemDetails> apiExtension)
+        //{
+        //    var problemDetails = apiExtension.Result;
+        //    var error = problemDetails.AdditionalProperties.ContainsKey("error") ? problemDetails.AdditionalProperties["error"].ToString() : problemDetails.AdditionalProperties["errors"].ToString();
+        //    ToastService.ShowError(error);
+        //}
 
     }
 }

@@ -1,12 +1,12 @@
-﻿@page "/user-management/add"
+﻿@page "/user-management/edit/{Id}"
 @using DPWH.EDMS.Web.Client.Pages.UserManagement.UserForm
 
-@inherits AddUserBase
+@inherits EditUserBase
 @attribute [Authorize(Policy = "RequireActiveRoles")]
 
 <EdmsBreadcrumbs Data="@BreadcrumbItems" />
 <EdmsLoader Visible="IsLoading" />
 
-<h3>Add New User</h3>
-<hr /> 
-<UserForm HandleOnCancel="OnCancel" HandleCreateOnSubmit="HandleSubmit" Type="Add"/>
+<h3>Edit User</h3>
+<hr />
+<UserForm Type="Edit" Id="@Id" />

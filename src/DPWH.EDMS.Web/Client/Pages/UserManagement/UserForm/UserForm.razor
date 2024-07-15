@@ -6,63 +6,67 @@
 
 <EdmsLoader Visible="@IsLoading" />
 
+
 <EditForm Model="@User" OnSubmit="@HandleCreateOnSubmit">
     <FluentValidationValidator @ref="FluentValidationValidator" DisableAssemblyScanning="@true"></FluentValidationValidator>
     <TelerikCard Class="edms-card-form">
         <CardBody>
-            <div class="d-flex justify-content-between">
-                <TelerikTextBox Width="500px" Id="EmployeeID" @bind-Value="@User.EmployeeId" PlaceHolder="Search Employee ID"></TelerikTextBox>
-                <TelerikButton OnClick="@ClearSearch">X</TelerikButton>
-                <TelerikButton OnClick="@(() => OnSearchEmployeeID(User.EmployeeId))" ThemeColor="@(ThemeConstants.Button.ThemeColor.Primary)">Search</TelerikButton>
-            </div>
-            <label class="SearchStatus">@(OnEmpId == true ? "" : "Employee not found.")</label>
-            <label class="SearchStatus">@(OnSearchPis == true ? "" : "Something went wrong. Please try again.")</label>
+            @if (Type.Contains("Add"))
+            {
+                <div class="d-flex justify-content-between">
+                    <TelerikTextBox Width="500px" Id="EmployeeID" @bind-Value="@User.EmployeeId" PlaceHolder="Search Employee ID"></TelerikTextBox>
+                    <TelerikButton OnClick="@ClearSearch">X</TelerikButton>
+                    <TelerikButton OnClick="@(() => OnSearchEmployeeID(User.EmployeeId))" ThemeColor="@(ThemeConstants.Button.ThemeColor.Primary)">Search</TelerikButton>
+                </div>
+                <label class="SearchStatus">@(OnEmpId == true ? "" : "Employee not found.")</label>
+                <label class="SearchStatus">@(OnSearchPis == true ? "" : "Something went wrong. Please try again.")</label>
 
+                <CardSeparator Class="my-1" />
+            }
             <div class="d-flex">
                 <div class="d-flex">
                     <div class="row ">
                         <div class="col-md-12">
-                            <CardSeparator Class="my-1" />
-                            <p class="sub-header mt-2">Employee Details</p>
+                            <p class="sub-header mt-2 fw-bold">Employee Details</p>
                         </div>
-                        @if (!SelectedAcord.Contains("add"))
+                        @if (!Type.Contains("Add"))
                         {
                             <div class="col-md-6 mb-3 mt-1">
-                                <label class="employeeDetails">Employee ID: <span class="employeeDetailsView">@User.EmployeeId</span></label>
+                                <label class="employeeDetails fw-bold">Employee ID: <span class="employeeDetailsView fw-normal">@User.EmployeeId</span></label>
                             </div>
                         }
                         <div class="col-md-6 mb-3 mt-1">
-                            <label class="employeeDetails">Full Name: <span class="employeeDetailsView">@User.FullName</span></label>
+                            <label class="employeeDetails fw-bold">Full Name: <span class="employeeDetailsView fw-normal">@User.FullName</span></label>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label class="employeeDetails">Email: <span class="employeeDetailsView">@User.Email</span></label>
+                            <label class="employeeDetails fw-bold">Email: <span class="employeeDetailsView fw-normal">@User.Email</span></label>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label class="employeeDetails">Position: <span class="employeeDetailsView">@User.Position</span></label>
+                            <label class="employeeDetails fw-bold">Position: <span class="employeeDetailsView fw-normal">@User.Position</span></label>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label class="employeeDetails">Designation: <span class="employeeDetailsView">@User.DesignationTitle</span></label>
+                            <label class="employeeDetails fw-bold">Designation: <span class="employeeDetailsView fw-normal">@User.DesignationTitle</span></label>
                         </div>
 
                         <div class="col-md-12 mb-3">
                             <p class="sub-header">Designation Details</p>
                         </div>
-                        @if (SelectedAcord.Contains("View"))
+                        @if (Type.Contains("View"))
                         {
                             <div class="col-md-6 mb-2">
-                                <label class="regionalDetails">Region/Central Office</label>
+                                <label class="regionalDetails fw-bold">Region/Central Office</label>
                                 <div class="form-group col-md-12">
                                     <span class="regionalDetailsView">@User.RegionalOffice</span>
                                 </div>
                             </div>
                             <div class="col-md-6 mb-2">
-                                <label class="regionalDetails">District/Bureau/Service</label>
+                                <label class="regionalDetails fw-bold">District/Bureau/Service</label>
                                 <div class="form-group col-md-12">
                                     <span class="regionalDetailsView">@User.DistrictEngineeringOffice</span>
                                 </div>
                             </div>
                             <div class="col-md-6 mb-2">
-                                <label class="regionalDetails">User Access</label>
+                                <label class="regionalDetails fw-bold">User Access</label>
                                 <div class="form-group col-md-12">
                                     <span class="regionalDetailsView">@User.Role</span>
                                 </div>
@@ -73,7 +77,7 @@
                             @if (UserRole == ApplicationRoles.Manager)
                             {
                                 <div class="col-md-6 mb-2">
-                                    <label class="regionalDetails">Region/Central Office</label>
+                                    <label class="regionalDetails fw-bold">Region/Central Office</label>
                                     <div class="form-group col-md-12 mt-2">
                                         <TelerikDropDownList @bind-Value="@SelectedRegionalOffice"
                                                              Id="region"
@@ -95,7 +99,7 @@
                             else
                             {
                                 <div class="col-md-6 mb-2">
-                                    <label class="regionalDetails">Region/Central Office</label>
+                                    <label class="regionalDetails fw-bold">Region/Central Office</label>
                                     <div class="form-group col-md-12 mt-2">
                                         <TelerikDropDownList @bind-Value="@SelectedRegionalOffice"
                                                              Id="region"
@@ -106,7 +110,7 @@
                                                              DefaultText="Select"
                                                              AdaptiveMode="@AdaptiveMode.Auto"
                                                              OnChange="OnRegionOfficeChanged"
-                                                             Enabled="@(!SelectedAcord.Contains("View"))"
+                                                             Enabled="@(!Type.Contains("View"))"
                                                              @ref="RegionOfficeRef">
                                         </TelerikDropDownList>
                                         <TelerikValidationMessage For="@(() => User.RegionalOffice)" />
@@ -116,7 +120,7 @@
                                 </div>
                             }
                             <div class="col-md-6 mb-1">
-                                <label class="regionalDetails">District/Bureau/Service</label>
+                                <label class="regionalDetails fw-bold">District/Bureau/Service</label>
                                 <div class="form-group col-md-12 mt-2">
                                     <TelerikDropDownList @bind-Value="@SelectedImplementingOffice"
                                                          Id="ImplementingOffice"
@@ -127,7 +131,7 @@
                                                          DefaultText="Select"
                                                          AdaptiveMode="@AdaptiveMode.Auto"
                                                          OnChange="OnChangeOffice"
-                                                         Enabled="@(!SelectedAcord.Contains("View"))"
+                                                         Enabled="@(!Type.Contains("View"))"
                                                          @ref="ImplementRef">
                                     </TelerikDropDownList>
                                     <TelerikValidationMessage For="@(() => User.DistrictEngineeringOffice)" />
@@ -135,7 +139,7 @@
                                 </div>
                             </div>
                             <div class="form-group col-md-12 mb-1">
-                                <label class="regionalDetails">User Access</label>
+                                <label class="regionalDetails fw-bold">User Access</label>
                                 <TelerikDropDownList @ref="DropDownListRef" @bind-Value="@User.Role"
                                                      Data="@UserAccessList"
                                                      ValueField="idRole"
@@ -143,7 +147,7 @@
                                                      TextField="UserAccess"
                                                      Filterable="true"
                                                      AdaptiveMode="@AdaptiveMode.Auto"
-                                                     Enabled="@(!SelectedAcord.Contains("View"))"
+                                                     Enabled="@(!Type.Contains("View"))"
                                                      OnChange="@(() => OnSelectedChange(true))" />
                                 <TelerikValidationMessage For="@(() => User.Role)" />
                                 @{
@@ -172,7 +176,7 @@
                             @if (UserCategory == true)
                             {
                                 <div class="form-group col-md-12 mb-1">
-                                    <label class="regionalDetails">Office</label>
+                                    <label class="regionalDetails fw-bold">Office</label>
                                     <TelerikDropDownList @bind-Value="User.Office"
                                                          Id="roleCateg"
                                                          Data="@Offices"
@@ -185,13 +189,13 @@
                                 </div>
                             }
                         }
-                        @if (SelectedAcord.Contains("View"))
+                        @if (Type.Contains("View"))
                         {
                             <div class="col-md-6">
-                                <label class="regionalDetails" style="font-weight: bolder">Created: <span class="regionalDetailsView" style="font-weight:normal">@GenericHelper.GetDateDisplay(User.Created)</span></label>
+                                <label class="regionalDetails fw-bold">Created: <span class="regionalDetailsView" style="font-weight:normal">@GenericHelper.GetDateDisplay(User.Created)</span></label>
                             </div>
                             <div class="col-md-6">
-                                <label class="regionalDetails" style="font-weight: bolder">Created by: <span class="regionalDetailsView" style="font-weight:normal">@User.CreatedBy</span></label>
+                                <label class="regionalDetails fw-bold">Created by: <span class="regionalDetailsView" style="font-weight:normal">@User.CreatedBy</span></label>
                             </div>
                         }
                     </div>
@@ -200,16 +204,48 @@
             </div>
 
         </CardBody>
+
     </TelerikCard>
-    <div class="edms-card-form my-3">
-        <div class="d-flex flex-row justify-content-between">
-            <TelerikButton @onclick="HandleOnCancelCallback"
-                           FillMode="@ThemeConstants.Button.FillMode.Outline" ThemeColor="@ThemeConstants.Button.ThemeColor.Secondary">
-                Cancel
-            </TelerikButton>
-            <TelerikButton ThemeColor="@(ThemeConstants.Button.ThemeColor.Primary)" OnClick="@(() => AddUser(User))">Submit</TelerikButton>
+    @if (Type.Contains("View"))
+    {
+        <div class="edms-card-form my-3">
+            <div class="d-flex flex-row justify-content-between">
+                <TelerikButton @onclick="OnCancel"
+                               FillMode="@ThemeConstants.Button.FillMode.Outline" ThemeColor="@ThemeConstants.Button.ThemeColor.Secondary">
+                    Back
+                </TelerikButton>
+                @* <TelerikButton ThemeColor="@(ThemeConstants.Button.ThemeColor.Primary)" OnClick="@(() => UpdateUser(User))">Update</TelerikButton> *@
+            </div>
         </div>
-    </div>
+    }
+    else
+    {
+        @if (Type.Contains("Edit"))
+        {
+            <div class="edms-card-form my-3">
+                <div class="d-flex flex-row justify-content-between">
+                    <TelerikButton @onclick="HandleOnCancelCallback"
+                                   FillMode="@ThemeConstants.Button.FillMode.Outline" ThemeColor="@ThemeConstants.Button.ThemeColor.Secondary">
+                        Cancel
+                    </TelerikButton>
+                    <TelerikButton ThemeColor="@(ThemeConstants.Button.ThemeColor.Primary)" OnClick="@(() => EditUser(User))">Update</TelerikButton>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="edms-card-form my-3">
+                <div class="d-flex flex-row justify-content-between">
+                    <TelerikButton @onclick="HandleOnCancelCallback"
+                                   FillMode="@ThemeConstants.Button.FillMode.Outline" ThemeColor="@ThemeConstants.Button.ThemeColor.Secondary">
+                        Cancel
+                    </TelerikButton>
+                    <TelerikButton ThemeColor="@(ThemeConstants.Button.ThemeColor.Primary)" OnClick="@(() => AddUser(User))">Submit</TelerikButton>
+                </div>
+            </div>
+        } 
+    }
+
 </EditForm>
 
 <style>
