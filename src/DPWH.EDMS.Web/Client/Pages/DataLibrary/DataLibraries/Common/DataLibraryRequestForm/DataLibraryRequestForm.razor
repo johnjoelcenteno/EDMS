@@ -11,31 +11,6 @@
             <TelerikTextBox Size="@ThemeConstants.Button.Size.Large" Id="Value" @bind-Value="@NewConfig.Value" PlaceHolder="Value"></TelerikTextBox>
             <ValidationMessage Class="text-danger" For="@(() => NewConfig.Value)" />
         </div>
-        @if (DataType == DataLibraryEnum.EmployeeRecords.ToString() || 
-            DataType == DataLibraryEnum.Issuances.ToString() || 
-            DataType == DataLibraryEnum.PersonalRecords.ToString())
-        {
-            <div class="col-md-12">
-                <label class="mb-2" for="Section">Section*</label>
-                <TelerikDropDownList Data="@SectionList"
-                                     @bind-Value="NewConfig.Section"
-                                     ValueField="string"
-                                     TextField="string"
-                                     DefaultText="Select"
-                                     OnChange="SectionDropdownErrorChecker" />
-                <ValidationMessage Class="text-danger" For="@(() => NewConfig.Section)" />
-            </div>
-            <div class="col-md-12">
-                <label class="mb-2" for="Name">Office*</label>
-                <TelerikDropDownList Data="@OfficeList"
-                                     @bind-Value="NewConfig.Office"
-                                     ValueField="string"
-                                     TextField="string"
-                                     DefaultText="Select"
-                                     OnChange="OfficeDropdownErrorChecker" />
-                <ValidationMessage Class="text-danger" For="@(() => NewConfig.Office)" />
-            </div>
-        }
         <CardSeparator Class="my-2" />
         <div class="k-actions k-actions-horizontal k-window-actions k-dialog-actions k-actions-stretched dialog">
 

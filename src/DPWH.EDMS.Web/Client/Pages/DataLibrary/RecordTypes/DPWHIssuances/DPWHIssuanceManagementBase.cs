@@ -50,7 +50,7 @@ public class DPWHIssuanceManagementBase : RecordTypesFormComponentBase
         {
             new() { Icon = "home", Url = "/"},
             new() { Text = "Data Library", Url = "/data-library"},
-            new() { Text = "Employee Records", Url = "/data-library/issuances" },
+            new() { Text = "DPWH Issuances", Url = "/data-library/issuances" },
 
         };
     }
