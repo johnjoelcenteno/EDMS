@@ -11,13 +11,13 @@ using Telerik.Blazor.Components;
 
 namespace DPWH.EDMS.Web.Client.Pages.CurrentUser.Records;
 
-public class RecordsBase : GridBase<GetLookupResult>
+public class RecordsBase : GridBase<PersonalRecordDocument>
 {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateAsync { get; set; }
     [Parameter] public required string Id { get; set; }
     [Inject] public required NavigationManager NavigationManager { get; set; }
     [Inject] public required ILookupsService LookupsService { get; set; }
-    protected EDMS.Client.Shared.MockModels.RecordModel Record { get; set; }
+    protected List<PersonalRecordDocument> Record { get; set; } = new List<PersonalRecordDocument>();
     protected MockCurrentData CurrentData { get; set; }
     protected List<Document> DocumentList = new List<Document>();
     protected GetLookupResultIEnumerableBaseApiResponse GetEmployeeRecords { get; set; } = new GetLookupResultIEnumerableBaseApiResponse();
@@ -33,7 +33,7 @@ public class RecordsBase : GridBase<GetLookupResult>
             Url = "/my-records"
         });
 
-        Record = MockCurrentData.GetCurrentRecord();
+        Record = MockCurrentData.GenerateCurrentDocuments();
        
     }
 
@@ -84,7 +84,7 @@ public class RecordsBase : GridBase<GetLookupResult>
     }
     public async Task viewData(GridCommandEventArgs args)
     {
-        GetLookupResult selectedId = args.Item as GetLookupResult;
+        PersonalRecordDocument selectedId = args.Item as PersonalRecordDocument;
         
         //Int32.TryParse(samp, out sampNumber);
         NavigationManager.NavigateTo($"/my-records/{selectedId.Id}");

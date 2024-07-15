@@ -22,16 +22,15 @@
             <CardSeparator Class="my-2"></CardSeparator>
             <div class="mobile-property-grid">
 
-                @if (GetEmployeeRecords.Data != null && !XSmall)
+                @if (Record != null && !XSmall)
                 {
-                    <TelerikGrid TItem="GetLookupResult"
+                    <TelerikGrid TItem="PersonalRecordDocument"
                                  @bind-PageSize="@PageSize"
                                  Height="@GridHeight"
                                  FilterMode="GridFilterMode.FilterRow"
                                  Sortable=true
                                  Pageable=true
-                                 Data="GetEmployeeRecords.Data"
-                                 OnStateChanged="@OnStateChanged"
+                                 Data="Record" 
                                  @ref="GridRef"
                                  Context="employee">
                         <GridSettings>
@@ -39,7 +38,7 @@
                             </GridPagerSettings>
                         </GridSettings>
                         <GridColumns>
-                            <GridColumn Field=@nameof(GetLookupResult.Name) Title="Document Name" />
+                            <GridColumn Field=@nameof(PersonalRecordDocument.DocumentName) Title="Document Name" />
                             <GridCommandColumn Width="5%">
                                 <GridCommandButton Class="commandButton" Command="ExportData" OnClick="@viewData">View</GridCommandButton>
                             </GridCommandColumn>
@@ -49,15 +48,15 @@
                         </GridColumns>
                     </TelerikGrid>
                 }
-                else if (GetEmployeeRecords.Data != null && XSmall)
+                else if (Record != null && XSmall)
                 {
-                    <TelerikGrid TItem="GetLookupResult"
+                    <TelerikGrid TItem="PersonalRecordDocument"
                                  @bind-PageSize="@PageSize"
                                  Height="@GridHeight"
                                  FilterMode="GridFilterMode.FilterRow"
                                  Sortable=true
                                  Pageable=true
-                                 Data="GetEmployeeRecords.Data"
+                                 Data="Record"
                                  Context="employee">
                         <GridSettings>
                             <GridPagerSettings PageSizes="@PageSizes">
@@ -65,14 +64,14 @@
                         </GridSettings>
                         <DetailTemplate>
                             @{
-                                var prop = employee as GetLookupResult;
+                                var prop = employee as PersonalRecordDocument;
                                 <div class="d-flex flex-column">
-                                    <p><b>Document Name :</b> @prop.Name </p>
+                                    <p><b>Document Name :</b> @prop.DocumentName </p>
                                 </div>
                             }
                         </DetailTemplate>
                         <GridColumns>
-                            <GridColumn Field=@nameof(GetLookupResult.Name) />
+                            <GridColumn Field=@nameof(PersonalRecordDocument.DocumentName) />
                         </GridColumns>
                     </TelerikGrid>
                 }
