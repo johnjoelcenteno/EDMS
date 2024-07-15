@@ -4456,7 +4456,7 @@ namespace DPWH.EDMS.Api.Contracts
                         content_.Add(new System.Net.Http.StringContent(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)), "Id");
                     }
                     request_.Content = content_;
-                    request_.Method = new System.Net.Http.HttpMethod("PUT");
+                    request_.Method = new System.Net.Http.HttpMethod("POST");
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();

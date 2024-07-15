@@ -1437,7 +1437,7 @@
       }
     },
     "/api/recordrequests/requestedrecordfiles": {
-      "put": {
+      "post": {
         "tags": [
           "RecordRequestSupportingFiles"
         ],
@@ -4911,6 +4911,10 @@
             "nullable": true
           },
           "designationTitle": {
+            "type": "string",
+            "nullable": true
+          },
+          "office": {
             "type": "string",
             "nullable": true
           },
