@@ -26,18 +26,25 @@ public class AccessTokenHandler : DelegatingHandler
         var authState = await _authenticationStateProvider.GetAuthenticationStateAsync();
         var user = authState.User;
 
-        if (user.Identity != null && user.Identity.IsAuthenticated)
+        try
         {
-            var tokenRes = await _httpClient.GetFromJsonAsync<string>(_accessTokenEndpoint);
-            if (!string.IsNullOrEmpty(tokenRes))
-            { 
-                request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", tokenRes);
-            }            
+            if (user.Identity != null && user.Identity.IsAuthenticated)
+            {
+                var tokenRes = await _httpClient.GetFromJsonAsync<string>(_accessTokenEndpoint);
+                if (!string.IsNullOrEmpty(tokenRes))
+                {
+                    request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", tokenRes);
+                }
+            }
+            else
+            {
+                _navManager.NavigateTo("/bff/login", true);
+            }
         }
-        //else
-        //{
-        //    _navManager.NavigateTo("/bff/login", true);
-        //}
+        catch (Exception ex)
+        {
+            _navManager.NavigateTo("/bff/login", true);
+        }
 
         return await base.SendAsync(request, cancellationToken);
     }
