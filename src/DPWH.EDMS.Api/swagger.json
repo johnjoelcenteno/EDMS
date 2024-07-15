@@ -5425,6 +5425,10 @@
             "type": "string",
             "nullable": true
           },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
           "claimantType": {
             "type": "string",
             "nullable": true
@@ -5437,6 +5441,10 @@
             "$ref": "#/components/schemas/AuthorizedRepresentativeModel"
           },
           "purpose": {
+            "type": "string",
+            "nullable": true
+          },
+          "remarks": {
             "type": "string",
             "nullable": true
           },

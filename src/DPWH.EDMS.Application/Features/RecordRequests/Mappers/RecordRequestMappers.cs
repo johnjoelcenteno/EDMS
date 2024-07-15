@@ -14,6 +14,7 @@ public static class RecordRequestMappers
             FullName = entity.FullName,
             ControlNumber = entity.ControlNumber,
             EmployeeNumber = entity.EmployeeNumber,
+            Email = entity.Email,
             ClaimantType = entity.ClaimantType,
             DateRequested = entity.DateRequested,
             AuthorizedRepresentative = entity.AuthorizedRepresentative.ValidId is not null ? new AuthorizedRepresentativeModel
@@ -30,6 +31,7 @@ public static class RecordRequestMappers
             } : new(),
             RequestedRecords = entity.RequestedRecords.Select(rr => new RequestedRecordModel(rr.Id, rr.RecordTypeId, rr.RecordType, rr.Office, rr.Status, rr.IsAvailable, rr.Uri)).ToList(),
             Purpose = entity.Purpose,
+            Remarks = entity.Remarks,
             Status = entity.Status,
             Files = entity.Files?.Select(entityFile => new RecordRequestDocumentModel
             {
