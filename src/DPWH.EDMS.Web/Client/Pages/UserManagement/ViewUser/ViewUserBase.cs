@@ -35,7 +35,8 @@ public class ViewUserBase : RxBaseComponent
                 Icon = "search",
                 Text = "View User",
                 Url = NavManager.Uri.ToString(),
-            }); 
+            });
+
         }
         catch (Exception ex) when (ex is ApiException<ProblemDetails> apiExtension)
         {
