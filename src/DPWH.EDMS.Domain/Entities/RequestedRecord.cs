@@ -27,7 +27,6 @@ public class RequestedRecord
     public void Update(string uri)
     {
         Uri = uri;
-        IsAvailable = true;
     }
     public Guid Id { get; private set; }
     
