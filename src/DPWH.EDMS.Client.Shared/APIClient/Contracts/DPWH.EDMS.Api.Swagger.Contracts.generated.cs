@@ -942,6 +942,9 @@ namespace DPWH.EDMS.Api.Contracts
         [Newtonsoft.Json.JsonProperty("employeeNumber", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string EmployeeNumber { get; set; }
 
+        [Newtonsoft.Json.JsonProperty("email", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Email { get; set; }
+
         [Newtonsoft.Json.JsonProperty("claimant", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string Claimant { get; set; }
 
@@ -965,6 +968,9 @@ namespace DPWH.EDMS.Api.Contracts
 
         [Newtonsoft.Json.JsonProperty("fullName", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string FullName { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("remarks", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Remarks { get; set; }
 
     }
 
