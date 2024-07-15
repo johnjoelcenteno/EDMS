@@ -1,5 +1,6 @@
 ﻿using DPWH.EDMS.Client.Shared.APIClient.Services.DataLibrary;
 using DPWH.EDMS.Client.Shared.APIClient.Services.RecordTypes;
+using DPWH.EDMS.Client.Shared.Configurations;
 using DPWH.EDMS.Components;
 using DPWH.EDMS.Web.Client.Pages.DataLibrary.RecordTypes.Common.Model;
 using DPWH.EDMS.Web.Client.Shared.BlazoredFluentValidator;
@@ -17,6 +18,7 @@ public class RecordTypesFormComponentBase : RxBaseComponent
 
 
     [Inject] public required IDataLibraryService DataLibraryService { get; set; }
+    [Inject] public required ConfigManager ConfigManager { get; set; }
     #endregion
 
 
@@ -60,23 +62,12 @@ public class RecordTypesFormComponentBase : RxBaseComponent
     #region Load Events
     protected async Task LoadSection()
     {
-        SectionList = new List<string>
-        {
-            "Employee Welfare and Benefits Section",
-            "Records Management Section",
-            "Integrated Payroll and Personnel Information",
-            "Current Section",
-            "Non-Current Section"
-        };
+        SectionList = ConfigManager.SectionDataLibray.ToList();
     }
 
     protected async Task LoadOffice()
     {
-        OfficeList = new List<string>
-        {
-            "HRMD",
-            "RMD"
-        };
+        OfficeList = ConfigManager.OfficeDataLibray.ToList();
     }
 
     protected async Task LoadCurrentValues()

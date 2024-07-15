@@ -21,5 +21,8 @@ public class ConfigManager
     public string BaseApiUrl { get; set; }
     public string PublicPortalUrl { get; set; }
     public string[] PropertyStatus { get; set; }
+    
+    public List<string> SectionDataLibray { get; set; }
+    public List<string> OfficeDataLibray { get; set; }
 
 }
