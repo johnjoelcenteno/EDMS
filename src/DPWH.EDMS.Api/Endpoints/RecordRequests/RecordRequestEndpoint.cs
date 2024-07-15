@@ -104,14 +104,13 @@ public static class RecordRequestEndpoint
         {
             var result = await mediator.Send(new GetTopRequestQuery());
             var data = new BaseApiResponse<IEnumerable<GetTopRequestQueryModel>>(result);
-            return result is null ? Results.BadRequest() : Results.Ok(data);
+            return Results.Ok(data);
         }).WithName("QueryTopRequestRecords")
             .WithTags(TagName)
             .WithDescription("Query Top Request Records")
             .WithApiVersionSet(ApiVersioning.VersionSet)
             .HasApiVersion(1.0)
             .Produces<BaseApiResponse<IEnumerable<GetTopRequestQueryModel>>>()
-            .Produces<ProblemDetails>(StatusCodes.Status400BadRequest)
             .Produces<ProblemDetails>(StatusCodes.Status500InternalServerError); ;
 
         app.MapPost(ApiEndpoints.RecordRequest.QueryByStatus, async (DataSourceRequest request, string status, IMediator mediator) =>
