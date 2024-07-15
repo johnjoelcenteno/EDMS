@@ -5,9 +5,9 @@ using MediatR;
 
 namespace DPWH.EDMS.Application.Features.RecordRequests.Commands.UpdateRequestedRecordIsAvailable;
 
-public record class UpdateRequestedRecordIsAvailableRequest(Guid Id, bool IsActive) : IRequest<Guid?>;
+public record class UpdateRequestedRecordIsAvailableRequest(List<Guid> Ids, bool isAvailable) : IRequest<List<Guid>?>;
 
-public class UpdateRequestedRecordIsAvailable : IRequestHandler<UpdateRequestedRecordIsAvailableRequest, Guid?>
+public class UpdateRequestedRecordIsAvailable : IRequestHandler<UpdateRequestedRecordIsAvailableRequest, List<Guid>?>
 {
     private readonly IWriteRepository _writeRepository;
 
@@ -15,14 +15,22 @@ public class UpdateRequestedRecordIsAvailable : IRequestHandler<UpdateRequestedR
     {
         _writeRepository = writeRepository;
     }
-    public async Task<Guid?> Handle(UpdateRequestedRecordIsAvailableRequest request, CancellationToken cancellationToken)
+    public async Task<List<Guid>?> Handle(UpdateRequestedRecordIsAvailableRequest request, CancellationToken cancellationToken)
     {
-        var requestedRecord = _writeRepository.RequestedRecords.FirstOrDefault(x => x.Id == request.Id);
+        if (!request.Ids.Any()) return null;
 
-        if (requestedRecord is null) return null;
+        var existingRecords = _writeRepository.RequestedRecords
+                .Where(x => request.Ids.Contains(x.Id))
+                .ToList();
 
-        requestedRecord.UpdateIsAvailable(request.IsActive);
+        var missingRecords = request.Ids.Where(x => !existingRecords.Select(x => x.Id).Contains(x));
+        if (missingRecords.Count() > 0)
+        {
+            throw new Exception($"{missingRecords}");
+        }
+
+        existingRecords.ForEach(x => x.UpdateIsAvailable(request.isAvailable));
         await _writeRepository.SaveChangesAsync(cancellationToken);
-        return requestedRecord.Id;
+        return request.Ids;
     }
 }

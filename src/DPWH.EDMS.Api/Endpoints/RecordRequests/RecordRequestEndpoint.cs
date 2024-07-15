@@ -69,12 +69,19 @@ public static class RecordRequestEndpoint
             .Produces<ProblemDetails>(StatusCodes.Status400BadRequest)
             .Produces<ProblemDetails>(StatusCodes.Status500InternalServerError);
 
-        app.MapGet(ApiEndpoints.RecordRequest.UpdateRequestedRecordIsAvailable, async ([FromRoute] Guid id, bool isActive, IMediator mediator) =>
+        app.MapPost(ApiEndpoints.RecordRequest.UpdateRequestedRecordIsAvailable, async ([FromBody] List<Guid> id, bool isActive, IMediator mediator) =>
         {
-            var result = await mediator.Send(new UpdateRequestedRecordIsAvailableRequest(id, isActive));
-            var data = new BaseApiResponse<Guid?>(result);
+            try
+            {
+                var result = await mediator.Send(new UpdateRequestedRecordIsAvailableRequest(id, isActive));
+                var data = new BaseApiResponse<List<Guid>?>(result);
 
-            return result is null ? Results.NotFound() : Results.Ok(data);
+                return Results.Ok(data);
+            }
+            catch (Exception ex)
+            {
+                return Results.BadRequest("Invalid requestRecord Ids");
+            }
         })
             .WithName("UpdateRequestedRecordIsAvailable")
             .WithTags(TagName)
