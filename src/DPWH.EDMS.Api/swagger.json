@@ -1219,12 +1219,12 @@
         }
       }
     },
-    "/api/lookups/employeerecords": {
+    "/api/lookups/personalrecords": {
       "get": {
         "tags": [
           "Lookups"
         ],
-        "operationId": "GetEmployeeRecords",
+        "operationId": "GetPersonalRecords",
         "responses": {
           "200": {
             "description": "Success",

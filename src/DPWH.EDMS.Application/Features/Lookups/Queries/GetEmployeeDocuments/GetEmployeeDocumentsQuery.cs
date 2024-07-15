@@ -1,5 +1,5 @@
 using DPWH.EDMS.Application.Contracts.Persistence;
-using DPWH.EDMS.Application.Features.RecordTypes;
+using DPWH.EDMS.Domain.Enums;
 using DPWH.EDMS.Domain.Extensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
