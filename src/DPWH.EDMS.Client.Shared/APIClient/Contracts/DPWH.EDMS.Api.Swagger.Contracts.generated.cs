@@ -1950,6 +1950,9 @@ namespace DPWH.EDMS.Api.Contracts
         [Newtonsoft.Json.JsonProperty("designationTitle", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string DesignationTitle { get; set; }
 
+        [Newtonsoft.Json.JsonProperty("office", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Office { get; set; }
+
         [Newtonsoft.Json.JsonProperty("createdBy", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string CreatedBy { get; set; }
 
