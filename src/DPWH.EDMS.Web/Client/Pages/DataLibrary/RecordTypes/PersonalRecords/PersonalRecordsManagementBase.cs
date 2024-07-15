@@ -48,7 +48,7 @@ public class PersonalRecordsManagementBase : RecordTypesFormComponentBase
         {
             new() { Icon = "home", Url = "/"},
             new() { Text = "Data Library", Url = "/data-library"},
-            new() { Text = "Employee Records", Url ="/data-library/personal-records" },
+            new() { Text = "Personal Records", Url ="/data-library/personal-records" },
 
         };
     }

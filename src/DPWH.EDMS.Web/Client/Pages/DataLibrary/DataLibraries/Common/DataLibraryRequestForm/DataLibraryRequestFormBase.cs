@@ -3,7 +3,7 @@ using DPWH.EDMS.Web.Client.Pages.DataLibrary.Common.Enum;
 using DPWH.EDMS.Web.Client.Shared.DataLibrary.RequestForm;
 using System.Text.RegularExpressions;
 
-namespace DPWH.EDMS.Web.Client.Pages.DataLibrary.DataLibraryRequestForm;
+namespace DPWH.EDMS.Web.Client.Pages.DataLibrary.DataLibraries.Common.DataLibraryRequestForm;
 
 public class DataLibraryRequestFormBase : DataLibraryRequestFormComponentBase
 {
@@ -21,16 +21,16 @@ public class DataLibraryRequestFormBase : DataLibraryRequestFormComponentBase
     #region Load Current Value
     protected async Task GetCurrentValues()
     {
-       if(Type == "Edit")
-       {
+        if (Type == "Edit")
+        {
             NewConfig.Value = EditItem.Value;
             NewConfig.Id = EditItem.Id.ToString();
-            if (DataType == DataLibraryEnum.EmployeeRecords.ToString() || 
+            if (DataType == DataLibraryEnum.EmployeeRecords.ToString() ||
                 DataType == DataLibraryEnum.Issuances.ToString() ||
                 DataType == DataLibraryEnum.PersonalRecords.ToString())
             {
-                    NewConfig.Section = EditItem.Section;
-                    NewConfig.Office = EditItem.Office;
+                NewConfig.Section = EditItem.Section;
+                NewConfig.Office = EditItem.Office;
             }
         }
         NewConfig.DataType = DataType;
