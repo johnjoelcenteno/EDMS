@@ -66,17 +66,19 @@
                 </div>
                 <div class="row">
                     <div class="col">
-                        <p><b>Record(s) Requested</b></p>
-                        @if (SelectedRecordRequest.RequestedRecords != null && SelectedRecordRequest.RequestedRecords.Count > 0)
+                        <p class="mb-1"><b>Record(s) Requested</b></p>
+                        @if (SelectedRecordRequest.RequestedRecords != null && SelectedRecordRequest.RequestedRecords.Count > 0 && GroupedRecords != null)
                         {
-                            <ul>
-                                @foreach (var record in SelectedRecordRequest.RequestedRecords)
-                                {
-                                    <li>
-                                        @record.RecordType
-                                    </li>
-                                }
-                            </ul>
+                            @foreach (var office in GroupedRecords)
+                            {
+                                <p><b>@office.Key</b></p>
+                                <ul>
+                                    @foreach (var recordType in office)
+                                    {
+                                        <li>@recordType</li>
+                                    }
+                                </ul>
+                            }
                         }
                     </div>
                 </div>
@@ -115,12 +117,35 @@
                 </div>
                 <div class="row">
                     <div class="col">
-                        @foreach (var record in SelectedRecordRequest.RequestedRecords)
+                        @if (Office == "RMD")
                         {
-                            <div>
-                                <input type="checkbox" />
-                                <label>@record.RecordType</label>
-                            </div>
+                            @foreach (var record in RMDRecords)
+                            {
+                                <div>
+                                    <TelerikCheckBox Id="@record.RecordType" @bind-Value="@record.IsAvailable" Enabled="SelectedRecordRequest.Status == RecordRequestStates.Review.ToString()" />
+                                    <label for="@record.RecordType">@record.RecordType</label>
+                                </div>
+                            }
+                        }
+                        else if (Office == "HRMD")
+                        {
+                            @foreach (var record in HRMDRecords)
+                            {
+                                <div>
+                                    <TelerikCheckBox Id="@record.RecordType" @bind-Value="@record.IsAvailable" Enabled="SelectedRecordRequest.Status == RecordRequestStates.Review.ToString()" />
+                                    <label for="@record.RecordType">@record.RecordType</label>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            @foreach (var record in SelectedRecordRequest.RequestedRecords)
+                            {
+                                <div>
+                                    <TelerikCheckBox Id="@record.RecordType" @bind-Value="@record.IsAvailable" Enabled="SelectedRecordRequest.Status == RecordRequestStates.Review.ToString()" />
+                                    <label for="@record.RecordType">@record.RecordType</label>
+                                </div>
+                            }
                         }
                     </div>
                 </div>
@@ -157,28 +182,83 @@
                 <div class="row mb-2">
                     <p><b>Documents</b></p>
                 </div>
-                @foreach (var record in SelectedRecordRequest.RequestedRecords)
+                @if (Office == "RMD")
                 {
-                    <div class="row mb-1">
-                        <div class="d-flex col">
-                            <input type="checkbox" />
-                            <label class="align-content-center ms-2">@record.RecordType</label>
+                    @foreach (var record in RMDRecords)
+                    {
+                        <div class="row mb-1">
+                            <div class="d-flex col">
+                                <input type="checkbox" />
+                                <label class="align-content-center ms-2">@record.RecordType</label>
+                            </div>
+                            <div class="col">
+                                <TelerikFileSelect Class="@(XSmall ? "mb-3" : "")"
+                                                   AllowedExtensions="@AllowedExtensions"
+                                                   OnSelect="@OnSelectDocument"
+                                                   OnRemove="@OnRemoveDocument"
+                                                   MaxFileSize="@MaxFileSize"
+                                                   MinFileSize="@MinFileSize"
+                                                   Multiple="false">
+                                    <SelectFilesButtonTemplate>
+                                        <TelerikSvgIcon Icon="@SvgIcon.Upload" />
+                                        Click to Upload
+                                    </SelectFilesButtonTemplate>
+                                </TelerikFileSelect>
+                            </div>
                         </div>
-                        <div class="col">
-                            <TelerikFileSelect Class="@(XSmall ? "mb-3" : "")"
-                                               AllowedExtensions="@AllowedExtensions"
-                                               OnSelect="@OnSelectDocument"
-                                               OnRemove="@OnRemoveDocument"
-                                               MaxFileSize="@MaxFileSize"
-                                               MinFileSize="@MinFileSize"
-                                               Multiple="false">
-                                <SelectFilesButtonTemplate>
-                                    <TelerikSvgIcon Icon="@SvgIcon.Upload" />
-                                    Click to Upload
-                                </SelectFilesButtonTemplate>
-                            </TelerikFileSelect>
+                    }
+                }
+                else if (Office == "HRMD")
+                {
+                    @foreach (var record in HRMDRecords)
+                    {
+                        <div class="row mb-1">
+                            <div class="d-flex col">
+                                <input type="checkbox" />
+                                <label class="align-content-center ms-2">@record.RecordType</label>
+                            </div>
+                            <div class="col">
+                                <TelerikFileSelect Class="@(XSmall ? "mb-3" : "")"
+                                                   AllowedExtensions="@AllowedExtensions"
+                                                   OnSelect="@OnSelectDocument"
+                                                   OnRemove="@OnRemoveDocument"
+                                                   MaxFileSize="@MaxFileSize"
+                                                   MinFileSize="@MinFileSize"
+                                                   Multiple="false">
+                                    <SelectFilesButtonTemplate>
+                                        <TelerikSvgIcon Icon="@SvgIcon.Upload" />
+                                        Click to Upload
+                                    </SelectFilesButtonTemplate>
+                                </TelerikFileSelect>
+                            </div>
+                        </div>                        
+                    }
+                }
+                else
+                {
+                    @foreach (var record in SelectedRecordRequest.RequestedRecords)
+                    {
+                        <div class="row mb-1">
+                            <div class="d-flex col">
+                                <input type="checkbox" />
+                                <label class="align-content-center ms-2">@record.RecordType</label>
+                            </div>
+                            <div class="col">
+                                <TelerikFileSelect Class="@(XSmall ? "mb-3" : "")"
+                                                   AllowedExtensions="@AllowedExtensions"
+                                                   OnSelect="@OnSelectDocument"
+                                                   OnRemove="@OnRemoveDocument"
+                                                   MaxFileSize="@MaxFileSize"
+                                                   MinFileSize="@MinFileSize"
+                                                   Multiple="false">
+                                    <SelectFilesButtonTemplate>
+                                        <TelerikSvgIcon Icon="@SvgIcon.Upload" />
+                                        Click to Upload
+                                    </SelectFilesButtonTemplate>
+                                </TelerikFileSelect>
+                            </div>
                         </div>
-                    </div>
+                    }
                 }
             </div>
         </div>
@@ -326,7 +406,7 @@
                 </div>
                 <div class="d-flex gap-3 justify-content-center">
                     <TelerikButton OnClick="@(() => IsModalVisible = false)" FillMode="@ThemeConstants.Button.FillMode.Outline">Cancel</TelerikButton>
-                    <TelerikButton OnClick="@(async () => await OnSubmit(RecordRequestStates.Release.ToString(), 2))" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary">Confirm</TelerikButton>
+                    <TelerikButton OnClick="@(async () => await OnReview())" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary">Confirm</TelerikButton>
                 </div>
                 break;
             case 2:
@@ -335,7 +415,7 @@
                 </div>
                 <div class="d-flex gap-3 justify-content-center">
                     <TelerikButton OnClick="@(() => IsModalVisible = false)" FillMode="@ThemeConstants.Button.FillMode.Outline">Cancel</TelerikButton>
-                    <TelerikButton OnClick="@(async () => await OnSubmit(RecordRequestStates.Claimed.ToString(), 3))" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary">Confirm</TelerikButton>
+                    <TelerikButton OnClick="@(async () => await OnRelease())" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary">Confirm</TelerikButton>
                 </div>
                 break;
             case 3:
@@ -344,7 +424,7 @@
                 </div>
                 <div class="d-flex gap-3 justify-content-center">
                     <TelerikButton OnClick="@(() => IsModalVisible = false)" FillMode="@ThemeConstants.Button.FillMode.Outline">Cancel</TelerikButton>
-                    <TelerikButton OnClick="@(async () => await OnSubmit(RecordRequestStates.Claimed.ToString(), 3))" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary">Confirm</TelerikButton>
+                    <TelerikButton OnClick="OnClaim" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary">Confirm</TelerikButton>
                 </div>
                 break;
             default:

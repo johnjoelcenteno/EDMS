@@ -14,11 +14,11 @@ public class RequestDetailsOverviewBase : RxBaseComponent
     [Inject] public required IRequestManagementService RequestManagementService { get; set; }
     [Inject] public required IExceptionHandlerService ExceptionHandlerService { get; set; }
     [Inject] public required IToastService ToastService { get; set; }
-
     protected RecordRequestModel SelectedRecordRequest { get; set; } = new();
-
     protected string CancelReturnUrl = string.Empty;
-
+    protected IEnumerable<IGrouping<string, string>>? GroupedRecords;
+    protected List<RequestedRecordModel> RMDRecords;
+    protected List<RequestedRecordModel> HRMDRecords;
     protected virtual void OnCancel()
     {
         if (!string.IsNullOrEmpty(CancelReturnUrl))
@@ -38,6 +38,17 @@ public class RequestDetailsOverviewBase : RxBaseComponent
                 {
                     onLoadCb.Invoke(recordReq.Data);
                 }
+
+                GroupedRecords = recordReq.Data.RequestedRecords
+                .GroupBy(r => r.Office, r => r.RecordType);
+
+                RMDRecords = recordReq.Data.RequestedRecords
+                .Where(r => r.Office == "RMD")
+                .ToList();
+
+                HRMDRecords = recordReq.Data.RequestedRecords
+                .Where(r => r.Office == "HRMD")
+                .ToList();
             }
             else
             {
