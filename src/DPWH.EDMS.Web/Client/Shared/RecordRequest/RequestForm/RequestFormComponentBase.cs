@@ -4,6 +4,7 @@ using DPWH.EDMS.Api.Contracts;
 using DPWH.EDMS.Client.Shared.APIClient.Services.DataLibrary;
 using DPWH.EDMS.Client.Shared.APIClient.Services.Lookups;
 using DPWH.EDMS.Client.Shared.APIClient.Services.RequestManagement;
+using DPWH.EDMS.Client.Shared.Enums;
 using DPWH.EDMS.Client.Shared.Models;
 using DPWH.EDMS.Components;
 using DPWH.EDMS.Components.Helpers;
@@ -112,7 +113,7 @@ public class RequestFormComponentBase : RxBaseComponent
     }
     protected async Task LoadEmployeeRecordList()
     {
-        var res = await LookupsService.GetPersonalRecords();
+        var res = await LookupsService.GetEmployeeDocuments();
 
         if (res.Success)
         {
@@ -249,6 +250,13 @@ public class RequestFormComponentBase : RxBaseComponent
             SelectedAuthorizedDocument.Document != null &&
             SelectedAuthorizedDocument.DocumentTypeId != null &&
             SelectedAuthorizedDocument.DocumentType != null;
+    }
+    #endregion
+
+    #region Conditions
+    protected bool IsSelectedPurposeOthers()
+    {
+        return !string.IsNullOrEmpty(SelectedItem.Purpose) && SelectedItem.Purpose.ToLower() == Purposes.Other.ToString().ToLower();
     }
     #endregion
 }
