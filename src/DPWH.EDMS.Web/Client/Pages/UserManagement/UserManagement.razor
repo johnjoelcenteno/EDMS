@@ -6,7 +6,7 @@
 
 @inherits UserManagementBase
 @inject NavigationManager nav
-@attribute [Authorize(Roles = "dpwh_superadmin, system_admin")]
+@attribute [Authorize(Policy = "RequireActiveRoles")]
 
 <EdmsLoader Visible="@IsLoading" />
 
