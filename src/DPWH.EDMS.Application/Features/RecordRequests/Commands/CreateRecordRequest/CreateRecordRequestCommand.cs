@@ -36,8 +36,7 @@ internal sealed class CreateRecordRequestCommandHandler(IWriteRepository writeRe
         //Optional for now: Make sure requested record type is valid
         var recordTypes = readRepository.RecordTypesView
             .Where(d => d.Category == RecordTypesCategory.Issuances.GetDescription() ||
-                        d.Category == RecordTypesCategory.PersonalRecords.GetDescription())
-            //.Select(d => new GetLookupResult(d.Id, d.Name))
+                        d.Category == RecordTypesCategory.EmployeeDocuments.GetDescription())            
             .ToList();
 
         var inputRecordTypes = model.RequestedRecords;
