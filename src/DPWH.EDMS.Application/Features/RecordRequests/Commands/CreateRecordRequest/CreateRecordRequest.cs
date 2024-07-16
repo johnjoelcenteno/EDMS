@@ -13,5 +13,5 @@
 /// <param name="RequestedRecords"></param>
 /// <param name="Purpose"></param>
 public record CreateRecordRequest(string? EmployeeNumber, string? Email, string Claimant, DateTimeOffset DateRequested, string? AuthorizedRepresentative,
-    Guid? SupportingFileValidId, Guid? SupportingFileAuthorizationDocumentId, Guid[] RequestedRecords, string Purpose, string? FullName, string? Remarks);
+    Guid? SupportingFileValidId, Guid? SupportingFileAuthorizationDocumentId, Guid[] RequestedRecords, string Purpose, string? OtherPurpose, string? FullName, string? Remarks);
 

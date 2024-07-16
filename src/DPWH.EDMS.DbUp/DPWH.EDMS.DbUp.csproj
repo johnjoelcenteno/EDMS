@@ -16,6 +16,7 @@
     <None Remove="Scripts\01\03-Seed.sql" />
     <None Remove="Scripts\01\05-Schema-UpdateRequestedRecords.sql" />
     <None Remove="Scripts\01\06-Schema-AddEmailColumnToRecordRequest.sql" />
+    <None Remove="Scripts\01\07-Schema-AddOtherPurposeColumn.sql" />
   </ItemGroup>
 
   <ItemGroup>
@@ -33,6 +34,7 @@
     <EmbeddedResource Include="Scripts\01\05-Schema-UpdateRequestedRecords.sql" />
     <EmbeddedResource Include="Scripts\01\04-Schema-AlterRequestAddFullName.sql" />
     <EmbeddedResource Include="Scripts\01\06-Schema-AddEmailColumnToRecordRequest.sql" />
+    <EmbeddedResource Include="Scripts\01\07-Schema-AddOtherPurposeColumn.sql" />
   </ItemGroup>
   
 	<ItemGroup>

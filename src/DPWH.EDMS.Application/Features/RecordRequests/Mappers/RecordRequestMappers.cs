@@ -31,6 +31,7 @@ public static class RecordRequestMappers
             } : new(),
             RequestedRecords = entity.RequestedRecords.Select(rr => new RequestedRecordModel(rr.Id, rr.RecordTypeId, rr.RecordType, rr.Office, rr.Status, rr.IsAvailable, rr.Uri)).ToList(),
             Purpose = entity.Purpose,
+            OtherPurpose = entity.OtherPurpose,
             Remarks = entity.Remarks,
             Status = entity.Status,
             Files = entity.Files?.Select(entityFile => new RecordRequestDocumentModel

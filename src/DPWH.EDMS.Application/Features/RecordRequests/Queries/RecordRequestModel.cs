@@ -9,6 +9,7 @@ public record RecordRequestModel
     public DateTimeOffset DateRequested { get; set; }
     public AuthorizedRepresentativeModel? AuthorizedRepresentative { get; set; }
     public string Purpose { get; set; }
+    public string? OtherPurpose { get; set; }
     public string? Remarks { get; set; }
     public string Status { get; set; }
     public string? FullName { get; set; }
