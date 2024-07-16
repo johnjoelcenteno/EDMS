@@ -33,6 +33,14 @@ public class PersonalRecordDocument
     public string Id { get; set; }
     public string DocumentName { get; set; }
 }
+public class ModelData
+{
+    public double Series1 { get; set; }
+    public double Series2 { get; set; }
+    public double Series3 { get; set; }
+}
+ 
+ 
 
 public class MockData
 {
@@ -129,6 +137,64 @@ public class MockData
             new Document { Id = 15, DocumentName = "Daily Wage Appointment/Plantilla", ControlNumber = "CN2024000000", DateRequested = DateTime.Now.AddDays(-16) },
         };
     }
+
+    public static List<ModelData> MonthlyRequestAverageTimeList()
+    {
+        return new List<ModelData>
+        {
+            new ModelData()
+            {
+
+                Series3 = 3
+            },
+            new ModelData()
+            {
+
+                Series3 = 5
+            },
+            new ModelData()
+            {
+
+                Series3 = 6
+            },
+            new ModelData()
+            {
+
+                Series3 = 12
+            },
+            new ModelData()
+            {
+
+                Series3 = 6
+            },
+            new ModelData()
+            {
+
+                Series3 = 26
+            },
+            new ModelData()
+            {
+
+                Series3 = 12
+            },
+            new ModelData()
+            {
+
+                Series3 = 12
+            },
+            new ModelData()
+            {
+
+                Series3 = 6
+            },
+            new ModelData()
+            {
+
+                Series3 = 3
+            }
+        };
+    }
+    
 }
 
 public class MockCurrentData
