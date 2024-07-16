@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using Duende.AccessTokenManagement.OpenIdConnect;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DPWH.EDMS.Web.Server.Controllers;
@@ -23,17 +24,24 @@ public class AccessTokenController : ControllerBase
     /// </summary>
     /// <returns>The user access token as JSON.</returns>
     [HttpGet]
-    public async Task<IActionResult> GetToken()
+    public async Task<IActionResult?> GetToken()
     {
         try
         {
             var token = await HttpContext.GetUserAccessTokenAsync();
-            return new JsonResult(token.AccessToken);
+            //token.Expiration = DateTime.UtcNow.AddHours(-1); // TEST EXPIRATION
+
+            return _IsTokenValid(token) ? new JsonResult(token.AccessToken) : null;
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "An error occurred while retrieving the access token.");
             return StatusCode(500, "An error occurred while retrieving the access token.");
         }
+    }
+
+    private bool _IsTokenValid(UserToken token)
+    {
+        return !token.IsError && DateTimeOffset.UtcNow < token.Expiration.UtcDateTime;
     }
 }
