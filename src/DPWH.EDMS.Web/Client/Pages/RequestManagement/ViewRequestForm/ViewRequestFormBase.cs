@@ -19,12 +19,16 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
     protected string Office { get; set; } = string.Empty;
     protected int ActiveTabIndex { get; set; } = 0;
     protected int CurrentStepIndex { get; set; }
-    protected DateTime? DateReceived { get; set; } = DateTime.Now;
-    protected DateTime? TimeReceived { get; set; } = DateTime.Now;
     protected bool IsModalVisible { get; set; }
     protected int MinFileSize { get; set; } = 1024;
     protected int MaxFileSize { get; set; } = 4 * 1024 * 1024;
     protected List<string> AllowedExtensions { get; set; } = new List<string>() { ".docx", ".pdf" };
+    
+    // Placeholders
+    protected string? Remarks { get; set; }
+    protected string? PickupLocation { get; set; }
+    protected DateTime? DateReceived { get; set; } = DateTime.Now;
+    protected DateTime? TimeReceived { get; set; } = DateTime.Now;
 
     protected override void OnParametersSet()
     {
