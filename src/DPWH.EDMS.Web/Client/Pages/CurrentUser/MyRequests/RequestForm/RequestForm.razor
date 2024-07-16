@@ -179,6 +179,15 @@
                 <ValidationMessage For="@(() => SelectedItem.Purpose)" class="text-danger" />
             </div>
 
+            @if (IsSelectedPurposeOthers())
+            {
+                <div class="form-group p-2 pt-0">
+                    <label for="otherPurpose"><small><i>Specify Purpose (Other)</i></small></label>
+                    <InputText id="otherPurpose" class="form-control" @bind-Value="SelectedItem.OtherPurpose" />
+                    <ValidationMessage For="@(() => SelectedItem.OtherPurpose)" class="text-danger" />
+                </div>
+            }
+
             <div class="form-group p-2">
                 <label for="remarks">Remarks</label>
                 <TelerikTextArea Rows="2" @bind-Value="SelectedItem.Remarks" />

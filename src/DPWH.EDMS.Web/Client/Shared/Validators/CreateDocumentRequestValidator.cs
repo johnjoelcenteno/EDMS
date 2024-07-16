@@ -1,4 +1,5 @@
 ﻿using DPWH.EDMS.Api.Contracts;
+using DPWH.EDMS.Client.Shared.Enums;
 using DPWH.EDMS.Shared.Enums;
 using FluentValidation;
 
@@ -51,6 +52,10 @@ public class CreateDocumentRequestModelValidator : AbstractValidator<CreateRecor
 
         RuleFor(x => x.Purpose)
             .NotEmpty().WithMessage("Purpose is required.");
+
+        RuleFor(x => x.OtherPurpose)
+            .NotEmpty().WithMessage("For Other Purpose, you need to specify the reason.")
+            .When(x => x.Purpose.ToLower() == Purposes.Other.ToString().ToLower());
 
         RuleFor(x => x.Remarks);
             //.NotEmpty().WithMessage("Purpose/Remarks is required.");
