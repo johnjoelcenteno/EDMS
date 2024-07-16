@@ -11,13 +11,13 @@ using Telerik.Blazor.Components;
 
 namespace DPWH.EDMS.Web.Client.Pages.CurrentUser.Records;
 
-public class RecordsBase : GridBase<PersonalRecordDocument>
+public class RecordsBase : GridBase<GetLookupResult>
 {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateAsync { get; set; }
     [Parameter] public required string Id { get; set; }
     [Inject] public required NavigationManager NavigationManager { get; set; }
     [Inject] public required ILookupsService LookupsService { get; set; }
-    protected List<PersonalRecordDocument> Record { get; set; } = new List<PersonalRecordDocument>();
+    protected EDMS.Client.Shared.MockModels.RecordModel Record { get; set; }
     protected MockCurrentData CurrentData { get; set; }
     protected List<Document> DocumentList = new List<Document>();
     protected GetLookupResultIEnumerableBaseApiResponse GetEmployeeRecords { get; set; } = new GetLookupResultIEnumerableBaseApiResponse();
@@ -25,7 +25,7 @@ public class RecordsBase : GridBase<PersonalRecordDocument>
     protected string DisplayName = "---";
     protected string Role = string.Empty;
     protected override void OnInitialized()
-    { 
+    {
         BreadcrumbItems.Add(new BreadcrumbModel
         {
             Icon = "menu",
@@ -33,8 +33,8 @@ public class RecordsBase : GridBase<PersonalRecordDocument>
             Url = "/my-records"
         });
 
-        Record = MockCurrentData.GenerateCurrentDocuments();
-       
+        Record = MockCurrentData.GetCurrentRecord();
+
     }
 
     protected async override Task OnInitializedAsync()
@@ -52,7 +52,7 @@ public class RecordsBase : GridBase<PersonalRecordDocument>
         if (AuthenticationStateAsync is null)
             return;
 
-        
+
         var authState = await AuthenticationStateAsync;
         var user = authState.User;
 
@@ -61,7 +61,7 @@ public class RecordsBase : GridBase<PersonalRecordDocument>
             var roleValue = user.Claims.FirstOrDefault(c => c.Type == "role")!.Value;
             DisplayName = !string.IsNullOrEmpty(user.Identity.Name) ? GenericHelper.CapitalizeFirstLetter(user.Identity.Name) : "---";
             Role = GetRoleLabel(roleValue);
-           
+
         }
     }
 
@@ -74,7 +74,7 @@ public class RecordsBase : GridBase<PersonalRecordDocument>
     {
         IsLoading = true;
 
-        var res = await LookupsService.GetEmployeeDocuments();
+        var res = await LookupsService.GetPersonalRecords();
         if (res.Success)
         {
             GetEmployeeRecords = res;
@@ -84,8 +84,8 @@ public class RecordsBase : GridBase<PersonalRecordDocument>
     }
     public async Task viewData(GridCommandEventArgs args)
     {
-        PersonalRecordDocument selectedId = args.Item as PersonalRecordDocument;
-        
+        GetLookupResult selectedId = args.Item as GetLookupResult;
+
         //Int32.TryParse(samp, out sampNumber);
         NavigationManager.NavigateTo($"/my-records/{selectedId.Id}");
     }

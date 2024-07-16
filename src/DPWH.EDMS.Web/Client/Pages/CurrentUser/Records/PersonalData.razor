@@ -3,6 +3,7 @@
 @inherits RecordsPersonalData
 
 <EdmsBreadcrumbs Data="@BreadcrumbItems" />
+<EdmsLoader Visible="IsLoading" />
 
 <h3>My Records</h3>
 @* <span>Personal Data Sheet</span><br />
@@ -17,7 +18,7 @@
         <CardTitle>
             <div class="d-flex justify-content-between">
                 <label class="headName">
-                    @Record.DocumentName
+                    @EmployeeRecord.Name
                 </label>
                 <TelerikButton Class="dlButton">Download</TelerikButton>
             </div>
