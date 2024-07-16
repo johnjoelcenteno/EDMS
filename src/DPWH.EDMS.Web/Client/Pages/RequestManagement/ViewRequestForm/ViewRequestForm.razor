@@ -82,9 +82,15 @@
                         }
                     </div>
                 </div>
-                <div class="row">
+                <div class="row mb-3">
                     <p><b>Purpose</b></p>
                     <p>@SelectedRecordRequest.Purpose</p>
+                </div>
+                <div class="row mb-3">
+                    <p><b>Remarks</b></p>
+                    <div class="col mt-2">
+                        <TelerikTextArea @bind-Value="Remarks"></TelerikTextArea>
+                    </div>
                 </div>
             </div>
         </div>
@@ -260,6 +266,13 @@
                         </div>
                     }
                 }
+                <div class="row mb-2">
+                    <p><b>Select Office for Pickup</b></p>
+                    <div class="col mt-2">
+                        <TelerikTextBox @bind-Value="PickupLocation" Placeholder="Auto-Generated based on viewer's office (RMD or HRMD)" Enabled="false"></TelerikTextBox>
+                    </div>
+                </div>
+
             </div>
         </div>
     </TabStripTab>
