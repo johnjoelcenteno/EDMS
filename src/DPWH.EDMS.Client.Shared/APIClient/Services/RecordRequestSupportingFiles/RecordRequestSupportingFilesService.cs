@@ -17,4 +17,9 @@ public class RecordRequestSupportingFilesService : IRecordRequestSupportingFiles
     {
         return _client.UploadSupportingFileAsync(document, documentType, documentTypeId);
     }
+
+    public Task<CreateResponse> UploadRequestedRecord(FileParameter document, Guid? id)
+    {
+        return _client.UploadRequestedRecordFileAsync(document, id);
+    }
 }

@@ -1,5 +1,6 @@
 ﻿using DPWH.EDMS.Api.Contracts;
 using DPWH.EDMS.Client.Shared.Configurations;
+using System.Collections.Generic;
 
 namespace DPWH.EDMS.Client.Shared.APIClient.Services.RequestManagement;
 
@@ -54,5 +55,9 @@ public class RequestManagementService : IRequestManagementService
     public async Task<GetMonthlyRequestModelIEnumerableBaseApiResponse> GetMonthlyRequestTotal()
     {
         return await _client.GetMonthlyRequestsTotalCountAsync();
+    }
+    public async Task<GuidNullableBaseApiResponse> UpdateIsAvailable(bool isAvailable, IEnumerable<Guid> body)
+    {
+        return await _client.UpdateRequestedRecordIsAvailableAsync(isAvailable, body);
     }
 }
