@@ -2,7 +2,8 @@
 @using DPWH.EDMS.Api.Contracts
 @using DPWH.EDMS.Components.Helpers
 
-@attribute [Authorize(Roles = "dpwh_superadmin, system_admin, dpwh_enduser")]
+@* @attribute [Authorize(Roles = "dpwh_superadmin, system_admin, dpwh_enduser, dpwh_it_support, dpwh_manager")] *@
+@attribute [Authorize]
 @inherits HomeBase
 
 <TelerikMediaQuery Media="(max-width: 480px)" OnChange="(changed => HandleMediaQueryChange(nameof(XSmall), changed))"></TelerikMediaQuery>
