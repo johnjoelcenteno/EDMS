@@ -75,7 +75,7 @@ public class EmployeeRecordsManagementBase : RecordTypesFormComponentBase
                         Id = item.Id,
                         Name = item.Name,
                         Section = item.Section,
-                        Category = "System", //temporary until CreatedBy is created
+                        Category = item.Category, //temporary until CreatedBy is created
                         Office = item.Office,
                         IsActive = !item.IsActive,
                         Created = item.Created.DateTime,

@@ -45,8 +45,8 @@
                                 <GridColumn Field=@nameof(RecordsLibraryModel.Category) Title="Category"/>
                                 <GridColumn Field=@nameof(RecordsLibraryModel.Section) Title="Section" />
                                 <GridColumn Field=@nameof(RecordsLibraryModel.Office) Title="Office" />
-                                <GridColumn Field=@nameof(RecordsLibraryModel.CreatedBy) Title="CreatedBy" />
-                                <GridColumn Field=@nameof(RecordsLibraryModel.Created) Title="Created" FilterEditorType="@GridFilterEditorType.DateTimePicker" FilterEditorFormat="yyyy-MM-dd HH:mm">
+                                <GridColumn Field=@nameof(RecordsLibraryModel.CreatedBy) Title="Created By" />
+                                <GridColumn Field=@nameof(RecordsLibraryModel.Created) Title="Created" Filterable="true">
                                     <Template>
                                         @{
                                             var req = context as RecordsLibraryModel;
