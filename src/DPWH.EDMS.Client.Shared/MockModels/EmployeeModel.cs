@@ -2,6 +2,7 @@
 
 public class EmployeeModel
 {
+    public Guid Id { get; set; }
     public string ControlNumber { get; set; }
     public DateTime DateRequested { get; set; }
     public string LastName { get; set; }

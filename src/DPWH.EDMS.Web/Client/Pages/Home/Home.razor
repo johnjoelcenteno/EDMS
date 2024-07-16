@@ -5,10 +5,10 @@
 @attribute [Authorize(Roles = "dpwh_superadmin, system_admin, dpwh_enduser")]
 @inherits HomeBase
 
-<TelerikMediaQuery Media="(max-width: 480px)" OnChange="((changed) => XSmall = changed)"></TelerikMediaQuery>
-<TelerikMediaQuery Media="(max-width: 960px)" OnChange="((changed) => Small = changed)"></TelerikMediaQuery>
-<TelerikMediaQuery Media="(max-width: 1280px)" OnChange="((changed) => Medium = changed)"></TelerikMediaQuery>
-<TelerikMediaQuery Media="(min-width: 1281px)" OnChange="((changed) => Large = changed)"></TelerikMediaQuery>
+<TelerikMediaQuery Media="(max-width: 480px)" OnChange="(changed => HandleMediaQueryChange(nameof(XSmall), changed))"></TelerikMediaQuery>
+<TelerikMediaQuery Media="(max-width: 960px)" OnChange="(changed => HandleMediaQueryChange(nameof(Small), changed))"></TelerikMediaQuery>
+<TelerikMediaQuery Media="(max-width: 1280px)" OnChange="(changed => HandleMediaQueryChange(nameof(Medium), changed))"></TelerikMediaQuery>
+<TelerikMediaQuery Media="(min-width: 1281px)" OnChange="(changed => HandleMediaQueryChange(nameof(Large), changed))"></TelerikMediaQuery>
 
 <EdmsLoader Visible="IsLoading" />
 
@@ -55,8 +55,7 @@
                                  Height="@GridHeight"
                                  Sortable=true
                                  Pageable=true
-                                 Data="EmployeeRecords"
-                                 OnStateChanged="@OnStateChanged"
+                                 Data="EmployeeRecords" 
                                  @ref="GridRef"
                                  FilterMode="@GridFilterMode.FilterRow"
                                  Context="employee">
@@ -157,8 +156,7 @@
                                  Height="@GridHeight"
                                  Sortable=true
                                  Pageable=true
-                                 Data="EmployeeRecords"
-                                 OnStateChanged="@OnStateChanged"
+                                 Data="EmployeeRecords" 
                                  @ref="GridRef"
                                  FilterMode="@GridFilterMode.FilterRow"
                                  Context="employee">
@@ -237,17 +235,19 @@
                 <h5 class="mb-0">Monthly Requests </h5>
             </CardHeader>
             <div class="container">
-                <TelerikChart>
+                <TelerikChart @ref="@RequstChartRef">
                     <ChartTooltip Visible="true"></ChartTooltip>
                     <ChartLegend Visible="false"></ChartLegend>
 
                     <ChartSeriesItems>
-                        <ChartSeries Type="ChartSeriesType.Bar" Name="Total Visits" Data="@Series1Data">
+                        <ChartSeries Type="ChartSeriesType.Line" Data="@Series1Data">
                         </ChartSeries>
                     </ChartSeriesItems>
 
                     <ChartValueAxes>
-                        <ChartValueAxis Max="1000"></ChartValueAxis>
+                        <ChartValueAxis Max="@ValueAxisMax" Name="my-value-axis">
+                            <ChartValueAxisLabels Format="#"></ChartValueAxisLabels>
+                        </ChartValueAxis>
                     </ChartValueAxes>
 
                     <ChartCategoryAxes>
@@ -257,6 +257,98 @@
                 </TelerikChart>
             </div>
         </TelerikCard>
+    </div>
+</div>
+<div class="d-flex flex-lg-row flex-column mt-3 gap-3 mb-4">
+    <div class="col">
+        <TelerikCard Width="100%">
+            <CardHeader Class="ch-card">
+                <h5 class="mb-0">Monthly Request Average Time</h5>
+            </CardHeader>
+            <div class="container  my-3">
+                <TelerikChart Width="100%" @ref="MonthlyAveTimeRef">
+                    <ChartTooltip Visible="true"></ChartTooltip>
+                    <ChartLegend Position="ChartLegendPosition.Bottom"></ChartLegend>
+
+                    <ChartSeriesItems>
+
+                        <ChartSeries Type="ChartSeriesType.Line"
+                                     Name="Request"
+                                     Data="@Data"
+                                     Field="@nameof(ModelData.Series3)">
+                        </ChartSeries>
+                    </ChartSeriesItems>
+
+                    <ChartCategoryAxes>
+                        <ChartCategoryAxis Categories="@Categories"></ChartCategoryAxis>
+                    </ChartCategoryAxes>
+
+                    <ChartValueAxes>
+                        <ChartValueAxis Name="my-value-axis">
+                            <ChartValueAxisLabels Format="# 'min'"></ChartValueAxisLabels>
+                        </ChartValueAxis>
+                    </ChartValueAxes>
+
+                </TelerikChart>
+            </div>
+        </TelerikCard>
+
+    </div>
+    <div class="col">
+        <TelerikCard Width="100%">
+            <CardHeader Class="ch-card">
+                <h5 class="mb-0">Top 10 Requests</h5>
+            </CardHeader>
+            <div class="container my-3">
+                @if (!XSmall)
+                {
+                    <TelerikChart @ref="Top10ChartRef">
+                        <ChartTooltip Visible="true"></ChartTooltip>
+                        <ChartLegend Visible="false"></ChartLegend>
+
+                        <ChartSeriesItems>
+                            <ChartSeries Type="ChartSeriesType.Bar" Name="Total Visits" Data="@Series1Data">
+                            </ChartSeries>
+                        </ChartSeriesItems>
+
+                        <ChartValueAxes>
+                            <ChartValueAxis Max="30"></ChartValueAxis>
+                        </ChartValueAxes>
+
+                        <ChartCategoryAxes>
+                            <ChartCategoryAxis Categories="@Categories"></ChartCategoryAxis>
+                        </ChartCategoryAxes>
+
+                    </TelerikChart>
+                }
+                else
+                {
+                    <TelerikGrid Data="@GetMonthlyRequestData" Pageable="false" Groupable="false" Sortable="true" Resizable="true">
+                        <GridColumns>
+                            <GridColumn Field="@nameof(GetMonthlyRequestModel.Month)" Title="Document Name" Width="195px"></GridColumn>
+                            <GridColumn Field="@nameof(GetMonthlyRequestModel.Count)" Title="Total Request">
+                                <Template>
+                                    @{
+                                        var ctx = context as GetMonthlyRequestModel;
+
+                                        <TelerikProgressBar Value="@(ctx!.Count)" Max="@GetHighestPercentageItem()" AriaLabel="Progress Bar">
+                                            <ProgressBarLabel Context="ctx" Visible="true" Position="@ProgressBarLabelPosition.Center">
+                                                <Template>
+                                                    @(ctx.Value) Document
+                                                </Template>
+                                            </ProgressBarLabel>
+                                        </TelerikProgressBar>
+                                    }
+                                </Template>
+                            </GridColumn>
+                        </GridColumns>
+                    </TelerikGrid>
+                }
+                
+                 
+            </div>
+        </TelerikCard>
+         
     </div>
 </div>
 
