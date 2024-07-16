@@ -8,7 +8,11 @@ public class RequestManagementBase : RecordRequestGridComponentBase
 {
     protected async override Task OnInitializedAsync()
     {
+        IsLoading = true;
+
         await HandleOnLoadGrid();
+
+        IsLoading = false;
     }
 
     protected override void OnInitialized()

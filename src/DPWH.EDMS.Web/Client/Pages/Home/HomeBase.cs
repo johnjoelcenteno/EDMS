@@ -36,9 +36,12 @@ public class HomeBase : GridBase<EmployeeModel>
     public string[] Categories;
     public TelerikChart FullfilledChartRef { get; set; }
     public TelerikChart RequstChartRef { get; set; }
+    public TelerikChart MonthlyAveTimeRef { get; set; }
+    public TelerikChart Top10ChartRef { get; set; }
 
     protected string SelectedStatus = string.Empty;
     protected DateTime? SelectedDate { get; set; }
+    protected int ValueAxisMax { get; set; } = 30;
 
     protected List<string> StatusList = new List<string>
     {
@@ -54,6 +57,14 @@ public class HomeBase : GridBase<EmployeeModel>
         DropDownListValue = "All";
 
         EmployeeList = GenerateEmployeeRecords(5);
+
+        mediaQueryActions = new Dictionary<string, Action<bool>>
+        {
+            { nameof(XSmall), changed => XSmall = changed },
+            { nameof(Small), changed => Small = changed },
+            { nameof(Medium), changed => Medium = changed},
+            { nameof(Large), changed => Large = changed }
+        };
     }
 
 
@@ -119,9 +130,29 @@ public class HomeBase : GridBase<EmployeeModel>
             Categories = GetMonthlyRequestData.Select(d => d.Month).ToArray();
 
             Series1Data = GetMonthlyRequestData.Select(d => (object)d.Count).ToList();
+             
+            int maxValue = Series1Data.Cast<int>().Max();
+            ValueAxisMax = maxValue < 28 ? 30 : maxValue;
         }
     }
 
+    protected int GetHighestPercentageItem()
+    {
+        // Use LINQ to find the item with the highest percentage
+        return GetMonthlyRequestData.OrderByDescending(item => item.Count).FirstOrDefault().Count;
+    }
+    private Dictionary<string, Action<bool>> mediaQueryActions;
+    
+    protected void HandleMediaQueryChange(string propertyName, bool changed)
+    {
+        if (mediaQueryActions.TryGetValue(propertyName, out var action))
+        {
+            action(changed);
+            RequstChartRef.Refresh();
+            MonthlyAveTimeRef.Refresh();
+            Top10ChartRef.Refresh();
+        }
+    }
     private async Task GetRecordRequest()
     {
         var res = await RequestManagementService.Query(DataSourceReq);
@@ -209,5 +240,5 @@ public class HomeBase : GridBase<EmployeeModel>
         return employees;
     }
 
-
+     
 }
