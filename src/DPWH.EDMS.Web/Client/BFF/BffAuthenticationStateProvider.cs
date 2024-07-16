@@ -45,7 +45,7 @@ public class BffAuthenticationStateProvider : AuthenticationStateProvider
                     NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(currentUser)));
                     await timer.DisposeAsync();
                 }
-            }, null, 1000, 5000);
+            }, null, TimeSpan.Zero, TimeSpan.FromMinutes(30)); // Verify user every 30 mins.
         }
 
         return state;
