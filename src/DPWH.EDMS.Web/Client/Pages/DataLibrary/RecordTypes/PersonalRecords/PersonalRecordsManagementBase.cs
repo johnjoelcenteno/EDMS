@@ -77,6 +77,8 @@ public class PersonalRecordsManagementBase : RecordTypesFormComponentBase
                         Category = "System", //temporary until CreatedBy is created
                         Office = item.Office,
                         IsActive = !item.IsActive,
+                        Created = item.Created.DateTime,
+                        CreatedBy = item.CreatedBy,
                     }).ToList();
                 GetRecordType = convertedData;
             }

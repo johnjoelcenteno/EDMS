@@ -1,5 +1,6 @@
 ﻿@page "/data-library/employee-documents"
 @using DPWH.EDMS.Client.Shared.Models
+@using DPWH.EDMS.Components.Helpers
 @using DPWH.EDMS.Web.Client.Pages.DataLibrary.RecordTypes.Common.Components.RequestForm
 @using DPWH.EDMS.Web.Client.Pages.DataLibrary.RecordTypes.Common.Model
 
@@ -41,9 +42,19 @@
                             </GridToolBarTemplate>
                             <GridColumns>
                                 <GridColumn Field=@nameof(RecordsLibraryModel.Name) Title="Value" />
-                                <GridColumn Field=@nameof(RecordsLibraryModel.Category) Title="Created By" />
+                                <GridColumn Field=@nameof(RecordsLibraryModel.Category) Title="Category"/>
                                 <GridColumn Field=@nameof(RecordsLibraryModel.Section) Title="Section" />
                                 <GridColumn Field=@nameof(RecordsLibraryModel.Office) Title="Office" />
+                                <GridColumn Field=@nameof(RecordsLibraryModel.CreatedBy) Title="CreatedBy" />
+                                <GridColumn Field=@nameof(RecordsLibraryModel.Created) Title="Created" FilterEditorType="@GridFilterEditorType.DateTimePicker" FilterEditorFormat="yyyy-MM-dd HH:mm">
+                                    <Template>
+                                        @{
+                                            var req = context as RecordsLibraryModel;
+                                            string dt = GenericHelper.GetDateTimeDisplay(req!.Created);
+                                        }
+                                        <p class="mb-0">@dt</p>
+                                    </Template>
+                                </GridColumn>
                                 <GridCommandColumn Width="50px">
                                     <TelerikButton Icon="@FontIcon.MoreVertical" OnClick="@( (MouseEventArgs e) => ShowRecordRowOptions(e, context as RecordsLibraryModel) )"></TelerikButton>
                                 </GridCommandColumn>
