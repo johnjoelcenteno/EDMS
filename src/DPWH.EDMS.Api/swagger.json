@@ -3775,6 +3775,10 @@
             "type": "string",
             "nullable": true
           },
+          "otherPurpose": {
+            "type": "string",
+            "nullable": true
+          },
           "fullName": {
             "type": "string",
             "nullable": true
@@ -5441,6 +5445,10 @@
             "$ref": "#/components/schemas/AuthorizedRepresentativeModel"
           },
           "purpose": {
+            "type": "string",
+            "nullable": true
+          },
+          "otherPurpose": {
             "type": "string",
             "nullable": true
           },

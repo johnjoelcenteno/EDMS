@@ -51,7 +51,7 @@ internal sealed class CreateRecordRequestCommandHandler(IWriteRepository writeRe
         var requestNumber = await _generatorService.Generate(DateTimeOffset.Now, cancellationToken);
 
         var recordRequest = RecordRequest.Create(requestNumber, model.EmployeeNumber, model.Email, claimantType,
-            model.DateRequested, representative, model.Purpose, model.Remarks, principal.GetUserName(), model.FullName);
+            model.DateRequested, representative, model.Purpose, model.OtherPurpose, model.Remarks, principal.GetUserName(), model.FullName);
 
 
         foreach (var providedRequestedRecord in model.RequestedRecords)

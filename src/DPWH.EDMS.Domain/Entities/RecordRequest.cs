@@ -16,6 +16,7 @@ public class RecordRequest : EntityBase
        DateTimeOffset dateRequested,
        AuthorizedRepresentative? representative,
        string purpose,
+       string? otherPurpose,
        string? remarks,
        string createdBy,
        string fullName
@@ -31,6 +32,7 @@ public class RecordRequest : EntityBase
             DateRequested = dateRequested,
             AuthorizedRepresentative = representative,
             Purpose = purpose,
+            OtherPurpose = otherPurpose,    
             Remarks = remarks,
             Status = RecordRequestStates.Review.ToString(),
             RequestedRecords = [],
@@ -53,6 +55,7 @@ public class RecordRequest : EntityBase
     public DateTimeOffset DateRequested { get; private set; }
     public AuthorizedRepresentative? AuthorizedRepresentative { get; private set; }
     public string Purpose { get; private set; }
+    public string? OtherPurpose { get; private set; }
     public string? Remarks {  get; private set; }
     public string Status { get; private set; }
     public string? FullName { get; set; }
