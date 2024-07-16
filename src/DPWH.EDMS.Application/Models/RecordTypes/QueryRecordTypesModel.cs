@@ -8,4 +8,6 @@ public class QueryRecordTypesModel
     public string Section { get; set; }
     public string Office { get; set; }
     public bool IsActive { get; set; }
+    public DateTimeOffset Created { get; set; }
+    public string CreatedBy { get; set; }
 }
