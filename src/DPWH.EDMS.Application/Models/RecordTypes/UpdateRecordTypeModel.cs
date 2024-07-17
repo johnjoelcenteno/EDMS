@@ -5,5 +5,6 @@ public record class UpdateRecordTypeModel(
     string Category,
     string Section,
     string Office,
-    bool IsActive
+    bool IsActive,
+    string? Code
 );

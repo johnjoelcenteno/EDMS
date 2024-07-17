@@ -3801,6 +3801,10 @@
             "type": "string",
             "nullable": true
           },
+          "code": {
+            "type": "string",
+            "nullable": true
+          },
           "section": {
             "type": "string",
             "nullable": true
@@ -5296,6 +5300,10 @@
           },
           "isActive": {
             "type": "boolean"
+          },
+          "code": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -5904,6 +5912,10 @@
           },
           "isActive": {
             "type": "boolean"
+          },
+          "code": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false

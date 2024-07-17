@@ -8,4 +8,5 @@ public class QueryRecordTypesModel
     public string Section { get; set; }
     public string Office { get; set; }
     public bool IsActive { get; set; }
+    public string? Code {  get; set; }
 }

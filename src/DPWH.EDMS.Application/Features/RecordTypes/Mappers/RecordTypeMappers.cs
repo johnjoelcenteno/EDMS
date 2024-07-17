@@ -14,6 +14,7 @@ public static class RecordTypeMappers
             Section = recordType.Section,
             Office = recordType.Office,
             IsActive = recordType.IsActive,
+            Code = recordType.Code ?? default,
         };
     }
 }
