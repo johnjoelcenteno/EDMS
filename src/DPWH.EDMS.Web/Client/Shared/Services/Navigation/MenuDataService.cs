@@ -17,8 +17,7 @@ public class MenuDataService : IMenuDataService
                 Children = default,
                 Level = 0,
                 SortOrder = 0,
-                //AuthorizedRoles = new List<string>{ ApplicationRoles.SuperAdmin, ApplicationRoles.SystemAdmin }
-                AuthorizedRoles = new List<string>{ ApplicationRoles.SuperAdmin, ApplicationRoles.SystemAdmin, ApplicationRoles.Manager, ApplicationRoles.ITSupport }
+                AuthorizedRoles = new List<string>{ ApplicationRoles.SuperAdmin, ApplicationRoles.SystemAdmin, ApplicationRoles.Manager, ApplicationRoles.ITSupport, ApplicationRoles.Staff }
 
             },
             new ()
@@ -29,8 +28,7 @@ public class MenuDataService : IMenuDataService
                 Children = default,
                 Level = 0,
                 SortOrder = 1,
-                //AuthorizedRoles = new List<string>{ ApplicationRoles.SuperAdmin, ApplicationRoles.SystemAdmin }
-                AuthorizedRoles = new List<string>{ ApplicationRoles.SuperAdmin, ApplicationRoles.SystemAdmin, ApplicationRoles.Manager, ApplicationRoles.ITSupport }
+                AuthorizedRoles = new List<string>{ ApplicationRoles.SuperAdmin, ApplicationRoles.SystemAdmin, ApplicationRoles.Manager, ApplicationRoles.Staff }
             },
             new ()
             {
@@ -40,8 +38,7 @@ public class MenuDataService : IMenuDataService
                 Children = default,
                 Level = 0,
                 SortOrder = 2,
-                //AuthorizedRoles = new List<string>{ ApplicationRoles.SuperAdmin, ApplicationRoles.SystemAdmin }
-                AuthorizedRoles = new List<string>{ ApplicationRoles.SuperAdmin, ApplicationRoles.SystemAdmin, ApplicationRoles.Manager, ApplicationRoles.ITSupport }
+                AuthorizedRoles = new List<string>{ ApplicationRoles.SuperAdmin, ApplicationRoles.SystemAdmin, ApplicationRoles.Manager, ApplicationRoles.Staff }
             },
             new ()
             {
@@ -51,8 +48,7 @@ public class MenuDataService : IMenuDataService
                 Children = default,
                 Level = 0,
                 SortOrder = 3,
-                //AuthorizedRoles = new List<string>{ ApplicationRoles.SuperAdmin, ApplicationRoles.SystemAdmin }
-                AuthorizedRoles = new List<string>{ ApplicationRoles.SuperAdmin, ApplicationRoles.SystemAdmin, ApplicationRoles.Manager, ApplicationRoles.ITSupport }
+                AuthorizedRoles = new List<string>{ ApplicationRoles.SuperAdmin, ApplicationRoles.SystemAdmin, ApplicationRoles.Manager, ApplicationRoles.ITSupport, ApplicationRoles.Staff }
             },
             new ()
             {
@@ -62,8 +58,7 @@ public class MenuDataService : IMenuDataService
                 Children = default,
                 Level = 0,
                 SortOrder = 4,
-                //AuthorizedRoles = new List<string>{ ApplicationRoles.SuperAdmin, ApplicationRoles.SystemAdmin }
-                AuthorizedRoles = new List<string>{ ApplicationRoles.SuperAdmin, ApplicationRoles.SystemAdmin, ApplicationRoles.Manager, ApplicationRoles.ITSupport }
+                AuthorizedRoles = new List<string>{ ApplicationRoles.SuperAdmin, ApplicationRoles.SystemAdmin, ApplicationRoles.Manager, ApplicationRoles.Staff }
             },
             new ()
             {
@@ -73,8 +68,7 @@ public class MenuDataService : IMenuDataService
                 Children = default,
                 Level = 0,
                 SortOrder = 5,
-                //AuthorizedRoles = new List<string>{ ApplicationRoles.SuperAdmin, ApplicationRoles.SystemAdmin }
-                AuthorizedRoles = new List<string>{ ApplicationRoles.SuperAdmin, ApplicationRoles.SystemAdmin, ApplicationRoles.Manager, ApplicationRoles.ITSupport }
+                AuthorizedRoles = new List<string>{ ApplicationRoles.SuperAdmin, ApplicationRoles.SystemAdmin, ApplicationRoles.Manager, ApplicationRoles.ITSupport, ApplicationRoles.Staff }
             }
         };
 
@@ -89,8 +83,7 @@ public class MenuDataService : IMenuDataService
                 Children = default,
                 Level = 0,
                 SortOrder = 2,
-                //AuthorizedRoles = new List<string>{ ApplicationRoles.SuperAdmin, ApplicationRoles.SystemAdmin, ApplicationRoles.EndUser }
-                AuthorizedRoles = new List<string>{ ApplicationRoles.SuperAdmin, ApplicationRoles.SystemAdmin, ApplicationRoles.EndUser, ApplicationRoles.Manager, ApplicationRoles.ITSupport }
+                AuthorizedRoles = new List<string>{ ApplicationRoles.SuperAdmin, ApplicationRoles.SystemAdmin, ApplicationRoles.EndUser, ApplicationRoles.Manager}
             },
             new ()
             {
@@ -101,7 +94,7 @@ public class MenuDataService : IMenuDataService
                 Level = 0,
                 SortOrder = 1,
                 //AuthorizedRoles = new List<string>{ ApplicationRoles.SuperAdmin, ApplicationRoles.SystemAdmin, ApplicationRoles.EndUser }
-                AuthorizedRoles = new List<string>{ ApplicationRoles.SuperAdmin, ApplicationRoles.SystemAdmin, ApplicationRoles.EndUser, ApplicationRoles.Manager, ApplicationRoles.ITSupport }
+                AuthorizedRoles = new List<string>{ ApplicationRoles.SuperAdmin, ApplicationRoles.SystemAdmin, ApplicationRoles.EndUser, ApplicationRoles.Manager}
             }
         };
 
@@ -117,7 +110,7 @@ public class MenuDataService : IMenuDataService
                 Level = 0,
                 SortOrder = 0,
                 //AuthorizedRoles = new List<string>{ApplicationRoles.SuperAdmin, ApplicationRoles.EndUser, ApplicationRoles.SystemAdmin }
-                AuthorizedRoles = new List<string>{ApplicationRoles.SuperAdmin, ApplicationRoles.EndUser, ApplicationRoles.SystemAdmin, ApplicationRoles.ITSupport, ApplicationRoles.Manager }
+                AuthorizedRoles = new List<string>{ApplicationRoles.SuperAdmin, ApplicationRoles.EndUser, ApplicationRoles.SystemAdmin, ApplicationRoles.Manager }
             },
              new ()
             {
@@ -128,7 +121,7 @@ public class MenuDataService : IMenuDataService
                 Level = 0,
                 SortOrder = 1,
                 //AuthorizedRoles = new List<string>{ApplicationRoles.SuperAdmin, ApplicationRoles.EndUser, ApplicationRoles.SystemAdmin }
-                AuthorizedRoles = new List<string>{ApplicationRoles.SuperAdmin, ApplicationRoles.EndUser, ApplicationRoles.SystemAdmin, ApplicationRoles.ITSupport, ApplicationRoles.Manager }
+                AuthorizedRoles = new List<string>{ApplicationRoles.SuperAdmin, ApplicationRoles.EndUser, ApplicationRoles.SystemAdmin, ApplicationRoles.Manager }
             },
              new ()
             {
@@ -139,7 +132,7 @@ public class MenuDataService : IMenuDataService
                 Level = 0,
                 SortOrder = 2,
                 //AuthorizedRoles = new List<string>{ApplicationRoles.SuperAdmin, ApplicationRoles.EndUser, ApplicationRoles.SystemAdmin }
-                AuthorizedRoles = new List<string>{ApplicationRoles.SuperAdmin, ApplicationRoles.EndUser, ApplicationRoles.SystemAdmin, ApplicationRoles.ITSupport, ApplicationRoles.Manager }
+                AuthorizedRoles = new List<string>{ApplicationRoles.SuperAdmin, ApplicationRoles.EndUser, ApplicationRoles.SystemAdmin, ApplicationRoles.Manager }
             }
         };
 }

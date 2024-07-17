@@ -49,7 +49,7 @@
                         </div>
 
                         <div class="col-md-12 mb-3">
-                            <p class="sub-header">Designation Details</p>
+                            <p class="sub-header fw-bold">Designation Details</p>
                         </div>
                         @if (Type.Contains("View"))
                         {
@@ -69,6 +69,12 @@
                                 <label class="regionalDetails fw-bold">User Access</label>
                                 <div class="form-group col-md-12">
                                     <span class="regionalDetailsView">@User.Role</span>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <label class="regionalDetails fw-bold">Office</label>
+                                <div class="form-group col-md-12">
+                                    <span class="regionalDetailsView">@(User.Office != null ? User.Office : "N/A")</span>
                                 </div>
                             </div>
                         }
@@ -143,7 +149,7 @@
                                 <TelerikDropDownList @ref="DropDownListRef" @bind-Value="@User.Role"
                                                      Data="@UserAccessList"
                                                      ValueField="idRole"
-                                                     DefaultText="Select Role"
+                                                     DefaultText="Select"
                                                      TextField="UserAccess"
                                                      Filterable="true"
                                                      AdaptiveMode="@AdaptiveMode.Auto"
@@ -158,7 +164,7 @@
                                     {
                                         <a>@LicenseInfo</a>
                                     }
-                                    if (LicenseLimit <= 0 && User.Role != "dpwh_requestor" && User.Role != "dpwh_inspector")
+                                    if (LicenseLimit <= 0 && User.Role != "dpwh_enduser")
                                     {
                                         <div class="insuf-license">
                                             <div class="text-center">
@@ -168,9 +174,8 @@
                                             </div>
                                         </div>
                                     }
-                                }
-
-                            </div>
+                                } 
+                            </div> 
                             <label class="employeeRole">@(OnEmpRole == true ? "" : "Please select Role")</label>
 
                             @if (UserCategory == true)
@@ -188,6 +193,21 @@
                                     <TelerikValidationMessage For="@(() => User.Office)" />
                                 </div>
                             }
+                           @*  @if (User.Role == ApplicationRoles.Manager & Type.Contains("Edit"))
+                            {
+                                <div class="form-group col-md-12 mb-1">
+                                    <label class="regionalDetails fw-bold">Office</label>
+                                    <TelerikDropDownList @bind-Value="User.Office"
+                                                         Id="roleCateg"
+                                                         Data="@Offices"
+                                                         DefaultText="Select"
+                                                         OnChange="OnCategoryChange"
+                                                         AdaptiveMode="@AdaptiveMode.None"
+                                                         Enabled="true">
+                                    </TelerikDropDownList>
+                                    <TelerikValidationMessage For="@(() => User.Office)" />
+                                </div>
+                            } *@
                         }
                         @if (Type.Contains("View"))
                         {
@@ -224,7 +244,7 @@
         {
             <div class="edms-card-form my-3">
                 <div class="d-flex flex-row justify-content-between">
-                    <TelerikButton @onclick="HandleOnCancelCallback"
+                    <TelerikButton @onclick="OnCancel"
                                    FillMode="@ThemeConstants.Button.FillMode.Outline" ThemeColor="@ThemeConstants.Button.ThemeColor.Secondary">
                         Cancel
                     </TelerikButton>

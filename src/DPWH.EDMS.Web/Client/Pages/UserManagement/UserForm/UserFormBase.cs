@@ -46,9 +46,10 @@ public class UserFormBase : RxBaseComponent
     protected UserManagementModel User { get; set; } = new();
     protected UserManagementModel UserModel { get; set; }
     protected TelerikForm FormRef { get; set; } = new();
-
+    protected TelerikDialog dialogReference = new();
     public string SelectedRegionalOffice { get; set; }
     public string SelectedImplementingOffice { get; set; }
+    public string SelectedUserRole { get; set; } 
     protected string SelectedAcord { get; set; }
     protected string UserRole { get; set; }
     protected string Role { get; set; }
@@ -102,10 +103,13 @@ public class UserFormBase : RxBaseComponent
                 User.DesignationTitle = selectedUser.Data.DesignationTitle;
                 User.RegionalOffice = selectedUser.Data.RegionalOfficeRegion;
                 User.DistrictEngineeringOffice = selectedUser.Data.DistrictEngineeringOffice;
-                User.Role = selectedUser.Data.UserAccess;
+                User.Role = selectedUser.Data.Role;
+                User.UserAccess = selectedUser.Data.UserAccess;
+                User.Office = selectedUser.Data.Office;
                 User.Created = selectedUser.Data.CreatedDate;
                 User.CreatedBy = selectedUser.Data.CreatedBy; 
             }
+            OnSelectedChange(true);
         }  
         await ExceptionHandlerService.HandleApiException(
             async () =>
@@ -129,7 +133,22 @@ public class UserFormBase : RxBaseComponent
             });
 
         await GetRegionList();
+        if (Type == "View")
+        {
+            DropDownListRef.DefaultText = User.UserAccess;
+            User.Role = User.UserAccess;
+        }
+        else if (Type == "Edit")
+        {
+            SelectedUserRole = User.Role;
+            dialogReference.Refresh();
+            DropDownListRef.DefaultText = SelectedUserRole;
+        }
+        SelectedRegionalOffice = User.RegionalOffice;
+        SelectedImplementingOffice = User.DistrictEngineeringOffice; 
+        await OnRegionOfficeChanged();
         IsLoading = false;
+        dialogReference.Refresh();
     }
     protected List<string> Offices = new List<string>()
         {
@@ -421,7 +440,7 @@ public class UserFormBase : RxBaseComponent
 
                 IsSaving = true;
 
-                if (LicenseLimit <= 0 && User.Role != "dpwh_requestor" && User.Role != "dpwh_inspector")
+                if (LicenseLimit <= 0 && User.Role != "dpwh_enduser")
                 {
                     ToastService.ShowWarning("Insufficient License!");
                     IsLoading = false;
