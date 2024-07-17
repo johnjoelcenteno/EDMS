@@ -28,7 +28,21 @@ internal sealed class GetRequestingOfficeHandler : IRequestHandler<GetRequesting
         {
             throw new AppException("Requesting Office table is empty, please run data sync");
         }
+        var requestOffice = requestingOffices.Select(g => new GetRequestingOfficeResult(g.ToArray())).OrderBy(reg => reg.RegionName).ToList();
+        requestOffice = InsertAtZeroIndex(requestOffice.ToList(), "National Capital Region");
+        requestOffice = InsertAtZeroIndex(requestOffice.ToList(), "Central Office");
 
-        return requestingOffices.Select(g => new GetRequestingOfficeResult(g.ToArray()));
+        return requestOffice;
+    }
+
+    private List<GetRequestingOfficeResult> InsertAtZeroIndex(List<GetRequestingOfficeResult> regionOffice,string regionName)
+    {
+        var find = regionOffice.FirstOrDefault(r => r.RegionName == regionName);
+        if (find != null)
+        {
+            regionOffice.Remove(find);
+            regionOffice.Insert(0, find);
+        }
+        return regionOffice.ToList();
     }
 }
