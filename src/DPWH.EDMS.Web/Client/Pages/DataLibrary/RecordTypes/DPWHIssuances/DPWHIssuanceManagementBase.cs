@@ -78,7 +78,7 @@ public class DPWHIssuanceManagementBase : RecordTypesFormComponentBase
                         Id = item.Id,
                         Name = item.Name,
                         Section = item.Section,
-                        Category = item.Category, //temporary until CreatedBy is created
+                        Category = item.Category,
                         Office = item.Office,
                         IsActive = !item.IsActive,
                         Created = item.Created.DateTime,
