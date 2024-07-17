@@ -56,6 +56,8 @@ public class EmployeeRecordsManagementBase : RecordTypesFormComponentBase
 
     protected override async Task OnInitializedAsync()
     {
+        await LoadSection();
+        await LoadOffice();
         await LoadLibraryData();
         GetGridMenuItems();
     }

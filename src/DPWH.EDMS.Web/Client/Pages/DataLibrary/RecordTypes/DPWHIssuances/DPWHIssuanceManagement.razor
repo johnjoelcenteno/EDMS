@@ -40,8 +40,94 @@
                             <GridColumns>
                                 <GridColumn Field=@nameof(RecordsLibraryModel.Name) Title="Value" />
                                 <GridColumn Field=@nameof(RecordsLibraryModel.Category) Title="Category" />
-                                <GridColumn Field=@nameof(RecordsLibraryModel.Section) Title="Section" />
-                                <GridColumn Field=@nameof(RecordsLibraryModel.Office) Title="Office" />
+                                <GridColumn Field=@nameof(RecordsLibraryModel.Section) Title="Section" >
+                                <FilterCellTemplate>
+                                    <TelerikDropDownList Data="@SectionList"
+                                                         Value="@SelectedSection"
+                                                         ValueField="string"
+                                                         TextField="string"
+                                                         DefaultText="Select Section"
+                                                         Width="100%"
+                                                         FilterOperator="@StringFilterOperator.Contains"
+                                                         ValueChanged="@(async (string val) =>
+                                                                    {
+                                                                        SelectedRecordType = nameof(RecordsLibraryModel.Section);
+                                                                        SelectedSection = val;
+
+                                                                        if (SelectedSection != null)
+                                                                        {
+                                                                             await context.ClearFilterAsync();
+                                                                        }
+
+                                                                        SetSectionFilter(context.FilterDescriptor);
+
+                                                                        await context.FilterAsync();
+
+                                                                    })">
+                                            <DropDownListSettings>
+                                                <DropDownListPopupSettings Width="Auto" />
+                                            </DropDownListSettings>
+                                    </TelerikDropDownList>
+                                    <TelerikButton ButtonType="ButtonType.Button"
+                                                   Class="k-clear-button-visible ml-sm"
+                                                   Icon="@SvgIcon.FilterClear"
+                                                       Enabled="@(!string.IsNullOrEmpty(SelectedSection))"
+                                                   OnClick="@(async () =>
+                                                               {
+                                                                  SelectedSection = string.Empty;
+
+                                                                  SetSectionFilter(context.FilterDescriptor);
+
+                                                                  await context.ClearFilterAsync();
+
+                                                               })">
+                                    </TelerikButton>
+                                </FilterCellTemplate>
+                                </GridColumn>
+                                <GridColumn Field=@nameof(RecordsLibraryModel.Office) Title="Office">
+                                <FilterCellTemplate>
+                                    <TelerikDropDownList Data="@OfficeList"
+                                                         Value="@SelectedOffice"
+                                                         ValueField="string"
+                                                         TextField="string"
+                                                         DefaultText="Select Office"
+                                                         Width="100%"
+                                                         FilterOperator="@StringFilterOperator.Contains"
+                                                         ValueChanged="@(async (string val) =>
+                                                                    {
+                                                                        SelectedRecordType = nameof(RecordsLibraryModel.Office);
+                                                                        SelectedOffice = val;
+
+                                                                        if (SelectedOffice != null)
+                                                                        {
+                                                                             await context.ClearFilterAsync();
+                                                                        }
+
+                                                                        SetOfficeFilter(context.FilterDescriptor);
+
+                                                                        await context.FilterAsync();
+
+                                                                    })">
+                                            <DropDownListSettings>
+                                                <DropDownListPopupSettings Width="Auto" />
+                                            </DropDownListSettings>
+                                    </TelerikDropDownList>
+                                    <TelerikButton ButtonType="ButtonType.Button"
+                                                   Class="k-clear-button-visible ml-sm"
+                                                   Icon="@SvgIcon.FilterClear"
+                                                   Enabled="@(!string.IsNullOrEmpty(SelectedOffice))"
+                                                   OnClick="@(async () =>
+                                                               {
+                                                                  SelectedOffice = string.Empty;
+
+                                                                  SetOfficeFilter(context.FilterDescriptor);
+
+                                                                  await context.ClearFilterAsync();
+
+                                                               })">
+                                    </TelerikButton>
+                                </FilterCellTemplate>
+                                </GridColumn>
                                 <GridColumn Field=@nameof(RecordsLibraryModel.CreatedBy) Title="Created By" />
                                 <GridColumn Field=@nameof(RecordsLibraryModel.Created) Title="Created" Filterable="true">
                                     <Template>
