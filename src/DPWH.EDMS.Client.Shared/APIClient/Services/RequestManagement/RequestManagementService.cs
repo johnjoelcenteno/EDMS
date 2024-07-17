@@ -60,4 +60,9 @@ public class RequestManagementService : IRequestManagementService
     {
         return await _client.UpdateRequestedRecordIsAvailableAsync(isAvailable, body);
     }
+
+    public async Task<GetTopRequestQueryModelIEnumerableBaseApiResponse> GetTopRequestRecords()
+    {
+        return await _client.QueryTopRequestRecordsAsync();
+    }
 }

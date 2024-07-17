@@ -14,6 +14,6 @@ namespace DPWH.EDMS.Client.Shared.APIClient.Services.RequestManagement
         Task<RecordRequestStatusCountModelBaseApiResponse> GetTotalOverviewStatus(string status);
         Task<GetMonthlyRequestModelIEnumerableBaseApiResponse> GetMonthlyRequestTotal();
         Task<GuidNullableBaseApiResponse> UpdateIsAvailable(bool isAvailable, IEnumerable<Guid> body);
-
+        Task<GetTopRequestQueryModelIEnumerableBaseApiResponse> GetTopRequestRecords();
     }
 }

@@ -18,8 +18,10 @@ public class MyRequestsBase : RecordRequestGridComponentBase
 
     protected async override Task OnInitializedAsync()
     {
+        IsLoading = true;
         await FetchUser();
         await HandleOnLoadGrid();
+        IsLoading = false;
     }
 
     protected override void OnInitialized()
@@ -29,7 +31,7 @@ public class MyRequestsBase : RecordRequestGridComponentBase
             Icon = "menu",
             Text = "My Requests",
             Url = NavManager.Uri.ToString(),
-        });        
+        });
     }
 
     protected bool CheckIfEndUser(ClaimsPrincipal user)
