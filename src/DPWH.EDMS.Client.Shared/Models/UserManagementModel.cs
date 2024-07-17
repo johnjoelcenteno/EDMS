@@ -17,6 +17,7 @@ public record UserManagementModel
     public string Email { get; set; }
     [Required(ErrorMessage = "Role is required")]
     public string Role { get; set; }
+    public string UserAccess { get; set; } 
     //[Required(ErrorMessage = "Department is required")]
     public string Department { get; set; }
     //[Required(ErrorMessage = "Position is required")]
