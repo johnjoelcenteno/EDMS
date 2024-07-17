@@ -56,6 +56,8 @@ public class EmployeeRecordsManagementBase : RecordTypesFormComponentBase
 
     protected override async Task OnInitializedAsync()
     {
+        await LoadSection();
+        await LoadOffice();
         await LoadLibraryData();
         GetGridMenuItems();
     }
@@ -75,9 +77,11 @@ public class EmployeeRecordsManagementBase : RecordTypesFormComponentBase
                         Id = item.Id,
                         Name = item.Name,
                         Section = item.Section,
-                        Category = "System", //temporary until CreatedBy is created
+                        Category = item.Category, //temporary until CreatedBy is created
                         Office = item.Office,
                         IsActive = !item.IsActive,
+                        Created = item.Created.DateTime,
+                        CreatedBy = item.CreatedBy,
                     }).ToList();
                 GetRecordType = convertedData;
             }

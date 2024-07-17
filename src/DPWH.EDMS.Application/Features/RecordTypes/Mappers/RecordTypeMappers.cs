@@ -13,6 +13,8 @@ public static class RecordTypeMappers
             Category = recordType.Category,
             Section = recordType.Section,
             Office = recordType.Office,
+            Created = recordType.Created,
+            CreatedBy = recordType.CreatedBy,
             IsActive = recordType.IsActive,
         };
     }

@@ -3,6 +3,7 @@
 @attribute [Authorize(Policy = "RequireActiveRoles")]
 @using DPWH.EDMS.Api.Contracts
 @using DPWH.EDMS.Client.Shared.Models
+@using DPWH.EDMS.Components.Helpers
 @using DPWH.EDMS.Web.Client.Pages.DataLibrary.DataLibraries.Common.DataLibraryRequestForm
 
 <TelerikMediaQuery Media="(max-width: 480px)" OnChange="((changed) => XSmall = changed)"></TelerikMediaQuery>
@@ -40,6 +41,7 @@
                             <GridColumns>
                                 <GridColumn Field=@nameof(DataManagementModel.Value) Title="Value" />
                                 <GridColumn Field=@nameof(DataManagementModel.CreatedBy) Title="Created By" />
+                                <GridColumn DisplayFormat="{0:MM /dd/yyyy hh:mm tt}" Field=@nameof(DataManagementModel.Created) Title="Created" />
                                 <GridCommandColumn Width="50px">
                                     <TelerikButton Icon="@FontIcon.MoreVertical" OnClick="@( (MouseEventArgs e) => ShowRowOptions(e, context as GetDataLibraryResultValue) )"></TelerikButton>
                                 </GridCommandColumn>

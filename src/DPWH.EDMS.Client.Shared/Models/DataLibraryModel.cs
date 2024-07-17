@@ -14,6 +14,7 @@ public class DataManagementModel
 {
     public string Value { get; set; }
     public string CreatedBy { get; set; }
+    public DateTime Created { get; set; }
 }
 
 public class ConfigModel

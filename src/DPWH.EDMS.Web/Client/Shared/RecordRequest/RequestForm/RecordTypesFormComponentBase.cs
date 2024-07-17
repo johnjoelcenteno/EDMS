@@ -7,6 +7,7 @@ using DPWH.EDMS.Web.Client.Shared.BlazoredFluentValidator;
 using DPWH.EDMS.Web.Client.Shared.Services.ExceptionHandler;
 using Microsoft.AspNetCore.Components;
 using Telerik.Blazor.Components;
+using Telerik.DataSource;
 
 namespace DPWH.EDMS.Web.Client.Shared.RecordRequest.RequestForm;
 
@@ -38,6 +39,9 @@ public class RecordTypesFormComponentBase : RxBaseComponent
     protected List<string> OfficeList { get; set; } = new List<string>();
     protected bool IsSectionEmpty { get; set; } = false;
     protected bool IsOfficeEmpty { get; set; } = false;
+    protected string SelectedSection = string.Empty;
+    protected string SelectedOffice = string.Empty;
+    protected string SelectedRecordType = string.Empty;
 
 
     protected TelerikDialog DialogReference = new();    
@@ -96,5 +100,32 @@ public class RecordTypesFormComponentBase : RxBaseComponent
         IsOfficeEmpty = string.IsNullOrEmpty(NewConfig.Office);
     }
     #endregion
+    protected void SetOfficeFilter(CompositeFilterDescriptor filterDescriptor)
+    {
+        filterDescriptor.FilterDescriptors.Clear();
 
+        if (!string.IsNullOrEmpty(SelectedOffice))
+        {
+            var selectedFrom = new FilterDescriptor(SelectedRecordType, FilterOperator.IsEqualTo, SelectedOffice);
+
+            filterDescriptor.FilterDescriptors.Add(selectedFrom);
+
+        }
+
+        StateHasChanged();
+    }
+    protected void SetSectionFilter(CompositeFilterDescriptor filterDescriptor)
+    {
+        filterDescriptor.FilterDescriptors.Clear();
+
+        if (!string.IsNullOrEmpty(SelectedSection))
+        {
+            var selectedFrom = new FilterDescriptor(SelectedRecordType, FilterOperator.IsEqualTo, SelectedSection);
+
+            filterDescriptor.FilterDescriptors.Add(selectedFrom);
+
+        }
+
+        StateHasChanged();
+    }
 }
