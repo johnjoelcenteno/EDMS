@@ -25,7 +25,7 @@
                     Add Request
                 </TelerikButton>
             </div>
-            <TelerikTabStrip ActiveTabIndexChanged="async(index) => TabChangedHandler(index)">             
+            <TelerikTabStrip ActiveTabIndexChanged="async(index) => await TabChangedHandler(index)">
                 @foreach (var state in RequestStates)
                 {
                     <TabStripTab Title="@state">
@@ -41,119 +41,14 @@
     private RenderFragment LoadGrid()
     {
         return @<div>
-        @if (RequestRecords != null && !XSmall)
-        {
-        <TelerikGrid TItem="EmployeeModel"
-                         @bind-PageSize="@PageSize"
-                         Height="@GridHeight"
-                         FilterMode="GridFilterMode.FilterRow"
-                         Sortable=true
-                         Pageable=true
-                         Data="RequestRecords"
-                         OnStateChanged="@OnStateChanged"
-                         @ref="GridRef"
-                         Context="item"
-                         OnRowClick="GoToSelectedItemOverview">
-                <GridSettings>
-                    <GridPagerSettings PageSizes="@PageSizes">
-                    </GridPagerSettings>
-                </GridSettings>
-                <GridColumns>
-                <GridColumn Field=@nameof(EmployeeModel.ControlNumber) Title="Control No." />
-                <GridColumn Field=@nameof(EmployeeModel.FullName) Title="Fullname" />
-                <GridColumn Field=@nameof(EmployeeModel.DateRequested)
-                                        Title="Date Requested"
-                                        FilterEditorType="@GridFilterEditorType.DatePicker"
-                                        DisplayFormat="{0:MMMM dd, yyyy}">
-
-                                <FilterCellTemplate>
-                                    <TelerikDatePicker Value="@SelectedDate"
-                                                       ShowWeekNumbers="true" ValueChanged="@(async (DateTime? val) =>
-                                                                    {
-                                                                        SelectedDate = val;
-
-                                                                        if (SelectedDate != null)
-                                                                        {
-                                                                             await context.ClearFilterAsync();
-                                                                        }
-
-                                                                        SetDateFilter(context.FilterDescriptor);
-
-                                                                        await context.FilterAsync();
-
-                                                                    })">
-
-                                    </TelerikDatePicker>
-
-                                    <TelerikButton ButtonType="ButtonType.Button"
-                                                   Class="k-clear-button-visible ml-sm"
-                                                   Icon="@SvgIcon.FilterClear"
-                                                   Enabled="@(SelectedDate.HasValue)"
-                                                   OnClick="@(async () =>
-                                                               {
-                                                                  SelectedDate = null;
-
-                                                                  SetDateFilter(context.FilterDescriptor);
-
-                                                                  await context.ClearFilterAsync();
-                                                               })">
-                                    </TelerikButton>
-                                </FilterCellTemplate>
-
-                            </GridColumn>
-                <GridColumn Field=@nameof(EmployeeModel.Purpose) Title="Purpose" />
-                <GridColumn Field=@nameof(EmployeeModel.Status) Title="Status">
-                                <FilterCellTemplate>
-                                    <TelerikDropDownList Data="@StatusList"
-                                                         Value="@SelectedStatus"
-                                                         ValueField="string"
-                                                         TextField="string"
-                                                         DefaultText="Select Status"
-                                                         Width="100%"
-                                                         FilterOperator="@StringFilterOperator.Contains"
-                                                         ValueChanged="@(async (string val) =>
-                                                                    {
-                                                                        SelectedStatus = val;
-
-                                                                        if (SelectedDate != null)
-                                                                        {
-                                                                             await context.ClearFilterAsync();
-                                                                        }
-
-                                                                        SetStatusFilter(context.FilterDescriptor);
-
-                                                                        await context.FilterAsync();
-
-                                                                    })">
-                                    </TelerikDropDownList>
-                                    <TelerikButton ButtonType="ButtonType.Button"
-                                                   Class="k-clear-button-visible ml-sm"
-                                                   Icon="@SvgIcon.FilterClear"
-                                                   Enabled="@(!string.IsNullOrEmpty(SelectedStatus))"
-                                                   OnClick="@(async () =>
-                                                               {
-                                                                  SelectedStatus = string.Empty;
-
-                                                                  SetStatusFilter(context.FilterDescriptor);
-
-                                                                  await context.ClearFilterAsync();
-
-                                                               })">
-                                    </TelerikButton>
-                                </FilterCellTemplate>
-                            </GridColumn>
-                </GridColumns>
-            </TelerikGrid>
-        }
-        else if (RequestRecords != null && XSmall)
-        {
-        <TelerikGrid TItem="EmployeeModel"
+        @if (GridData != null && !XSmall)
+    {
+        <TelerikGrid TItem="RecordRequestModel"
                      @bind-PageSize="@PageSize"
                      Height="@GridHeight"
-                     FilterMode="GridFilterMode.FilterRow"
+                     FilterMode="GridFilterMode.None"
                      Sortable=true
-                     Pageable=true
-                     Data="RequestRecords"
+                     Data="GridData"
                      OnStateChanged="@OnStateChanged"
                      @ref="GridRef"
                      Context="item"
@@ -162,30 +57,40 @@
                 <GridPagerSettings PageSizes="@PageSizes">
                 </GridPagerSettings>
             </GridSettings>
-            <DetailTemplate>
-                @{
-            var prop = item as EmployeeModel;
-                    <div class="d-flex flex-column">
-                        <p><b>Status: </b>@item.Status</p>
-                        <p><b>Control Number: </b>@item.ControlNumber</p>
-                        <p><b>Purpose: </b>@item.Purpose</p>
-                        <p><b>Date Requested: </b>@(GenericHelper.GetDateDisplay(item.DateRequested))</p>
-                    </div>
-                }
-            </DetailTemplate>
             <GridColumns>
-                <GridColumn Field=@nameof(EmployeeModel.FullName) Title="Full Name" />
+                <GridColumn Field=@nameof(RecordRequestModel.ControlNumber) Title="Control No." Filterable="false" />
+                <GridColumn Field=@nameof(RecordRequestModel.FullName) Title="Fullname" Filterable="false" />
+                <GridColumn Field=@nameof(RecordRequestModel.DateRequested) Title="Date Requested">
+                    <Template>
+                        @{
+                    var req = context as RecordRequestModel;
+                    string dt = GenericHelper.GetDateTimeDisplay(req!.DateRequested);
+                        }
+                        <p class="mb-0">@dt</p>
+                    </Template>
+                </GridColumn>
+                <GridColumn Field=@nameof(RecordRequestModel.Purpose) Title="Purpose" />
+                <GridColumn Field=@nameof(RecordRequestModel.Status) Title="Status" />
             </GridColumns>
         </TelerikGrid>
-        }
-        else
-        {
-            <span>No Data to display.</span>
-        }
- 
-        </div>;
     }
+    else
+    {
+        <span>No Data to display.</span>
+    }
+        <TelerikPager PageChanged="@PageChangedHandler"
+                      Total="TotalItems"
+                      ButtonCount="6"
+                      PageSize="@PageSize"
+                      PageSizeChanged="@PageSizeChangedHandler"
+                      PageSizes="@(new List<int?> {5, 10, 20})"
+                      Page="@Page">
+        </TelerikPager>
+    </div>;
+    }
+
 }
+
 <style>
     .k-grid .k-table-row {
         cursor: pointer;

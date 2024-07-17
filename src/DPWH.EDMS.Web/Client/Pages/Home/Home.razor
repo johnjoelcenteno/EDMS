@@ -50,7 +50,7 @@
 
                 @if (GridData != null && !XSmall)
                 {
-                    <TelerikGrid TItem="EmployeeModel"
+                    <TelerikGrid TItem="EmployeeModel" Class="home-grid"
                                  @bind-PageSize="@PageSize"
                                  Height="@GridHeight"
                                  Sortable=true
@@ -259,19 +259,18 @@
         </TelerikCard>
     </div>
 </div>
-<div class="d-flex flex-lg-row flex-column mt-3 gap-3 mb-4">
+<div class="d-flex flex-lg-row flex-column mt-3 gap-3 mb-4 equal-height-columns">
     <div class="col">
         <TelerikCard Width="100%">
             <CardHeader Class="ch-card">
                 <h5 class="mb-0">Monthly Request Average Time</h5>
             </CardHeader>
-            <div class="container  my-3">
+            <div class="container my-3">
                 <TelerikChart Width="100%" @ref="MonthlyAveTimeRef">
                     <ChartTooltip Visible="true"></ChartTooltip>
                     <ChartLegend Position="ChartLegendPosition.Bottom"></ChartLegend>
 
                     <ChartSeriesItems>
-
                         <ChartSeries Type="ChartSeriesType.Line"
                                      Name="Request"
                                      Data="@MockData.MonthlyRequestAverageTimeList()"
@@ -288,67 +287,38 @@
                             <ChartValueAxisLabels Format="# 'min'"></ChartValueAxisLabels>
                         </ChartValueAxis>
                     </ChartValueAxes>
-
                 </TelerikChart>
             </div>
         </TelerikCard>
-
     </div>
     <div class="col">
-        <TelerikCard Width="100%">
+        <TelerikCard Width="100%"  >
             <CardHeader Class="ch-card">
                 <h5 class="mb-0">Top 10 Requests</h5>
             </CardHeader>
             <div class="container my-3">
-                @if (!XSmall)
-                {
-                    <TelerikChart @ref="Top10ChartRef">
-                        <ChartTooltip Visible="true"></ChartTooltip>
-                        <ChartLegend Visible="false"></ChartLegend>
+                <TelerikGrid Height="400px" Data="@GetTopRequestList" Pageable="false" Groupable="false" Sortable="true" Resizable="true">
+                    <GridColumns>
+                        <GridColumn Field="@nameof(GetTopRequestQueryModel.RecordName)" Title="Document Name" Width="@(XSmall ? null : "255px")"></GridColumn>
+                        <GridColumn Field="@nameof(GetTopRequestQueryModel.Total)" Title="Total Request">
+                            <Template>
+                                @{
+                                    var ctx = context as GetTopRequestQueryModel;
 
-                        <ChartSeriesItems>
-                            <ChartSeries Type="ChartSeriesType.Bar" Name="Total Visits" Data="@Series1Data">
-                            </ChartSeries>
-                        </ChartSeriesItems>
-
-                        <ChartValueAxes>
-                            <ChartValueAxis Max="30"></ChartValueAxis>
-                        </ChartValueAxes>
-
-                        <ChartCategoryAxes>
-                            <ChartCategoryAxis Categories="@Categories"></ChartCategoryAxis>
-                        </ChartCategoryAxes>
-
-                    </TelerikChart>
-                }
-                else
-                {
-                    <TelerikGrid Data="@GetMonthlyRequestData" Pageable="false" Groupable="false" Sortable="true" Resizable="true">
-                        <GridColumns>
-                            <GridColumn Field="@nameof(GetMonthlyRequestModel.Month)" Title="Document Name" Width="195px"></GridColumn>
-                            <GridColumn Field="@nameof(GetMonthlyRequestModel.Count)" Title="Total Request">
-                                <Template>
-                                    @{
-                                        var ctx = context as GetMonthlyRequestModel;
-
-                                        <TelerikProgressBar Value="@(ctx!.Count)" Max="@GetHighestPercentageItem()" AriaLabel="Progress Bar">
-                                            <ProgressBarLabel Context="ctx" Visible="true" Position="@ProgressBarLabelPosition.Center">
-                                                <Template>
-                                                    @(ctx.Value) Document
-                                                </Template>
-                                            </ProgressBarLabel>
-                                        </TelerikProgressBar>
-                                    }
-                                </Template>
-                            </GridColumn>
-                        </GridColumns>
-                    </TelerikGrid>
-                }
-                
-                 
+                                    <TelerikProgressBar Value="@(ctx!.Total)" Max="@GetHighestPercentageItem()" AriaLabel="Progress Bar">
+                                        <ProgressBarLabel Context="ctx" Visible="true" Position="@ProgressBarLabelPosition.Center">
+                                            <Template>
+                                                @(ctx.Value)
+                                            </Template>
+                                        </ProgressBarLabel>
+                                    </TelerikProgressBar>
+                                }
+                            </Template>
+                        </GridColumn>
+                    </GridColumns>
+                </TelerikGrid>
             </div>
         </TelerikCard>
-         
     </div>
 </div>
 
@@ -385,5 +355,16 @@
 
     .inspectionBanner {
         padding-right: 4rem
+    }
+
+    .home-grid .k-grid-content {
+      
+        overflow-y: hidden;
+    }
+
+     .home-grid .k-grid-header, .k-grid-footer {
+        
+        padding-inline-end: 0px;
+        
     }
 </style>

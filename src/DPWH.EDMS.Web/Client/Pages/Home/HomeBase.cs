@@ -32,8 +32,13 @@ public class HomeBase : GridBase<EmployeeModel>
     protected List<EmployeeModel> EmployeeList = new List<EmployeeModel>();
     protected List<SimpleKeyValue> PieChart = new List<SimpleKeyValue>();
     protected List<GetMonthlyRequestModel> GetMonthlyRequestData { get; set; } = new List<GetMonthlyRequestModel>();
+    protected List<GetTopRequestQueryModel> GetTopRequestList { get; set; } = new List<GetTopRequestQueryModel>();
+
     public List<object> Series1Data;
     public string[] Categories;
+
+    public List<object> SeriesTopRequest;
+    public string[] CategoriesTopRequest;
     public TelerikChart FullfilledChartRef { get; set; }
     public TelerikChart RequstChartRef { get; set; }
     public TelerikChart MonthlyAveTimeRef { get; set; }
@@ -71,10 +76,13 @@ public class HomeBase : GridBase<EmployeeModel>
     protected async override Task OnInitializedAsync()
     {
         IsLoading = true;
+
         await HandleEndUserAccess();
         await GetRecordRequest();
         await GetOverviewTotal();
         await GetMonthlyRequestTotal();
+        await GetTopRequest();
+
         IsLoading = false;
     }
     protected void SetDateFilter(CompositeFilterDescriptor filterDescriptor)
@@ -136,10 +144,11 @@ public class HomeBase : GridBase<EmployeeModel>
         }
     }
 
-    protected int GetHighestPercentageItem()
+    protected long GetHighestPercentageItem()
     {
-        // Use LINQ to find the item with the highest percentage
-        return GetMonthlyRequestData.OrderByDescending(item => item.Count).FirstOrDefault().Count;
+        var total = GetTopRequestList.Select(x => (object)x.Total).ToList();
+        long maxValue = total.Cast<long>().Max();
+        return maxValue < 28 ? 30 : GetTopRequestList.OrderByDescending(item => item.Total).FirstOrDefault().Total;
     }
     private Dictionary<string, Action<bool>> mediaQueryActions;
     
@@ -240,5 +249,16 @@ public class HomeBase : GridBase<EmployeeModel>
         return employees;
     }
 
-     
+    protected async Task GetTopRequest()
+    {
+        var res = await RequestManagementService.GetTopRequestRecords();
+        if(res.Success && res.Data != null)
+        {
+            GetTopRequestList = res.Data.ToList();
+
+            CategoriesTopRequest = GetTopRequestList.Select(d => d.RecordName).ToArray();
+
+            SeriesTopRequest = GetTopRequestList.Select(d => (object)d.Total).ToList();
+        }
+    }
 }
