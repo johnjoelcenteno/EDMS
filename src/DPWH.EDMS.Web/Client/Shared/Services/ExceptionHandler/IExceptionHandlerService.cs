@@ -11,5 +11,10 @@ public interface IExceptionHandlerService
         Func<Task<T?>> func,
         Action? afterSuccessCb = null,
         string? successMessage = null);
+
+    Task<bool> IsSuccess(
+        Func<Task> func,
+        Action? afterSuccessCb = null,
+        string? successMessage = null);
 }
 

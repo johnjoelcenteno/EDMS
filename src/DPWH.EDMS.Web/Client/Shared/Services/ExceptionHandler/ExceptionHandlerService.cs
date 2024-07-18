@@ -47,6 +47,44 @@ public class ExceptionHandlerService : IExceptionHandlerService
         }
     }
 
+    public async Task<bool> IsSuccess(
+        Func<Task> func,
+        Action? afterSuccessCb = null,
+        string? successMessage = null)
+    {
+        try
+        {
+            await func.Invoke();
+
+            if (!string.IsNullOrEmpty(successMessage))
+            {
+                _ToastService.ShowSuccess(successMessage);
+                if (afterSuccessCb != null)
+                {
+                    afterSuccessCb.Invoke();
+                }
+            }
+
+            return true;
+
+        }
+        catch (Exception ex) when (ex is ApiException<ProblemDetails> apiEx)
+        {
+            OnCatchError(apiEx);
+            return false;
+        }
+        catch (Exception ex) when (ex is ApiException apiEx)
+        {
+            OnCatchError(apiEx);
+            return false;
+        }
+        catch (Exception ex)
+        {
+            _ToastService.ShowError(ex.Message);
+            return false;
+        }
+    }
+
     public async Task<T?> HandleApiException<T>(Func<Task<T?>> func, Action? afterSuccessCb, string? successMessage = null)
     {
         try
