@@ -11,17 +11,8 @@ using MediatR;
 namespace DPWH.EDMS.Application.Features.RecordTypes.Commands;
 
 public record class CreateRecordTypeRequest(CreateRecordTypeModel Model) : IRequest<Guid>;
-public class CreateRecordType : IRequestHandler<CreateRecordTypeRequest, Guid>
+internal sealed class CreateRecordTypeHandler(IWriteRepository WriteRepository, ClaimsPrincipal _principal) : IRequestHandler<CreateRecordTypeRequest, Guid>
 {
-    public IWriteRepository WriteRepository { get; }
-
-    private readonly ClaimsPrincipal _principal;
-
-    public CreateRecordType(IWriteRepository writeRepository, ClaimsPrincipal principal)
-    {
-        WriteRepository = writeRepository;
-        _principal = principal;
-    }
 
     public async Task<Guid> Handle(CreateRecordTypeRequest request, CancellationToken cancellationToken)
     {

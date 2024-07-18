@@ -6,7 +6,7 @@ public record class CreateRecordTypeModel(
     string Name,
     string Category,
     string? Code,
-    string Section,
-    string Office,
+    string? Section,
+    string? Office,
     bool IsActive
 );
