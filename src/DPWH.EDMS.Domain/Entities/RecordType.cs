@@ -7,7 +7,7 @@ namespace DPWH.EDMS.Domain
     {
         private RecordType() { }
 
-        private RecordType(Guid id, string name, string category, string section, string office, string code,bool isActive)
+        private RecordType(Guid id, string name, string category, string? section, string? office, string? code,bool isActive)
         {
             Id = id;
             Name = name;
@@ -18,7 +18,7 @@ namespace DPWH.EDMS.Domain
             Code = code;
         }
 
-        public static RecordType Create(string name, string category, string section, string office, bool isActive,string code, string createdBy)
+        public static RecordType Create(string name, string category, string? section, string? office, bool isActive,string? code, string createdBy)
         {
             var id = Guid.NewGuid();
 
@@ -27,7 +27,7 @@ namespace DPWH.EDMS.Domain
             return recordType;
         }
 
-        public void Update(string name, string category, string section, string office, bool isActive, string code,string modifiedBy)
+        public void Update(string name, string category, string? section, string? office, bool isActive, string? code,string modifiedBy)
         {
             Name = name;
             Category = category;
@@ -40,8 +40,8 @@ namespace DPWH.EDMS.Domain
 
         public string Name { get; private set; }
         public string Category { get; private set; }
-        public string Section { get; private set; }
-        public string Office { get; private set; }
+        public string? Section { get; private set; }
+        public string? Office { get; private set; }
         public bool IsActive { get; private set; }
         public string? Code { get; private set; }
     }
