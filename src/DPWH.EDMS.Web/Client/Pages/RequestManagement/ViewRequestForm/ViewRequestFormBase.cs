@@ -1,8 +1,10 @@
 ﻿using DPWH.EDMS.Api.Contracts;
+using DPWH.EDMS.Client.Shared.APIClient.Services.RecordRequestSupportingFiles;
 using DPWH.EDMS.Client.Shared.Models;
 using DPWH.EDMS.IDP.Core.Extensions;
 using DPWH.EDMS.Shared.Enums;
 using DPWH.EDMS.Web.Client.Shared.RecordRequest.View.RequestDetailsOverview;
+using DPWH.EDMS.Web.Client.Shared.Services.Document;
 using DPWH.NGOBIA.Client.Shared.APIClient.Services.Users;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -13,7 +15,10 @@ namespace DPWH.EDMS.Web.Client.Pages.RequestManagement.ViewRequestForm;
 public class ViewRequestFormBase : RequestDetailsOverviewBase
 {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateAsync { get; set; }
+    [Inject] public required IDocumentService DocumentService { get; set; }
     [Inject] public required IUsersService UsersService { get; set; }
+    [Inject] public required IRecordRequestSupportingFilesService RecordRequestSupportingFilesService { get; set; }
+
     [Inject] public required NavigationManager NavigationManager { get; set; }
     protected UpdateResponseBaseApiResponse? UpdateResponse;
     protected string Office { get; set; } = string.Empty;
@@ -23,7 +28,11 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
     protected int MinFileSize { get; set; } = 1024;
     protected int MaxFileSize { get; set; } = 4 * 1024 * 1024;
     protected List<string> AllowedExtensions { get; set; } = new List<string>() { ".docx", ".pdf" };
-    
+
+    // For Uploads
+    protected Dictionary<Guid, UploadRequestedRecordDocumentModel> UploadRequestedRecords { get; set; } = new();
+    protected string? ValidationMessage { get; set; }
+
     // Placeholders
     protected string? Remarks { get; set; }
     protected string? PickupLocation { get; set; }
@@ -100,6 +109,66 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
         }
     }
 
+    protected void ValidateRecordsFileSelect()
+    {
+        ValidationMessage = string.Empty;
+        bool allFilesSelected = true;
+
+        if (Office == "RMD")
+        {
+            foreach (var record in RMDRecords)
+            {
+                if (!UploadRequestedRecords.ContainsKey(record.Id) || UploadRequestedRecords[record.Id].Document == null)
+                {
+                    allFilesSelected = false;
+                    break;
+                }
+            }
+        }
+        else if (Office == "HRMD")
+        {
+            foreach (var record in HRMDRecords)
+            {
+                if (!UploadRequestedRecords.ContainsKey(record.Id) || UploadRequestedRecords[record.Id].Document == null)
+                {
+                    allFilesSelected = false;
+                    break;
+                }
+            }
+        }
+        else
+        {
+            foreach (var record in SelectedRecordRequest.RequestedRecords)
+            {
+                if (!UploadRequestedRecords.ContainsKey(record.Id) || UploadRequestedRecords[record.Id].Document == null)
+                {
+                    allFilesSelected = false;
+                    break;
+                }
+            }
+        }
+        
+        if (allFilesSelected)
+        {
+            IsModalVisible = true;
+        }
+        else
+        {
+            ValidationMessage = "Please select a file for each requested record.";
+        }
+    }
+
+    protected async Task OnUploadDocument()
+    {
+        foreach (var uploadRecord in UploadRequestedRecords.Values)
+        {
+            if (uploadRecord.Document != null)
+            {
+                await RecordRequestSupportingFilesService.UploadRequestedRecord(uploadRecord.Document, uploadRecord.Id);
+            }
+        }
+    }
+
     protected async Task OnReview()
     {
         IsLoading = true;
@@ -120,6 +189,7 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
     {
         IsLoading = true;
         IsModalVisible = false;
+        await OnUploadDocument();
         await OnStatusChange(RecordRequestStates.Claimed.ToString());
         ActiveTabIndex = 3;
         StateHasChanged();
@@ -171,14 +241,50 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
         }
     }
 
-    protected async void OnSelectDocument(FileSelectEventArgs args)
+    protected async void OnSelectDocument(FileSelectEventArgs args, Guid recordId)
     {
+        var requestedRecord = SelectedRecordRequest.RequestedRecords.FirstOrDefault(r => r.Id == recordId);
 
+        if (requestedRecord != null)
+        {
+            var document = await DocumentService.GetFileToUpload(args);
+
+            if (UploadRequestedRecords.ContainsKey(recordId))
+            {
+                UploadRequestedRecords[recordId].Document = document;
+            }
+            else
+            {
+                UploadRequestedRecords[recordId] = new UploadRequestedRecordDocumentModel()
+                {
+                    Document = document,
+                    Id = recordId
+                };
+            }
+
+            if (Office == "RMD" && RMDRecords.All(r => UploadRequestedRecords.ContainsKey(r.Id) && UploadRequestedRecords[r.Id].Document != null))
+            {
+                ValidationMessage = string.Empty;
+            }
+            else if (Office == "HRMD" && HRMDRecords.All(r => UploadRequestedRecords.ContainsKey(r.Id) && UploadRequestedRecords[r.Id].Document != null))
+            {
+                ValidationMessage = string.Empty;
+            }
+            else if (SelectedRecordRequest.RequestedRecords.All(r => UploadRequestedRecords.ContainsKey(r.Id) && UploadRequestedRecords[r.Id].Document != null))
+            {
+                ValidationMessage = string.Empty;
+            }
+        }
+
+        StateHasChanged();
     }
 
-    protected async void OnRemoveDocument(FileSelectEventArgs args)
+    protected void OnRemoveDocument(FileSelectEventArgs args, Guid recordId)
     {
-
+        if (UploadRequestedRecords.ContainsKey(recordId))
+        {
+            UploadRequestedRecords.Remove(recordId);
+        }
     }
 
     protected async void OnSelectTransmittal(FileSelectEventArgs args)

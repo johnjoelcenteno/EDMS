@@ -166,7 +166,7 @@
                     @StepperFragment
                     <div class="d-flex gap-3 justify-content-center">
                         <TelerikButton OnClick="OnCancel" FillMode="@ThemeConstants.Button.FillMode.Outline">Cancel</TelerikButton>
-                        <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.Status == RecordRequestStates.Release.ToString())">Submit</TelerikButton>
+                        <TelerikButton OnClick="ValidateRecordsFileSelect" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.Status == RecordRequestStates.Release.ToString())">Submit</TelerikButton>
                     </div>
                 </div>
             }
@@ -194,22 +194,29 @@
                     {
                         <div class="row mb-1">
                             <div class="d-flex col">
-                                <input type="checkbox" />
-                                <label class="align-content-center ms-2">@record.RecordType</label>
+                                <label class="align-content-center">@record.RecordType</label>
                             </div>
                             <div class="col">
-                                <TelerikFileSelect Class="@(XSmall ? "mb-3" : "")"
-                                                   AllowedExtensions="@AllowedExtensions"
-                                                   OnSelect="@OnSelectDocument"
-                                                   OnRemove="@OnRemoveDocument"
-                                                   MaxFileSize="@MaxFileSize"
-                                                   MinFileSize="@MinFileSize"
-                                                   Multiple="false">
-                                    <SelectFilesButtonTemplate>
-                                        <TelerikSvgIcon Icon="@SvgIcon.Upload" />
-                                        Click to Upload
-                                    </SelectFilesButtonTemplate>
-                                </TelerikFileSelect>
+                                @if (SelectedRecordRequest.Status != RecordRequestStates.Release.ToString() && !string.IsNullOrEmpty(record.Uri))
+                                {
+                                    <div class="text-end">
+                                        <NavLink class="telerik-blazor k-button k-button-solid k-rounded-md k-button-md k-button-solid-base" target="_blank" href=@record.Uri>View Uploaded Record</NavLink>
+                                    </div>
+                                }
+                                else {
+                                    <TelerikFileSelect Class="@(XSmall ? "mb-3" : "record-upload-btn")"
+                                                       AllowedExtensions="@AllowedExtensions"
+                                                       OnSelect="(args) => OnSelectDocument(args, record.Id)"
+                                                       OnRemove="(args) => OnRemoveDocument(args, record.Id)"
+                                                       MaxFileSize="@MaxFileSize"
+                                                       MinFileSize="@MinFileSize"
+                                                       Multiple="false">
+                                        <SelectFilesButtonTemplate>
+                                            <TelerikSvgIcon Icon="@SvgIcon.Upload" />
+                                            @(record.IsAvailable ? "Select Record" : "Select Certificate of No Record")
+                                        </SelectFilesButtonTemplate>
+                                    </TelerikFileSelect>
+                                }
                             </div>
                         </div>
                     }
@@ -220,22 +227,30 @@
                     {
                         <div class="row mb-1">
                             <div class="d-flex col">
-                                <input type="checkbox" />
-                                <label class="align-content-center ms-2">@record.RecordType</label>
+                                <label class="align-content-center">@record.RecordType</label>
                             </div>
                             <div class="col">
-                                <TelerikFileSelect Class="@(XSmall ? "mb-3" : "")"
+                                @if (SelectedRecordRequest.Status != RecordRequestStates.Release.ToString() && !string.IsNullOrEmpty(record.Uri))
+                                {
+                                    <div class="text-end">
+                                        <NavLink class="telerik-blazor k-button k-button-solid k-rounded-md k-button-md k-button-solid-base" target="_blank" href=@record.Uri>View Uploaded Record</NavLink>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <TelerikFileSelect Class="@(XSmall ? "mb-3" : "record-upload-btn")"
                                                    AllowedExtensions="@AllowedExtensions"
-                                                   OnSelect="@OnSelectDocument"
-                                                   OnRemove="@OnRemoveDocument"
+                                                   OnSelect="(args) => OnSelectDocument(args, record.Id)"
+                                                   OnRemove="(args) => OnRemoveDocument(args, record.Id)"
                                                    MaxFileSize="@MaxFileSize"
                                                    MinFileSize="@MinFileSize"
                                                    Multiple="false">
                                     <SelectFilesButtonTemplate>
                                         <TelerikSvgIcon Icon="@SvgIcon.Upload" />
-                                        Click to Upload
+                                        @(record.IsAvailable ? "Select Record" : "Select Certificate of No Record")
                                     </SelectFilesButtonTemplate>
-                                </TelerikFileSelect>
+                                </TelerikFileSelect>                                    
+                                }
                             </div>
                         </div>                        
                     }
@@ -246,26 +261,37 @@
                     {
                         <div class="row mb-1">
                             <div class="d-flex col">
-                                <input type="checkbox" />
-                                <label class="align-content-center ms-2">@record.RecordType</label>
+                                <label class="align-content-center">@record.RecordType</label>
                             </div>
                             <div class="col">
-                                <TelerikFileSelect Class="@(XSmall ? "mb-3" : "")"
-                                                   AllowedExtensions="@AllowedExtensions"
-                                                   OnSelect="@OnSelectDocument"
-                                                   OnRemove="@OnRemoveDocument"
-                                                   MaxFileSize="@MaxFileSize"
-                                                   MinFileSize="@MinFileSize"
-                                                   Multiple="false">
-                                    <SelectFilesButtonTemplate>
-                                        <TelerikSvgIcon Icon="@SvgIcon.Upload" />
-                                        Click to Upload
-                                    </SelectFilesButtonTemplate>
-                                </TelerikFileSelect>
+                                @if (SelectedRecordRequest.Status != RecordRequestStates.Release.ToString() && !string.IsNullOrEmpty(record.Uri))
+                                {
+                                    <div class="text-end">
+                                        <NavLink class="telerik-blazor k-button k-button-solid k-rounded-md k-button-md k-button-solid-base" target="_blank" href=@record.Uri>View Uploaded Record</NavLink>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <TelerikFileSelect Class="@(XSmall ? "mb-3" : "record-upload-btn")"
+                                                       AllowedExtensions="@AllowedExtensions"
+                                                       OnSelect="(args) => OnSelectDocument(args, record.Id)"
+                                                       OnRemove="(args) => OnRemoveDocument(args, record.Id)"
+                                                       MaxFileSize="@MaxFileSize"
+                                                       MinFileSize="@MinFileSize"
+                                                       Multiple="false">
+                                        <SelectFilesButtonTemplate>
+                                            <TelerikSvgIcon Icon="@SvgIcon.Upload" />
+                                            @(record.IsAvailable ? "Select Record" : "Select Certificate of No Record")
+                                        </SelectFilesButtonTemplate>
+                                    </TelerikFileSelect>
+                                }
                             </div>
                         </div>
                     }
                 }
+                <div class="@(XSmall ? "text-danger mb-3" : "text-danger text-end mb-3")">
+                    <p>@ValidationMessage</p>
+                </div>
                 <div class="row mb-2">
                     <p><b>Select Office for Pickup</b></p>
                     <div class="col mt-2">
@@ -300,11 +326,11 @@
                     <h5>Receiving Details</h5>
                 </div>
                 <div class="d-flex mb-3">
-                    <div>
+                    @* <div>
                         <button class="toggle-button">-</button>
-                    </div>
+                    </div> *@
                     <div>
-                        <p>&emsp;Control No. @SelectedRecordRequest.ControlNumber</p>
+                        <p>Control No. @SelectedRecordRequest.ControlNumber</p>
                     </div>
                 </div>
                 <div class="hl-top hl-bottom bg-light p-3">
@@ -505,5 +531,9 @@
     .view-export-btn {
         border: none;
         color: #005A9C;
+    }
+
+    .record-upload-btn {
+        width: 456px;
     }
 </style>
