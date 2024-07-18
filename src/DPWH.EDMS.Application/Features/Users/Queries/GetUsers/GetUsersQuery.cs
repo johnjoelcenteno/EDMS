@@ -1,20 +1,28 @@
 using DPWH.EDMS.Application.Contracts.Persistence;
 using DPWH.EDMS.Domain.Extensions;
 using DPWH.EDMS.IDP.Core.Constants;
+using DPWH.EDMS.IDP.Core.Extensions;
 using KendoNET.DynamicLinq;
 using MediatR;
+using System.Security.Claims;
 
 namespace DPWH.EDMS.Application.Features.Users.Queries.GetUsers;
 
 public record GetUsersQuery(DataSourceRequest DataSourceRequest) : IRequest<DataSourceResult>;
 
-internal sealed class GetUsersHandler(IReadAppIdpRepository repository) : IRequestHandler<GetUsersQuery, DataSourceResult>
+internal sealed class GetUsersHandler(IReadAppIdpRepository repository, ClaimsPrincipal claimsPrincipal) : IRequestHandler<GetUsersQuery, DataSourceResult>
 {
     public Task<DataSourceResult> Handle(GetUsersQuery request, CancellationToken cancellationToken)
     {
-        var result = repository
-            .ViewUserAccess
-            .Where(p => ApplicationPolicies.RequireActiveRoles.Contains(p.UserRole))
+        var users = repository
+            .ViewUserAccess.AsQueryable();
+
+        var currentUserId = claimsPrincipal.GetUserId().ToString();
+
+        var result = users
+            .Where(p => ApplicationPolicies.RequireActiveRoles.Contains(p.UserRole) && 
+                        !(p.UserRole == ApplicationRoles.ITSupport && 
+                        p.Id == currentUserId))
             .Select(p => new GetUsersQueryResult
             {
                 Id = p.Id,
