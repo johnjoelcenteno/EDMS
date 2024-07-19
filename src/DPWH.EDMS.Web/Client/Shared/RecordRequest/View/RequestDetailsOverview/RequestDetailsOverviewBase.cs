@@ -17,8 +17,8 @@ public class RequestDetailsOverviewBase : RxBaseComponent
     protected RecordRequestModel SelectedRecordRequest { get; set; } = new();
     protected string CancelReturnUrl = string.Empty;
     protected IEnumerable<IGrouping<string, string>>? GroupedRecords;
-    protected List<RequestedRecordModel> RMDRecords;
-    protected List<RequestedRecordModel> HRMDRecords;
+    protected List<RequestedRecordModel>? RMDRecords;
+    protected List<RequestedRecordModel>? HRMDRecords;
     protected virtual void OnCancel()
     {
         if (!string.IsNullOrEmpty(CancelReturnUrl))
