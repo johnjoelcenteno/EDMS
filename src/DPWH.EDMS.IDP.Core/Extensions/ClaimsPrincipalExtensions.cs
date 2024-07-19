@@ -76,7 +76,7 @@ public static class ClaimsPrincipalExtensions
 
         return string.IsNullOrWhiteSpace(displayName) ? defaultValue : displayName;
     }
-    public static string? GetOffice(this ClaimsPrincipal principal)
+    public static string? GetRegionalOffice(this ClaimsPrincipal principal)
     {
         return principal.Claims.FirstOrDefault(c => c.Type == "regional_office")?.Value;
     }
@@ -86,8 +86,13 @@ public static class ClaimsPrincipalExtensions
         return principal.Claims.FirstOrDefault(c => c.Type == "implementing_office")?.Value;
     }
 
+    public static string? GetOffice(this ClaimsPrincipal principal)
+    {
+        return principal.Claims.FirstOrDefault(c => c.Type == "office")?.Value;
+    }
+
     public static bool IsFromCentralOffice(this ClaimsPrincipal principal)
     {
-        return principal.GetOffice() is "Central Office";
+        return principal.GetRegionalOffice() is "Central Office";
     }
 }
