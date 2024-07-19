@@ -123,7 +123,7 @@
                 </div>
                 <div class="row">
                     <div class="col">
-                        @if (Office == "RMD")
+                        @if (User.Office == Offices.RMD.ToString() && RMDRecords != null)
                         {
                             @foreach (var record in RMDRecords)
                             {
@@ -133,7 +133,7 @@
                                 </div>
                             }
                         }
-                        else if (Office == "HRMD")
+                        else if (User.Office == Offices.HRMD.ToString() && HRMDRecords != null)
                         {
                             @foreach (var record in HRMDRecords)
                             {
@@ -188,7 +188,7 @@
                 <div class="row mb-2">
                     <p><b>Documents</b></p>
                 </div>
-                @if (Office == "RMD")
+                @if (User.Office == Offices.RMD.ToString() && RMDRecords != null)
                 {
                     @foreach (var record in RMDRecords)
                     {
@@ -221,7 +221,7 @@
                         </div>
                     }
                 }
-                else if (Office == "HRMD")
+                else if (User.Office == Offices.HRMD.ToString() && HRMDRecords != null)
                 {
                     @foreach (var record in HRMDRecords)
                     {
@@ -295,7 +295,7 @@
                 <div class="row mb-2">
                     <p><b>Select Office for Pickup</b></p>
                     <div class="col mt-2">
-                        <TelerikTextBox @bind-Value="PickupLocation" Placeholder="Auto-Generated based on viewer's office (RMD or HRMD)" Enabled="false"></TelerikTextBox>
+                        <TelerikTextBox Placeholder="@PickUpLocation" Enabled="false"></TelerikTextBox>
                     </div>
                 </div>
 

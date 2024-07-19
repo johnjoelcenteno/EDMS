@@ -18,10 +18,10 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
     [Inject] public required IDocumentService DocumentService { get; set; }
     [Inject] public required IUsersService UsersService { get; set; }
     [Inject] public required IRecordRequestSupportingFilesService RecordRequestSupportingFilesService { get; set; }
-
     [Inject] public required NavigationManager NavigationManager { get; set; }
+
     protected UpdateResponseBaseApiResponse? UpdateResponse;
-    protected string Office { get; set; } = string.Empty;
+    protected GetUserByIdResult User = new GetUserByIdResult();
     protected int ActiveTabIndex { get; set; } = 0;
     protected int CurrentStepIndex { get; set; }
     protected bool IsModalVisible { get; set; }
@@ -35,7 +35,20 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
 
     // Placeholders
     protected string? Remarks { get; set; }
-    protected string? PickupLocation { get; set; }
+    protected string PickUpLocation
+    {
+        get
+        {
+            if (User.UserAccess == "Manager" || User.UserAccess == "Staff")
+            {
+                return User.Office;
+            }
+            else
+            {
+                return Offices.RMD.ToString();
+            }
+        }
+    }
     protected DateTime? DateReceived { get; set; } = DateTime.Now;
     protected DateTime? TimeReceived { get; set; } = DateTime.Now;
 
@@ -114,7 +127,7 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
         ValidationMessage = string.Empty;
         bool allFilesSelected = true;
 
-        if (Office == "RMD")
+        if (User.Office == Offices.RMD.ToString() && RMDRecords != null)
         {
             foreach (var record in RMDRecords)
             {
@@ -125,7 +138,7 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
                 }
             }
         }
-        else if (Office == "HRMD")
+        else if (User.Office == Offices.HRMD.ToString() && HRMDRecords != null)
         {
             foreach (var record in HRMDRecords)
             {
@@ -215,7 +228,8 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
 
         if (userRes.Success)
         {
-            Office = userRes.Data.Office;
+            User.UserAccess = userRes.Data.UserAccess;
+            User.Office = userRes.Data.Office;
         }
         else
         {
@@ -262,11 +276,11 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
                 };
             }
 
-            if (Office == "RMD" && RMDRecords.All(r => UploadRequestedRecords.ContainsKey(r.Id) && UploadRequestedRecords[r.Id].Document != null))
+            if (User.Office == Offices.RMD.ToString() && RMDRecords != null && RMDRecords.All(r => UploadRequestedRecords.ContainsKey(r.Id) && UploadRequestedRecords[r.Id].Document != null))
             {
                 ValidationMessage = string.Empty;
             }
-            else if (Office == "HRMD" && HRMDRecords.All(r => UploadRequestedRecords.ContainsKey(r.Id) && UploadRequestedRecords[r.Id].Document != null))
+            else if (User.Office == Offices.HRMD.ToString() && HRMDRecords != null && HRMDRecords.All(r => UploadRequestedRecords.ContainsKey(r.Id) && UploadRequestedRecords[r.Id].Document != null))
             {
                 ValidationMessage = string.Empty;
             }
