@@ -16,6 +16,7 @@ public static class RecordTypeMappers
             Created = recordType.Created,
             CreatedBy = recordType.CreatedBy,
             IsActive = recordType.IsActive,
+            Code = recordType.Code ?? default,
         };
     }
 }

@@ -3,7 +3,8 @@
 public record class UpdateRecordTypeModel(
     string Name,
     string Category,
-    string Section,
-    string Office,
-    bool IsActive
+    string? Section,
+    string? Office,
+    bool IsActive,
+    string? Code
 );
