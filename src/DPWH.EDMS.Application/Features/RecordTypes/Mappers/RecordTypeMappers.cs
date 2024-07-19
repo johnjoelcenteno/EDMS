@@ -11,12 +11,12 @@ public static class RecordTypeMappers
             Id = recordType.Id,
             Name = recordType.Name,
             Category = recordType.Category,
-            Section = recordType.Section,
-            Office = recordType.Office,
+            Section = recordType.Section ?? default!,
+            Office = recordType.Office ?? default!,
             Created = recordType.Created,
             CreatedBy = recordType.CreatedBy,
             IsActive = recordType.IsActive,
-            Code = recordType.Code ?? default,
+            Code = recordType.Code ?? default!,
         };
     }
 }
