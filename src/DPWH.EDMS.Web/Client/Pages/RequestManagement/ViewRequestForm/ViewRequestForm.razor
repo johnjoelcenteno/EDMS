@@ -158,7 +158,7 @@
             </div>
         </div>
     </TabStripTab>
-    <TabStripTab Title="Release">
+    <TabStripTab Title="Release" Disabled="@(CurrentStepIndex <= 1)">
         <div class="row">
             @if (!XSmall)
             {
@@ -294,15 +294,17 @@
                 </div>
                 <div class="row mb-2">
                     <p><b>Select Office for Pickup</b></p>
-                    <div class="col mt-2">
+                    <p>@PickUpLocation</p>
+
+                    @* <div class="col mt-2">
                         <TelerikTextBox Placeholder="@PickUpLocation" Enabled="false"></TelerikTextBox>
-                    </div>
+                    </div> *@
                 </div>
 
             </div>
         </div>
     </TabStripTab>
-    <TabStripTab Title="Claim">
+    <TabStripTab Title="Claim" Disabled="@(CurrentStepIndex <= 2)">
         <div class="row">
             @if (!XSmall)
             {
@@ -326,9 +328,6 @@
                     <h5>Receiving Details</h5>
                 </div>
                 <div class="d-flex mb-3">
-                    @* <div>
-                        <button class="toggle-button">-</button>
-                    </div> *@
                     <div>
                         <p>Control No. @SelectedRecordRequest.ControlNumber</p>
                     </div>
