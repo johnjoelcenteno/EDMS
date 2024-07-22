@@ -78,6 +78,7 @@ public class PersonalRecordsManagementBase : RecordTypesFormComponentBase
                         Section = item.Section,
                         Category = item.Category, //temporary until CreatedBy is created
                         Office = item.Office,
+                        Code = item.Code,
                         IsActive = !item.IsActive,
                         Created = item.Created.DateTime,
                         CreatedBy = item.CreatedBy,
@@ -112,6 +113,7 @@ public class PersonalRecordsManagementBase : RecordTypesFormComponentBase
                         NewConfig.Category = SelectedItem.Category;
                         NewConfig.Section = SelectedItem.Section;
                         NewConfig.Office = SelectedItem.Office;
+                        NewConfig.Code = SelectedItem.Code;
                     }
 
                     DialogReference.Refresh();
@@ -182,31 +184,21 @@ public class PersonalRecordsManagementBase : RecordTypesFormComponentBase
         else
         {
 
-
-            if (string.IsNullOrEmpty(model.Section) || string.IsNullOrEmpty(model.Office))
+            IsOpen = false;
+            var data = new CreateRecordTypeModel
             {
-                IsSectionEmpty = string.IsNullOrEmpty(model.Section);
-                IsOfficeEmpty = string.IsNullOrEmpty(model.Office);
-            }
-            else
+                IsActive = true,
+                Category = "Personal Records",
+                Code = model.Code,
+                Name = model.Name,
+                Section = model.Section,
+                Office = model.Office
+            };
+            await ExceptionHandlerService.HandleApiException(async () =>
             {
-                IsOpen = false;
-                var data = new CreateRecordTypeModel
-                {
-                    IsActive = true,
-                    Category = "Personal Records",
-                    Name = model.Name,
-                    Section = model.Section,
-                    Office = model.Office
-                };
-                await ExceptionHandlerService.HandleApiException(async () =>
-                {
 
-                    var res = await RecordTypesService.CreateRecordTypesAsync(data);
-                }, null, $"{data.Name} Successfully Saved!");
-            }
-
-
+                var res = await RecordTypesService.CreateRecordTypesAsync(data);
+            }, null, $"{data.Name} Successfully Saved!");
 
         }
 
@@ -226,32 +218,26 @@ public class PersonalRecordsManagementBase : RecordTypesFormComponentBase
         }
 
 
-        if (string.IsNullOrEmpty(item.Section) || string.IsNullOrEmpty(item.Office))
-        {
-            IsSectionEmpty = string.IsNullOrEmpty(item.Section);
-            IsOfficeEmpty = string.IsNullOrEmpty(item.Office);
 
-        }
-        else
+        var data = new UpdateRecordTypeModel
         {
-            var data = new UpdateRecordTypeModel
+            IsActive = true,
+            Category = "Personal Records",
+            Name = item.Name,
+            Code = item.Code,
+            Section = item.Section,
+            Office = item.Office
+        };
+        await ExceptionHandlerService.HandleApiException(async () =>
+        {
+            var res = await RecordTypesService.UpdateRecordTypesAsync(item.Id, data);
+            if (res != null)
             {
-                IsActive = true,
-                Category = "Personal Records",
-                Name = item.Name,
-                Section = item.Section,
-                Office = item.Office
-            };
-            await ExceptionHandlerService.HandleApiException(async () =>
-            {
-                var res = await RecordTypesService.UpdateRecordTypesAsync(item.Id, data);
-                if (res != null)
-                {
-                    IsOpen = false;
-                }
+                IsOpen = false;
+            }
 
-            }, null, $"{data.Name} Successfully Updated!");
-        }
+        }, null, $"{data.Name} Successfully Updated!");
+
 
         await LoadLibraryData();
         IsLoading = false;

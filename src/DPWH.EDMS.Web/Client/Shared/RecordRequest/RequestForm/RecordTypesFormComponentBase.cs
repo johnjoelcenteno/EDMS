@@ -28,6 +28,7 @@ public class RecordTypesFormComponentBase : RxBaseComponent
     [Parameter] public EventCallback HandleOnCancel {  get; set; }
     [Parameter] public string Type {  get; set; }
     [Parameter] public RecordsLibraryModel EditItem { get; set; }
+    [Parameter] public string DataType { get; set; } = String.Empty;
 
     #endregion
 
@@ -76,13 +77,18 @@ public class RecordTypesFormComponentBase : RxBaseComponent
 
     protected async Task LoadCurrentValues()
     {
-        if(EditItem.Name != null)
+        if(EditItem.Name != null && Type == "Edit")
         {
             NewConfig.Name = EditItem.Name;
             NewConfig.Id = EditItem.Id;
-            NewConfig.Category = EditItem.Category;
+            NewConfig.Category = DataType;
             NewConfig.Section = EditItem.Section;
             NewConfig.Office = EditItem.Office;
+            NewConfig.Code = EditItem.Code;
+        }
+        else
+        {
+            NewConfig.Category = DataType;
         }
         
     

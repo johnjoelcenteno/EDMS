@@ -9,8 +9,7 @@ public class RecordTypesRequestFormBase : RecordTypesFormComponentBase
     {
         await LoadSection();
         await LoadOffice();
-        if(Type == "Edit")
-            await LoadCurrentValues();
+        await LoadCurrentValues();
         DialogReference.Refresh();
         StateHasChanged();
     }
