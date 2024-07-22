@@ -8,7 +8,7 @@ variables:
   # Configure OpenIdc
   oidc.Authority: 'https://app-idp-ngobia-dpwh-dev.azurewebsites.net'
   oidc.PostLogoutRedirectUri: 'https://dpwh-edms-dev.movementsoft.com'
-  oidc.RedirectUri: 'https://dpwh-edms-dev.movementsoft.com/authentication/login-callback'
+  oidc.RedirectUri: 'https://dpwh-edms-dev.movementsoft.com/signin-oidc'
   
   # Azure Resource Group Name and ASE details
   ResourceGroupName: 'rg-edms-dpwh-dev'
