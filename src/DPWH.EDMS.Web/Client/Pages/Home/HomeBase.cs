@@ -17,7 +17,7 @@ using Telerik.Blazor.Components.Grid;
 
 namespace DPWH.EDMS.Web.Client.Pages.Home;
 
-public class HomeBase : GridBase<EmployeeModel>
+public class HomeBase : GridBase<RecordRequestModel>
 {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateAsync { get; set; }
     [Inject] public required NavigationManager NavigationManager { get; set; }
@@ -43,9 +43,12 @@ public class HomeBase : GridBase<EmployeeModel>
     public TelerikChart RequstChartRef { get; set; }
     public TelerikChart MonthlyAveTimeRef { get; set; }
     public TelerikChart Top10ChartRef { get; set; }
-
-    protected string SelectedStatus = string.Empty;
+     
     protected DateTime? SelectedDate { get; set; }
+    protected int? SearchControlNumber { get; set; }
+    protected string? SearchFullName { get; set; }
+    protected string? SearchPurpose { get; set; }
+    protected string? SearchStatus { get; set; }
     protected int ValueAxisMax { get; set; } = 30;
 
     protected List<string> StatusList = new List<string>
@@ -85,34 +88,38 @@ public class HomeBase : GridBase<EmployeeModel>
 
         IsLoading = false;
     }
-    protected void SetDateFilter(CompositeFilterDescriptor filterDescriptor)
+    protected async void SetFilterGrid()
     {
-        filterDescriptor.FilterDescriptors.Clear();
-        if (SelectedDate.HasValue)
-        {
-            var selectedDatePickerFrom = new FilterDescriptor(nameof(EmployeeModel.DateRequested), FilterOperator.IsGreaterThan, SelectedDate);
-            var selectedDatePickerTo = new FilterDescriptor(nameof(EmployeeModel.DateRequested), FilterOperator.IsLessThan, SelectedDate.Value.AddDays(1));
+        var filters = new List<Api.Contracts.Filter>();
 
+        AddDateFilter(filters);
+        AddTextSearchFilterIfNotNull(filters, nameof(RecordRequestModel.ControlNumber), SearchControlNumber?.ToString(), "eq");
+        AddTextSearchFilterIfNotNull(filters, nameof(RecordRequestModel.FullName), SearchFullName, "contains");
+        AddTextSearchFilterIfNotNull(filters, nameof(RecordRequestModel.Status), SearchStatus, "contains");
+        AddTextSearchFilterIfNotNull(filters, nameof(RecordRequestModel.Purpose), SearchPurpose, "contains");
 
-            filterDescriptor.FilterDescriptors.Add(selectedDatePickerFrom);
-            filterDescriptor.FilterDescriptors.Add(selectedDatePickerTo);
-        }
+        SearchFilterRequest.Logic = DataSourceHelper.AND_LOGIC;
+        SearchFilterRequest.Filters = filters.Any() ? filters : null;
 
+        await LoadData();
         StateHasChanged();
     }
-    protected void SetStatusFilter(CompositeFilterDescriptor filterDescriptor)
+
+    private void AddDateFilter(List<Api.Contracts.Filter> filters)
     {
-        filterDescriptor.FilterDescriptors.Clear();
-
-        if (!string.IsNullOrEmpty(SelectedStatus))
+        if (SelectedDate.HasValue)
         {
-            var selectedDatePickerFrom = new FilterDescriptor(nameof(EmployeeModel.Status), FilterOperator.IsEqualTo, SelectedStatus);
-
-            filterDescriptor.FilterDescriptors.Add(selectedDatePickerFrom);
-
+            AddTextSearchFilter(filters, nameof(RecordRequestModel.DateRequested), SelectedDate.Value.ToString(), "gte");
+            AddTextSearchFilter(filters, nameof(RecordRequestModel.DateRequested), SelectedDate.Value.AddDays(1).ToString(), "lte");
         }
+    }
 
-        StateHasChanged();
+    private void AddTextSearchFilterIfNotNull(List<Api.Contracts.Filter> filters, string fieldName, string? value, string operation)
+    {
+        if (!string.IsNullOrEmpty(value))
+        {
+            AddTextSearchFilter(filters, fieldName, value, operation);
+        }
     }
     private async Task HandleEndUserAccess()
     {
@@ -164,14 +171,8 @@ public class HomeBase : GridBase<EmployeeModel>
     }
     private async Task GetRecordRequest()
     {
-        var res = await RequestManagementService.Query(DataSourceReq);
-
-        if (res.Data != null)
-        {
-            var getData = GenericHelper.GetListByDataSource<EmployeeModel>(res.Data);
-            EmployeeRecords = getData;
-        }
-
+        ServiceCb = RequestManagementService.Query;
+        await LoadData();
     }
 
     private async Task GetOverviewTotal()
