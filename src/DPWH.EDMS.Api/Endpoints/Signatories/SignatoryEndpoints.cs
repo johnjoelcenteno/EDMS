@@ -29,14 +29,14 @@ public static class SignatoryEndpoints
         builder.MapPost(ApiEndpoints.Signatories.Query, async (DataSourceRequest request, IMediator mediator) =>
         {
             var result = await mediator.Send(new QuerySignatoryRequest(request));
-            return result;
+            return Results.Ok(result);
         })
         .WithName("Query signatories")
         .WithTags(TagName)
         .WithDescription("Queries signatories")
         .WithApiVersionSet(ApiVersioning.VersionSet)
         .HasApiVersion(1.0)
-        .Produces<BaseApiResponse<DataSourceResult>>()
+        .Produces<DataSourceResult>()
         .Produces<ProblemDetails>(StatusCodes.Status400BadRequest)
         .Produces<ProblemDetails>(StatusCodes.Status500InternalServerError);
 
