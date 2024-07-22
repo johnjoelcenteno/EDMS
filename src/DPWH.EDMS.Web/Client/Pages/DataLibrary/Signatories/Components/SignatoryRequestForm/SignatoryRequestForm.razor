@@ -1,0 +1,57 @@
+﻿@using DPWH.EDMS.Web.Client.Pages.DataLibrary.Common.Enum
+@inherits SignatoryRequestFormBase
+
+<EdmsLoader Visible="@IsLoading" />
+
+<EditForm Model="NewConfig" OnSubmit="@HandleOnSubmitCallback">
+    <FluentValidationValidator @ref="FluentValidationValidator" DisableAssemblyScanning="@true"></FluentValidationValidator>
+    <div class="row g-3 mb-3">
+        <div class="col-md-12">
+            <label class="mb-2" for="Name">Name*</label>
+            <TelerikTextBox Size="@ThemeConstants.Button.Size.Large" Id="Name" @bind-Value="@NewConfig.Name" PlaceHolder="Name"></TelerikTextBox>
+            <ValidationMessage Class="text-danger" For="@(() => NewConfig.Name)" />
+        </div>
+        <div class="col-md-12">
+            <label class="mb-2" for="Name">Document Type*</label>
+            <TelerikTextBox Size="@ThemeConstants.Button.Size.Large" Id="DocumentType" @bind-Value="@NewConfig.DocumentType" PlaceHolder="Document Type"></TelerikTextBox>
+            <ValidationMessage Class="text-danger" For="@(() => NewConfig.DocumentType)" />
+        </div>
+        <div class="col-md-12">
+            <label class="mb-2" for="Name">Position*</label>
+            <TelerikTextBox Size="@ThemeConstants.Button.Size.Large" Id="Position" @bind-Value="@NewConfig.Position" PlaceHolder="Position"></TelerikTextBox>
+            <ValidationMessage Class="text-danger" For="@(() => NewConfig.Position)" />
+        </div>
+        <div class="col-md-12">
+            <label class="mb-2" for="Name">Office 1*</label>
+            <TelerikTextBox Size="@ThemeConstants.Button.Size.Large" Id="Office1" @bind-Value="@NewConfig.Office1" PlaceHolder="Office 1"></TelerikTextBox>
+            <ValidationMessage Class="text-danger" For="@(() => NewConfig.Office1)" />
+        </div>
+        <div class="col-md-12">
+            <label class="mb-2" for="Name">Office 2*</label>
+            <TelerikTextBox Size="@ThemeConstants.Button.Size.Large" Id="Office2" @bind-Value="@NewConfig.Office2" PlaceHolder="Office 2"></TelerikTextBox>
+            <ValidationMessage Class="text-danger" For="@(() => NewConfig.Office2)" />
+        </div>
+        <div class="col-md-12">
+            <label class="mb-2" for="Name">Signatory Number*</label>
+            <TelerikNumericTextBox Size="@ThemeConstants.Button.Size.Large" Id="SignatoryNo" @bind-Value="@NewConfig.SignatoryNo" PlaceHolder="Signatory Number"></TelerikNumericTextBox>
+            <ValidationMessage Class="text-danger" For="@(() => NewConfig.SignatoryNo)" />
+        </div>
+        
+        <CardSeparator Class="my-2" />
+        <div class="k-actions k-actions-horizontal k-window-actions k-dialog-actions k-actions-stretched dialog">
+
+            <TelerikButton Class="telerik-blazor k-button k-button-solid k-rounded-md k-button-md k-button-solid-base" @onclick="HandleOnCancelCallBack">
+                <span class="k-button-text">Cancel</span>
+            </TelerikButton>
+            <TelerikButton Class="telerik-blazor k-button k-button-solid k-rounded-md k-button-md k-button-solid-primary">
+                <span class="k-button-text">Submit</span>
+            </TelerikButton>
+        </div>
+    </div>
+</EditForm>
+
+<style>
+    .k-window-actions {
+        border-width: 0 !important;
+    }
+</style>
