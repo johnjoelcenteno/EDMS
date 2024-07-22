@@ -1,0 +1,33 @@
+﻿@page "/records-management/{UserId}"
+@using DPWH.EDMS.Components.Helpers
+@using DPWH.EDMS.Web.Client.Pages.RecordsManagement.Employee.PersonalDetails
+@using DPWH.EDMS.Web.Client.Pages.RecordsManagement.Employee.Records
+@using DPWH.EDMS.Web.Client.Pages.RecordsManagement.Employee.RequestHistory
+
+@inherits EmployeeBase
+
+@attribute [Authorize(Policy = "RequireActiveRoles")]
+
+<EdmsLoader Visible="@IsLoading" />
+<TelerikMediaQuery Media="(max-width: 480px)" OnChange="((changed) => XSmall = changed)"></TelerikMediaQuery>
+
+<EdmsBreadcrumbs Data="@BreadcrumbItems" />
+<h3>Records</h3>
+<div class="d-flex flex-row align-items-center mb-2">
+    <p class="fs-5">Name: @SelectedEmployee.FirstName @SelectedEmployee.LastName </p>
+    @* <span class="role-chip">@Record.Role</span> *@
+</div>
+<p>Email: @SelectedEmployee.Email &nbsp;&nbsp; / &nbsp;&nbsp; Contact: @GenericHelper.GetDisplayValue(SelectedEmployee.MobileNumber)</p>
+<hr />
+
+<TelerikTabStrip>
+    <TabStripTab Title="Personal Details">
+        <PersonalDetails SelectedEmployee="@SelectedEmployee" />
+    </TabStripTab>
+    <TabStripTab Title="Request History">       
+        <RequestHistory SelectedEmployee="SelectedEmployee" />
+    </TabStripTab>
+    <TabStripTab Title="Records">        
+        <Records />
+    </TabStripTab>
+</TelerikTabStrip>
