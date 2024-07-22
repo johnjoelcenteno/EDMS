@@ -10,5 +10,6 @@ public class RecordsLibraryModel
     public bool IsActive { get; set; }
     public DateTime Created {  get; set; }
     public string CreatedBy {  get; set; }
+    public string? Code { get; set; }
 }
 

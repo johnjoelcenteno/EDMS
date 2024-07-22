@@ -2,6 +2,7 @@
 
 @using DPWH.EDMS.Client.Shared.Models
 @using DPWH.EDMS.Components.Helpers
+@using DPWH.EDMS.Web.Client.Pages.DataLibrary.Common.Enum
 @using DPWH.EDMS.Web.Client.Pages.DataLibrary.RecordTypes.Common.Components.RequestForm
 @using DPWH.EDMS.Web.Client.Pages.DataLibrary.RecordTypes.Common.Model
 @attribute [Authorize(Policy = "RequireActiveRoles")]
@@ -41,7 +42,8 @@
                             </GridToolBarTemplate>
                             <GridColumns>
                                 <GridColumn Field=@nameof(RecordsLibraryModel.Name) Title="Value" />
-                                <GridColumn Field=@nameof(RecordsLibraryModel.Category) Title="Category" />
+                                <GridColumn Field=@nameof(RecordsLibraryModel.Code) Title="Code" />
+                               @*  <GridColumn Field=@nameof(RecordsLibraryModel.Category) Title="Category" />
                                 <GridColumn Field=@nameof(RecordsLibraryModel.Section) Title="Section">
                                     <FilterCellTemplate>
                                         <TelerikDropDownList Data="@SectionList"
@@ -129,7 +131,7 @@
                                                                })">
                                         </TelerikButton>
                                     </FilterCellTemplate>
-                                </GridColumn>
+                                </GridColumn> *@
                                 <GridColumn Field=@nameof(RecordsLibraryModel.CreatedBy) Title="Created By" />
                                 <GridColumn Field=@nameof(RecordsLibraryModel.Created) Title="Created" Filterable="true">
                                     <Template>
@@ -202,10 +204,10 @@
                 @switch (GetOpenbtn)
                 {
                     case "Add":
-                        <RecordTypesRequestForm HandleOnCancel="OnCancel" HandleCreateOnSubmit="OnSave" Type="Add" EditItem="@NewConfig" />
+                        <RecordTypesRequestForm HandleOnCancel="OnCancel" HandleCreateOnSubmit="OnSave" Type="Add" EditItem="@NewConfig" DataType="@DataLibraryEnum.PersonalRecords.GetDescription()"/>
                         break;
                     case "Edit":
-                        <RecordTypesRequestForm HandleOnCancel="OnCancel" HandleCreateOnSubmit="OnUpdateItem" Type="Edit" EditItem="@NewConfig" />
+                        <RecordTypesRequestForm HandleOnCancel="OnCancel" HandleCreateOnSubmit="OnUpdateItem" Type="Edit" EditItem="@NewConfig" DataType="@DataLibraryEnum.PersonalRecords.GetDescription()" />
 
                         break;
                     default:
