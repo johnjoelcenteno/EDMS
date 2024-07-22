@@ -28,7 +28,7 @@ public class MenuDataService : IMenuDataService
                 Children = default,
                 Level = 0,
                 SortOrder = 1,
-                AuthorizedRoles = new List<string>{ ApplicationRoles.SuperAdmin, ApplicationRoles.SystemAdmin, ApplicationRoles.Manager}
+                AuthorizedRoles = new List<string>{ ApplicationRoles.SuperAdmin, ApplicationRoles.SystemAdmin, ApplicationRoles.Manager, ApplicationRoles.Staff}
             },
             new ()
             {
@@ -83,7 +83,7 @@ public class MenuDataService : IMenuDataService
                 Children = default,
                 Level = 0,
                 SortOrder = 2,
-                AuthorizedRoles = new List<string>{ ApplicationRoles.SuperAdmin, ApplicationRoles.SystemAdmin, ApplicationRoles.EndUser, ApplicationRoles.Manager}
+                AuthorizedRoles = new List<string>{ ApplicationRoles.SuperAdmin, ApplicationRoles.SystemAdmin, ApplicationRoles.EndUser, ApplicationRoles.Manager, ApplicationRoles.Staff}
             },
             new ()
             {
