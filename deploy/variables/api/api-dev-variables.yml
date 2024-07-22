@@ -1,17 +1,6 @@
 ﻿# DEVELOPMENT ENVIRONMENT PUBLIC API pipeline variables
 
-variables:
-
-  # This is the Azure Service Connection which is used to deploy the ARM template(s).
-  # You will need to have one created specific to your project and the DEV environment.
-  AzureSubscription: 'SC-NGOBIA'
-
-  # This is the AAD object ID of the Azure Service Connection (NGOBIA DevOps) which is used to deploy the ARM template(s).
-  # You will need to have one created specific to your project and the DEV environment.
-  AzureDevOpsServiceConnectionObjectId: 'db09627f-10b3-4ddf-ae99-f2cacec14737'
-
-  # This is our Azure Development subscription ID. MovementSoft Subscription
-  AzureSubscriptionId: 'c98075bb-7436-4c42-b5aa-f0513533bda4'
+variables:  
 
   # Configurations from AppSettings
   SqlServerName: 'sql-edms-dpwh-dev'
