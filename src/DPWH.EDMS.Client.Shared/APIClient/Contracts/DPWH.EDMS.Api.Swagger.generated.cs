@@ -7790,7 +7790,7 @@ namespace DPWH.EDMS.Api.Contracts
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<DataSourceResultBaseApiResponse> Query_signatoriesAsync(DataSourceRequest body)
+        public virtual System.Threading.Tasks.Task<DataSourceResult> Query_signatoriesAsync(DataSourceRequest body)
         {
             return Query_signatoriesAsync(body, System.Threading.CancellationToken.None);
         }
@@ -7798,7 +7798,7 @@ namespace DPWH.EDMS.Api.Contracts
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<DataSourceResultBaseApiResponse> Query_signatoriesAsync(DataSourceRequest body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<DataSourceResult> Query_signatoriesAsync(DataSourceRequest body, System.Threading.CancellationToken cancellationToken)
         {
             if (body == null)
                 throw new System.ArgumentNullException("body");
@@ -7846,7 +7846,7 @@ namespace DPWH.EDMS.Api.Contracts
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<DataSourceResultBaseApiResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<DataSourceResult>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
