@@ -7,6 +7,7 @@ using DPWH.EDMS.Application;
 using DPWH.EDMS.Application.Features.RecordRequests.Queries;
 using DPWH.EDMS.Application.Features.DataLibrary.Queries.GetDataLibraryById;
 using DPWH.EDMS.Application.Features.RecordRequests.Commands.SaveRequestedRecordFile;
+using DPWH.EDMS.Application.Features.RecordRequests.Commands.SaveTransmittalReceipt;
 
 namespace DPWH.EDMS.Api.Endpoints.RecordRequests;
 
@@ -104,6 +105,42 @@ public static class RecordRequestSupportingFilesEndpoint
             .WithName("UploadRequestedRecordFile")
             .WithTags(TagName)
             .WithDescription("Upload requested record file.")
+            .DisableAntiforgery()
+            .Produces<CreateResponse>(StatusCodes.Status200OK)
+            .Produces<ValidationFailureResponse>(StatusCodes.Status400BadRequest);
+
+        app.MapPost(ApiEndpoints.RecordRequest.Documents.UploadTransmittalReceipt, async (
+        [AsParameters] UploadTransmittalReceipt model,
+        IMediator mediator,
+        IBlobService blobService,
+        CancellationToken token,
+        ILogger<Program> logger) =>
+            {
+                var request = new
+                {
+                    Id = Guid.NewGuid(),
+                    File = model.Document,
+                    Filename = model.Document?.FileName
+                };
+
+                var metadata = new Dictionary<string, string>();
+
+                byte[] data;
+                using (var memoryStream = new MemoryStream())
+                {
+                    await model.Document.CopyToAsync(memoryStream);
+                    data = memoryStream.ToArray();
+                }
+
+                var uri = await blobService.Put(WellKnownContainers.TransmittalReceipt, request.Id.ToString(), data, request.File.ContentType, metadata);
+                var command = new SaveTransmittalReceiptFileCommand(model.RecordRequestId, request.Filename, model.Document.Length, uri, model.DateReceived, model.TimeReceived);
+                var response = await mediator.Send(command, token);
+
+                return TypedResults.Ok(response);
+            })
+            .WithName("UploadTransmittalReceiptFile")
+            .WithTags(TagName)
+            .WithDescription("Upload transmittal receipt file.")
             .DisableAntiforgery()
             .Produces<CreateResponse>(StatusCodes.Status200OK)
             .Produces<ValidationFailureResponse>(StatusCodes.Status400BadRequest);

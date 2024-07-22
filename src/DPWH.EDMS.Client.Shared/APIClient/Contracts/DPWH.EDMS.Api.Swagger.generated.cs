@@ -4528,6 +4528,126 @@ namespace DPWH.EDMS.Api.Contracts
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
+        public virtual System.Threading.Tasks.Task<CreateResponse> UploadTransmittalReceiptFileAsync(System.DateTimeOffset dateReceived, System.DateTimeOffset timeReceived, FileParameter document, System.Guid? recordRequestId)
+        {
+            return UploadTransmittalReceiptFileAsync(dateReceived, timeReceived, document, recordRequestId, System.Threading.CancellationToken.None);
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<CreateResponse> UploadTransmittalReceiptFileAsync(System.DateTimeOffset dateReceived, System.DateTimeOffset timeReceived, FileParameter document, System.Guid? recordRequestId, System.Threading.CancellationToken cancellationToken)
+        {
+            if (dateReceived == null)
+                throw new System.ArgumentNullException("dateReceived");
+
+            if (timeReceived == null)
+                throw new System.ArgumentNullException("timeReceived");
+
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    var boundary_ = System.Guid.NewGuid().ToString();
+                    var content_ = new System.Net.Http.MultipartFormDataContent(boundary_);
+                    content_.Headers.Remove("Content-Type");
+                    content_.Headers.TryAddWithoutValidation("Content-Type", "multipart/form-data; boundary=" + boundary_);
+
+                    if (document == null)
+                        throw new System.ArgumentNullException("document");
+                    else
+                    {
+                        var content_document_ = new System.Net.Http.StreamContent(document.Data);
+                        if (!string.IsNullOrEmpty(document.ContentType))
+                            content_document_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse(document.ContentType);
+                        content_.Add(content_document_, "Document", document.FileName ?? "Document");
+                    }
+
+                    if (recordRequestId == null)
+                        throw new System.ArgumentNullException("recordRequestId");
+                    else
+                    {
+                        content_.Add(new System.Net.Http.StringContent(ConvertToString(recordRequestId, System.Globalization.CultureInfo.InvariantCulture)), "RecordRequestId");
+                    }
+                    request_.Content = content_;
+                    request_.Method = new System.Net.Http.HttpMethod("POST");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+                
+                    // Operation Path: "api/recordrequests/transmittalreceipt"
+                    urlBuilder_.Append("api/recordrequests/transmittalreceipt");
+                    urlBuilder_.Append('?');
+                    urlBuilder_.Append(System.Uri.EscapeDataString("DateReceived")).Append('=').Append(System.Uri.EscapeDataString(dateReceived.ToString("s", System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    urlBuilder_.Append(System.Uri.EscapeDataString("TimeReceived")).Append('=').Append(System.Uri.EscapeDataString(timeReceived.ToString("s", System.Globalization.CultureInfo.InvariantCulture))).Append('&');
+                    urlBuilder_.Length--;
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<CreateResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        if (status_ == 400)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ValidationFailureResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new ApiException<ValidationFailureResponse>("Bad Request", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<RecordRequestDocumentModelBaseApiResponse> GetSupportingFileByIdAsync(System.Guid id)
         {
             return GetSupportingFileByIdAsync(id, System.Threading.CancellationToken.None);

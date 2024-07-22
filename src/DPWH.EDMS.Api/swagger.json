@@ -1496,6 +1496,86 @@
         }
       }
     },
+    "/api/recordrequests/transmittalreceipt": {
+      "post": {
+        "tags": [
+          "RecordRequestSupportingFiles"
+        ],
+        "operationId": "UploadTransmittalReceiptFile",
+        "parameters": [
+          {
+            "name": "DateReceived",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "TimeReceived",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "required": [
+                  "RecordRequestId"
+                ],
+                "type": "object",
+                "properties": {
+                  "Document": {
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "RecordRequestId": {
+                    "type": "string",
+                    "format": "uuid"
+                  }
+                }
+              },
+              "encoding": {
+                "Document": {
+                  "style": "form"
+                },
+                "RecordRequestId": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationFailureResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/recordrequests/supportingfiles/{id}": {
       "get": {
         "tags": [

@@ -17,6 +17,8 @@ public class AppDataContext : DbContext, IReadRepository, IWriteRepository
     public IQueryable<RecordRequestDocument> RecordRequestDocumentsView => RecordRequestDocuments.AsNoTracking();
     public DbSet<RequestedRecord> RequestedRecords { get; set; }
     public IQueryable<RequestedRecord> RequestedRecordsView => RequestedRecords.AsNoTracking();
+    public DbSet<RequestedRecordReceipt> RequestedRecordReceipts { get; set; }
+    public IQueryable<RequestedRecordReceipt> RequestedRecordReceiptsView => RequestedRecordReceipts.AsNoTracking();
     public DbSet<Record> Records { get; set; }
     public IQueryable<Record> RecordsView => Records.AsNoTracking();
 
