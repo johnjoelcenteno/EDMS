@@ -5,6 +5,7 @@ using DPWH.EDMS.Client.Shared.APIClient.Services.RecordManagement;
 using DPWH.EDMS.Client.Shared.APIClient.Services.RecordRequestSupportingFiles;
 using DPWH.EDMS.Client.Shared.APIClient.Services.RecordTypes;
 using DPWH.EDMS.Client.Shared.APIClient.Services.RequestManagement;
+using DPWH.EDMS.Client.Shared.APIClient.Services.Signatories;
 using DPWH.NGOBIA.Client.Shared.APIClient.Services.Users;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -22,7 +23,8 @@ public static class RestApiServiceProvider
         services.AddScoped<IRecordManagementService, RecordManagementService>();
         services.AddScoped<IRequestManagementService, RequestManagementService>();
         services.AddScoped<IRecordTypesService, RecordTypesService>();
-        
+        services.AddScoped<ISignatoryManagementService, SignatoryManagementService>();
+
         return services;
     }
 }

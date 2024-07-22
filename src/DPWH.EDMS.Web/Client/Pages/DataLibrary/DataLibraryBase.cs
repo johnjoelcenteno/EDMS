@@ -53,7 +53,14 @@ public class DataLibraryBase : RxBaseComponent
                 Name = "Employee Documents",
                 Url = "/data-library/employee-documents"
 
-            }
+            },
+            new DataLibraryModel
+            {
+                Icon = FontIcon.Gear,
+                Name = "Signatories",
+                Url = "/data-library/signatories"
+
+            },
         };
 
         BreadcrumbItems.Add(new BreadcrumbModel
