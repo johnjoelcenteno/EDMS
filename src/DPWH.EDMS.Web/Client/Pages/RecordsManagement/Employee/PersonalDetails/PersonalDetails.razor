@@ -1,0 +1,24 @@
+﻿@inherits PersonalDetailsBase
+@using DPWH.EDMS.Components.Helpers
+
+<div class="d-flex flex-column">
+    <div class="d-flex flex-row mb-2">
+        <p class="edms-text-header-small">Designation Details</p>
+    </div>
+    <div class="detail-flex">
+        <p><b>Regional/Central Office:</b>&nbsp; @GenericHelper.GetDisplayValue(SelectedEmployee.RegionalOfficeRegion)</p>
+        <p><b>Position:</b>&nbsp; @GenericHelper.GetDisplayValue(SelectedEmployee.Position)</p>
+    </div>
+    <div class="detail-flex">
+        <p><b>District/Bureau/Service:</b>&nbsp; @GenericHelper.GetDisplayValue(SelectedEmployee.Department)</p>
+        <p><b>Designation:</b>&nbsp; @GenericHelper.GetDisplayValue(SelectedEmployee.DesignationTitle)</p>
+    </div>
+    <hr />
+    <div class="d-flex flex-row mb-2">
+        <p class="edms-text-header-small">Account Information</p>
+    </div>
+    <div class="detail-flex">
+        <p><b>Account Status:</b>&nbsp; @GenericHelper.GetDisplayValue(SelectedEmployee.UserAccess)</p>
+        <p><b>Date Joined:</b>&nbsp; @GenericHelper.GetDateDisplay(SelectedEmployee.CreatedDate)</p>
+    </div>
+</div>

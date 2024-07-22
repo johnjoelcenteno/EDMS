@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Telerik.DataSource;
-
-namespace DPWH.EDMS.Client.Shared.MockModels;
+﻿namespace DPWH.EDMS.Client.Shared.MockModels;
 public class RecordModel
 {
     public string Id { get; set; }

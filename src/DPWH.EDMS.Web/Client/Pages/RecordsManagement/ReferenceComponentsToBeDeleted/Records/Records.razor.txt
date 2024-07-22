@@ -1,4 +1,4 @@
-﻿@page "/records-management/{Id}"
+﻿@* @page "/records-management/{Id}" *@
 @using DPWH.EDMS.Api.Contracts
 @using DPWH.EDMS.Components.Helpers
 
@@ -173,31 +173,3 @@
         </TelerikCard>
     </TabStripTab>
 </TelerikTabStrip>
-<style>
-    .commandButton {
-        font-weight: 500;
-        width: 100%;
-    }
-
-    .role-chip {
-        background-color: #38339b;
-        color: #fff;
-        font-size: 12px;
-        border-radius: 25px;
-        padding: 3px 16px;
-        margin: 0 10px;
-    }
-
-    .detail-flex {
-        display: flex;
-        flex: 100;
-        flex-wrap: wrap;
-    }
-
-        .detail-flex p {
-            display: flex;
-            flex-wrap: wrap;
-            flex: 50;
-            line-height: 35px;
-        }
-</style>
