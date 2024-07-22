@@ -1,5 +1,74 @@
-﻿<h3>Records</h3>
+﻿@using DPWH.EDMS.Api.Contracts
+@using DPWH.EDMS.Components.Helpers
+@inherits RecordsBase
 
-@code {
+<EdmsLoader Visible="IsLoading" />
 
+@if (GridData != null && !XSmall)
+{
+    <TelerikGrid TItem="RecordModel"
+                 @bind-PageSize="@PageSize"
+                 Height="@GridHeight"
+                 FilterMode="GridFilterMode.None"
+                 Sortable=true
+                 Data="GridData"
+                 OnStateChanged="@OnStateChanged"
+                 @ref="GridRef"
+                 Context="item"
+                 OnRowClick="GoToSelectedItemOverview">
+        <GridSettings>
+            <GridPagerSettings PageSizes="@PageSizes">
+            </GridPagerSettings>
+        </GridSettings>
+        <GridColumns>
+            <GridColumn Field=@nameof(RecordModel.RecordName) Title="Name" Filterable="false" />
+            <GridColumn Field=@nameof(RecordModel.RecordUri) Title="Uri" Filterable="false" />
+            <GridCommandColumn Title="Actions">
+                <GridCommandButton Class="commandButton" Command="ExportData">View</GridCommandButton>
+                <GridCommandButton Class="commandButton">Export</GridCommandButton>
+            </GridCommandColumn>
+        </GridColumns>
+    </TelerikGrid>
 }
+else if (GridData != null && XSmall)
+{
+    <TelerikGrid TItem="RecordModel"
+                 @bind-PageSize="@PageSize"
+                 Height="@GridHeight"
+                 FilterMode="GridFilterMode.None"
+                 Sortable=true
+                 Data="GridData"
+                 OnStateChanged="@OnStateChanged"
+                 @ref="GridRef"
+                 Context="item"
+                 OnRowClick="GoToSelectedItemOverview">
+        <GridSettings>
+            <GridPagerSettings PageSizes="@PageSizes">
+            </GridPagerSettings>
+        </GridSettings>
+        <DetailTemplate>
+            @{
+                var prop = item as RecordModel;
+                <div class="d-flex flex-column">
+                    <p><b>Record Name: </b>@item.RecordName</p>
+                    <p><b>Record Uri: </b>@item.RecordUri</p>
+                </div>
+            }
+        </DetailTemplate>
+        <GridColumns>
+            <GridColumn Field=@nameof(RecordModel.RecordName) Title="Full Name" />
+        </GridColumns>
+    </TelerikGrid>
+}
+else
+{
+    <span>No Data to display.</span>
+}
+<TelerikPager PageChanged="@PageChangedHandler"
+              Total="TotalItems"
+              ButtonCount="6"
+              PageSize="@PageSize"
+              PageSizeChanged="@PageSizeChangedHandler"
+              PageSizes="@(new List<int?> {5, 10, 20})"
+              Page="@Page">
+</TelerikPager>
