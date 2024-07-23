@@ -61,4 +61,5 @@ public class RecordRequest : EntityBase
     public string? FullName { get; set; }
     public virtual IList<RequestedRecord> RequestedRecords { get; set; }
     public virtual IList<RecordRequestDocument>? Files { get; set; }
+    public RequestedRecordReceipt RequestedRecordReceipt { get; set; }
 }

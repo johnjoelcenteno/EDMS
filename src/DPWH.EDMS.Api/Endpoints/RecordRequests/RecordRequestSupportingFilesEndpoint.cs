@@ -8,6 +8,8 @@ using DPWH.EDMS.Application.Features.RecordRequests.Queries;
 using DPWH.EDMS.Application.Features.DataLibrary.Queries.GetDataLibraryById;
 using DPWH.EDMS.Application.Features.RecordRequests.Commands.SaveRequestedRecordFile;
 using DPWH.EDMS.Application.Features.RecordRequests.Commands.SaveTransmittalReceipt;
+using Microsoft.AspNetCore.Mvc;
+using DPWH.EDMS.Application.Features.RecordRequests.Queries.GetTransmittalReceipt;
 
 namespace DPWH.EDMS.Api.Endpoints.RecordRequests;
 
@@ -18,6 +20,23 @@ public static class RecordRequestSupportingFilesEndpoint
     public static IEndpointRouteBuilder MapRecordRequestSupportingFiles(this IEndpointRouteBuilder app)
     {
         #region "GETs"        
+
+        app.MapGet(ApiEndpoints.RecordRequest.Documents.GetTransmittalReceipt, async ([FromRoute] Guid id, IMediator mediator, CancellationToken token) =>
+            {
+                var result = await mediator.Send(new GetTransmittalReceiptQuery(id), token);
+
+                var data = new BaseApiResponse<GetTransmittalReceiptModel>(result);
+
+                return result is null ? Results.NotFound() : Results.Ok(data);
+
+            })
+            .WithName("GetTransmittalReceipt")
+            .WithTags(TagName)
+            .WithDescription("Get transmittal receipt using the id.")
+            .WithApiVersionSet(ApiVersioning.VersionSet)
+            .HasApiVersion(1.0)
+            .Produces<BaseApiResponse<GetTransmittalReceiptModel>>()
+            .Produces(StatusCodes.Status404NotFound);
 
         #endregion
 
