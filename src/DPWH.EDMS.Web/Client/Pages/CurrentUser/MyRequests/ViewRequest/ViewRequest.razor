@@ -6,6 +6,7 @@
 @using DPWH.EDMS.Shared.Enums
 @using DPWH.EDMS.Web.Client.Shared.RecordRequest.View.RequestDetailsOverview
 
+<TelerikMediaQuery Media="(max-width: 480px)" OnChange="((changed) => XSmall = changed)"></TelerikMediaQuery>
 <EdmsBreadcrumbs Data="@BreadcrumbItems" />
 <EdmsLoader Visible="IsLoading" />
 
@@ -27,67 +28,136 @@
                 Overview
             </HeaderTemplate>
             <Content>
-                <div class="d-flex flex-column">
-                    <div class="d-flex flex-row justify-content-between mb-2">
+                <div class="row mb-3">
+                    <div class="col-12 mb-3">
                         <p class="edms-text-header-small">Request Details</p>
-                        <TelerikButton ButtonType="ButtonType.Submit" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary">
-                            Export
-                        </TelerikButton>
                     </div>
-                    <div class="detail-flex">
-                        <p><b>Control Number:</b>&nbsp; @SelectedRecordRequest.ControlNumber</p>
-                        <p><b>Employee No:</b>&nbsp; @SelectedRecordRequest.EmployeeNumber</p>
+                    <div class="col-6 mb-2">
+                        <p class="d-md-inline d-block"><b>Control Number:</b></p>
+                        <p class="d-md-inline d-block">@SelectedRecordRequest.ControlNumber</p>
+                    </div>
+                    <div class="col-6 mb-2">
+                        <p class="d-md-inline d-block"><b>Status:</b></p>
+                        <p class="d-md-inline d-block">@SelectedRecordRequest.Status</p>
+                    </div>
+                    <div class="col-6 mb-2">
+                        <p class="d-md-inline d-block"><b>Date Requested:</b></p>
+                        <p class="d-md-inline d-block">@GenericHelper.GetDateTimeDisplay(SelectedRecordRequest.DateRequested)</p>
+                    </div>
+                    <div class="col-6 mb-2">
+                        <p class="d-md-inline d-block"><b>Employee Number:</b></p>
+                        <p class="d-md-inline d-block">@SelectedRecordRequest.EmployeeNumber</p>
+                    </div>
+                    <div class="col-6 mb-2">
+                        <p class="d-md-inline d-block"><b>Employee Name:</b></p>
+                        <p class="d-md-inline d-block">@SelectedRecordRequest.FullName</p>
+                    </div>
+                    <div class="col-6 mb-2">
+                        <p class="d-md-inline d-block"><b>Employee Email:</b></p>
+                        <p class="d-md-inline d-block">@SelectedRecordRequest.Email</p>
+                    </div>
+                    <div class="col-6 mb-2">
+                        <p class="d-md-inline d-block"><b>Claimant:</b></p>
+                        <p class="d-md-inline d-block">@SelectedRecordRequest.ClaimantType</p>
+                    </div>
+                    <div class="col-6 mb-2">
+                        <p class="d-md-inline d-block"><b>Purpose:</b></p>
+                        <p class="d-md-inline d-block">@SelectedRecordRequest.Purpose</p>
+                    </div>
+                    <div class="col-6 mb-2">
+                        <p class="d-md-inline d-block"><b>Remarks:</b></p>
+                        <p class="d-md-inline d-block">@SelectedRecordRequest.Remarks</p>
+                    </div>
+                </div>
 
+                <hr />
+
+                <div class="row mb-3">
+                    <div class="col-12 mb-3">
+                        <p class="edms-text-header-small">Uploaded Supporting Documents</p>
                     </div>
-                    <div class="detail-flex">
-                        <p><b>Claimant Type:</b>&nbsp; @(SelectedRecordRequest.ClaimantType == ClaimantTypes.AuthorizedRepresentative.ToString() ? "Authorized Representative" : "Requestor")</p>
-                        @if (SelectedRecordRequest != null && SelectedRecordRequest.ClaimantType == ClaimantTypes.AuthorizedRepresentative.ToString())
-                        {
-                            <p><b>Representative Name: </b>&nbsp; @SelectedRecordRequest.AuthorizedRepresentative.RepresentativeName</p>
-                        }
-                    </div>
-                    <div class="detail-flex">
-                        @* <p><b>Active or Inactive Employee:</b>&nbsp; @(SelectedRecordRequest!.IsActiveEmployee ? "Yes" : "No") </p> *@
-                        <p><b>Date Requested:</b>&nbsp; @GenericHelper.GetDateTimeDisplay(SelectedRecordRequest.DateRequested)</p>
-                    </div>
-                    <div class="detail-flex">
-                        <p><b>Purpose:</b>&nbsp;@SelectedRecordRequest.Purpose</p>
-                    </div>
-                    <hr />
-                    <div class="d-flex flex-row mb-2">
-                        <p class="edms-text-header-small">Requested Documents</p>
-                    </div>
-                    <div class="detail-flex">
+                    <div class="col-12">
                         <ul>
-                            @if (SelectedRecordRequest.RequestedRecords != null && SelectedRecordRequest.RequestedRecords.Count > 0)
-                            {
-                                foreach (var record in SelectedRecordRequest.RequestedRecords)
-                                {
-                                    <li>@record.RecordType</li>
-                                }
-                            }
-                        </ul>
-                    </div>
-                    <hr />
-                    <div class="d-flex flex-row mb-2">
-                        <p class="edms-text-header-small">Uploaded Documents</p>
-                    </div>
-                    <div class="detail-flex">
-                        <ul>
-                            <li>
-                                <strong>Valid ID:</strong>
-                                <a href="@SelectedRecordRequest!.AuthorizedRepresentative.ValidIdUri" target="_blank">
+                            <li class="mb-2">
+                                <p class="d-md-inline d-block"><b>Valid ID:</b></p>
+                                <a class="d-md-inline d-block" href="@SelectedRecordRequest!.AuthorizedRepresentative.ValidIdUri" target="_blank">
                                     @GetValidIdTextDisplay()
                                 </a>
                             </li>
-                            <li>
-                                <strong>Authorized Document:</strong>
-                                <a href="@SelectedRecordRequest.AuthorizedRepresentative.AuthorizationDocumentUri" target="_blank">
+                            <li class="mb-2">
+                                <p class="d-md-inline d-block"><b>Authorization Document:</b></p>
+                                <a class="d-md-inline d-block" href="@SelectedRecordRequest.AuthorizedRepresentative.AuthorizationDocumentUri" target="_blank">
                                     @GetSupportingDocTextDisplay()
                                 </a>
                             </li>
                         </ul>
                     </div>
+                </div>
+
+                <hr />
+
+                <div class="row mb-3">
+                    <div class="col">
+                        <p class="edms-text-header-small">Requested Record(s)</p>
+                    </div>
+                    @if (SelectedRecordRequest.RequestedRecords.Any(record => !string.IsNullOrEmpty(record.Uri)))
+                    {
+                        <div class="col">
+                            <p class="edms-text-header-small">Record(s) for Release</p>
+                        </div>
+                    }
+                </div>
+                <div class="row">
+                    @if (SelectedRecordRequest.RequestedRecords != null && RMDRecords?.Count > 0)
+                    {
+                        <div class="col">
+                            <p><b>@Offices.RMD.ToString()</b></p>
+                            <ul>
+                                @foreach (var record in RMDRecords)
+                                {
+                                    <li>
+                                        <div class="row">
+                                            <div class="col d-flex align-items-center pe-0">
+                                                <p>@record.RecordType</p>
+                                            </div>
+                                            @if (!string.IsNullOrEmpty(record.Uri))
+                                            {
+                                                <div class=@(XSmall ? "col mb-1 ps-0 text-center" : "col mb-1 ps-0")>
+                                                    <NavLink class="telerik-blazor k-button k-button-solid k-rounded-md k-button-md k-button-solid-primary" target="_blank" href=@record.Uri>View</NavLink>
+                                                </div>
+                                            }
+                                        </div>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    }
+                </div>
+                <div class="row">
+                    @if (SelectedRecordRequest.RequestedRecords != null && HRMDRecords?.Count > 0)
+                    {
+                        <div class="col">
+                            <p><b>@Offices.HRMD.ToString()</b></p>
+                            <ul>
+                                @foreach (var record in HRMDRecords)
+                                {
+                                    <li>
+                                        <div class="row">
+                                            <div class="col d-flex align-items-center pe-0">
+                                                <p>@record.RecordType</p>
+                                            </div>
+                                            @if (!string.IsNullOrEmpty(record.Uri))
+                                            {
+                                                <div class=@(XSmall ? "col mb-1 ps-0 text-center" : "col mb-1 ps-0")>
+                                                    <NavLink class="telerik-blazor k-button k-button-solid k-rounded-md k-button-md k-button-solid-primary" target="_blank" href=@record.Uri>View</NavLink>
+                                                </div>
+                                            }
+                                        </div>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    }
                 </div>
             </Content>
         </TabStripTab>
