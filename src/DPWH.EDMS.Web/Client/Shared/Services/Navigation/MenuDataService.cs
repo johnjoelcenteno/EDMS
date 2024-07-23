@@ -67,8 +67,8 @@ public class MenuDataService : IMenuDataService
                     {
                         new MenuModel
                         {
-                            Text = MenuType.Users.GetDisplayName(),
-                            Url = "/users",
+                            Text = MenuType.ReportsUsers.GetDisplayName(),
+                            Url = "/reports/users",
                             Icon = "supervisor_account",
                             Children = default,
                             Level = 2,
@@ -76,12 +76,39 @@ public class MenuDataService : IMenuDataService
                         },
                         new MenuModel
                         {
-                            Text = MenuType.RecordsManagementReport.GetDisplayName(),
-                            Url = "/records-management",
+                            Text = MenuType.ReportsRecordsManagement.GetDisplayName(),
+                            Url = "/reports/records-management",
                             Icon = "supervisor_account",
                             Children = default,
                             Level = 2,
-                            SortOrder = 0,
+                            SortOrder = 1,
+                        },
+                        new MenuModel
+                        {
+                            Text = MenuType.ReportsRequestManagement.GetDisplayName(),
+                            Url = "/reports/request-management",
+                            Icon = "folder_open",
+                            Children = default,
+                            Level = 2,
+                            SortOrder = 2,
+                        },
+                        new MenuModel
+                        {
+                            Text = MenuType.ReportsUserManagement.GetDisplayName(),
+                            Url = "/reports/user-management",
+                            Icon = "manage_accounts",
+                            Children = default,
+                            Level = 2,
+                            SortOrder = 3,
+                        },
+                         new MenuModel
+                        {
+                            Text = MenuType.ReportsSystem.GetDisplayName(),
+                            Url = "/reports/system",
+                            Icon = "settings_applications",
+                            Children = default,
+                            Level = 2,
+                            SortOrder = 4,
                         }
                     },
                     Level = 1,
@@ -92,7 +119,54 @@ public class MenuDataService : IMenuDataService
                     Text = MenuType.AuditTrail.GetDisplayName(),
                     Url = "/audit-trail",
                     Icon = "query_stats",
-                    Children = default,
+                    Children = new List<MenuModel>
+                    {
+                        new MenuModel
+                        {
+                            Text = MenuType.AuditTrailUserActivity.GetDisplayName(),
+                            Url = "/audit-trail/user-activity",
+                            Icon = "settings_accessibility",
+                            Children = default,
+                            Level = 2,
+                            SortOrder = 0,
+                        },
+                        new MenuModel
+                        {
+                            Text = MenuType.AuditTrailRecordsManagement.GetDisplayName(),
+                            Url = "/audit-trail/records-management",
+                            Icon = "supervisor_account",
+                            Children = default,
+                            Level = 2,
+                            SortOrder = 1,
+                        },
+                        new MenuModel
+                        {
+                            Text = MenuType.AuditTrailRequestManagement.GetDisplayName(),
+                            Url = "/audit-trail/request-management",
+                            Icon = "folder_open",
+                            Children = default,
+                            Level = 2,
+                            SortOrder = 2,
+                        },
+                        new MenuModel
+                        {
+                            Text = MenuType.AuditTrailUserManagement.GetDisplayName(),
+                            Url = "/audit-trail/user-management",
+                            Icon = "manage_accounts",
+                            Children = default,
+                            Level = 2,
+                            SortOrder = 3,
+                        },
+                         new MenuModel
+                        {
+                            Text = MenuType.AuditTrailDataLibrary.GetDisplayName(),
+                            Url = "/audit-trail/data-library",
+                            Icon = "description",
+                            Children = default,
+                            Level = 2,
+                            SortOrder = 4,
+                        }
+                    },
                     Level = 1,
                     SortOrder = 1,
                 }

@@ -8,32 +8,74 @@ public enum MenuType
 {
     [Display(Name = "Home")]
     Home,
+
     [Display(Name = "Records Management")]
     RecordsManagement,
+
     [Display(Name = "Request Management")]
     RequestManagement,
+
     [Display(Name = "User Management")]
     UserManagement,
+
     [Display(Name = "Reports and Analytics")]
     ReportsAndAnalytics,
+
+    #region Reports
     [Display(Name = "Reports")]
     Reports,
+
     [Display(Name = "Users")]
-    Users,
-    [Display(Name = "Records Management Report")]
-    RecordsManagementReport,
+    ReportsUsers,
+
+    [Display(Name = "Records Management")]
+    ReportsRecordsManagement,
+
+    [Display(Name = "Request Management")]
+    ReportsRequestManagement,
+
+    [Display(Name = "User Management")]
+    ReportsUserManagement,
+
+    [Display(Name = "System")]
+    ReportsSystem,
+    #endregion
+
+    #region Audit Trail
     [Display(Name = "Audit Trail")]
     AuditTrail,
+
+    [Display(Name = "User Activity")]
+    AuditTrailUserActivity,    
+
+    [Display(Name = "Request Management")]
+    AuditTrailRequestManagement,
+
+    [Display(Name = "Records Management")]
+    AuditTrailRecordsManagement,
+
+    [Display(Name = "User Management")]
+    AuditTrailUserManagement,
+
+    [Display(Name = "Data Library")]
+    AuditTrailDataLibrary,
+    #endregion
+
     [Display(Name = "Data Library")]
     DataLibrary,
+
     [Display(Name = "My Records")]
     MyRecords,
+
     [Display(Name = "My Requests")]
     MyRequests,
+
     [Display(Name = "Profile")]
     Profile,
+
     [Display(Name = "Settings")]
     Settings,
+
     [Display(Name = "Support")]
     Support
 }
