@@ -90,9 +90,14 @@ internal sealed class CreateUserWithRoleHandler : IRequestHandler<CreateUserWith
 
                 await _userManager.UpdateAsync(user);
 
-                //update role
+                //update/add claims
+                var userClaims = new List<Claim>();
+
                 var roleClaim = new Claim("role", command.Role);
-                var addRoleClaimResult = await _userManager.AddClaimAsync(user, roleClaim);
+                var clientClaim = new Claim("client", "EDMS");
+                userClaims.Add(roleClaim);
+                userClaims.Add(clientClaim);
+                var addRoleClaimResult = await _userManager.AddClaimsAsync(user, userClaims);
                 if (!addRoleClaimResult.Succeeded) throw new AppException(addRoleClaimResult.Errors.First().Description);
 
             }
@@ -151,8 +156,10 @@ internal sealed class CreateUserWithRoleHandler : IRequestHandler<CreateUserWith
                 var userClaims = new List<Claim>();
                 var roleClaim = new Claim(JwtClaimTypes.Role, command.Role);
                 var nameClaim = new Claim(JwtClaimTypes.Name, command.FirstName + " " + command.LastName);
+                var clientClaim = new Claim("client", "EDMS");
                 userClaims.Add(roleClaim);
                 userClaims.Add(nameClaim);
+                userClaims.Add(clientClaim);
 
                 var addRoleClaimResult = await _userManager.AddClaimsAsync(newUser, userClaims);
 

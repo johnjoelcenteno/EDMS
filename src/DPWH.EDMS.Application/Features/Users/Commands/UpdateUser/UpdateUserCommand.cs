@@ -3,6 +3,7 @@ using DPWH.EDMS.Domain.Exceptions;
 using DPWH.EDMS.IDP.Core.Constants;
 using DPWH.EDMS.IDP.Core.Entities;
 using DPWH.EDMS.IDP.Core.Extensions;
+using IdentityModel;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
@@ -80,11 +81,22 @@ internal sealed class UpdateUserHandler : IRequestHandler<UpdateUserCommand, Upd
             var claims = await _userManager.GetClaimsAsync(user);
 
             //Removing Existing Role
-            var roleClaims = claims.Where(x => x.Type == "role");
+            var roleClaims = claims.Where(x => x.Type == JwtClaimTypes.Role);
             if (roleClaims.Any())
             {
                 await _userManager.RemoveClaimsAsync(user, roleClaims);
             }
+
+            //Removing Existing Role
+            var clientClaims = claims.Where(x => x.Type == "client");
+            if (clientClaims.Any())
+            {
+                await _userManager.RemoveClaimsAsync(user, clientClaims);
+            }
+
+            //Adding new : client
+            var addClientClaimResult = await _userManager.AddClaimAsync(user, new Claim("client", "EDMS"));
+
             //Adding new Role
             var addClaimResult = await _userManager.AddClaimAsync(user, new Claim("role", command.Role));
 
