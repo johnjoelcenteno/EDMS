@@ -11,33 +11,34 @@ using DPWH.EDMS.Api.Endpoints.Users;
 using DPWH.EDMS.Api.Endpoints.RecordsManagement;
 using DPWH.EDMS.Api.Endpoints.RecordRequests;
 using DPWH.EDMS.Api.Endpoints.DataSync;
+using DPWH.EDMS.Api.Endpoints.Reports;
 
 namespace DPWH.EDMS.Api.Endpoints;
 
 public static class EndpointsExtensions
 {
-        public static IEndpointRouteBuilder MapApiEndpoints(this IEndpointRouteBuilder app)
-        {
-                // new endpoints
-                app.MapRecordRequestsEndpoints();
-                // app.MapEmployeeRequestEndpointExtensions();
-                app.MapRecordTypeExtensions();
-                app.MapSignatoryEndpointExtensions();
-                
-                app.MapRecordsEndpoints();
-                app.MapRootEndpoints();
-                app.MapLookupsEndpoints();
-                app.MapAddressEndpoints();
-                app.MapLicensesEndpoints();
-                app.MapUsersEndpoints();
-                app.MapRoleEndpoints();
-                //app.MapReportsEndpoints();
-                app.MapAuditLogsEndpoints();
-                app.MapSystemLogsEndpoints();
-                app.MapDpwhIntegrationsEndpoints();                
-                app.MapDataLibrariesEndpoints();
-                app.MapDataSyncEndpoints();
+    public static IEndpointRouteBuilder MapApiEndpoints(this IEndpointRouteBuilder app)
+    {
+        // new endpoints
+        app.MapRecordRequestsEndpoints();
+        // app.MapEmployeeRequestEndpointExtensions();
+        app.MapRecordTypeExtensions();
+        app.MapSignatoryEndpointExtensions();
 
-                return app;
-        }
+        app.MapRecordsEndpoints();
+        app.MapRootEndpoints();
+        app.MapLookupsEndpoints();
+        app.MapAddressEndpoints();
+        app.MapLicensesEndpoints();
+        app.MapUsersEndpoints();
+        app.MapRoleEndpoints();
+        app.MapReportsEndpoints();
+        app.MapAuditLogsEndpoints();
+        app.MapSystemLogsEndpoints();
+        app.MapDpwhIntegrationsEndpoints();
+        app.MapDataLibrariesEndpoints();
+        app.MapDataSyncEndpoints();
+
+        return app;
+    }
 }
