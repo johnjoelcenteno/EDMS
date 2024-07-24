@@ -1,4 +1,5 @@
 ﻿using DPWH.EDMS.Client.Shared.APIClient.Services.DpwhIntegrations;
+using DPWH.EDMS.Client.Shared.APIClient.Services.Export;
 using DPWH.EDMS.Web.Client.Pages.Home.HomeService;
 using DPWH.EDMS.Web.Client.Shared.Services.Document;
 using DPWH.EDMS.Web.Client.Shared.Services.ExceptionHandler;
@@ -15,6 +16,7 @@ public static class SharedServiceProvider
         services.AddScoped<IDocumentService, DocumentService>();
         services.AddScoped<IDpwhIntegrationsService, DpwhIntegrationsService>();
         services.AddScoped<IExceptionPISHandlerService, ExceptionPISHandlerService>();
+        services.AddScoped<IExcelExportService, ExcelExportService>();
         services.AddScoped<OverviewFilterService>();
         services.AddScoped<NavRx>();
 
