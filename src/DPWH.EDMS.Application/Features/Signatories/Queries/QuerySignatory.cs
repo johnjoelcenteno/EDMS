@@ -18,7 +18,17 @@ public class QuerySignatory : IRequestHandler<QuerySignatoryRequest, DataSourceR
     {
         var result = _readRepository
                 .SignatoriesView
-                .Select(x => SignatoryMappers.Map(x))
+                .Select(x => new QuerySignatoryModel() // Fix for where "could not be translated error"
+                {
+                    Id = x.Id,
+                    DocumentType = x.DocumentType,
+                    Name = x.Name,
+                    Position = x.Position,
+                    Office1 = x.Office1,
+                    Office2 = x.Office2,
+                    SignatoryNo = x.SignatoryNo,
+                    IsActive = x.IsActive,
+                })
                 .ToDataSourceResult(request.DataSourceRequest.FixSerialization());
 
         return Task.FromResult(result);
