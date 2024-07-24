@@ -9,11 +9,13 @@ using System.ComponentModel;
 using Telerik.FontIcons;
 using Telerik.Blazor.Components;
 using DPWH.EDMS.Client.Shared.APIClient.Services.DpwhIntegrations;
+using DPWH.EDMS.Client.Shared.APIClient.Services.Export;
 using Telerik.Blazor.Components.Menu;
 using DPWH.EDMS.IDP.Core.Constants;
 using Microsoft.AspNetCore.Components.Web;
 using DPWH.EDMS.Components.Helpers;
 using System.Runtime.InteropServices;
+using DocumentFormat.OpenXml.Spreadsheet;
 
 namespace DPWH.EDMS.Web.Client.Pages.UserManagement;
 
@@ -24,6 +26,7 @@ public class UserManagementBase : GridBase<UserModel>
     [Inject] public required ILicensesService LicensesService { get; set; }
     [Inject] public required IExceptionHandlerService ExceptionHandlerService { get; set; }
     [Inject] public required IDpwhIntegrationsService DpwhIntegrationService { get; set; }
+    [Inject] public required IExcelExportService ExcelExportService { get; set; }
     [Parameter] public UserModel ViewItem { get; set; } = default!;
 
 
@@ -169,5 +172,26 @@ public class UserManagementBase : GridBase<UserModel>
         //    ToastService.ShowError(error);
         //}
 
+    }
+
+    protected async Task ConfirmToExcel()
+    {
+        
+        IsLoading = true;
+        try
+        {
+            var fileName = $"User Management Reports as of {DateTime.Now.ToString("MMM dd, yyyy")}.xlsx";
+            await ExceptionHandlerService.HandleApiException(async () => await ExcelExportService.ExportList(GridData, fileName), null);
+            //await ExcelExportService.ExportList(GridData, fileName);
+ 
+        }
+        catch (Exception ex) when (ex is ApiException<ProblemDetails> apiExtension)
+        {
+            var problemDetails = apiExtension.Result;
+            var error = problemDetails.AdditionalProperties.ContainsKey("error") ? problemDetails.AdditionalProperties["error"].ToString() : problemDetails.AdditionalProperties["errors"].ToString();
+            ToastService.ShowError(error);
+        }
+
+        IsLoading = false;
     }
 }
