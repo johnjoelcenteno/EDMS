@@ -7,6 +7,9 @@ using DPWH.EDMS.Application;
 using DPWH.EDMS.Application.Features.RecordRequests.Queries;
 using DPWH.EDMS.Application.Features.DataLibrary.Queries.GetDataLibraryById;
 using DPWH.EDMS.Application.Features.RecordRequests.Commands.SaveRequestedRecordFile;
+using DPWH.EDMS.Application.Features.RecordRequests.Commands.SaveTransmittalReceipt;
+using Microsoft.AspNetCore.Mvc;
+using DPWH.EDMS.Application.Features.RecordRequests.Queries.GetTransmittalReceipt;
 
 namespace DPWH.EDMS.Api.Endpoints.RecordRequests;
 
@@ -17,6 +20,23 @@ public static class RecordRequestSupportingFilesEndpoint
     public static IEndpointRouteBuilder MapRecordRequestSupportingFiles(this IEndpointRouteBuilder app)
     {
         #region "GETs"        
+
+        app.MapGet(ApiEndpoints.RecordRequest.Documents.GetTransmittalReceipt, async ([FromRoute] Guid id, IMediator mediator, CancellationToken token) =>
+            {
+                var result = await mediator.Send(new GetTransmittalReceiptQuery(id), token);
+
+                var data = new BaseApiResponse<GetTransmittalReceiptModel>(result);
+
+                return result is null ? Results.NotFound() : Results.Ok(data);
+
+            })
+            .WithName("GetTransmittalReceipt")
+            .WithTags(TagName)
+            .WithDescription("Get transmittal receipt using the id.")
+            .WithApiVersionSet(ApiVersioning.VersionSet)
+            .HasApiVersion(1.0)
+            .Produces<BaseApiResponse<GetTransmittalReceiptModel>>()
+            .Produces(StatusCodes.Status404NotFound);
 
         #endregion
 
@@ -104,6 +124,42 @@ public static class RecordRequestSupportingFilesEndpoint
             .WithName("UploadRequestedRecordFile")
             .WithTags(TagName)
             .WithDescription("Upload requested record file.")
+            .DisableAntiforgery()
+            .Produces<CreateResponse>(StatusCodes.Status200OK)
+            .Produces<ValidationFailureResponse>(StatusCodes.Status400BadRequest);
+
+        app.MapPost(ApiEndpoints.RecordRequest.Documents.UploadTransmittalReceipt, async (
+        [AsParameters] UploadTransmittalReceipt model,
+        IMediator mediator,
+        IBlobService blobService,
+        CancellationToken token,
+        ILogger<Program> logger) =>
+            {
+                var request = new
+                {
+                    Id = Guid.NewGuid(),
+                    File = model.Document,
+                    Filename = model.Document?.FileName
+                };
+
+                var metadata = new Dictionary<string, string>();
+
+                byte[] data;
+                using (var memoryStream = new MemoryStream())
+                {
+                    await model.Document.CopyToAsync(memoryStream);
+                    data = memoryStream.ToArray();
+                }
+
+                var uri = await blobService.Put(WellKnownContainers.TransmittalReceipt, request.Id.ToString(), data, request.File.ContentType, metadata);
+                var command = new SaveTransmittalReceiptFileCommand(model.RecordRequestId, request.Filename, model.Document.Length, uri, model.DateReceived, model.TimeReceived);
+                var response = await mediator.Send(command, token);
+
+                return TypedResults.Ok(response);
+            })
+            .WithName("UploadTransmittalReceiptFile")
+            .WithTags(TagName)
+            .WithDescription("Upload transmittal receipt file.")
             .DisableAntiforgery()
             .Produces<CreateResponse>(StatusCodes.Status200OK)
             .Produces<ValidationFailureResponse>(StatusCodes.Status400BadRequest);

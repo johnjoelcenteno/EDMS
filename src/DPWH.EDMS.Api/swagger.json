@@ -1369,6 +1369,40 @@
         }
       }
     },
+    "/api/recordrequests/transmittalreceipt/{id}": {
+      "get": {
+        "tags": [
+          "RecordRequestSupportingFiles"
+        ],
+        "operationId": "GetTransmittalReceipt",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetTransmittalReceiptModelBaseApiResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/recordrequests/supportingfiles": {
       "post": {
         "tags": [
@@ -1466,6 +1500,86 @@
                   "style": "form"
                 },
                 "Id": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationFailureResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/recordrequests/transmittalreceipt": {
+      "post": {
+        "tags": [
+          "RecordRequestSupportingFiles"
+        ],
+        "operationId": "UploadTransmittalReceiptFile",
+        "parameters": [
+          {
+            "name": "DateReceived",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "TimeReceived",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "required": [
+                  "RecordRequestId"
+                ],
+                "type": "object",
+                "properties": {
+                  "Document": {
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "RecordRequestId": {
+                    "type": "string",
+                    "format": "uuid"
+                  }
+                }
+              },
+              "encoding": {
+                "Document": {
+                  "style": "form"
+                },
+                "RecordRequestId": {
                   "style": "form"
                 }
               }
@@ -4983,6 +5097,42 @@
               "$ref": "#/components/schemas/GetTopRequestQueryModel"
             },
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetTransmittalReceiptModel": {
+        "type": "object",
+        "properties": {
+          "filename": {
+            "type": "string",
+            "nullable": true
+          },
+          "uri": {
+            "type": "string",
+            "nullable": true
+          },
+          "dateReceived": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "timeReceived": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetTransmittalReceiptModelBaseApiResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "$ref": "#/components/schemas/GetTransmittalReceiptModel"
           }
         },
         "additionalProperties": false
