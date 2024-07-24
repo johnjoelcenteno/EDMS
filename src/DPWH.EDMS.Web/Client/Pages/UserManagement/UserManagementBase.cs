@@ -9,7 +9,7 @@ using System.ComponentModel;
 using Telerik.FontIcons;
 using Telerik.Blazor.Components;
 using DPWH.EDMS.Client.Shared.APIClient.Services.DpwhIntegrations;
-using DPWH.EDMS.Client.Shared.APIClient.Services.Export;
+using DPWH.EDMS.Web.Client.Shared.Services.Export;
 using Telerik.Blazor.Components.Menu;
 using DPWH.EDMS.IDP.Core.Constants;
 using Microsoft.AspNetCore.Components.Web;
