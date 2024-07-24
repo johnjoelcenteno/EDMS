@@ -25,7 +25,7 @@ public class AppIdpDataContext : IdentityDbContext<ApplicationUser>, IReadAppIdp
     {
         builder.Entity<ViewUserAccess>()
             .HasNoKey()
-            .ToView("ViewUserAccess");
+            .ToView("ViewUserAccessEDMS");
 
         builder.Entity<UserBasicInfo>()
             .ToTable("AspNetUsers");
