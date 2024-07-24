@@ -1,7 +1,134 @@
 ﻿@page "/reports/system"
+@using DPWH.EDMS.Api.Contracts
+@using Microsoft.AspNetCore.Authorization;
 
-<h3>System</h3>
+@inherits SystemManagementBase
 
+
+<TelerikMediaQuery Media="(max-width: 480px)" OnChange="((changed) => XSmall = changed)"></TelerikMediaQuery>
+<TelerikBreadcrumb Data="@BreadcrumbItems" />
+
+<p class="header">System Report</p>
+<hr />
+<div class="container-fluid">
+
+    <TelerikMediaQuery Media="(max-width: 480px)" OnChange="((changed) => XSmall = changed)"></TelerikMediaQuery>
+
+    @if (!!IsLoading)
+    {
+        <TelerikLoaderContainer LoaderPosition="@LoaderPosition.End"></TelerikLoaderContainer>
+    }
+    <TelerikCard Width="100%">
+        <CardBody>
+            <CardTitle>System</CardTitle>
+            <CardSeparator Class="my-2"></CardSeparator>
+            <div class="mobile-property-grid">
+                @*@if (IsLoading)
+                {
+                <GridSkeleton />
+                }*@
+
+                @if (GridData != null && !XSmall)
+                {
+                    <TelerikGrid Class="grid-no-scroll"
+                                 TItem="SystemLogsModel"
+                                 @bind-PageSize="@PageSize"
+                                 Height="@GridHeight"
+                                 Sortable=true
+                                 Pageable=true
+                                 Data="GridData">
+                        <GridToolBarTemplate>
+
+                            <span class="k-toolbar-spacer"></span>
+
+                            <TelerikButton Icon="@FontIcon.FileExcel" ThemeColor="@(ThemeConstants.Button.ThemeColor.Success)" OnClick="@DownloadToExcel">Excel</TelerikButton>
+                            @*    <TelerikButton Icon="@FontIcon.FilePdf" ThemeColor="@(ThemeConstants.Button.ThemeColor.Primary)" OnClick="@DownloadToPdf">Pdf</TelerikButton> *@
+                        </GridToolBarTemplate>
+                        <GridSettings>
+                            <GridPagerSettings PageSizes="@PageSizes">
+                            </GridPagerSettings>
+                        </GridSettings>
+                        <GridColumns>
+                            <GridColumn Field=@nameof(SystemLogsModel.Version) Title="Section" />
+                            <GridColumn Field=@nameof(SystemLogsModel.Description) Title="Update Description" />
+
+                            <GridColumn Field=@nameof(SystemLogsModel.Created) Title="Date Created" DisplayFormat="{0:MMMM dd, yyyy}" />
+                        </GridColumns>
+                    </TelerikGrid>
+                }
+                else if (GridData != null && XSmall)
+                {
+                    <TelerikGrid Class="grid-no-scroll"
+                                 TItem="SystemLogsModel"
+                                 @bind-PageSize="@PageSize"
+                                 Height="@GridHeight"
+                                 FilterMode="@GridFilterMode.FilterRow"
+                                 Sortable=true
+                                 Pageable=true
+                                 Data="GridData">
+                        <GridSettings>
+                            <GridPagerSettings PageSizes="@PageSizes">
+                            </GridPagerSettings>
+                        </GridSettings>
+                        <DetailTemplate>
+                            @{
+                                var prop = context as SystemLogsModel;
+                                <div class="d-flex flex-column">
+                                    <p><b>Version :</b> @prop.Version </p>
+                                    <p><b>Description :</b> @prop.Description </p>
+                                    <p><b>Date Created:</b> @prop.Created.ToString("MMM dd, yyyy") </p>
+
+                                </div>
+                            }
+                        </DetailTemplate>
+                        <GridColumns>
+                            <GridColumn Field=@nameof(SystemLogsModel.Version) />
+                        </GridColumns>
+                    </TelerikGrid>
+                }
+                else
+                {
+                    <span>No Data to display.</span>
+                }
+            </div>
+        </CardBody>
+    </TelerikCard>
+</div>
+<TelerikDialog @bind-Visible="@Visible" Height="220px" Width="320px" Title="Download File">
+    <DialogContent>
+        <p style="text-align: center">Click <span style="color:#7f56d9;">Continue</span> to download Excel File.</p>
+    </DialogContent>
+    <DialogButtons>
+        <TelerikButton OnClick="@(() => { Visible = false; })">Cancel</TelerikButton>
+        <TelerikButton ThemeColor="@(ThemeConstants.Button.ThemeColor.Primary)" OnClick="@ConfirmToExcel">Continue</TelerikButton>
+    </DialogButtons>
+</TelerikDialog>
 @code {
 
 }
+<style>
+    p.header {
+        font-size: 20px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 12px; /* 60% */
+    }
+
+    .k-breadcrumb {
+        background-color: transparent;
+        margin-bottom: 16px;
+    }
+
+    .k-breadcrumb-current-item .k-breadcrumb-link, .k-breadcrumb-last-item .k-breadcrumb-link {
+        color: #7f56d9;
+    }
+
+    .card-div {
+        background-color: white;
+        padding-top: 16px;
+        padding-right: 16px;
+        padding-left: 16px;
+        border-radius: 6px;
+        margin-bottom: 20px;
+    }
+</style>

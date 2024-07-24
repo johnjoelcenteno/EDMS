@@ -3,6 +3,7 @@ using DPWH.EDMS.Web.Client.Pages.Home.HomeService;
 using DPWH.EDMS.Web.Client.Shared.Services.Document;
 using DPWH.EDMS.Web.Client.Shared.Services.ExceptionHandler;
 using DPWH.EDMS.Web.Client.Shared.Services.ExceptionHandlerPIS;
+using DPWH.EDMS.Web.Client.Shared.Services.Export;
 using DPWH.EDMS.Web.Client.Shared.Services.Navigation;
 
 namespace DPWH.EDMS.Web.Client.Shared.Core;
@@ -17,7 +18,7 @@ public static class SharedServiceProvider
         services.AddScoped<IExceptionPISHandlerService, ExceptionPISHandlerService>();
         services.AddScoped<OverviewFilterService>();
         services.AddScoped<NavRx>();
-
+        services.AddScoped<IExcelExportService,ExcelExportService>();
         return services;
     }
 }
