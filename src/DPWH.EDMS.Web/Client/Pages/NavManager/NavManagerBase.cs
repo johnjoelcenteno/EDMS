@@ -16,4 +16,9 @@ public class NavManagerBase : GridBase<MenuItemModel>
         StateHasChanged();
         IsLoading = false;
     }
+
+    protected void GoToCreateMenuItem()
+    {
+        NavManager.NavigateTo("/navmanager/create");
+    }
 }
