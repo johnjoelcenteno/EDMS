@@ -69,7 +69,7 @@
                     @if (SelectedTypes != null && SelectedTypes.Count > 0 || !string.IsNullOrEmpty(SelectedRegionalOffice) || !string.IsNullOrEmpty(SelectedDEO))
                     {
                         @* OnClick = "@(() => ShowReport(SelectedTypes))" *@
-                        <TelerikButton ThemeColor="@(ThemeConstants.Button.ThemeColor.Primary)" >Generate</TelerikButton>
+                        <TelerikButton ThemeColor="@(ThemeConstants.Button.ThemeColor.Primary)" OnClick="@(() => ShowReport(SelectedTypes))">Generate</TelerikButton>
 
                     }
                     else
@@ -108,7 +108,7 @@
 
                                 <span class="k-toolbar-spacer"></span>
                                 @* OnClick="@ConfirmToExcel" *@
-                                <TelerikButton Icon="@FontIcon.FileExcel" ThemeColor="@(ThemeConstants.Button.ThemeColor.Success)" >Excel</TelerikButton>
+                                <TelerikButton Icon="@FontIcon.FileExcel" ThemeColor="@(ThemeConstants.Button.ThemeColor.Success)" OnClick="@ConfirmToExcel">Excel</TelerikButton>
                                 @*    <TelerikButton Icon="@FontIcon.FilePdf" ThemeColor="@(ThemeConstants.Button.ThemeColor.Primary)" OnClick="@DownloadToPdf">Pdf</TelerikButton> *@
                             </GridToolBarTemplate>
                             <GridSettings>

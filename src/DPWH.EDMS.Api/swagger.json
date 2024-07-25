@@ -2207,6 +2207,69 @@
         }
       }
     },
+    "/api/reports/usersperrole": {
+      "post": {
+        "tags": [
+          "Reports"
+        ],
+        "operationId": "UsersPerRole",
+        "requestBody": {
+          "content": {
+            "application/json; api-version=1.0": {
+              "schema": {
+                "$ref": "#/components/schemas/DataSourceRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/DataSourceResult"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/reports/users": {
+      "post": {
+        "tags": [
+          "Reports"
+        ],
+        "operationId": "Users",
+        "requestBody": {
+          "content": {
+            "application/json; api-version=1.0": {
+              "schema": {
+                "$ref": "#/components/schemas/DataSourceRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/DataSourceResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/recordrequests/{id}": {
       "get": {
         "tags": [
