@@ -30,6 +30,15 @@ public static class ApiEndpoints
 
     }
 
+    public static class Navigation
+    {
+        private const string Base = $"{ApiBase}/Navigation";
+
+        public const string Create = $"{Base}/Create";
+        public const string Query = $"{Base}/Query";
+
+    }
+
     public static class RecordRequest
     {
         private const string Base = $"{ApiBase}/recordrequests";

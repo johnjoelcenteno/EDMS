@@ -7,6 +7,7 @@ public interface IReadRepository
 {
     IQueryable<Signatory> SignatoriesView { get; }
     IQueryable<RecordType> RecordTypesView { get; }
+    IQueryable<MenuItem> MenuItemsView { get; }
     IQueryable<RecordRequest> RecordRequestsView { get; }
     IQueryable<RecordRequestDocument> RecordRequestDocumentsView { get; }
     IQueryable<EmployeeRecord> EmployeeRecordsView { get; }

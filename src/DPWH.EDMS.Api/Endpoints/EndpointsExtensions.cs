@@ -12,6 +12,7 @@ using DPWH.EDMS.Api.Endpoints.RecordsManagement;
 using DPWH.EDMS.Api.Endpoints.RecordRequests;
 using DPWH.EDMS.Api.Endpoints.DataSync;
 using DPWH.EDMS.Api.Endpoints.Reports;
+using DPWH.EDMS.Api.Endpoints.Navigation;
 
 namespace DPWH.EDMS.Api.Endpoints;
 
@@ -23,6 +24,7 @@ public static class EndpointsExtensions
         app.MapRecordRequestsEndpoints();
         // app.MapEmployeeRequestEndpointExtensions();
         app.MapRecordTypeExtensions();
+        app.MapNavigationExtensions();
         app.MapSignatoryEndpointExtensions();
 
         app.MapRecordsEndpoints();
@@ -33,6 +35,7 @@ public static class EndpointsExtensions
         app.MapUsersEndpoints();
         app.MapRoleEndpoints();
         app.MapReportsEndpoints();
+        //app.MapReportsEndpoints();
         app.MapAuditLogsEndpoints();
         app.MapSystemLogsEndpoints();
         app.MapDpwhIntegrationsEndpoints();

@@ -1,0 +1,56 @@
+﻿@page "/navmanager"
+@using DPWH.EDMS.Client.Shared.Models
+
+@inherits NavManagerBase
+
+<EdmsLoader Visible="@IsLoading" />
+
+<h3>Nav Manager</h3>
+
+<hr />
+
+<div class="d-flex flex-row mt-3">
+    <TelerikCard Width="100%">
+        <CardBody>            
+            <div>
+                @if (GridData != null && !XSmall)
+                {
+                    <TelerikGrid TItem="MenuItemModel"
+                                 @bind-PageSize="@PageSize"
+                                 Height="@GridHeight"
+                                 FilterMode="GridFilterMode.FilterRow"
+                                 Sortable=true
+                                 Data="GridData"
+                                 OnStateChanged="@OnStateChanged"
+                                 @ref="GridRef"
+                                 Context="item">
+                        <GridSettings>
+                            <GridPagerSettings PageSizes="@PageSizes">
+                            </GridPagerSettings>
+                        </GridSettings>
+                        <GridColumns>
+                            <GridColumn Field=@nameof(MenuItemModel.Text) Title="Text" />                                
+                            <GridColumn Field=@nameof(MenuItemModel.Url) Title="Url" />                                
+                            <GridColumn Field=@nameof(MenuItemModel.SortOrder) Title="Sort Order" />                                
+                            <GridColumn Field=@nameof(MenuItemModel.Level) Title="Level" />                                
+                            <GridColumn Field=@nameof(MenuItemModel.ParentId) Title="Parent" />                                
+                        </GridColumns>
+                    </TelerikGrid>
+                }
+                else
+                {
+                    <span>No Data to display.</span>
+                }
+                <TelerikPager PageChanged="@PageChangedHandler"
+                              Total="TotalItems"
+                              ButtonCount="6"
+                              PageSize="@PageSize"
+                              PageSizeChanged="@PageSizeChangedHandler"
+                              PageSizes="@(new List<int?> {5, 10, 20})"
+                              Page="@Page">
+                </TelerikPager>
+            </div>
+
+        </CardBody>
+    </TelerikCard>
+</div>
