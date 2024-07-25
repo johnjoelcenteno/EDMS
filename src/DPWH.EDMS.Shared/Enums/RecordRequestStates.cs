@@ -4,5 +4,6 @@ public enum RecordRequestStates
 {
     Review,    
     Release,   
+    Submitted,
     Claimed
 }
