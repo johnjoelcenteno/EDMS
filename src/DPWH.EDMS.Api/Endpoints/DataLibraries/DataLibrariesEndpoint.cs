@@ -23,14 +23,14 @@ public static class DataLibrariesEndpoint
             {
                 var result = await mediator.Send(new GetDataLibraryQuery(request), token);
 
-                return Results.Ok(result);
+                return result;
             })
             .WithName("GetDataLibraries")
             .WithTags(TagName)
             .WithDescription("Get all data libraries")
             .WithApiVersionSet(ApiVersioning.VersionSet)
             .HasApiVersion(1.0)
-            .Produces<BaseApiResponse<IEnumerable<GetDataLibraryResult>>>()
+            .Produces<DataSourceResult>()
             .Produces<ProblemDetails>(StatusCodes.Status500InternalServerError)
             .CacheOutput(builder => builder.Tag(TagName));
 
