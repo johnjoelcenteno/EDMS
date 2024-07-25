@@ -1,9 +1,8 @@
 ﻿
 using AutoMapper;
 using Blazored.Toast.Services;
+using DocumentFormat.OpenXml.Spreadsheet;
 using DPWH.EDMS.Api.Contracts;
-using DPWH.EDMS.Client.Shared.APIClient.Services.DataLibrary;
-using DPWH.EDMS.Client.Shared.APIClient.Services.RecordManagement;
 using DPWH.EDMS.Client.Shared.APIClient.Services.Signatories;
 using DPWH.EDMS.Client.Shared.Models;
 using DPWH.EDMS.Components.Components.ReusableGrid;
@@ -31,12 +30,13 @@ public class SignatoriesManagementBase : GridBase<SignatoriesModel>
     protected string ItemId { get; set; }
     protected bool IsOpen { get; set; } = false;
     protected bool IsConfirm { get; set; } = false;
+    protected int? SearchSignatoryNo { get; set; }
+    protected string? SearchName { get; set; }
+    protected string? SearchDocumentType { get; set; }
+    protected string? SearchPosition { get; set; }
+    protected string? SearchOffice1 { get; set; }
+    protected string? SearchOffice2 { get; set; }
     protected DataSourceResult GetSignatoryResult { get; set; } = new DataSourceResult();
-    protected DataSourceRequest GetSignatory { get; set; } = new DataSourceRequest
-    {
-        Take = 0,
-        Skip = 0
-    };
 
     protected TelerikDialog dialogReference = new();
     protected TelerikForm FormRef { get; set; } = new TelerikForm();
@@ -64,34 +64,18 @@ public class SignatoriesManagementBase : GridBase<SignatoriesModel>
         GetGridMenuItems();
     }
 
-
     protected virtual async Task LoadLibraryData()
     {
         IsLoading = true;
 
         await ExceptionHandlerService.HandleApiException(async () =>
         {
-
-            var signatoriesResults = await SignatoryService.Query(GetSignatory);
-
-            if (signatoriesResults.Data != null)
-            {
-                var checkIsActive = GenericHelper.GetListByDataSource<SignatoriesModel>(signatoriesResults.Data);
-               var convertData =  checkIsActive.Where(item => item.IsActive)
-                .Select(item => new SignatoriesModel
-                {
-                    Id = item.Id,
-                    Name = item.Name,
-                    DocumentType = item.DocumentType,
-                    Position = item.Position,
-                    Office1 = item.Office1,
-                    Office2 = item.Office2,
-                    SignatoryNo = item.SignatoryNo,
-                    IsActive = item.IsActive
-                }) .ToList();
-                GridData = convertData;
-                
-            }
+            ServiceCb = SignatoryService.Query;
+            var filters = new List<Api.Contracts.Filter>();
+            AddTextSearchFilterIfNotNull(filters, nameof(SignatoriesModel.IsActive), true.ToString(), "eq");
+            SearchFilterRequest.Logic = DataSourceHelper.AND_LOGIC;
+            SearchFilterRequest.Filters = filters.Any() ? filters : null;
+            await LoadData();
         });
 
 
@@ -266,5 +250,32 @@ public class SignatoriesManagementBase : GridBase<SignatoriesModel>
         }
         IsLoading = false;
         await LoadLibraryData();
+    }
+
+    protected async void SetFilterGrid()
+    {
+        var filters = new List<Api.Contracts.Filter>();
+
+        AddTextSearchFilterIfNotNull(filters, nameof(SignatoriesModel.SignatoryNo), SearchSignatoryNo?.ToString(), "eq");
+        AddTextSearchFilterIfNotNull(filters, nameof(SignatoriesModel.Name), SearchName, "contains");
+        AddTextSearchFilterIfNotNull(filters, nameof(SignatoriesModel.DocumentType), SearchDocumentType, "contains");
+        AddTextSearchFilterIfNotNull(filters, nameof(SignatoriesModel.Position), SearchPosition, "contains");
+        AddTextSearchFilterIfNotNull(filters, nameof(SignatoriesModel.Office1), SearchOffice1, "contains");
+        AddTextSearchFilterIfNotNull(filters, nameof(SignatoriesModel.Office2), SearchOffice2, "contains");
+        AddTextSearchFilterIfNotNull(filters, nameof(SignatoriesModel.IsActive), true.ToString(), "eq");
+
+        SearchFilterRequest.Logic = DataSourceHelper.AND_LOGIC;
+        SearchFilterRequest.Filters = filters.Any() ? filters : null;
+
+        await LoadData();
+        StateHasChanged();
+    }
+
+    private void AddTextSearchFilterIfNotNull(List<Api.Contracts.Filter> filters, string fieldName, string? value, string operation)
+    {
+        if (!string.IsNullOrEmpty(value))
+        {
+            AddTextSearchFilter(filters, fieldName, value, operation);
+        }
     }
 }
