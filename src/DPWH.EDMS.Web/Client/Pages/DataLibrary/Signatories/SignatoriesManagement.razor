@@ -27,9 +27,10 @@
                                      @bind-PageSize="@PageSize"
                                      Height="@GridHeight"
                                      Sortable=true
-                                     Pageable=true
+                                     OnStateChanged="@OnStateChanged"
                                      FilterMode="@GridFilterMode.FilterRow"
-                                     Data="GridData">
+                                     Data="GridData"
+                                     Context="item">
                             <GridSettings>
                                 <GridPagerSettings PageSizes="@PageSizes">
                                 </GridPagerSettings>
@@ -39,12 +40,168 @@
                                 <TelerikButton Icon="@FontIcon.Plus" ThemeColor="@(ThemeConstants.Button.ThemeColor.Primary)" OnClick="@( () => { GetOpenbtn = "Add"; IsOpen = true;})">Add</TelerikButton>
                             </GridToolBarTemplate>
                             <GridColumns>
-                                <GridColumn Field=@nameof(SignatoriesModel.Name) Title="Name" />
-                                <GridColumn Field=@nameof(SignatoriesModel.DocumentType) Title="Document Type" />
-                                <GridColumn Field=@nameof(SignatoriesModel.Position) Title="Position" />
-                                <GridColumn Field=@nameof(SignatoriesModel.Office1) Title="Office 1" />
-                                <GridColumn Field=@nameof(SignatoriesModel.Office2) Title="Office 2" />
-                                <GridColumn Field=@nameof(SignatoriesModel.SignatoryNo) Title="Signatory Number" />
+                                <GridColumn Field=@nameof(SignatoriesModel.Name) Title="Name">
+                                    <FilterCellTemplate>
+                                        <TelerikTextBox Value="@SearchName"
+                                                        ValueChanged="@((string? val) =>
+                                               {
+                                                  SearchName = val;
+
+                                                  SetFilterGrid();
+
+                                               })">
+
+                                        </TelerikTextBox>
+
+                                        <TelerikButton ButtonType="ButtonType.Button"
+                                                       Class="k-clear-button-visible ml-sm"
+                                                       Icon="@SvgIcon.FilterClear"
+                                                       Enabled="@(!string.IsNullOrEmpty(SearchName))"
+                                                       OnClick="@(() =>
+                                               {
+                                                 SearchName = null;
+
+                                                 SetFilterGrid();
+
+                                              })">
+                                        </TelerikButton>
+                                    </FilterCellTemplate>
+                                </GridColumn>
+                                <GridColumn Field=@nameof(SignatoriesModel.DocumentType) Title="Document Type">
+                                    <FilterCellTemplate>
+                                        <TelerikTextBox Value="@SearchDocumentType"
+                                                        ValueChanged="@((string? val) =>
+                                               {
+                                                  SearchDocumentType = val;
+
+                                                  SetFilterGrid();
+
+                                               })">
+
+                                        </TelerikTextBox>
+
+                                        <TelerikButton ButtonType="ButtonType.Button"
+                                                       Class="k-clear-button-visible ml-sm"
+                                                       Icon="@SvgIcon.FilterClear"
+                                                       Enabled="@(!string.IsNullOrEmpty(SearchDocumentType))"
+                                                       OnClick="@(() =>
+                                               {
+                                                 SearchDocumentType = null;
+
+                                                 SetFilterGrid();
+
+                                              })">
+                                        </TelerikButton>
+                                    </FilterCellTemplate>
+                                </GridColumn>
+                                <GridColumn Field=@nameof(SignatoriesModel.Position) Title="Position">
+                                    <FilterCellTemplate>
+                                        <TelerikTextBox Value="@SearchPosition"
+                                                        ValueChanged="@((string? val) =>
+                                               {
+                                                  SearchPosition = val;
+
+                                                  SetFilterGrid();
+
+                                               })">
+
+                                        </TelerikTextBox>
+
+                                        <TelerikButton ButtonType="ButtonType.Button"
+                                                       Class="k-clear-button-visible ml-sm"
+                                                       Icon="@SvgIcon.FilterClear"
+                                                       Enabled="@(!string.IsNullOrEmpty(SearchPosition))"
+                                                       OnClick="@(() =>
+                                               {
+                                                 SearchPosition = null;
+
+                                                 SetFilterGrid();
+
+                                              })">
+                                        </TelerikButton>
+                                    </FilterCellTemplate>
+                                </GridColumn>
+                                <GridColumn Field=@nameof(SignatoriesModel.Office1) Title="Office 1">
+                                    <FilterCellTemplate>
+                                        <TelerikTextBox Value="@SearchOffice1"
+                                                        ValueChanged="@((string? val) =>
+                                               {
+                                                  SearchOffice1 = val;
+
+                                                  SetFilterGrid();
+
+                                               })">
+
+                                        </TelerikTextBox>
+
+                                        <TelerikButton ButtonType="ButtonType.Button"
+                                                       Class="k-clear-button-visible ml-sm"
+                                                       Icon="@SvgIcon.FilterClear"
+                                                       Enabled="@(!string.IsNullOrEmpty(SearchOffice1))"
+                                                       OnClick="@(() =>
+                                               {
+                                                 SearchOffice1 = null;
+
+                                                 SetFilterGrid();
+
+                                              })">
+                                        </TelerikButton>
+                                    </FilterCellTemplate>
+                                </GridColumn>
+                                <GridColumn Field=@nameof(SignatoriesModel.Office2) Title="Office 2">
+                                    <FilterCellTemplate>
+                                        <TelerikTextBox Value="@SearchOffice2"
+                                                        ValueChanged="@((string? val) =>
+                                               {
+                                                  SearchOffice2 = val;
+
+                                                  SetFilterGrid();
+
+                                               })">
+
+                                        </TelerikTextBox>
+
+                                        <TelerikButton ButtonType="ButtonType.Button"
+                                                       Class="k-clear-button-visible ml-sm"
+                                                       Icon="@SvgIcon.FilterClear"
+                                                       Enabled="@(!string.IsNullOrEmpty(SearchOffice2))"
+                                                       OnClick="@(() =>
+                                               {
+                                                 SearchOffice2 = null;
+
+                                                 SetFilterGrid();
+
+                                              })">
+                                        </TelerikButton>
+                                    </FilterCellTemplate>
+                                </GridColumn>
+                                <GridColumn Field=@nameof(SignatoriesModel.SignatoryNo) Title="Signatory No.">
+                                    <FilterCellTemplate>
+                                        <TelerikNumericTextBox Value="@SearchSignatoryNo"
+                                                               ValueChanged="@((int? val) =>
+                                               {
+                                                  SearchSignatoryNo = val;
+
+                                                  SetFilterGrid();
+
+                                               })">
+
+                                        </TelerikNumericTextBox>
+
+                                        <TelerikButton ButtonType="ButtonType.Button"
+                                                       Class="k-clear-button-visible ml-sm"
+                                                       Icon="@SvgIcon.FilterClear"
+                                                       Enabled="@(SearchSignatoryNo.HasValue)"
+                                                       OnClick="@(() =>
+                                               {
+                                                 SearchSignatoryNo = null;
+
+                                                 SetFilterGrid();
+
+                                              })">
+                                        </TelerikButton>
+                                    </FilterCellTemplate>
+                                </GridColumn>
                                 <GridCommandColumn Width="50px">
                                     <TelerikButton Icon="@FontIcon.MoreVertical" OnClick="@( (MouseEventArgs e) => ShowRowOptions(e, context as SignatoriesModel) )"></TelerikButton>
                                 </GridCommandColumn>
@@ -91,6 +248,14 @@
                     {
                         <span>No Data to display.</span>
                     }
+                    <TelerikPager PageChanged="@PageChangedHandler"
+                                  Total="TotalItems"
+                                  ButtonCount="6"
+                                  PageSize="@PageSize"
+                                  PageSizeChanged="@PageSizeChangedHandler"
+                                  PageSizes="@(new List<int?> {5, 10, 20})"
+                                  Page="@Page">
+                    </TelerikPager>
                 </div>
             </CardBody>
         </TelerikCard>
