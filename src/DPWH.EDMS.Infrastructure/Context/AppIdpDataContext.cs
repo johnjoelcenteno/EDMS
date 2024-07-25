@@ -14,6 +14,12 @@ public class AppIdpDataContext : IdentityDbContext<ApplicationUser>, IReadAppIdp
 
     }
 
+    public DbSet<ClientRole> ClientRoles { get; set; }
+    public DbSet<ClientUserRole> ClientUserRoles { get; set; }
+
+    public IQueryable<ClientRole> ClientRolesView => ClientRoles.AsNoTracking();
+    public IQueryable<ClientUserRole> ClientUserRolesView => ClientUserRoles.AsNoTracking();
+
     public IQueryable<ApplicationUser> UsersView => Users
     .Include(u => u.UserBasicInfo)
     .Include(u => u.EmployeeInfo)
