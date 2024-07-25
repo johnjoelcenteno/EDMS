@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using DPWH.EDMS.Api.Contracts;
+using Newtonsoft.Json;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
@@ -194,29 +195,29 @@ namespace DPWH.EDMS.Components.Helpers
             return id != Guid.Empty && id != null;
         }
 
-        //public static async Task<List<T>> GetListByQuery<T>(
-        //    DataSourceRequest dReq, 
-        //    Func<DataSourceRequest, Task<DataSourceResult>> ServiceCb, 
-        //    Action<string> ErrCb
-        //)
-        //{
-        //    try
-        //    {
-        //        var result = await ServiceCb(dReq);
-        //        var items = GetListByDataSource<T>(result.Data);
+        public static async Task<List<T>> GetListByQuery<T>(
+            DataSourceRequest dReq,
+            Func<DataSourceRequest, Task<DataSourceResult>> ServiceCb,
+            Action<string> ErrCb
+        )
+        {
+            try
+            {
+                var result = await ServiceCb(dReq);
+                var items = GetListByDataSource<T>(result.Data);
 
-        //        return items;
-        //    }
-        //    catch (Exception ex) when (ex is ApiException<ProblemDetails> apiExtension)
-        //    {
-        //        var problemDetails = apiExtension.Result;
-        //        var error = problemDetails.AdditionalProperties.ContainsKey("error") ? problemDetails.AdditionalProperties["error"].ToString() : problemDetails.AdditionalProperties["errors"].ToString();
+                return items;
+            }
+            catch (Exception ex) when (ex is ApiException<ProblemDetails> apiExtension)
+            {
+                var problemDetails = apiExtension.Result;
+                var error = problemDetails.AdditionalProperties.ContainsKey("error") ? problemDetails.AdditionalProperties["error"].ToString() : problemDetails.AdditionalProperties["errors"].ToString();
 
-        //        if (ErrCb != null)
-        //            ErrCb.Invoke(error ?? $"GetAllItemsByQuery<,> Something went wrong!");
+                if (ErrCb != null)
+                    ErrCb.Invoke(error ?? $"GetAllItemsByQuery<,> Something went wrong!");
 
-        //        return new List<T>();
-        //    }
-        //}
+                return new List<T>();
+            }
+        }
     }
 }
