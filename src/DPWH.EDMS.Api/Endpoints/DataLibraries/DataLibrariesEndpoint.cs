@@ -6,6 +6,7 @@ using DPWH.EDMS.Application.Features.DataLibrary.Commands.RecoverDataLibrary;
 using DPWH.EDMS.Application.Features.DataLibrary.Commands.UpdateDataLibrary;
 using DPWH.EDMS.Application.Features.DataLibrary.Queries.GetDataLibrary;
 using DPWH.EDMS.Application.Models;
+using KendoNET.DynamicLinq;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
@@ -18,12 +19,11 @@ public static class DataLibrariesEndpoint
 
     public static IEndpointRouteBuilder MapDataLibraries(this IEndpointRouteBuilder app)
     {
-        app.MapGet(ApiEndpoints.DataLibraries.GetAll, async (IMediator mediator, CancellationToken token) =>
+        app.MapPost(ApiEndpoints.DataLibraries.GetAll, async (DataSourceRequest request,IMediator mediator, CancellationToken token) =>
             {
-                var result = await mediator.Send(new GetDataLibraryQuery(), token);
-                var data = new BaseApiResponse<IEnumerable<GetDataLibraryResult>>(result);
+                var result = await mediator.Send(new GetDataLibraryQuery(request), token);
 
-                return Results.Ok(data);
+                return Results.Ok(result);
             })
             .WithName("GetDataLibraries")
             .WithTags(TagName)

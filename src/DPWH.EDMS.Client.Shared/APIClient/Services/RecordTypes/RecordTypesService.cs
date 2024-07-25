@@ -38,7 +38,7 @@ public class RecordTypesService : IRecordTypesService
         return await _client.Query_record_types_by_idAsync(id);
     }
 
-    public async Task<DataSourceResultBaseApiResponse> QueryRecordTypesAsync(DataSourceRequest request)
+    public async Task<DataSourceResult> QueryRecordTypesAsync(DataSourceRequest request)
     {
         return await _client.Query_record_typeAsync(request);
     }
