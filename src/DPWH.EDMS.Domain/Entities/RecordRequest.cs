@@ -34,7 +34,7 @@ public class RecordRequest : EntityBase
             Purpose = purpose,
             OtherPurpose = otherPurpose,    
             Remarks = remarks,
-            Status = RecordRequestStates.Review.ToString(),
+            Status = RecordRequestStates.Submitted.ToString(),
             RequestedRecords = [],
             FullName = fullName
         };

@@ -852,29 +852,36 @@ namespace DPWH.EDMS.Api.Contracts
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<GetDataLibraryResultIEnumerableBaseApiResponse> GetDataLibrariesAsync()
+        public virtual System.Threading.Tasks.Task<DataSourceResult> GetDataLibrariesAsync(DataSourceRequest body)
         {
-            return GetDataLibrariesAsync(System.Threading.CancellationToken.None);
+            return GetDataLibrariesAsync(body, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<GetDataLibraryResultIEnumerableBaseApiResponse> GetDataLibrariesAsync(System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<DataSourceResult> GetDataLibrariesAsync(DataSourceRequest body, System.Threading.CancellationToken cancellationToken)
         {
+            if (body == null)
+                throw new System.ArgumentNullException("body");
+
             var client_ = _httpClient;
             var disposeClient_ = false;
             try
             {
                 using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    request_.Method = new System.Net.Http.HttpMethod("GET");
+                    var json_ = Newtonsoft.Json.JsonConvert.SerializeObject(body, _settings.Value);
+                    var content_ = new System.Net.Http.StringContent(json_);
+                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; api-version=1.0");
+                    request_.Content = content_;
+                    request_.Method = new System.Net.Http.HttpMethod("POST");
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json; api-version=1.0"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                 
-                    // Operation Path: "api/datalibraries"
-                    urlBuilder_.Append("api/datalibraries");
+                    // Operation Path: "api/datalibraries/getall"
+                    urlBuilder_.Append("api/datalibraries/getall");
 
                     PrepareRequest(client_, request_, urlBuilder_);
 
@@ -901,7 +908,7 @@ namespace DPWH.EDMS.Api.Contracts
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<GetDataLibraryResultIEnumerableBaseApiResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<DataSourceResult>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -5928,7 +5935,7 @@ namespace DPWH.EDMS.Api.Contracts
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<DataSourceResultBaseApiResponse> Query_record_typeAsync(DataSourceRequest body)
+        public virtual System.Threading.Tasks.Task<DataSourceResult> Query_record_typeAsync(DataSourceRequest body)
         {
             return Query_record_typeAsync(body, System.Threading.CancellationToken.None);
         }
@@ -5936,7 +5943,7 @@ namespace DPWH.EDMS.Api.Contracts
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<DataSourceResultBaseApiResponse> Query_record_typeAsync(DataSourceRequest body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<DataSourceResult> Query_record_typeAsync(DataSourceRequest body, System.Threading.CancellationToken cancellationToken)
         {
             if (body == null)
                 throw new System.ArgumentNullException("body");
@@ -5984,7 +5991,7 @@ namespace DPWH.EDMS.Api.Contracts
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<DataSourceResultBaseApiResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<DataSourceResult>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);

@@ -1,8 +1,13 @@
-﻿namespace DPWH.EDMS.Shared.Enums;
+﻿using System.ComponentModel;
+
+namespace DPWH.EDMS.Shared.Enums;
 
 public enum RecordRequestStates
 {
-    Review,    
-    Release,   
+    Submitted,
+    Reviewed,
+    Approved,
+    [Description("For Release")]
+    ForRelease,
     Claimed
 }

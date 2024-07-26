@@ -25,9 +25,9 @@ public class DataLibraryService : IDataLibraryService
         return await _client.DeleteDataLibraryAsync(id);
     }
 
-    public async Task<GetDataLibraryResultIEnumerableBaseApiResponse> GetDataLibraries()
+    public async Task<DataSourceResult> GetDataLibraries(DataSourceRequest body)
     {
-        return await _client.GetDataLibrariesAsync();
+        return await _client.GetDataLibrariesAsync(body);
     }
 
     public async Task<UpdateDataLibraryResultBaseApiResponse> UpdateDataLibraries(UpdateDataLibraryCommand request)
