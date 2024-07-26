@@ -390,6 +390,19 @@
                 <h5 class="mb-0">Top 10 Requests</h5>
             </CardHeader>
             <div class="container my-3">
+         
+               @*  <TelerikChart>
+                    <ChartSeriesItems>
+                        <ChartSeries Type="ChartSeriesType.Column"
+                                     Data="@GetTopRequestList"
+                                     Field="@nameof(GetTopRequestQueryModel.Total)"
+                                     CategoryField="@nameof(GetTopRequestQueryModel.RecordName)"
+                                     DrilldownField="@nameof(GetTopRequestQueryModel.Total)">
+                        </ChartSeries>
+                    </ChartSeriesItems>
+                    <ChartLegend Position="@ChartLegendPosition.Bottom" />
+                </TelerikChart> *@
+
                 <TelerikGrid Height="400px" Data="@GetTopRequestList" Pageable="false" Groupable="false" Sortable="true" Resizable="true">
                     <GridColumns>
                         <GridColumn Field="@nameof(GetTopRequestQueryModel.RecordName)" Title="Document Name" Width="@(XSmall ? null : "255px")"></GridColumn>

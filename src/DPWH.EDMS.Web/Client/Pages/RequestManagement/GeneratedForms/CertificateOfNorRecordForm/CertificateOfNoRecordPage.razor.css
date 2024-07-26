@@ -1,0 +1,84 @@
+﻿.page-legal-size {
+    height: auto;
+    padding: 0.8cm;
+    width: 75cm;
+    margin: 1cm auto;
+    font-size: 14px;
+    border: 1px #D3D3D3 solid;
+    border-radius: 5px;
+    background: white;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+.printable-design {
+    width: auto;
+    height: auto;
+    padding: 1cm;
+    margin: 1cm auto;
+    font-size: 14px;
+    border-radius: 5px;
+    background: white;
+}
+
+.spacer-container{
+    margin-bottom: 50px;
+}
+* {
+    margin: 0;
+    padding: 0;
+    text-indent: 0;
+}
+
+.s1 {
+    color: black;
+    font-family: Tahoma, sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    text-decoration: none;
+    font-size: 9pt;
+}
+
+p {
+    color: black;
+    font-family: Tahoma, sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    text-decoration: none;
+    font-size: 11pt;
+    margin: 0pt;
+}
+
+h2 {
+    color: black;
+    font-family: Tahoma, sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    text-decoration: none;
+    font-size: 11pt;
+}
+
+h1 {
+    color: black;
+    font-family: Tahoma, sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    text-decoration: none;
+    font-size: 14pt;
+}
+
+.s2 {
+    color: black;
+    font-family: "Times New Roman", serif;
+    font-style: normal;
+    font-weight: normal;
+    text-decoration: underline;
+    font-size: 11pt;
+}
+
+.s3 {
+    color: black;
+    font-family: Tahoma, sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    text-decoration: none;
+    font-size: 8pt;
+}

@@ -154,6 +154,12 @@ public class HomeBase : GridBase<RecordRequestModel>
     protected long GetHighestPercentageItem()
     {
         var total = GetTopRequestList.Select(x => (object)x.Total).ToList();
+
+        if (!total.Any())
+        {
+            return 0;
+        }
+
         long maxValue = total.Cast<long>().Max();
         return maxValue < 28 ? 30 : GetTopRequestList.OrderByDescending(item => item.Total).FirstOrDefault().Total;
     }

@@ -1,0 +1,241 @@
+﻿@page "/transmittal-receipt/{RequestId}/{IsExporting}"
+@page "/transmittal-receipt/{RequestId}"
+@using DPWH.EDMS.Components.Helpers;
+@using DPWH.EDMS.Web.Client.Pages.RequestManagement.ViewRequestForm
+@inherits TransmittalReceiptFormBase
+ 
+<EdmsLoader Visible="IsLoading" />
+<div class="d-flex justify-content-end pt-3" style="width: 22cm; margin-left: auto; margin-right: auto;">
+    <TelerikButton Class="float-right" Icon="@SvgIcon.Download" OnClick="@ExportPdf">
+        Export PDF
+    </TelerikButton>
+</div>
+ 
+@{
+    var offices = new List<string> { "RMD", "HRMD" }; 
+    if (!string.IsNullOrEmpty(UserRole) && UserRole.Contains("IT Support") || UserRole.Contains("Admin"))
+    {
+        offices.Remove("HRMD");
+    }
+
+    if (!string.IsNullOrEmpty(UserRole) && (UserRole.Contains("Staff") || UserRole.Contains("Manager")))
+    {
+        var removeItem = RemoveOffice(User.Office);
+
+        if (!string.IsNullOrEmpty(removeItem))
+        {
+            offices.Remove(removeItem);
+        }
+    }
+} 
+ 
+
+@foreach (var items in offices)
+{
+    var records = UserRole.Contains("Staff") || UserRole.Contains("Manager") ? SelectedRecordRequest?.RequestedRecords?.Where(r => r.Office == items).ToList() : SelectedRecordRequest?.RequestedRecords?.Where(x => x.Office == "RMD").ToList();
+    if (records != null && records.Count > 0)
+    {
+        <div class="container page-legal-size" style="width:794px">
+            <div class="container" @ref="PdfContainerRef">
+                <div class="printable-design">
+                    <div class="row">
+                        <div class="col-2"><img src="_content/DPWH.EDMS.Components/images/dpwh_dark.png" alt="Logo" width="89"></div>
+                        <div class="header-container col-8 d-flex justify-content-center">
+                            <div class="text-center">
+                                <p class="text-decoration-none fw-normal">Republic of the Philippines</p>
+                                <p class="text-decoration-none fw-normal">DEPARTMENT OF PUBLIC WORKS AND HIGHWAYS</p>
+                                <p class="text-decoration-none">CENTRAL OFFICE</p>
+                                <p class="text-decoration-none fw-normal">Manila</p>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="my-5" />
+
+                    <p style="padding-top: 10pt;text-indent: 0pt;text-align: center;">TRANSMITTAL FORM</p>
+                    <p style="text-indent: 0pt;text-align: left;"><br /></p>
+                    <table style="border-collapse:collapse;margin-left:5.924pt" cellspacing="0">
+                        <tr style="height:14pt">
+                            <td style="width:74pt">
+                                <p class="s1" style="padding-left: 2pt;text-indent: 0pt;line-height: 12pt;text-align: left;">Control No.</p>
+                            </td>
+                            <td style="width:124pt">
+                                <p class="s2" style="text-indent: 0pt;line-height: 12pt;text-align: left;">@SelectedRecordRequest?.ControlNumber</p>
+                            </td>
+                            <td style="width:117pt">
+                                <p class="s1" style="padding-left: 29pt;text-indent: 0pt;line-height: 12pt;text-align: left;">Release Date:</p>
+                            </td>
+                            <td style="width:99pt">
+                                <p class="s2" style="text-indent: 0pt;line-height: 12pt;text-align: left;">@GenericHelper.GetDateDisplay(DateTime.Now)</p>
+                            </td>
+                        </tr>
+                    </table>
+                    <p style="text-indent: 0pt;text-align: left;"><br /></p>
+                    <table style="border-collapse:collapse;margin-left:5.924pt" cellspacing="0">
+                        <tr style="height:17pt">
+                            <td style="width:198pt" colspan="2">
+                                <p class="s3" style="padding-left: 2pt;text-indent: 0pt;text-align: left;">REQUESTOR DETAILS</p>
+                            </td>
+                        </tr>
+                        <tr style="height:20pt">
+                            <td style="width:100%">
+                                <p class="s2" style="padding-top: 3pt;padding-left: 2pt;text-indent: 0pt;text-align: left;">Complete Name : @SelectedRecordRequest?.FullName</p>
+                            </td>
+                            <td style="width:99pt">
+                                <p class="s2" style="padding-top: 3pt;padding-right: 2pt;text-indent: 0pt;text-align: right;"></p>
+                            </td>
+                        </tr>
+                        <tr style="height:17pt">
+                            <td style="width:99pt">
+                                <p class="s2" style="padding-top: 3pt;padding-left: 2pt;text-indent: 0pt;line-height: 12pt;text-align: left;">Office : @(!string.IsNullOrEmpty(records.FirstOrDefault(x => x.Office == "RMD")?.Office) ? "Records Management Division" : "") @(!string.IsNullOrEmpty(records.FirstOrDefault(x => x.Office == "HRMD")?.Office) ? "Human Resource Management Division" : "")</p>
+                            </td>
+                            <td style="width:99pt">
+                                <p class="s2" style="padding-top: 3pt;padding-right: 2pt;text-indent: 0pt;line-height: 12pt;text-align: right;"></p>
+                            </td>
+                        </tr>
+                    </table>
+                    <p style="padding-top: 6pt;text-indent: 0pt;text-align: left;"><br /></p>
+                    <table style="border-collapse:collapse;margin-left:5.924pt" cellspacing="0">
+                        <tr style="height:17pt">
+                            <td style="width:108pt">
+                                <p class="s3" style="padding-left: 2pt;text-indent: 0pt;text-align: left;">REQUEST DETAILS</p>
+                            </td>
+                            <td style="width:240pt">
+                                <p style="text-indent: 0pt;text-align: left;"><br /></p>
+                            </td>
+                        </tr>
+                        <tr style="height:54pt">
+                            <td style="width:108pt">
+                                <p class="s2" style="padding-top: 2pt;padding-left: 2pt;text-indent: 0pt;text-align: left;">Office Concerned:</p>
+                            </td>
+                            <td style="width:240pt">
+                                <p class="s2" style="padding-top: 2pt;padding-left: 2pt;text-indent: 0pt;text-align: left;">Options:</p>
+                                <ul id="l1">
+                                    <li data-list-text="-">
+                                        <p class="s2" style="padding-top: 6pt;padding-left: 38pt;text-indent: -17pt;text-align: left;">Records Management Division</p>
+                                    </li>
+                                    <li data-list-text="-">
+                                        <p class="s2" style="padding-top: 1pt;padding-left: 38pt;text-indent: -17pt;text-align: left;">Human Resource Management Division</p>
+                                    </li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr style="height:20pt">
+                            <td style="width:348pt" colspan="2">
+                                <p class="s2" style="padding-top: 3pt;padding-left: 2pt;text-indent: 0pt;text-align: left;">Released Documents: </p>
+                            </td>
+                        </tr>
+                        <tr style="height:75pt">
+                            <td style="width:348pt" colspan="2">
+                                <ol id="l2">
+                                    @if (SelectedRecordRequest?.RequestedRecords != null && SelectedRecordRequest.RequestedRecords.Count > 0)
+                                    {
+                                        int count = 1;
+
+                                        foreach (var item in records)
+                                        {
+                                            <li data-list-text="@count++.">
+                                                <p class="s2 fw-bolder" style="padding-top: 2pt; padding-left: 38pt; text-indent: -17pt; text-align: left;">@item.RecordType</p>
+                                            </li>
+
+                                        }
+                                    }
+
+                                </ol>
+                            </td>
+                        </tr>
+                        <tr style="height:29pt">
+                            <td style="width:220pt">
+                                <p class="s2" style="padding-top: 12pt;padding-left: 2pt;text-indent: 0pt;text-align: left;">Purpose : @SelectedRecordRequest?.Purpose</p>
+                            </td>
+                            <td style="width:240pt">
+                                <p style="text-indent: 0pt;text-align: left;"><br /></p>
+                            </td>
+                        </tr>
+                        <tr style="height:17pt">
+                            <td style="width:108pt">
+                                <p class="s2" style="padding-top: 3pt;padding-left: 2pt;text-indent: 0pt;line-height: 12pt;text-align: left;"></p>
+                            </td>
+                            <td style="width:240pt">
+                                <p style="text-indent: 0pt;text-align: left;"><br /></p>
+                            </td>
+                        </tr>
+                    </table>
+                    <p style="text-indent: 0pt;text-align: left;"><br /></p>
+                    <table style="border-collapse:collapse;margin-left:5.924pt" cellspacing="0">
+                        <tr style="height:20pt">
+                            <td style="width:163pt">
+                                <p class="s2" style="padding-left: 2pt;text-indent: 0pt;text-align: left;">Released by:</p>
+                            </td>
+                            <td style="width:285pt;border-bottom-style:solid;border-bottom-width:1pt">
+                                <p class="s2" style="padding-left: 5pt;text-indent: 0pt;text-align: left;"> </p>
+                            </td>
+                        </tr>
+                        <tr style="height:17pt">
+                            <td style="width:163pt">
+                                <p style="text-indent: 0pt;text-align: left;"><br /></p>
+                            </td>
+                            <td style="width:285pt;border-top-style:solid;border-top-width:1pt">
+                                <p class="s1" style="text-indent: 0pt;text-align: center;">Office - @GetOfficeName(records.FirstOrDefault()?.Office)</p>
+                            </td>
+                        </tr>
+                        <tr style="height:29pt">
+                            <td style="width:163pt">
+                                <p style="text-indent: 0pt;text-align: left;"><br /></p>
+                            </td>
+                            <td style="width:285pt">
+                                <p class="s1" style="padding-top: 3pt;padding-left: 92pt;text-indent: 0pt;text-align: left;">Name &amp; Signature</p>
+                            </td>
+                        </tr>
+                        <tr style="height:32pt">
+                            <td style="width:163pt">
+                                <p class="s2" style="padding-top: 12pt;padding-left: 2pt;text-indent: 0pt;text-align: left;">Received by:</p>
+                            </td>
+                            <td style="width:285pt;border-bottom-style:solid;border-bottom-width:1pt">
+                                <p class="s2" style="padding-top: 12pt;text-indent: 0pt;text-align: center;">@SelectedRecordRequest?.FullName</p>
+                            </td>
+                        </tr>
+                        <tr style="height:26pt">
+                            <td style="width:163pt">
+                                <p style="text-indent: 0pt;text-align: left;"><br /></p>
+                            </td>
+                            <td style="width:285pt;border-top-style:solid;border-top-width:1pt">
+                                <p class="s1" style="padding-left: 92pt;text-indent: 0pt;text-align: left;">Name &amp; Signature</p>
+                            </td>
+                        </tr>
+                        <tr style="height:48pt">
+                            <td style="width:163pt">
+                                <p class="s2" style="padding-top: 12pt;padding-left: 2pt;padding-right: 24pt;text-indent: 0pt;line-height: 114%;text-align: left;">Authorized Representative (if any)</p>
+                            </td>
+                            <td style="width:285pt;border-bottom-style:solid;border-bottom-width:1pt">
+                                <p class="s2" style="padding-top: 12pt;text-indent: 0pt;text-align: center;">@SelectedRecordRequest?.AuthorizedRepresentative?.RepresentativeName</p>
+                            </td>
+                        </tr>
+                        <tr style="height:26pt">
+                            <td style="width:163pt">
+                                <p style="text-indent: 0pt;text-align: left;"><br /></p>
+                            </td>
+                            <td style="width:285pt;border-top-style:solid;border-top-width:1pt">
+                                <p class="s1" style="padding-left: 92pt;text-indent: 0pt;text-align: left;">Name &amp; Signature</p>
+                            </td>
+                        </tr>
+                        <tr style="height:32pt">
+                            <td style="width:163pt">
+                                <p class="s2" style="padding-top: 12pt;padding-left: 2pt;text-indent: 0pt;text-align: left;">Date &amp; Time Received</p>
+                            </td>
+                            <td style="width:285pt;border-bottom-style:solid;border-bottom-width:1pt">
+                                <p class="s2" style="padding-top: 12pt;padding-left: 5pt;text-indent: 0pt;text-align: left;"></p>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            
+        </div>
+
+    }
+
+}
+
+ 
+  
