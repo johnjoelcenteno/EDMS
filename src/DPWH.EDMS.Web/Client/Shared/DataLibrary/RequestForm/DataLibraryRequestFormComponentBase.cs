@@ -1,15 +1,22 @@
 ﻿using DPWH.EDMS.Api.Contracts;
+using DPWH.EDMS.Client.Shared.APIClient.Services.DataLibrary;
 using DPWH.EDMS.Client.Shared.Models;
 using DPWH.EDMS.Components;
 using DPWH.EDMS.Web.Client.Pages.DataLibrary.Common.Enum;
 using DPWH.EDMS.Web.Client.Shared.BlazoredFluentValidator;
+using DPWH.EDMS.Web.Client.Shared.Services.ExceptionHandler;
 using Microsoft.AspNetCore.Components;
+using DPWH.EDMS.Components.Components.ReusableGrid;
 using Telerik.Blazor.Components;
+using DPWH.EDMS.Components.Helpers;
+using DPWH.EDMS.Web.Client.Pages.DataLibrary.RecordTypes.Common.Model;
 
 namespace DPWH.EDMS.Web.Client.Shared.DataLibrary.RequestForm;
 
-public class DataLibraryRequestFormComponentBase : RxBaseComponent
+public class DataLibraryRequestFormComponentBase : GridBase<DataManagementModel>
 {
+    [Inject] public required IDataLibraryService DataLibraryService { get; set; }
+    [Inject] public required IExceptionHandlerService ExceptionHandlerService { get; set; }
     [Parameter] public EventCallback<ConfigModel> HandleCreateOnSubmit { get; set; }
     [Parameter] public EventCallback HandleOnCancel { get; set; }
     [Parameter] public string DataType { get; set; }
@@ -20,44 +27,62 @@ public class DataLibraryRequestFormComponentBase : RxBaseComponent
     protected TelerikDialog dialogReference = new();
     //validator
     protected FluentValidationValidator? FluentValidationValidator;
-    protected List<string> SectionList { get; set; } = new List<string>();
-    protected List<string> OfficeList { get; set; } = new List<string>();
-    protected bool IsSectionEmpty { get; set; } = false;
-    protected bool IsOfficeEmpty { get; set; } = false;
     protected bool IsVisible {  get; set; } = false;
+    protected string? SearchValue { get; set; }
+    protected string? SearchCreatedBy { get; set; }
+    protected DateTime? SelectedCreated { get; set; }
 
     #region Load Events
 
-    protected async Task LoadSection()
+    protected virtual async Task LoadLibraryData()
     {
-        SectionList = new List<string>
+        IsLoading = true;
+
+        await ExceptionHandlerService.HandleApiException(async () =>
         {
-            "Employee Welfare and Benefits Section",
-            "Records Management Section",
-            "Integrated Payroll and Personnel Information",
-            "Current Section",
-            "Non-Current Section"
-        };
+            ServiceCb = DataLibraryService.GetDataLibraries;
+
+            var filters = new List<Api.Contracts.Filter>();
+            AddTextSearchFilterIfNotNull(filters, nameof(DataManagementModel.Type), DataType, "eq");
+            AddTextSearchFilterIfNotNull(filters, nameof(DataManagementModel.IsDeleted), false.ToString(), "eq");
+            SearchFilterRequest.Logic = DataSourceHelper.AND_LOGIC;
+            SearchFilterRequest.Filters = filters.Any() ? filters : null;
+            await LoadData();
+
+        });
+
+        IsLoading = false;
+    }
+    protected async void SetFilterGrid()
+    {
+        var filters = new List<Api.Contracts.Filter>();
+        AddDateFilter(filters);
+        AddTextSearchFilterIfNotNull(filters, nameof(DataManagementModel.Value), SearchValue?.ToString(), "contains");
+        AddTextSearchFilterIfNotNull(filters, nameof(DataManagementModel.Type), DataType, "eq");
+        AddTextSearchFilterIfNotNull(filters, nameof(DataManagementModel.CreatedBy), SearchCreatedBy, "contains");
+        AddTextSearchFilterIfNotNull(filters, nameof(DataManagementModel.IsDeleted), false.ToString(), "eq");
+        Console.WriteLine(DataType);
+        SearchFilterRequest.Logic = DataSourceHelper.AND_LOGIC;
+        SearchFilterRequest.Filters = filters.Any() ? filters : null;
+
+        await LoadData();
+        StateHasChanged();
     }
 
-    protected async Task LoadOffice()
+    private void AddTextSearchFilterIfNotNull(List<Api.Contracts.Filter> filters, string fieldName, string? value, string operation)
     {
-        OfficeList = new List<string>
+        if (!string.IsNullOrEmpty(value))
         {
-            "HRMD",
-            "RMD"
-        };
+            AddTextSearchFilter(filters, fieldName, value, operation);
+        }
     }
-    #endregion
-
-    #region OnChange Events
-    protected async Task SectionDropdownErrorChecker()
+    private void AddDateFilter(List<Api.Contracts.Filter> filters)
     {
-        IsSectionEmpty = string.IsNullOrEmpty(NewConfig.Section);
-    }
-    protected async Task OfficeDropdownErrorChecker()
-    {
-        IsOfficeEmpty = string.IsNullOrEmpty(NewConfig.Office);
+        if (SelectedCreated.HasValue)
+        {
+            AddTextSearchFilter(filters, nameof(DataManagementModel.Created), SelectedCreated.Value.ToString(), "gte");
+            AddTextSearchFilter(filters, nameof(DataManagementModel.Created), SelectedCreated.Value.AddDays(1).ToString(), "lte");
+        }
     }
     #endregion
 
@@ -83,41 +108,12 @@ public class DataLibraryRequestFormComponentBase : RxBaseComponent
             await HandleOnCancel.InvokeAsync();
         }
     }
-
     #endregion
 
-    #region Optional Validation
-    protected bool IsEmployee()
-    {
-        if (DataType == DataLibraryEnum.EmployeeRecords.ToString())
-        {
-
-            if (string.IsNullOrEmpty(NewConfig.Section) || string.IsNullOrEmpty(NewConfig.Office))
-            {
-                IsSectionEmpty = string.IsNullOrEmpty(NewConfig.Section);
-                IsOfficeEmpty = string.IsNullOrEmpty(NewConfig.Office);
-                return false;
-            }
-            else
-            {
-                return true;
-            }
-        }
-        if (string.IsNullOrEmpty(NewConfig.Value))
-        {
-            if (string.IsNullOrEmpty(NewConfig.Section) || string.IsNullOrEmpty(NewConfig.Office))
-            {
-                IsSectionEmpty = string.IsNullOrEmpty(NewConfig.Section);
-                IsOfficeEmpty = string.IsNullOrEmpty(NewConfig.Office);
-            }
-            return false;
-        }
-        else
-        {
-            return true;
-        }
-       
-    }
-    #endregion
+    //#region Optional Validation
+    //protected bool IsEmployee()
+    //{
+    //}
+    //#endregion
 }
 
