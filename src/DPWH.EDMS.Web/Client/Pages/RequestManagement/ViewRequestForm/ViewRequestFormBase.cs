@@ -29,13 +29,6 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
     protected int MaxFileSize { get; set; } = 4 * 1024 * 1024;
     protected bool HasNoRecords { get; set; } = false;
     protected List<string> AllowedExtensions { get; set; } = new List<string>() { ".docx", ".pdf" };
-
-    // For Uploads
-    protected Dictionary<Guid, UploadRequestedRecordDocumentModel> UploadRequestedRecords { get; set; } = new();
-    protected string? ValidationMessage { get; set; }
-
-    // Placeholders
-    protected string? Remarks { get; set; }
     protected string PickUpLocation
     {
         get
@@ -50,6 +43,13 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
             }
         }
     }
+
+    // For Uploads
+    protected Dictionary<Guid, UploadRequestedRecordDocumentModel> UploadRequestedRecords { get; set; } = new();
+    protected string? ValidationMessage { get; set; }
+
+    // Placeholders
+    protected string? Remarks { get; set; }
     protected DateTime? DateReceived { get; set; } = DateTime.Now;
     protected DateTime? TimeReceived { get; set; } = DateTime.Now;
 
@@ -132,7 +132,7 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
         {
             foreach (var record in RMDRecords)
             {
-                
+
                 if (!record.IsAvailable)
                 {
                     allFilesSelected = true;
@@ -151,7 +151,7 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
         {
             foreach (var record in HRMDRecords)
             {
-                
+
                 if (!record.IsAvailable)
                 {
                     allFilesSelected = true;
@@ -170,7 +170,7 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
         {
             foreach (var record in SelectedRecordRequest.RequestedRecords)
             {
-                
+
                 if (!record.IsAvailable)
                 {
                     allFilesSelected = true;
@@ -185,7 +185,7 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
                 }
             }
         }
-        
+
         if (allFilesSelected)
         {
             IsModalVisible = true;
@@ -211,7 +211,7 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
     {
         IsLoading = true;
         IsModalVisible = false;
-        await OnStatusChange(RecordRequestStates.Release.ToString());
+        await OnStatusChange(RecordRequestStates.Reviewed.ToString());
 
         foreach (var record in SelectedRecordRequest.RequestedRecords)
         {
@@ -228,16 +228,17 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
         IsLoading = true;
         IsModalVisible = false;
         await OnUploadDocument();
-        await OnStatusChange(RecordRequestStates.Claimed.ToString());
+        await OnStatusChange("For Release");
         ActiveTabIndex = 3;
         StateHasChanged();
         IsLoading = false;
     }
 
-    protected void OnClaim()
+    protected async Task OnClaim()
     {
         IsLoading = true;
         IsModalVisible = false;
+        await OnStatusChange(RecordRequestStates.Claimed.ToString());
         NavigationManager.NavigateTo("/request-management");
         StateHasChanged();
         IsLoading = false;
@@ -266,16 +267,20 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
     {
         switch (SelectedRecordRequest.Status)
         {
-            case var status when status == RecordRequestStates.Review.ToString():
+            case var status when status == RecordRequestStates.Reviewed.ToString():
                 CurrentStepIndex = 1;
                 break;
 
-            case var status when status == RecordRequestStates.Release.ToString():
+            case var status when status == RecordRequestStates.ForRelease.ToString() || SelectedRecordRequest.Status == "For Release":
                 CurrentStepIndex = 2;
                 break;
 
-            default:
+            case var status when status == RecordRequestStates.Claimed.ToString():
                 CurrentStepIndex = 3;
+                break;
+
+            default:
+                CurrentStepIndex = 0;
                 break;
         }
     }
