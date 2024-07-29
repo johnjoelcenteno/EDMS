@@ -22,7 +22,18 @@ public class QueryRecordTypes : IRequestHandler<QueryRecordTypesRequest, DataSou
         var result = _readRepository
             .RecordTypesView
             .OrderByDescending(x => x.Created)
-            .Select(x => RecordTypeMappers.Map(x))
+            .Select(x => new QueryRecordTypesModel()
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Category = x.Category,
+                Section = x.Section ?? default!,
+                Office = x.Office ?? default!,
+                Created = x.Created,
+                CreatedBy = x.CreatedBy,
+                IsActive = x.IsActive,
+                Code = x.Code ?? default!,
+            })
             .ToDataSourceResult(request.DataSourceRequest.FixSerialization());
 
         return Task.FromResult(result);
