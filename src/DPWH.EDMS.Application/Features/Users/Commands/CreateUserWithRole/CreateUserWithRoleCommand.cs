@@ -58,7 +58,10 @@ internal sealed class CreateUserWithRoleHandler : IRequestHandler<CreateUserWith
         _logger.LogInformation("Creating new user with role {@CreateUserWithRoleRequest}", command);
 
         //check if user already exist            
-        var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Email == command.Email, cancellationToken);
+        var user = await _userManager.Users
+            .Include(u => u.EmployeeInfo)
+            .Include(u => u.UserBasicInfo)
+            .FirstOrDefaultAsync(u => u.Email == command.Email, cancellationToken);
 
         if (user is not null)
         {
@@ -101,8 +104,37 @@ internal sealed class CreateUserWithRoleHandler : IRequestHandler<CreateUserWith
                 if (!addRoleClaimResult.Succeeded) throw new AppException(addRoleClaimResult.Errors.First().Description);
 
             }
-            _logger.LogError("User `{Email}` already exists", command.Email);
-            throw new AppException($"User `{command.Email}` already exists");
+            else
+            {
+                /// Special handling here: 
+                /// If user being added is already in User store but not yet part of EDMS - update it
+
+                _logger.LogInformation("Special handling: User already existing is user store");
+
+                var claims = await _userManager.GetClaimsAsync(user);
+
+                var edmsClaim = claims.FirstOrDefault(x => x.Type == "client" && x.Value == "EDMS");
+                if (edmsClaim is null)
+                {                    
+                    var addClientClaimResult = await _userManager.AddClaimAsync(user, new Claim("client", "EDMS"));
+                    var addRoleClaimResult = await _userManager.AddClaimAsync(user, new Claim(JwtClaimTypes.Role, command.Role));
+
+                    return new CreateUserWithRoleResult
+                    {
+                        Id = user.Id,
+                        UserName = user.UserName!,
+                        Email = user.Email!,                        
+                        Role = command.Role,
+                        UserAccess = ApplicationRoles.GetDisplayRoleName(command.Role),
+                        CreatedBy = user.CreatedBy
+                    };
+                }
+                else
+                {
+                    _logger.LogError("User `{Email}` already exists", command.Email);
+                    throw new AppException($"User `{command.Email}` already exists");
+                }
+            }            
         }
 
         if (ApplicationPolicies.NoLicenseUsers.Contains(command.Role))

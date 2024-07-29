@@ -33,6 +33,7 @@ public class NavMenuBase: RxBaseComponent
 
     protected string DisplayName = "---";
     protected string Role = string.Empty;
+    protected string Office = string.Empty;
 
     protected MenuModel? SelectedLevel1Item = null;
 
@@ -68,14 +69,41 @@ public class NavMenuBase: RxBaseComponent
         if (user.Identity is not null && user.Identity.IsAuthenticated)
         {
             var roleValue = user.Claims.FirstOrDefault(c => c.Type == "role")!.Value;
-            DisplayName = !string.IsNullOrEmpty(user.Identity.Name) ? GenericHelper.CapitalizeFirstLetter(user.Identity.Name) : "---";
+            var firstnameValue = user.Claims.FirstOrDefault(x => x.Type == "firstname")?.Value;
+            var lastnameValue = user.Claims.FirstOrDefault(x => x.Type == "lastname")?.Value;
+            var office = user.Claims.FirstOrDefault(x => x.Type == "office")?.Value;
+            if (!string.IsNullOrEmpty(firstnameValue) && !string.IsNullOrEmpty(lastnameValue))
+            {
+                var displayValue = $"{firstnameValue} {lastnameValue}";
+                DisplayName = GenericHelper.CapitalizeFirstLetter(displayValue);
+            }
+            else
+            {
+                DisplayName = "---";
+            }
+            if (!string.IsNullOrEmpty(office))
+            {
+                Office = GetOfficeName(office);
+            }
+            else
+            {
+                Office = "---";
+            }
             Role = GetRoleLabel(roleValue);
             NavMenus = MenuDataService.GetMenuItems().Where(m => m.AuthorizedRoles.Any(r => r == roleValue)).ToList();
             NavMenus2 = MenuDataService.GetMenuItems2().Where(m => m.AuthorizedRoles.Any(r => r == roleValue)).ToList();
             NavSettings = MenuDataService.GetSettingsItems().Where(m => m.AuthorizedRoles.Any(r => r == roleValue)).ToList();            
         }        
     }
-
+    protected string GetOfficeName(string officeCode)
+    {
+        return officeCode switch
+        {
+            "RMD" => "Records Management Division",
+            "HRMD" => "Human Resource Management Division",
+            _ => string.Empty
+        };
+    }
     private string GetRoleLabel(string roleValue)
     {
         return ApplicationRoles.GetDisplayRoleName(roleValue, "Unknown Role");

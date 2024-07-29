@@ -15,7 +15,7 @@ public interface IRecordTypesService
 
     Task<QueryRecordTypesModelListBaseApiResponse> QueryByCategoryRecordTypesAsync(string category);
 
-    Task<DataSourceResultBaseApiResponse> QueryRecordTypesAsync(DataSourceRequest request);
+    Task<DataSourceResult> QueryRecordTypesAsync(DataSourceRequest request);
 
     Task<GuidNullableBaseApiResponse> UpdateRecordTypesAsync(Guid id,UpdateRecordTypeModel model);
 

@@ -331,7 +331,7 @@ public static class ApiEndpoints
     {
         private const string Base = $"{ApiBase}/datalibraries";
 
-        public const string GetAll = Base;
+        public const string GetAll = $"{Base}/getall";
         public const string Add = Base;
         public const string Update = Base;
         public const string Delete = $"{Base}/{{id}}";

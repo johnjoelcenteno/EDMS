@@ -70,7 +70,7 @@ public static class RecordTypeEndpoints
         .WithDescription("Queries record type")
         .WithApiVersionSet(ApiVersioning.VersionSet)
         .HasApiVersion(1.0)
-        .Produces<BaseApiResponse<DataSourceResult>>()
+        .Produces<DataSourceResult>()
         .Produces<ProblemDetails>(StatusCodes.Status400BadRequest)
         .Produces<ProblemDetails>(StatusCodes.Status500InternalServerError);
 

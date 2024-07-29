@@ -27,6 +27,7 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
     protected bool IsModalVisible { get; set; }
     protected int MinFileSize { get; set; } = 1024;
     protected int MaxFileSize { get; set; } = 4 * 1024 * 1024;
+    protected bool HasNoRecords { get; set; } = false;
     protected List<string> AllowedExtensions { get; set; } = new List<string>() { ".docx", ".pdf" };
 
     // For Uploads
@@ -131,10 +132,18 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
         {
             foreach (var record in RMDRecords)
             {
-                if (!UploadRequestedRecords.ContainsKey(record.Id) || UploadRequestedRecords[record.Id].Document == null)
+                
+                if (!record.IsAvailable)
                 {
-                    allFilesSelected = false;
-                    break;
+                    allFilesSelected = true;
+                }
+                else
+                {
+                    if (!UploadRequestedRecords.ContainsKey(record.Id) || UploadRequestedRecords[record.Id].Document == null)
+                    {
+                        allFilesSelected = false;
+                        break;
+                    }
                 }
             }
         }
@@ -142,10 +151,18 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
         {
             foreach (var record in HRMDRecords)
             {
-                if (!UploadRequestedRecords.ContainsKey(record.Id) || UploadRequestedRecords[record.Id].Document == null)
+                
+                if (!record.IsAvailable)
                 {
-                    allFilesSelected = false;
-                    break;
+                    allFilesSelected = true;
+                }
+                else
+                {
+                    if (!UploadRequestedRecords.ContainsKey(record.Id) || UploadRequestedRecords[record.Id].Document == null)
+                    {
+                        allFilesSelected = false;
+                        break;
+                    }
                 }
             }
         }
@@ -153,10 +170,18 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
         {
             foreach (var record in SelectedRecordRequest.RequestedRecords)
             {
-                if (!UploadRequestedRecords.ContainsKey(record.Id) || UploadRequestedRecords[record.Id].Document == null)
+                
+                if (!record.IsAvailable)
                 {
-                    allFilesSelected = false;
-                    break;
+                    allFilesSelected = true;
+                }
+                else
+                {
+                    if (!UploadRequestedRecords.ContainsKey(record.Id) || UploadRequestedRecords[record.Id].Document == null)
+                    {
+                        allFilesSelected = false;
+                        break;
+                    }
                 }
             }
         }
@@ -300,6 +325,7 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
             UploadRequestedRecords.Remove(recordId);
         }
     }
+
 
     protected async void OnSelectTransmittal(FileSelectEventArgs args)
     {

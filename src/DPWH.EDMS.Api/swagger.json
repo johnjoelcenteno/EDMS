@@ -253,19 +253,29 @@
         }
       }
     },
-    "/api/datalibraries": {
-      "get": {
+    "/api/datalibraries/getall": {
+      "post": {
         "tags": [
           "DataLibraries"
         ],
         "operationId": "GetDataLibraries",
+        "requestBody": {
+          "content": {
+            "application/json; api-version=1.0": {
+              "schema": {
+                "$ref": "#/components/schemas/DataSourceRequest"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "description": "Success",
             "content": {
               "application/json; api-version=1.0": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetDataLibraryResultIEnumerableBaseApiResponse"
+                  "$ref": "#/components/schemas/DataSourceResult"
                 }
               }
             }
@@ -281,7 +291,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/api/datalibraries": {
       "post": {
         "tags": [
           "DataLibraries"
@@ -2169,7 +2181,7 @@
             "content": {
               "application/json; api-version=1.0": {
                 "schema": {
-                  "$ref": "#/components/schemas/DataSourceResultBaseApiResponse"
+                  "$ref": "#/components/schemas/DataSourceResult"
                 }
               }
             }
@@ -4574,18 +4586,6 @@
         },
         "additionalProperties": false
       },
-      "DataSourceResultBaseApiResponse": {
-        "type": "object",
-        "properties": {
-          "success": {
-            "type": "boolean"
-          },
-          "data": {
-            "$ref": "#/components/schemas/DataSourceResult"
-          }
-        },
-        "additionalProperties": false
-      },
       "DeactivateUserCommand": {
         "type": "object",
         "properties": {
@@ -5070,65 +5070,6 @@
             "items": {
               "$ref": "#/components/schemas/GetAuthorizationDocumentsResult"
             },
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "GetDataLibraryResult": {
-        "type": "object",
-        "properties": {
-          "type": {
-            "type": "string",
-            "nullable": true
-          },
-          "data": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/GetDataLibraryResultValue"
-            },
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "GetDataLibraryResultIEnumerableBaseApiResponse": {
-        "type": "object",
-        "properties": {
-          "success": {
-            "type": "boolean"
-          },
-          "data": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/GetDataLibraryResult"
-            },
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "GetDataLibraryResultValue": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "value": {
-            "type": "string",
-            "nullable": true
-          },
-          "isDeleted": {
-            "type": "boolean"
-          },
-          "created": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "createdBy": {
-            "type": "string",
             "nullable": true
           }
         },

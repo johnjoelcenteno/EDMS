@@ -2,7 +2,7 @@
 
 public static class ApplicationRoles
 {
-    private const string RolePrefix = "dpwh_";
+    private const string RolePrefix = "dpwh_edms_";
 
     public const string SystemAdmin = "system_admin";
     public const string SuperAdmin = $"{RolePrefix}superadmin";
@@ -10,8 +10,7 @@ public static class ApplicationRoles
     public const string EndUser = $"{RolePrefix}enduser";
     public const string ITSupport = $"{RolePrefix}it_support";
     public const string Staff = $"{RolePrefix}staff";
-    public const string Deactivated = "deactivated";
-    public const string Suspended = "suspended";
+    public const string Deactivated = $"{RolePrefix}deactivated";    
 
     public static readonly IReadOnlyDictionary<string, string> UserAccessMapping = new Dictionary<string, string>{
             { "system_admin", "system_admin" },
@@ -20,8 +19,7 @@ public static class ApplicationRoles
             { ITSupport, "IT Support"},
             { EndUser, "End User"},
             { Staff, "Staff"},
-            { Deactivated, "Deactivated" },
-            { Suspended, "Suspended" }
+            { Deactivated, "Deactivated" }            
         };
 
     public static string GetDisplayRoleName(string? roleClaim, string? defaultValue = null)
@@ -35,6 +33,6 @@ public static class ApplicationRoles
     }
 
     public static IReadOnlyDictionary<string, string> AssignableRoles => UserAccessMapping
-        .Where(m => m.Key != SystemAdmin && m.Key != Deactivated && m.Key != Suspended)
+        .Where(m => m.Key != SystemAdmin && m.Key != Deactivated)
         .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
 }

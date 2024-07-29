@@ -12,12 +12,24 @@ public record GetDataLibraryResultValue
     {
         Id = entity.Id;
         Value = entity.Value;
+        Type = entity.Type;
         IsDeleted = entity.IsDeleted;
         Created = entity.Created;
         CreatedBy = entity.CreatedBy;
     }
 
     public Guid Id { get; set; }
+    public string Type { get; set; }
+    public string Value { get; set; }
+    public bool IsDeleted { get; set; }
+    public DateTimeOffset? Created { get; set; }
+    public string CreatedBy { get; set; }
+}
+
+public class GetAllDataLibraray
+{
+    public Guid Id { get; set; }
+    public string Type { get; set; }
     public string Value { get; set; }
     public bool IsDeleted { get; set; }
     public DateTimeOffset? Created { get; set; }
