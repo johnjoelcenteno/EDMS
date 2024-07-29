@@ -9,6 +9,7 @@ BEGIN
         Expanded BIT NOT NULL,
         Level INT NOT NULL,
         SortOrder INT NOT NULL,
+        NavType NVARCHAR(200) NULL,
         AuthorizedRoles NVARCHAR(MAX) NULL, -- Storing list of roles as a delimited string
         ParentId UNIQUEIDENTIFIER NULL,
         Created DATETIMEOFFSET(7) NOT NULL,

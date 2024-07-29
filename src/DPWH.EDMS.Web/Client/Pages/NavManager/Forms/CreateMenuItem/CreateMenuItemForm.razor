@@ -1,5 +1,5 @@
 ﻿@page "/navmanager/create"
-@using DPWH.EDMS.Client.Shared.Models
+@using DPWH.EDMS.Api.Contracts
 
 @inherits CreateMenuItemFormBase
 
@@ -38,8 +38,13 @@
                     </div>
                     <div class="col-md-6 col-12 p-2">
                         <label for="url">Nav Type</label>
-                        <p>TODO</p>
-                        @*<ValidationMessage For="@(() => SelectedItem.Url)" class="text-danger" /> *@
+                        <TelerikDropDownList Data="@NavTypeList"
+                                             @bind-Value="SelectedItem.NavType"
+                                             Filterable="true"
+                                             ValueField="@nameof(MenuItemModel.NavType)"
+                                             TextField="@nameof(MenuItemModel.NavType)"
+                                             DefaultText="Select" />
+                        <ValidationMessage For="@(() => SelectedItem.NavType)" class="text-danger" />
                     </div>
                 </div>
             </div>

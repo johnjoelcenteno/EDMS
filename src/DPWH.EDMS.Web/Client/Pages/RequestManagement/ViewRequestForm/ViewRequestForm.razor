@@ -103,7 +103,7 @@
                     @StepperFragment
                     <div class="d-flex gap-3 justify-content-center">
                         <TelerikButton OnClick="OnCancel" FillMode="@ThemeConstants.Button.FillMode.Outline">Cancel</TelerikButton>
-                        <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.Status == RecordRequestStates.Review.ToString())">Submit</TelerikButton>
+                        <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.Status == RecordRequestStates.Reviewed.ToString())">Submit</TelerikButton>
                     </div>
                 </div>
             }
@@ -128,7 +128,7 @@
                             @foreach (var record in RMDRecords)
                             {
                                 <div>
-                                    <TelerikCheckBox Id="@record.RecordType" @bind-Value="@record.IsAvailable" Enabled="SelectedRecordRequest.Status == RecordRequestStates.Review.ToString()" />
+                                    <TelerikCheckBox Id="@record.RecordType" @bind-Value="@record.IsAvailable" Enabled="SelectedRecordRequest.Status == RecordRequestStates.Reviewed.ToString()" />
                                     <label for="@record.RecordType">@record.RecordType</label>
                                 </div>
                             }
@@ -138,7 +138,7 @@
                             @foreach (var record in HRMDRecords)
                             {
                                 <div>
-                                    <TelerikCheckBox Id="@record.RecordType" @bind-Value="@record.IsAvailable" Enabled="SelectedRecordRequest.Status == RecordRequestStates.Review.ToString()" />
+                                    <TelerikCheckBox Id="@record.RecordType" @bind-Value="@record.IsAvailable" Enabled="SelectedRecordRequest.Status == RecordRequestStates.Reviewed.ToString()" />
                                     <label for="@record.RecordType">@record.RecordType</label>
                                 </div>
                             }
@@ -148,7 +148,7 @@
                             @foreach (var record in SelectedRecordRequest.RequestedRecords)
                             {
                                 <div>
-                                    <TelerikCheckBox Id="@record.RecordType" @bind-Value="@record.IsAvailable" Enabled="SelectedRecordRequest.Status == RecordRequestStates.Review.ToString()" />
+                                    <TelerikCheckBox Id="@record.RecordType" @bind-Value="@record.IsAvailable" Enabled="SelectedRecordRequest.Status == RecordRequestStates.Reviewed.ToString()" />
                                     <label for="@record.RecordType">@record.RecordType</label>
                                 </div>
                             }
@@ -166,7 +166,7 @@
                     @StepperFragment
                     <div class="d-flex gap-3 justify-content-center">
                         <TelerikButton OnClick="OnCancel" FillMode="@ThemeConstants.Button.FillMode.Outline">Cancel</TelerikButton>
-                        <TelerikButton OnClick="ValidateRecordsFileSelect" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.Status == RecordRequestStates.Release.ToString())">Submit</TelerikButton>
+                        <TelerikButton OnClick="ValidateRecordsFileSelect" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.Status == RecordRequestStates.ForRelease.ToString())">Submit</TelerikButton>
                     </div>
                 </div>
             }
@@ -197,7 +197,7 @@
                                 <label class="align-content-center">@record.RecordType</label>
                             </div>
                             <div class="col">
-                                @if (SelectedRecordRequest.Status != RecordRequestStates.Release.ToString() && !string.IsNullOrEmpty(record.Uri))
+                                @if (SelectedRecordRequest.Status != RecordRequestStates.ForRelease.ToString() && !string.IsNullOrEmpty(record.Uri))
                                 {
                                     HasNoRecords = false;
 
@@ -243,7 +243,7 @@
                                 <label class="align-content-center">@record.RecordType</label>
                             </div>
                             <div class="col">
-                                @if (SelectedRecordRequest.Status != RecordRequestStates.Release.ToString() && !string.IsNullOrEmpty(record.Uri))
+                                @if (SelectedRecordRequest.Status != RecordRequestStates.ForRelease.ToString() && !string.IsNullOrEmpty(record.Uri))
                                 {
                                     HasNoRecords = false;
                                     <div class="text-end">
@@ -291,7 +291,7 @@
                                 <label class="align-content-center">@record.RecordType</label>
                             </div>
                             <div class="col">
-                                @if (SelectedRecordRequest.Status != RecordRequestStates.Release.ToString() && !string.IsNullOrEmpty(record.Uri))
+                                @if (SelectedRecordRequest.Status != RecordRequestStates.ForRelease.ToString() && !string.IsNullOrEmpty(record.Uri))
                                 {
                                     HasNoRecords = false;
                                     <div class="text-end">
@@ -456,7 +456,7 @@
             <div class="row my-3">
                 <div class="d-flex gap-3 justify-content-center">
                     <TelerikButton OnClick="OnCancel" FillMode="@ThemeConstants.Button.FillMode.Outline">Cancel</TelerikButton>
-                    <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.Status == RecordRequestStates.Review.ToString())">Submit</TelerikButton>
+                    <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.Status == RecordRequestStates.Reviewed.ToString())">Submit</TelerikButton>
                 </div>
             </div>
             break;
@@ -464,7 +464,7 @@
             <div class="row my-3">
                 <div class="d-flex gap-3 justify-content-center">
                     <TelerikButton OnClick="OnCancel" FillMode="@ThemeConstants.Button.FillMode.Outline">Cancel</TelerikButton>
-                    <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.Status == RecordRequestStates.Release.ToString())">Submit</TelerikButton>
+                    <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.Status == RecordRequestStates.ForRelease.ToString())">Submit</TelerikButton>
                 </div>
             </div>
             break;

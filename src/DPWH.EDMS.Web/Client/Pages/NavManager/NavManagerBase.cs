@@ -1,7 +1,8 @@
-﻿using DPWH.EDMS.Client.Shared.APIClient.Services.Navigation;
-using DPWH.EDMS.Client.Shared.Models;
+﻿using DPWH.EDMS.Api.Contracts;
+using DPWH.EDMS.Client.Shared.APIClient.Services.Navigation;
 using DPWH.EDMS.Components.Components.ReusableGrid;
 using Microsoft.AspNetCore.Components;
+using Telerik.Blazor.Components;
 
 namespace DPWH.EDMS.Web.Client.Pages.NavManager;
 
@@ -20,5 +21,25 @@ public class NavManagerBase : GridBase<MenuItemModel>
     protected void GoToCreateMenuItem()
     {
         NavManager.NavigateTo("/navmanager/create");
+    }
+
+    protected async Task HandleDeleteMenuItem(GridCommandEventArgs args)
+    {
+        IsLoading = true;
+        var item = (MenuItemModel)args.Item;
+        var res = await NavigationService.Delete(item.Id);
+
+        if(res.Success)
+        {
+            ToastService.ShowSuccess("Successfully deleted menu item!");
+        }
+        else
+        {
+            ToastService.ShowError("Something went wrong on deleting menu item!");
+        }
+
+        await LoadData();
+        StateHasChanged();
+        IsLoading = false;
     }
 }

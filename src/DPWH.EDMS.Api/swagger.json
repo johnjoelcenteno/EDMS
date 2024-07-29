@@ -1381,17 +1381,27 @@
         }
       }
     },
-    "/api/Navigation/Create": {
+    "/api/Navigation/QueryByNavType/{type}": {
       "post": {
         "tags": [
           "Navigation"
         ],
-        "operationId": "CreateMenuItem",
+        "operationId": "QueryMenuItemByNavType",
+        "parameters": [
+          {
+            "name": "navType",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json; api-version=1.0": {
               "schema": {
-                "$ref": "#/components/schemas/CreateMenuItemModel"
+                "$ref": "#/components/schemas/DataSourceRequest"
               }
             }
           },
@@ -1403,7 +1413,7 @@
             "content": {
               "application/json; api-version=1.0": {
                 "schema": {
-                  "$ref": "#/components/schemas/CreateResponse"
+                  "$ref": "#/components/schemas/DataSourceResult"
                 }
               }
             }
@@ -1454,6 +1464,139 @@
               "application/json; api-version=1.0": {
                 "schema": {
                   "$ref": "#/components/schemas/DataSourceResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Navigation/{id}": {
+      "get": {
+        "tags": [
+          "Navigation"
+        ],
+        "operationId": "GetMenuItem",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/MenuItemModelBaseApiResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Navigation"
+        ],
+        "operationId": "DeleteMenuItem",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Navigation/Create": {
+      "post": {
+        "tags": [
+          "Navigation"
+        ],
+        "operationId": "CreateMenuItem",
+        "requestBody": {
+          "content": {
+            "application/json; api-version=1.0": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateMenuItemModel"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateResponse"
                 }
               }
             }
@@ -4023,6 +4166,10 @@
             "type": "integer",
             "format": "int32"
           },
+          "navType": {
+            "type": "string",
+            "nullable": true
+          },
           "authorizedRoles": {
             "type": "array",
             "items": {
@@ -5505,6 +5652,67 @@
               "$ref": "#/components/schemas/SimpleKeyValue"
             },
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "MenuItemModel": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "text": {
+            "type": "string",
+            "nullable": true
+          },
+          "url": {
+            "type": "string",
+            "nullable": true
+          },
+          "icon": {
+            "type": "string",
+            "nullable": true
+          },
+          "expanded": {
+            "type": "boolean"
+          },
+          "level": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sortOrder": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "navType": {
+            "type": "string",
+            "nullable": true
+          },
+          "authorizedRoles": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "parentId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "MenuItemModelBaseApiResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "$ref": "#/components/schemas/MenuItemModel"
           }
         },
         "additionalProperties": false

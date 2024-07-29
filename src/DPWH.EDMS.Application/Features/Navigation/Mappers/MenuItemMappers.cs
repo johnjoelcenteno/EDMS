@@ -16,6 +16,23 @@ public static class MenuItemMappers
             Expanded = menuItem.Expanded,
             Level = menuItem.Level,
             SortOrder = menuItem.SortOrder,
+            NavType = menuItem.NavType,
+            AuthorizedRoles = menuItem.AuthorizedRoles,
+            ParentId = menuItem.ParentId,
+        };
+    }
+    public static MenuItemModel MapToModel(MenuItem menuItem)
+    {
+        return new MenuItemModel
+        {
+            Id = menuItem.Id,
+            Text = menuItem.Text,
+            Url = menuItem.Url,
+            Icon = menuItem.Icon,
+            Expanded = menuItem.Expanded,
+            Level = menuItem.Level,
+            SortOrder = menuItem.SortOrder,
+            NavType = menuItem.NavType,
             AuthorizedRoles = menuItem.AuthorizedRoles,
             ParentId = menuItem.ParentId,
         };

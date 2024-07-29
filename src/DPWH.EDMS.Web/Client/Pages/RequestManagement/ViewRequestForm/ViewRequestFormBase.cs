@@ -211,7 +211,7 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
     {
         IsLoading = true;
         IsModalVisible = false;
-        await OnStatusChange(RecordRequestStates.Release.ToString());
+        await OnStatusChange(RecordRequestStates.Reviewed.ToString());
 
         foreach (var record in SelectedRecordRequest.RequestedRecords)
         {
@@ -266,11 +266,11 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
     {
         switch (SelectedRecordRequest.Status)
         {
-            case var status when status == RecordRequestStates.Review.ToString():
+            case var status when status == RecordRequestStates.Reviewed.ToString():
                 CurrentStepIndex = 1;
                 break;
 
-            case var status when status == RecordRequestStates.Release.ToString():
+            case var status when status == RecordRequestStates.ForRelease.ToString():
                 CurrentStepIndex = 2;
                 break;
 

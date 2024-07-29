@@ -1,8 +1,12 @@
-﻿using DPWH.EDMS.Domain.Entities;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace DPWH.EDMS.Application.Models.Navigation;
 
-public class QueryMenuItemModel
+public class MenuItemModel
 {
     public Guid Id { get; set; }
     public string? Text { get; set; }

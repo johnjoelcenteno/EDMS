@@ -1,8 +1,12 @@
-﻿using DPWH.EDMS.Client.Shared.Configurations;
+﻿using AutoMapper;
+using DPWH.EDMS.Api.Contracts;
+using DPWH.EDMS.Client.Shared.APIClient.Services.Navigation;
+using DPWH.EDMS.Client.Shared.Configurations;
 using DPWH.EDMS.Client.Shared.Models;
 using DPWH.EDMS.Components;
 using DPWH.EDMS.Components.Helpers;
 using DPWH.EDMS.IDP.Core.Constants;
+using DPWH.EDMS.Shared.Enums;
 using DPWH.EDMS.Web.Client.Shared.Services.Navigation;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -17,6 +21,8 @@ public class NavMenuBase: RxBaseComponent
     //[Inject] public required AuthRxService AuthRxService { get; set; }
     [Inject] public required ConfigManager ConfigManager { get; set; }
     [Inject] public required IMenuDataService MenuDataService { get; set; }
+    [Inject] public required IMapper Mapper { get; set; }
+    [Inject] public required INavigationService NavigationService { get; set; }
     [Inject] public required NavRx NavRx { get; set; }
 
     protected bool IsNavMenuCollapsed = false;
@@ -90,9 +96,28 @@ public class NavMenuBase: RxBaseComponent
                 Office = "---";
             }
             Role = GetRoleLabel(roleValue);
+
+            try
+            {
+                var currentUserMenusRes = await NavigationService
+                    .QueryByNavType(
+                        NavType.CurrentUserMenu.ToString(),
+                        new DataSourceRequest() { Skip = 0 }
+                    );
+            
+            var currentUserMenus = GenericHelper.GetListByDataSource<Api.Contracts.MenuItemModel>(currentUserMenusRes.Data);
+
+            NavMenus2 = Mapper.Map<List<MenuModel>>(currentUserMenus);
+
             NavMenus = MenuDataService.GetMenuItems().Where(m => m.AuthorizedRoles.Any(r => r == roleValue)).ToList();
-            NavMenus2 = MenuDataService.GetMenuItems2().Where(m => m.AuthorizedRoles.Any(r => r == roleValue)).ToList();
-            NavSettings = MenuDataService.GetSettingsItems().Where(m => m.AuthorizedRoles.Any(r => r == roleValue)).ToList();            
+            //NavMenus2 = MenuDataService.GetMenuItems2().Where(m => m.AuthorizedRoles.Any(r => r == roleValue)).ToList();
+            NavSettings = MenuDataService.GetSettingsItems().Where(m => m.AuthorizedRoles.Any(r => r == roleValue)).ToList();
+            }
+            catch (Exception ex)
+            {
+                var x = ex.Message;
+                throw;
+            }
         }        
     }
     protected string GetOfficeName(string officeCode)

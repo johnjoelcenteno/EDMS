@@ -22,4 +22,19 @@ public class NavigationService : INavigationService
     {
         return await _client.QueryMenuItemAsync(body);
     }
+
+    public async Task<DataSourceResult> QueryByNavType(string navType, DataSourceRequest body)
+    {
+        return await _client.QueryMenuItemByNavTypeAsync(navType, body);
+    }
+
+    public async Task<DeleteResponse> Delete(Guid id)
+    {
+        return await _client.DeleteMenuItemAsync(id);
+    }
+
+    public async Task<MenuItemModelBaseApiResponse> GetById(Guid id)
+    {
+        return await _client.GetMenuItemAsync(id);        
+    }
 }

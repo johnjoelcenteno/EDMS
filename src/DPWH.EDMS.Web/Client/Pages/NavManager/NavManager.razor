@@ -1,5 +1,5 @@
 ﻿@page "/navmanager"
-@using DPWH.EDMS.Client.Shared.Models
+@using DPWH.EDMS.Api.Contracts
 
 @inherits NavManagerBase
 
@@ -40,8 +40,13 @@
                             <GridColumn Field=@nameof(MenuItemModel.Text) Title="Text" />                                
                             <GridColumn Field=@nameof(MenuItemModel.Url) Title="Url" />                                
                             <GridColumn Field=@nameof(MenuItemModel.SortOrder) Title="Sort Order" />                                
-                            <GridColumn Field=@nameof(MenuItemModel.Level) Title="Level" />                                
-                            <GridColumn Field=@nameof(MenuItemModel.ParentId) Title="Parent" />                                
+                            <GridColumn Field=@nameof(MenuItemModel.Level) Title="Level" />
+                            <GridColumn Field=@nameof(MenuItemModel.NavType) Title="Type" />
+                            <GridColumn Field=@nameof(MenuItemModel.ParentId) Title="Parent" />     
+                            <GridCommandColumn Width="260px">
+                                <GridCommandButton Icon="@SvgIcon.Pencil" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary"></GridCommandButton>
+                                <GridCommandButton Icon="@SvgIcon.Trash" OnClick="HandleDeleteMenuItem"></GridCommandButton>
+                            </GridCommandColumn>
                         </GridColumns>
                     </TelerikGrid>
                 }

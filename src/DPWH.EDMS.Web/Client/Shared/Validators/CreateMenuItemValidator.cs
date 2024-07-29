@@ -30,7 +30,7 @@ public class CreateMenuItemValidator : AbstractValidator<CreateMenuItemModel>
         //    .NotNull().WithMessage("AuthorizedRoles must not be null.")
         //    .Must(x => x.Count > 0).WithMessage("AuthorizedRoles must contain at least one role.");
 
-        //RuleFor(x => x.ParentId)
-        //    .Must(x => x == null || x != Guid.Empty).WithMessage("ParentId must be null or a valid Guid.");
+        RuleFor(x => x.NavType)
+            .NotNull().WithMessage("Nav Type is required.");
     }
 }

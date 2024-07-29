@@ -9,5 +9,6 @@ public class AutoMapperProfiles : Profile
     public AutoMapperProfiles()
     {
         CreateMap<GetUserByIdResult, UserModel>();
+        CreateMap<Api.Contracts.MenuItemModel, MenuModel>().ReverseMap();
     }
 }

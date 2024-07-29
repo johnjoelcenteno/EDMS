@@ -29,6 +29,7 @@ internal sealed class CreateMenuItemHandler(IWriteRepository WriteRepository, Cl
             model.Expanded,
             model.Level,
             model.SortOrder,
+            model.NavType,
             model.AuthorizedRoles,
             model.ParentId,
             createdBy

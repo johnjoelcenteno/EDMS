@@ -2,9 +2,9 @@
 using Blazored.Toast.Services;
 using DPWH.EDMS.Api.Contracts;
 using DPWH.EDMS.Client.Shared.APIClient.Services.Navigation;
-using DPWH.EDMS.Client.Shared.Models;
 using DPWH.EDMS.Components;
 using DPWH.EDMS.Components.Helpers;
+using DPWH.EDMS.Shared.Enums;
 using DPWH.EDMS.Web.Client.Shared.BlazoredFluentValidator;
 using Microsoft.AspNetCore.Components;
 
@@ -24,6 +24,11 @@ public class CreateMenuItemFormBase : RxBaseComponent
 
     // Lists
     protected List<MenuItemModel> MenuItemList = new();
+    protected List<string> NavTypeList = new List<string>() { 
+        NavType.MainMenu.ToString(), 
+        NavType.CurrentUserMenu.ToString(), 
+        NavType.Settings.ToString() 
+    };
 
     // Dropdowns
     //protected TelerikDropDownList<GetValidIDsResult, string> ParentIdsRef = new();
@@ -37,6 +42,7 @@ public class CreateMenuItemFormBase : RxBaseComponent
 
         SelectedItem.Expanded = false;
         SelectedItem.AuthorizedRoles = new List<string>();
+        //SelectedItem.NavType = NavType.MainMenu.ToString();
 
         await LoadMenuItems();
 
@@ -67,7 +73,8 @@ public class CreateMenuItemFormBase : RxBaseComponent
         if (await FluentValidationValidator!.ValidateAsync())
         {
             var res = await NavigationService.Create(SelectedItem);
-            if (res.Success) {
+            if (res.Success)
+            {
                 ToastService.ShowSuccess("Successfully created menu item!");
                 NavManager.NavigateTo("/navmanager");
             }
@@ -80,6 +87,6 @@ public class CreateMenuItemFormBase : RxBaseComponent
     protected void HandleOnCancelCallback()
     {
         NavManager.NavigateTo("/navmanager");
-    }   
-    #endregion  
+    }
+    #endregion
 }

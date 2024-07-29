@@ -15,7 +15,8 @@ namespace DPWH.EDMS.Application.Models.Navigation;
 //    public IEnumerable<MenuItemModel>? Children { get; set; }
 //}
 
-public record class CreateMenuItemModel(
+public record class UpdateMenuItemModel(
+    Guid Id,
     string Text,
     string? Url,
     string? Icon,
