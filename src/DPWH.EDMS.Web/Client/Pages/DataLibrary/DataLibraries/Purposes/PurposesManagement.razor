@@ -23,13 +23,12 @@
                     @if (GridData != null && !XSmall)
                     {
                         <TelerikContextMenu @ref="@ContextMenuRef" Data="@MenuItems" OnClick="@((GridMenuItemModel item) => OnItemClick(item))"></TelerikContextMenu>
-                        <TelerikGrid TItem="GetDataLibraryResultValue"
+                        <TelerikGrid TItem="DataManagementModel"
                                      @bind-PageSize="@PageSize"
                                      Height="@GridHeight"
                                      Sortable=true
-                                     Pageable=true
                                      FilterMode="@GridFilterMode.FilterRow"
-                                     Data="GetDataLibrary.Data">
+                                     Data="GridData">
                             <GridSettings>
                                 <GridPagerSettings PageSizes="@PageSizes">
                                 </GridPagerSettings>
@@ -39,11 +38,90 @@
                                 <TelerikButton Icon="@FontIcon.Plus" ThemeColor="@(ThemeConstants.Button.ThemeColor.Primary)" OnClick="@AddUser">Add</TelerikButton>
                             </GridToolBarTemplate>
                             <GridColumns>
-                                <GridColumn Field=@nameof(DataManagementModel.Value) Title="Value" />
-                                <GridColumn Field=@nameof(DataManagementModel.CreatedBy) Title="Created By" />
-                                <GridColumn DisplayFormat="{0:MM/dd/yyyy hh:mm tt}" Field=@nameof(DataManagementModel.Created) Title="Date Created" />
+                                <GridColumn Field=@nameof(DataManagementModel.Value) Title="Value">
+                                    <FilterCellTemplate>
+                                        <TelerikTextBox Value="@SearchValue"
+                                                        ValueChanged="@((string? val) =>
+                                               {
+                                                  SearchValue = val;
+
+                                                  SetFilterGrid();
+
+                                               })">
+
+                                        </TelerikTextBox>
+
+                                        <TelerikButton ButtonType="ButtonType.Button"
+                                                       Class="k-clear-button-visible ml-sm"
+                                                       Icon="@SvgIcon.FilterClear"
+                                                       Enabled="@(!string.IsNullOrEmpty(SearchValue))"
+                                                       OnClick="@(() =>
+                                               {
+                                                 SearchValue = null;
+
+                                                 SetFilterGrid();
+
+                                              })">
+                                        </TelerikButton>
+                                    </FilterCellTemplate>
+                                </GridColumn>
+                                <GridColumn Field=@nameof(DataManagementModel.CreatedBy) Title="Created By">
+                                    <FilterCellTemplate>
+                                        <TelerikTextBox Value="@SearchCreatedBy"
+                                                        ValueChanged="@((string? val) =>
+                                               {
+                                                  SearchCreatedBy = val;
+
+                                                  SetFilterGrid();
+
+                                               })">
+
+                                        </TelerikTextBox>
+
+                                        <TelerikButton ButtonType="ButtonType.Button"
+                                                       Class="k-clear-button-visible ml-sm"
+                                                       Icon="@SvgIcon.FilterClear"
+                                                       Enabled="@(!string.IsNullOrEmpty(SearchCreatedBy))"
+                                                       OnClick="@(() =>
+                                               {
+                                                 SearchCreatedBy = null;
+
+                                                 SetFilterGrid();
+
+                                              })">
+                                        </TelerikButton>
+                                    </FilterCellTemplate>
+                                </GridColumn>
+                                <GridColumn Field=@nameof(DataManagementModel.Created) Title="Date Created" DisplayFormat="{0:MMMM dd, yyyy}">
+                                    <FilterCellTemplate>
+                                        <TelerikDatePicker Value="@SelectedCreated"
+                                                           ShowWeekNumbers="true"
+                                                           ValueChanged="@((DateTime? val) =>
+                                               {
+                                                  SelectedCreated = val;
+
+                                                  SetFilterGrid();
+
+                                               })">
+
+                                        </TelerikDatePicker>
+
+                                        <TelerikButton ButtonType="ButtonType.Button"
+                                                       Class="k-clear-button-visible ml-sm"
+                                                       Icon="@SvgIcon.FilterClear"
+                                                       Enabled="@(SelectedCreated.HasValue)"
+                                                       OnClick="@(() =>
+                                               {
+                                                 SelectedCreated = null;
+
+                                                 SetFilterGrid();
+
+                                              })">
+                                        </TelerikButton>
+                                    </FilterCellTemplate>
+                                </GridColumn>
                                 <GridCommandColumn Width="50px">
-                                    <TelerikButton Icon="@FontIcon.MoreVertical" OnClick="@( (MouseEventArgs e) => ShowRowOptions(e, context as GetDataLibraryResultValue) )"></TelerikButton>
+                                    <TelerikButton Icon="@FontIcon.MoreVertical" OnClick="@( (MouseEventArgs e) => ShowRowOptions(e, context as DataManagementModel) )"></TelerikButton>
                                 </GridCommandColumn>
                             </GridColumns>
                         </TelerikGrid>
@@ -51,13 +129,12 @@
                     else if (GridData != null && XSmall)
                     {
                         <TelerikContextMenu @ref="@ContextMenuRef" Data="@MenuItems" OnClick="@((GridMenuItemModel item) => OnItemClick(item))"></TelerikContextMenu>
-                        <TelerikGrid TItem="GetDataLibraryResultValue"
+                        <TelerikGrid TItem="DataManagementModel"
                                      @bind-PageSize="@PageSize"
                                      Height="@GridHeight"
                                      FilterMode="@GridFilterMode.FilterRow"
                                      Sortable=true
-                                     Pageable=true
-                                     Data="GetDataLibrary.Data">
+                                     Data="GridData">
                             <GridSettings>
                                 <GridPagerSettings PageSizes="@PageSizes">
                                 </GridPagerSettings>
@@ -69,7 +146,7 @@
                             </GridToolBarTemplate>
                             <DetailTemplate>
                                 @{
-                                    var prop = context as GetDataLibraryResultValue;
+                                    var prop = context as DataManagementModel;
                                     <div class="d-flex flex-column">
                                         <p><b>Name:</b> @prop.Value </p>
                                         <p><b>Created By:</b> @prop.CreatedBy </p>
@@ -77,9 +154,35 @@
                                 }
                             </DetailTemplate>
                             <GridColumns>
-                                <GridColumn Field=@nameof(GetDataLibraryResultValue.Value) />
+                                <GridColumn Field=@nameof(DataManagementModel.Value) Title="Value">
+                                    <FilterCellTemplate>
+                                        <TelerikTextBox Value="@SearchValue"
+                                                        ValueChanged="@((string? val) =>
+                                               {
+                                                  SearchValue = val;
+
+                                                  SetFilterGrid();
+
+                                               })">
+
+                                        </TelerikTextBox>
+
+                                        <TelerikButton ButtonType="ButtonType.Button"
+                                                       Class="k-clear-button-visible ml-sm"
+                                                       Icon="@SvgIcon.FilterClear"
+                                                       Enabled="@(!string.IsNullOrEmpty(SearchValue))"
+                                                       OnClick="@(() =>
+                                               {
+                                                 SearchValue = null;
+
+                                                 SetFilterGrid();
+
+                                              })">
+                                        </TelerikButton>
+                                    </FilterCellTemplate>
+                                </GridColumn>
                                 <GridCommandColumn Width="50px">
-                                    <TelerikButton Icon="@FontIcon.MoreVertical" OnClick="@( (MouseEventArgs e) => ShowRowOptions(e, context as GetDataLibraryResultValue) )"></TelerikButton>
+                                    <TelerikButton Icon="@FontIcon.MoreVertical" OnClick="@( (MouseEventArgs e) => ShowRowOptions(e, context as DataManagementModel) )"></TelerikButton>
                                 </GridCommandColumn>
                             </GridColumns>
                         </TelerikGrid>
@@ -88,6 +191,14 @@
                     {
                         <span>No Data to display.</span>
                     }
+                    <TelerikPager PageChanged="@PageChangedHandler"
+                                  Total="TotalItems"
+                                  ButtonCount="6"
+                                  PageSize="@PageSize"
+                                  PageSizeChanged="@PageSizeChangedHandler"
+                                  PageSizes="@(new List<int?> {5, 10, 20})"
+                                  Page="@Page">
+                    </TelerikPager>
                 </div>
             </CardBody>
         </TelerikCard>

@@ -4,6 +4,9 @@ using DPWH.EDMS.Api.Contracts;
 using DPWH.EDMS.Client.Shared.APIClient.Services.DataLibrary;
 using DPWH.EDMS.Client.Shared.Models;
 using DPWH.EDMS.Components.Components.ReusableGrid;
+using DPWH.EDMS.Components.Helpers;
+using DPWH.EDMS.Web.Client.Pages.DataLibrary.RecordTypes.Common.Model;
+using DPWH.EDMS.Web.Client.Shared.DataLibrary.RequestForm;
 using DPWH.EDMS.Web.Client.Shared.Services.ExceptionHandler;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
@@ -14,25 +17,22 @@ using Telerik.SvgIcons;
 
 namespace DPWH.EDMS.Web.Client.Pages.DataLibrary.DataLibraries.Purposes;
 
-public class PurposesManagementBase : GridBase<DataManagementModel>
+public class PurposesManagementBase : DataLibraryRequestFormComponentBase
 {
-    [Inject] public required IDataLibraryService DataLibraryService { get; set; }
-    [Inject] public required IExceptionHandlerService ExceptionHandlerService { get; set; }
     public bool checkRecordType = false;
     protected string UriName = "Purposes";
-    protected string DataType = "Purposes";
     protected string SelectedAcord { get; set; }
     protected string getOpenbtn = "";
     protected string ItemId { get; set; }
     protected bool IsOpen { get; set; } = false;
     protected bool IsConfirm { get; set; } = false;
 
-    protected GetDataLibraryResult GetDataLibrary { get; set; } = new GetDataLibraryResult();
+    protected DataSourceResult GetDataLibrary { get; set; } = new DataSourceResult();
 
     protected TelerikDialog dialogReference = new();
     protected TelerikForm FormRef { get; set; } = new TelerikForm();
     protected ConfigModel NewConfig = new ConfigModel();
-    protected GetDataLibraryResultValue SelectedItem { get; set; } = default!;
+    protected DataManagementModel SelectedItem { get; set; } = default!;
     protected TelerikContextMenu<GridMenuItemModel> ContextMenuRef { get; set; } = new();
     protected List<GridMenuItemModel> MenuItems { get; set; } = new();
 
@@ -50,45 +50,9 @@ public class PurposesManagementBase : GridBase<DataManagementModel>
 
     protected override async Task OnInitializedAsync()
     {
+        DataType = "Purposes";
         await LoadLibraryData();
         GetGridMenuItems();
-    }
-
-
-    protected virtual async Task LoadLibraryData()
-    {
-        IsLoading = true;
-
-        await ExceptionHandlerService.HandleApiException(async () =>
-        {
-            var dataLibraryResults = await DataLibraryService.GetDataLibraries();
-            var propertyConditionData = dataLibraryResults.Data.FirstOrDefault(item => item.Type == DataType);
-
-            if (propertyConditionData != null)
-            {
-                var convertedData = propertyConditionData.Data.Where(item => !item.IsDeleted)
-                    .Select(item => new GetDataLibraryResultValue
-                    {
-                        Id = item.Id,
-                        Value = item.Value,
-                        Created = item.Created,
-                        CreatedBy = item.CreatedBy,
-                        IsDeleted = item.IsDeleted
-                    })
-                    .ToList();
-
-                GetDataLibrary = new GetDataLibraryResult
-                {
-                    Type = propertyConditionData.Type,
-                    Data = convertedData
-                };
-            }
-        });
-
-
-
-
-        IsLoading = false;
     }
 
     protected void GetGridMenuItems()
@@ -100,7 +64,7 @@ public class PurposesManagementBase : GridBase<DataManagementModel>
             };
     }
 
-    protected async Task ShowRowOptions(MouseEventArgs e, GetDataLibraryResultValue row)
+    protected async Task ShowRowOptions(MouseEventArgs e, DataManagementModel row)
     {
         SelectedItem = row;
         ItemId = row.Id.ToString();

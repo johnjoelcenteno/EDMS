@@ -10,8 +10,6 @@ public class DataLibraryRequestFormBase : DataLibraryRequestFormComponentBase
     protected override async void OnInitialized()
     {
         IsLoading = true;
-        await LoadSection();
-        await LoadOffice();
         await GetCurrentValues();
         IsVisible = true;
         IsLoading = false;
@@ -25,13 +23,6 @@ public class DataLibraryRequestFormBase : DataLibraryRequestFormComponentBase
         {
             NewConfig.Value = EditItem.Value;
             NewConfig.Id = EditItem.Id.ToString();
-            if (DataType == DataLibraryEnum.EmployeeRecords.ToString() ||
-                DataType == DataLibraryEnum.Issuances.ToString() ||
-                DataType == DataLibraryEnum.PersonalRecords.ToString())
-            {
-                NewConfig.Section = EditItem.Section;
-                NewConfig.Office = EditItem.Office;
-            }
         }
         NewConfig.DataType = DataType;
     }

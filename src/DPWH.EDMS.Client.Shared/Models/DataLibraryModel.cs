@@ -12,7 +12,10 @@ public class DataLibraryModel
 
 public class DataManagementModel
 {
+    public Guid Id { get; set; }
     public string Value { get; set; }
+    public string Type { get; set; }
+    public bool IsDeleted { get; set; }
     public string CreatedBy { get; set; }
     public DateTime Created { get; set; }
 }
