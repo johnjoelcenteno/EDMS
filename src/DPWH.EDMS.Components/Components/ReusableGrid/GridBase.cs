@@ -69,7 +69,7 @@ public class GridBase<T> : RxBaseComponent
             ToastService.ShowError(error);
 
             if (problemDetails.Status == 401)
-                NavManager.NavigateTo("/logout", true);
+                NavManager.NavigateTo("/401", true);
         }
         catch (Exception ex) when (ex is ApiException apiExt)
         {
@@ -80,7 +80,7 @@ public class GridBase<T> : RxBaseComponent
             ToastService.ShowError(htmlContent);
 
             if (apiExt.StatusCode == 401)
-                NavManager.NavigateTo("/logout", true);
+                NavManager.NavigateTo("/401", true);
         }
 
         // Loading is complete
