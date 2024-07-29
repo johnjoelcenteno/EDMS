@@ -99,11 +99,9 @@ public class NavMenuBase: RxBaseComponent
 
             try
             {
-                var currentUserMenusRes = await NavigationService
-                    .QueryByNavType(
-                        NavType.CurrentUserMenu.ToString(),
-                        new DataSourceRequest() { Skip = 0 }
-                    );
+                DataSourceRequest req = new DataSourceRequest();
+                req.Skip = 0;
+                var currentUserMenusRes = await NavigationService.QueryByNavType( NavType.CurrentUserMenu.ToString(), req);
             
             var currentUserMenus = GenericHelper.GetListByDataSource<Api.Contracts.MenuItemModel>(currentUserMenusRes.Data);
 

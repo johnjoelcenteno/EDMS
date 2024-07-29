@@ -1381,7 +1381,7 @@
         }
       }
     },
-    "/api/Navigation/QueryByNavType/{type}": {
+    "/api/Navigation/QueryByNavType/{navType}": {
       "post": {
         "tags": [
           "Navigation"
@@ -1390,7 +1390,7 @@
         "parameters": [
           {
             "name": "navType",
-            "in": "query",
+            "in": "path",
             "required": true,
             "schema": {
               "type": "string"

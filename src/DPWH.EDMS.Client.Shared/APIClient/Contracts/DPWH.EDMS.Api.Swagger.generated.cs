@@ -4339,11 +4339,9 @@ namespace DPWH.EDMS.Api.Contracts
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                 
-                    // Operation Path: "api/Navigation/QueryByNavType/{type}"
+                    // Operation Path: "api/Navigation/QueryByNavType/{navType}"
                     urlBuilder_.Append("api/Navigation/QueryByNavType/");
-                    urlBuilder_.Append('?');
-                    urlBuilder_.Append(System.Uri.EscapeDataString("navType")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(navType, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
-                    urlBuilder_.Length--;
+                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(navType, System.Globalization.CultureInfo.InvariantCulture)));
 
                     PrepareRequest(client_, request_, urlBuilder_);
 
