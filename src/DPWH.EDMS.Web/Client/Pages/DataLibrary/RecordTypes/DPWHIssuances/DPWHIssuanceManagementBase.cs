@@ -27,13 +27,6 @@ public class DPWHIssuanceManagementBase : RecordTypesFormComponentBase
     protected string SelectedAcord { get; set; }
 
     protected List<RecordsLibraryModel> GetRecordType = new List<RecordsLibraryModel>();
-
-    protected int Page { get; set; } = 1;
-    protected int PageSize { get; set; } = 5;
-    protected int PageMapSize { get; set; } = 3;
-    protected string GridHeight { get; set; } = "auto";
-    protected List<int?> PageSizes { get; set; } = new List<int?> { 5, 10, 15 };
-
     protected RecordsLibraryModel SelectedItem { get; set; } = default!;
     protected RecordsLibraryModel SelectedRecordItem { get; set; } = default!;
 
@@ -57,40 +50,12 @@ public class DPWHIssuanceManagementBase : RecordTypesFormComponentBase
 
     protected override async Task OnInitializedAsync()
     {
+        DataType = "DPWH Issuances";
         await LoadSection();
         await LoadOffice();
         await LoadLibraryData();
         GetGridMenuItems();
     }
-
-    protected virtual async Task LoadLibraryData()
-    {
-        IsLoading = true;
-
-        await ExceptionHandlerService.HandleApiException(async () =>
-        {
-            var dataLibraryResults = await RecordTypesService.QueryByCategoryRecordTypesAsync("DPWH Issuances");
-            if (dataLibraryResults.Success)
-            {
-                var convertedData = dataLibraryResults.Data.Where(item => item.IsActive)
-                    .Select(item => new RecordsLibraryModel
-                    {
-                        Id = item.Id,
-                        Name = item.Name,
-                        Section = item.Section,
-                        Category = item.Category,
-                        Office = item.Office,
-                        IsActive = !item.IsActive,
-                        Created = item.Created.DateTime,
-                        CreatedBy = item.CreatedBy,
-                    }).ToList();
-                GetRecordType = convertedData;
-            }
-        });
-        IsLoading = false;
-    }
-
-
     protected async void OnItemClick(GridMenuItemModel item)
     {
         if (item.Action != null)
