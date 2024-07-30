@@ -1,5 +1,6 @@
 ﻿using DPWH.EDMS.Application.Features.Navigation.Commands.CreateMenuItem;
 using DPWH.EDMS.Application.Features.Navigation.Commands.DeleteMenuItem;
+using DPWH.EDMS.Application.Features.Navigation.Commands.UpdateMenuItem;
 using DPWH.EDMS.Application.Features.Navigation.Queries;
 using DPWH.EDMS.Application.Features.Navigation.Queries.GetMenuItemById;
 using DPWH.EDMS.Application.Features.Navigation.Queries.GetMenuItemsByNavType;
@@ -76,6 +77,21 @@ public static class NavigationEndpoints
        .Produces<CreateResponse>()
        .Produces<ProblemDetails>(StatusCodes.Status400BadRequest)
        .Produces<ProblemDetails>(StatusCodes.Status500InternalServerError);
+
+        builder.MapPut(ApiEndpoints.Navigation.Update, async ([FromRoute] Guid Id, UpdateMenuItemModel model, IMediator mediator) =>
+        {
+            var result = await mediator.Send(new UpdateMenuItemRequest(Id, model));
+            var data = new BaseApiResponse<Guid?>(result);
+            return result is null ? Results.NotFound() : Results.Ok(data);
+        })
+        .WithName("UpdateMenuItem")
+        .WithTags(TagName)
+        .WithDescription("Updates menu item")
+        .WithApiVersionSet(ApiVersioning.VersionSet)
+        .HasApiVersion(1.0)
+        .Produces<BaseApiResponse<Guid?>>()
+        .Produces<ProblemDetails>(StatusCodes.Status400BadRequest)
+        .Produces<ProblemDetails>(StatusCodes.Status500InternalServerError);
 
         builder.MapDelete(ApiEndpoints.Navigation.Delete, async (Guid Id, IMediator mediator) =>
         {
