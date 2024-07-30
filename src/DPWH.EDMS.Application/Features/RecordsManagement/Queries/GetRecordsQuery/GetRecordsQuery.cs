@@ -20,7 +20,8 @@ public class GetRecordsQueryHandler(IReadRepository readRepository) : IRequestHa
                 EmployeeId = s.EmployeeId,
                 RecordTypeId = s.RecordTypeId,
                 RecordName = s.RecordName,
-                RecordUri = s.RecordUri
+                RecordUri = s.RecordUri,
+                DocVersion = s.Created.ToString("MMddyyyy")
             })
             .ToDataSourceResult(request.Request.FixSerialization());
 

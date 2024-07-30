@@ -21,7 +21,8 @@ public class GetRecordsByEmployeeIdQueryHandler(IReadRepository readRepository) 
                 EmployeeId = s.EmployeeId,
                 RecordTypeId = s.RecordTypeId,
                 RecordName = s.RecordName,
-                RecordUri = s.RecordUri
+                RecordUri = s.RecordUri,
+                DocVersion = s.Created.ToString("MMddyyyy")
             })
             .ToDataSourceResult(request.Request.FixSerialization());
 

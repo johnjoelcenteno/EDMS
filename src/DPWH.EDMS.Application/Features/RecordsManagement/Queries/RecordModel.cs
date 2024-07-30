@@ -6,5 +6,6 @@ public record RecordModel
     public Guid RecordTypeId { get; set; }
     public string RecordName { get; set; }
     public string RecordUri { get; set; }
+    public string DocVersion { get; set; }
 }
 
