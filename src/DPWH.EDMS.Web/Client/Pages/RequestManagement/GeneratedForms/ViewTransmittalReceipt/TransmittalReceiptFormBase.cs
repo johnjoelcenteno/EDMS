@@ -84,11 +84,13 @@ public class TransmittalReceiptFormBase : ComponentBase
 
         if (user.Identity is not null && user.Identity.IsAuthenticated)
         {
-            var roleValue = user.Claims.FirstOrDefault(c => c.Type == "role")!.Value;
+            var roles = user.Claims.Where(c => c.Type == "role")!.ToList();
+            var role = roles.FirstOrDefault(role => !string.IsNullOrEmpty(role.Value) && role.Value.Contains(ApplicationRoles.RolePrefix))?.Value ?? string.Empty;
+
             var firstnameValue = user.Claims.FirstOrDefault(x => x.Type == "firstname")!.Value;
             var lastnameValue = user.Claims.FirstOrDefault(x => x.Type == "lastname")!.Value;
 
-            UserRole = GetRoleLabel(roleValue);
+            UserRole = GetRoleLabel(role);
 
             if (firstnameValue != null && lastnameValue != null)
             {
@@ -102,12 +104,12 @@ public class TransmittalReceiptFormBase : ComponentBase
     {
         return officeCode switch
         {
-            "RMD" => "Records Management Division",
-            "HRMD" => "Human Resource Management Division",
+            nameof(Offices.RMD) => "Records Management Division",
+            nameof(Offices.HRMD) => "Human Resource Management Division",
             _ => string.Empty
         };
     }
-   
+
     protected async Task ExportPdf()
     {
         IsLoading = true;
@@ -142,13 +144,13 @@ public class TransmittalReceiptFormBase : ComponentBase
         if (string.IsNullOrEmpty(officeValue))
             return string.Empty;
 
-        if (officeValue == "RMD")
+        if (officeValue == Offices.RMD.ToString())
         {
-            return "HRMD";
+            return Offices.HRMD.ToString();
         }
-        else if (officeValue == "HRMD")
+        else if (officeValue == Offices.HRMD.ToString())
         {
-            return "RMD";
+            return Offices.RMD.ToString();
         }
 
         return string.Empty;

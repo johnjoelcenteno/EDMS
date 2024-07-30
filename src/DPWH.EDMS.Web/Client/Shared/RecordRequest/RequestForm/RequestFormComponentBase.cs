@@ -165,14 +165,9 @@ public class RequestFormComponentBase : RxBaseComponent
     #region Submit Events
     protected async Task HandleOnSubmitCallback()
     {
-        var res = await FluentValidationValidator!.ValidateAsync();
+        var validationRes = await FluentValidationValidator!.ValidateAsync();
        
-        if (!res)
-        {
-            return;
-        }
-
-        if (await FluentValidationValidator!.ValidateAsync() && IsValidIdValid() && IsAuthorizedDocumentValid())
+        if (validationRes && IsValidIdValid() && IsAuthorizedDocumentValid())
         {
             if (HandleCreateOnSubmit.HasDelegate)
             {
