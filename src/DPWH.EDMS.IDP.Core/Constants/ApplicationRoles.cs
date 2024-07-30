@@ -2,7 +2,7 @@
 
 public static class ApplicationRoles
 {
-    private const string RolePrefix = "dpwh_edms_";
+    public const string RolePrefix = "dpwh_edms_";
 
     public const string SystemAdmin = "system_admin";
     public const string SuperAdmin = $"{RolePrefix}superadmin";
