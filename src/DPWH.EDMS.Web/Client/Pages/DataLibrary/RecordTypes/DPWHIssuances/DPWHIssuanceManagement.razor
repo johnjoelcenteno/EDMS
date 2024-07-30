@@ -26,9 +26,8 @@
                                      @bind-PageSize="@PageSize"
                                      Height="@GridHeight"
                                      Sortable=true
-                                     Pageable=true
                                      FilterMode="@GridFilterMode.FilterRow"
-                                     Data="GetRecordType">
+                                     Data="GridData">
                             <GridSettings>
                                 <GridPagerSettings PageSizes="@PageSizes">
                                 </GridPagerSettings>
@@ -38,105 +37,176 @@
                                 <TelerikButton Icon="@FontIcon.Plus" ThemeColor="@(ThemeConstants.Button.ThemeColor.Primary)" OnClick="@( () => { GetOpenbtn = "Add"; IsOpen = true;})">Add</TelerikButton>
                             </GridToolBarTemplate>
                             <GridColumns>
-                                <GridColumn Field=@nameof(RecordsLibraryModel.Name) Title="Value" />
-                                <GridColumn Field=@nameof(RecordsLibraryModel.Category) Title="Category" />
-                                <GridColumn Field=@nameof(RecordsLibraryModel.Section) Title="Section" >
-                                <FilterCellTemplate>
-                                    <TelerikDropDownList Data="@SectionList"
-                                                         Value="@SelectedSection"
-                                                         ValueField="string"
-                                                         TextField="string"
-                                                         DefaultText="Select Section"
-                                                         Width="100%"
-                                                         FilterOperator="@StringFilterOperator.Contains"
-                                                         ValueChanged="@(async (string val) =>
-                                                                    {
-                                                                        SelectedRecordType = nameof(RecordsLibraryModel.Section);
-                                                                        SelectedSection = val;
+                                <GridColumn Field=@nameof(RecordsLibraryModel.Name) Title="Name">
+                                    <FilterCellTemplate>
+                                        <TelerikTextBox Value="@SearchName"
+                                                        ValueChanged="@((string? val) =>
+                                               {
+                                                  SearchName = val;
 
-                                                                        if (SelectedSection != null)
-                                                                        {
-                                                                             await context.ClearFilterAsync();
-                                                                        }
+                                                  SetFilterGrid();
 
-                                                                        SetSectionFilter(context.FilterDescriptor);
+                                               })">
 
-                                                                        await context.FilterAsync();
+                                        </TelerikTextBox>
 
-                                                                    })">
-                                            <DropDownListSettings>
-                                                <DropDownListPopupSettings Width="Auto" />
-                                            </DropDownListSettings>
-                                    </TelerikDropDownList>
-                                    <TelerikButton ButtonType="ButtonType.Button"
-                                                   Class="k-clear-button-visible ml-sm"
-                                                   Icon="@SvgIcon.FilterClear"
-                                                       Enabled="@(!string.IsNullOrEmpty(SelectedSection))"
-                                                   OnClick="@(async () =>
-                                                               {
-                                                                  SelectedSection = string.Empty;
+                                        <TelerikButton ButtonType="ButtonType.Button"
+                                                       Class="k-clear-button-visible ml-sm"
+                                                       Icon="@SvgIcon.FilterClear"
+                                                       Enabled="@(!string.IsNullOrEmpty(SearchName))"
+                                                       OnClick="@(() =>
+                                               {
+                                                 SearchName = null;
 
-                                                                  SetSectionFilter(context.FilterDescriptor);
+                                                 SetFilterGrid();
 
-                                                                  await context.ClearFilterAsync();
+                                              })">
+                                        </TelerikButton>
+                                    </FilterCellTemplate>
+                                </GridColumn>
+                                <GridColumn Field=@nameof(RecordsLibraryModel.Category) Title="Category">
+                                    <FilterCellTemplate>
+                                        <TelerikTextBox Value="@SearchCategory"
+                                                        ValueChanged="@((string? val) =>
+                                               {
+                                                  SearchCategory = val;
 
-                                                               })">
-                                    </TelerikButton>
-                                </FilterCellTemplate>
+                                                  SetFilterGrid();
+
+                                               })">
+
+                                        </TelerikTextBox>
+
+                                        <TelerikButton ButtonType="ButtonType.Button"
+                                                       Class="k-clear-button-visible ml-sm"
+                                                       Icon="@SvgIcon.FilterClear"
+                                                       Enabled="@(!string.IsNullOrEmpty(SearchCategory))"
+                                                       OnClick="@(() =>
+                                               {
+                                                 SearchCategory = null;
+
+                                                 SetFilterGrid();
+
+                                              })">
+                                        </TelerikButton>
+                                    </FilterCellTemplate>
+                                </GridColumn>
+                                <GridColumn Field=@nameof(RecordsLibraryModel.Section) Title="Section">
+                                    <FilterCellTemplate>
+                                        <TelerikDropDownList Data="@SectionList"
+                                                             Value="@SearchSection"
+                                                             ValueField="string"
+                                                             TextField="string"
+                                                             DefaultText="Select Status"
+                                                             Width="100%"
+                                                             FilterOperator="@StringFilterOperator.Contains"
+                                                             ValueChanged="@((string val) =>
+                                                   {
+                                                      SearchSection = val;
+
+                                                      SetFilterGrid();
+
+                                                   })">
+                                        </TelerikDropDownList>
+                                        <TelerikButton ButtonType="ButtonType.Button"
+                                                       Class="k-clear-button-visible ml-sm"
+                                                       Icon="@SvgIcon.FilterClear"
+                                                       Enabled="@(!string.IsNullOrEmpty(SearchSection))"
+                                                       OnClick="@(() =>
+                                                  {
+                                                       SearchSection = string.Empty;
+
+                                                       SetFilterGrid();
+
+                                                  })">
+                                        </TelerikButton>
+                                    </FilterCellTemplate>
                                 </GridColumn>
                                 <GridColumn Field=@nameof(RecordsLibraryModel.Office) Title="Office">
-                                <FilterCellTemplate>
-                                    <TelerikDropDownList Data="@OfficeList"
-                                                         Value="@SelectedOffice"
-                                                         ValueField="string"
-                                                         TextField="string"
-                                                         DefaultText="Select Office"
-                                                         Width="100%"
-                                                         FilterOperator="@StringFilterOperator.Contains"
-                                                         ValueChanged="@(async (string val) =>
-                                                                    {
-                                                                        SelectedRecordType = nameof(RecordsLibraryModel.Office);
-                                                                        SelectedOffice = val;
+                                    <FilterCellTemplate>
+                                        <TelerikDropDownList Data="@OfficeList"
+                                                             Value="@SearchOffice"
+                                                             ValueField="string"
+                                                             TextField="string"
+                                                             DefaultText="Select Status"
+                                                             Width="100%"
+                                                             FilterOperator="@StringFilterOperator.Contains"
+                                                             ValueChanged="@((string val) =>
+                                                   {
+                                                      SearchOffice = val;
 
-                                                                        if (SelectedOffice != null)
-                                                                        {
-                                                                             await context.ClearFilterAsync();
-                                                                        }
+                                                      SetFilterGrid();
 
-                                                                        SetOfficeFilter(context.FilterDescriptor);
+                                                   })">
+                                        </TelerikDropDownList>
+                                        <TelerikButton ButtonType="ButtonType.Button"
+                                                       Class="k-clear-button-visible ml-sm"
+                                                       Icon="@SvgIcon.FilterClear"
+                                                       Enabled="@(!string.IsNullOrEmpty(SearchOffice))"
+                                                       OnClick="@(() =>
+                                                  {
+                                                       SearchOffice = string.Empty;
 
-                                                                        await context.FilterAsync();
+                                                       SetFilterGrid();
 
-                                                                    })">
-                                            <DropDownListSettings>
-                                                <DropDownListPopupSettings Width="Auto" />
-                                            </DropDownListSettings>
-                                    </TelerikDropDownList>
-                                    <TelerikButton ButtonType="ButtonType.Button"
-                                                   Class="k-clear-button-visible ml-sm"
-                                                   Icon="@SvgIcon.FilterClear"
-                                                   Enabled="@(!string.IsNullOrEmpty(SelectedOffice))"
-                                                   OnClick="@(async () =>
-                                                               {
-                                                                  SelectedOffice = string.Empty;
-
-                                                                  SetOfficeFilter(context.FilterDescriptor);
-
-                                                                  await context.ClearFilterAsync();
-
-                                                               })">
-                                    </TelerikButton>
-                                </FilterCellTemplate>
+                                                  })">
+                                        </TelerikButton>
+                                    </FilterCellTemplate>
                                 </GridColumn>
-                                <GridColumn Field=@nameof(RecordsLibraryModel.CreatedBy) Title="Created By" />
-                                <GridColumn Field=@nameof(RecordsLibraryModel.Created) Title="Date Created" Filterable="true">
-                                    <Template>
-                                        @{
-                                            var req = context as RecordsLibraryModel;
-                                            string dt = GenericHelper.GetDateTimeDisplay(req!.Created);
-                                        }
-                                        <p class="mb-0">@dt</p>
-                                    </Template>
+                                <GridColumn Field=@nameof(RecordsLibraryModel.CreatedBy) Title="Created By">
+                                    <FilterCellTemplate>
+                                        <TelerikTextBox Value="@SearchCreatedBy"
+                                                        ValueChanged="@((string? val) =>
+                                               {
+                                                  SearchCreatedBy = val;
+
+                                                  SetFilterGrid();
+
+                                               })">
+
+                                        </TelerikTextBox>
+
+                                        <TelerikButton ButtonType="ButtonType.Button"
+                                                       Class="k-clear-button-visible ml-sm"
+                                                       Icon="@SvgIcon.FilterClear"
+                                                       Enabled="@(!string.IsNullOrEmpty(SearchCreatedBy))"
+                                                       OnClick="@(() =>
+                                               {
+                                                 SearchCreatedBy = null;
+
+                                                 SetFilterGrid();
+
+                                              })">
+                                        </TelerikButton>
+                                    </FilterCellTemplate>
+                                </GridColumn>
+                                <GridColumn Field=@nameof(RecordsLibraryModel.Created) Title="Date Created" DisplayFormat="{0:MMMM dd, yyyy}">
+                                    <FilterCellTemplate>
+                                        <TelerikDatePicker Value="@SelectedCreated"
+                                                           ShowWeekNumbers="true"
+                                                           ValueChanged="@((DateTime? val) =>
+                                               {
+                                                  SelectedCreated = val;
+
+                                                  SetFilterGrid();
+
+                                               })">
+
+                                        </TelerikDatePicker>
+
+                                        <TelerikButton ButtonType="ButtonType.Button"
+                                                       Class="k-clear-button-visible ml-sm"
+                                                       Icon="@SvgIcon.FilterClear"
+                                                       Enabled="@(SelectedCreated.HasValue)"
+                                                       OnClick="@(() =>
+                                               {
+                                                 SelectedCreated = null;
+
+                                                 SetFilterGrid();
+
+                                              })">
+                                        </TelerikButton>
+                                    </FilterCellTemplate>
                                 </GridColumn>
                                 <GridCommandColumn Width="50px">
                                     <TelerikButton Icon="@FontIcon.MoreVertical" OnClick="@( (MouseEventArgs e) => ShowRecordRowOptions(e, context as RecordsLibraryModel) )"></TelerikButton>
@@ -152,8 +222,7 @@
                                      Height="@GridHeight"
                                      FilterMode="@GridFilterMode.FilterRow"
                                      Sortable=true
-                                     Pageable=true
-                                     Data="GetRecordType">
+                                     Data="GridData">
                             <GridSettings>
                                 <GridPagerSettings PageSizes="@PageSizes">
                                 </GridPagerSettings>
@@ -173,7 +242,33 @@
                                 }
                             </DetailTemplate>
                             <GridColumns>
-                                <GridColumn Field=@nameof(RecordsLibraryModel.Name) />
+                                <GridColumn Field=@nameof(RecordsLibraryModel.Name) Title="Name">
+                                    <FilterCellTemplate>
+                                        <TelerikTextBox Value="@SearchName"
+                                                        ValueChanged="@((string? val) =>
+                                               {
+                                                  SearchName = val;
+
+                                                  SetFilterGrid();
+
+                                               })">
+
+                                        </TelerikTextBox>
+
+                                        <TelerikButton ButtonType="ButtonType.Button"
+                                                       Class="k-clear-button-visible ml-sm"
+                                                       Icon="@SvgIcon.FilterClear"
+                                                       Enabled="@(!string.IsNullOrEmpty(SearchName))"
+                                                       OnClick="@(() =>
+                                               {
+                                                 SearchName = null;
+
+                                                 SetFilterGrid();
+
+                                              })">
+                                        </TelerikButton>
+                                    </FilterCellTemplate>
+                                </GridColumn>
                                 <GridCommandColumn Width="50px">
                                     <TelerikButton Icon="@FontIcon.MoreVertical" OnClick="@( (MouseEventArgs e) => ShowRowOptions(e, context as RecordsLibraryModel) )"></TelerikButton>
                                 </GridCommandColumn>
@@ -184,6 +279,14 @@
                     {
                         <span>No Data to display.</span>
                     }
+                    <TelerikPager PageChanged="@PageChangedHandler"
+                                  Total="TotalItems"
+                                  ButtonCount="6"
+                                  PageSize="@PageSize"
+                                  PageSizeChanged="@PageSizeChangedHandler"
+                                  PageSizes="@(new List<int?> {5, 10, 20})"
+                                  Page="@Page">
+                    </TelerikPager>
                 </div>
             </CardBody>
         </TelerikCard>

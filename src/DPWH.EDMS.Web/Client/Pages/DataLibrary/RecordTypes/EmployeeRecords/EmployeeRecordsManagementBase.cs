@@ -1,5 +1,6 @@
 ﻿using DPWH.EDMS.Api.Contracts;
 using DPWH.EDMS.Client.Shared.Models;
+using DPWH.EDMS.Components.Helpers;
 using DPWH.EDMS.Web.Client.Pages.DataLibrary.RecordTypes.Common.Model;
 using DPWH.EDMS.Web.Client.Shared.RecordRequest.RequestForm;
 using Microsoft.AspNetCore.Components;
@@ -24,15 +25,7 @@ public class EmployeeRecordsManagementBase : RecordTypesFormComponentBase
     protected TelerikContextMenu<GridMenuItemModel> ContextMenuRef { get; set; } = new();
     protected List<GridMenuItemModel> MenuItems { get; set; } = new();
     protected string SelectedAcord { get; set; }
-
     protected List<RecordsLibraryModel> GetRecordType = new List<RecordsLibraryModel>();
-
-    protected int Page { get; set; } = 1;
-    protected int PageSize { get; set; } = 5;
-    protected int PageMapSize { get; set; } = 3;
-    protected string GridHeight { get; set; } = "auto";
-    protected List<int?> PageSizes { get; set; } = new List<int?> { 5, 10, 15 };
-
     protected RecordsLibraryModel SelectedItem { get; set; } = default!;
     protected RecordsLibraryModel SelectedRecordItem { get; set; } = default!;
 
@@ -56,38 +49,14 @@ public class EmployeeRecordsManagementBase : RecordTypesFormComponentBase
 
     protected override async Task OnInitializedAsync()
     {
+        DataType = "Employee Documents";
         await LoadSection();
         await LoadOffice();
         await LoadLibraryData();
         GetGridMenuItems();
     }
 
-    protected virtual async Task LoadLibraryData()
-    {
-        IsLoading = true;
 
-        await ExceptionHandlerService.HandleApiException(async () =>
-        {
-            var dataLibraryResults = await RecordTypesService.QueryByCategoryRecordTypesAsync("Employee Documents");
-            if (dataLibraryResults.Success)
-            {
-                var convertedData = dataLibraryResults.Data.Where(item => item.IsActive)
-                    .Select(item => new RecordsLibraryModel
-                    {
-                        Id = item.Id,
-                        Name = item.Name,
-                        Section = item.Section,
-                        Category = item.Category, //temporary until CreatedBy is created
-                        Office = item.Office,
-                        IsActive = !item.IsActive,
-                        Created = item.Created.DateTime,
-                        CreatedBy = item.CreatedBy,
-                    }).ToList();
-                GetRecordType = convertedData;
-            }
-        });
-        IsLoading = false;
-    }
 
 
     protected async void OnItemClick(GridMenuItemModel item)
@@ -227,32 +196,32 @@ public class EmployeeRecordsManagementBase : RecordTypesFormComponentBase
         }
 
 
-            if (string.IsNullOrEmpty(item.Section) || string.IsNullOrEmpty(item.Office))
-            {
-                IsSectionEmpty = string.IsNullOrEmpty(item.Section);
-                IsOfficeEmpty = string.IsNullOrEmpty(item.Office);
+        if (string.IsNullOrEmpty(item.Section) || string.IsNullOrEmpty(item.Office))
+        {
+            IsSectionEmpty = string.IsNullOrEmpty(item.Section);
+            IsOfficeEmpty = string.IsNullOrEmpty(item.Office);
 
-            }
-            else
+        }
+        else
+        {
+            var data = new UpdateRecordTypeModel
             {
-                var data = new UpdateRecordTypeModel
+                IsActive = true,
+                Category = "Employee Documents",
+                Name = item.Name,
+                Section = item.Section,
+                Office = item.Office
+            };
+            await ExceptionHandlerService.HandleApiException(async () =>
+            {
+                var res = await RecordTypesService.UpdateRecordTypesAsync(item.Id, data);
+                if (res != null)
                 {
-                    IsActive = true,
-                    Category = "Employee Documents",
-                    Name = item.Name,
-                    Section = item.Section,
-                    Office = item.Office
-                };
-                await ExceptionHandlerService.HandleApiException(async () =>
-                {
-                    var res = await RecordTypesService.UpdateRecordTypesAsync(item.Id, data);
-                    if (res != null)
-                    {
-                        IsOpen = false;
-                    }
+                    IsOpen = false;
+                }
 
-                }, null, $"{data.Name} Successfully Updated!");
-            }
+            }, null, $"{data.Name} Successfully Updated!");
+        }
 
         await LoadLibraryData();
         IsLoading = false;
@@ -263,13 +232,12 @@ public class EmployeeRecordsManagementBase : RecordTypesFormComponentBase
         IsConfirm = false;
         IsLoading = true;
 
-            await ExceptionHandlerService.HandleApiException(async () =>
-            {
-                var res = await RecordTypesService.DeleteRecordTypesAsync(Guid.Parse(id));
-            }, null, $"{NewConfig.Name} Successfully Deleted!");
+        await ExceptionHandlerService.HandleApiException(async () =>
+        {
+            var res = await RecordTypesService.DeleteRecordTypesAsync(Guid.Parse(id));
+        }, null, $"{NewConfig.Name} Successfully Deleted!");
         await LoadLibraryData();
         IsLoading = false;
     }
-
 }
 
