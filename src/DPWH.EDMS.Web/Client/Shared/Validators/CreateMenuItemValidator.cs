@@ -26,9 +26,9 @@ public class CreateMenuItemValidator : AbstractValidator<CreateMenuItemModel>
         RuleFor(x => x.SortOrder)
             .NotNull().WithMessage("SortOrder is required.");
 
-        //RuleFor(x => x.AuthorizedRoles)
-        //    .NotNull().WithMessage("AuthorizedRoles must not be null.")
-        //    .Must(x => x.Count > 0).WithMessage("AuthorizedRoles must contain at least one role.");
+        RuleFor(x => x.AuthorizedRoles)
+            .NotNull().WithMessage("AuthorizedRoles is required.")
+            .Must(x => x.Count > 0).WithMessage("AuthorizedRoles must contain at least one role.");
 
         RuleFor(x => x.NavType)
             .NotNull().WithMessage("Nav Type is required.");

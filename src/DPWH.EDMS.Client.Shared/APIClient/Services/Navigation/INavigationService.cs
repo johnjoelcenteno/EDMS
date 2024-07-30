@@ -9,4 +9,5 @@ public interface INavigationService
     Task<DataSourceResult> QueryByNavType(string navType, DataSourceRequest body);
     Task<DeleteResponse> Delete(Guid id);
     Task<MenuItemModelBaseApiResponse> GetById(Guid id);
+    Task<GuidNullableBaseApiResponse> Update(Guid id, UpdateMenuItemModel body);
 }

@@ -4,6 +4,7 @@ using DPWH.EDMS.Api.Contracts;
 using DPWH.EDMS.Client.Shared.APIClient.Services.Navigation;
 using DPWH.EDMS.Components;
 using DPWH.EDMS.Components.Helpers;
+using DPWH.EDMS.IDP.Core.Constants;
 using DPWH.EDMS.Shared.Enums;
 using DPWH.EDMS.Web.Client.Shared.BlazoredFluentValidator;
 using Microsoft.AspNetCore.Components;
@@ -16,19 +17,29 @@ public class CreateMenuItemFormBase : RxBaseComponent
     [Inject] public required INavigationService NavigationService { get; set; }
     [Inject] public required IMapper Mapper { get; set; }
 
-    [Parameter] public bool IsEditMode { get; set; } = false;
-    //[Parameter] public EventCallback<(CreateRecordRequest, UploadRecordRequestDocumentModel, UploadRecordRequestDocumentModel)> HandleCreateOnSubmit { get; set; }
-    //[Parameter] public EventCallback<CreateRecordRequest> HandleEditOnSubmit { get; set; } // TODO
     [Parameter] public EventCallback HandleOnCancel { get; set; }
     protected CreateMenuItemModel SelectedItem { get; set; } = new();
 
     // Lists
     protected List<MenuItemModel> MenuItemList = new();
+
     protected List<string> NavTypeList = new List<string>() { 
         NavType.MainMenu.ToString(), 
         NavType.CurrentUserMenu.ToString(), 
         NavType.Settings.ToString() 
     };
+
+    protected List<string> AuthorizedRoleList = new List<string>() {
+        ApplicationRoles.SuperAdmin, 
+        ApplicationRoles.SystemAdmin,
+        ApplicationRoles.Manager, 
+        ApplicationRoles.ITSupport, 
+        ApplicationRoles.Staff,
+        ApplicationRoles.EndUser,
+        ApplicationRoles.Deactivated,
+    };
+
+    protected List<string> SelectedAuthorizedRoleList = new List<string>();
 
     // Dropdowns
     //protected TelerikDropDownList<GetValidIDsResult, string> ParentIdsRef = new();
@@ -41,7 +52,7 @@ public class CreateMenuItemFormBase : RxBaseComponent
         IsLoading = true;
 
         SelectedItem.Expanded = false;
-        SelectedItem.AuthorizedRoles = new List<string>();
+        //SelectedItem.AuthorizedRoles = new List<string>();
         //SelectedItem.NavType = NavType.MainMenu.ToString();
 
         await LoadMenuItems();
@@ -83,6 +94,11 @@ public class CreateMenuItemFormBase : RxBaseComponent
                 ToastService.ShowError("Something went wront on creating menu item!");
             }
         }
+    }
+
+    protected void HandleSelectRoles()
+    {
+        SelectedItem.AuthorizedRoles = SelectedAuthorizedRoleList;
     }
     protected void HandleOnCancelCallback()
     {

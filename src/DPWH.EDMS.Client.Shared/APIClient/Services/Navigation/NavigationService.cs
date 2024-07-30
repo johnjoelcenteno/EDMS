@@ -37,4 +37,9 @@ public class NavigationService : INavigationService
     {
         return await _client.GetMenuItemAsync(id);        
     }
+
+    public async Task<GuidNullableBaseApiResponse> Update(Guid id, UpdateMenuItemModel body)
+    {
+        return await _client.UpdateMenuItemAsync(id, body);
+    }
 }

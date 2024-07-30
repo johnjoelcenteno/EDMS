@@ -76,8 +76,15 @@
                         </div>
                         <div class="col-md-6 col-12 p-2">
                             <label for="url">Authorized Roles</label>
-                            <p>TODO</p>
-                            @*<ValidationMessage For="@(() => SelectedItem.Url)" class="text-danger" /> *@
+
+                            <TelerikMultiSelect Data="@AuthorizedRoleList"
+                                                TItem="string"
+                                                TValue="string"
+                                                OnChange="HandleSelectRoles"
+                                                @bind-Value="SelectedAuthorizedRoleList"
+                                                Placeholder="-">
+                            </TelerikMultiSelect>
+                            <ValidationMessage For="@(() => SelectedItem.AuthorizedRoles)" class="text-danger" />
                         </div>
                     </div>
                 </div>
