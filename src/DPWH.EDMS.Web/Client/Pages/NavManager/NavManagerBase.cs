@@ -23,6 +23,17 @@ public class NavManagerBase : GridBase<MenuItemModel>
         NavManager.NavigateTo("/navmanager/create");
     }
 
+    protected void GoToEditMenuItem(Guid id)
+    {
+        NavManager.NavigateTo($"/navmanager/edit/{id.ToString()}");
+    }
+
+    protected void HandleEditMenuItem(GridCommandEventArgs args)
+    {
+        var item = (MenuItemModel)args.Item;
+        GoToEditMenuItem(item.Id);
+    }
+
     protected async Task HandleDeleteMenuItem(GridCommandEventArgs args)
     {
         IsLoading = true;

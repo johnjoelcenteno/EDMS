@@ -44,7 +44,7 @@
                             <GridColumn Field=@nameof(MenuItemModel.NavType) Title="Type" />
                             <GridColumn Field=@nameof(MenuItemModel.ParentId) Title="Parent" />     
                             <GridCommandColumn Width="260px">
-                                <GridCommandButton Icon="@SvgIcon.Pencil" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary"></GridCommandButton>
+                                <GridCommandButton Icon="@SvgIcon.Pencil" OnClick="HandleEditMenuItem" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary"></GridCommandButton>
                                 <GridCommandButton Icon="@SvgIcon.Trash" OnClick="HandleDeleteMenuItem"></GridCommandButton>
                             </GridCommandColumn>
                         </GridColumns>
