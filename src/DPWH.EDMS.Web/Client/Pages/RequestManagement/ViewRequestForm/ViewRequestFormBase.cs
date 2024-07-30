@@ -36,20 +36,6 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
 
     // Placeholders
     protected string? Remarks { get; set; }
-    protected string PickUpLocation
-    {
-        get
-        {
-            if (User.UserAccess == "Manager" || User.UserAccess == "Staff")
-            {
-                return User.Office;
-            }
-            else
-            {
-                return Offices.RMD.ToString();
-            }
-        }
-    }
     protected DateTime? DateReceived { get; set; } = DateTime.Now;
     protected DateTime? TimeReceived { get; set; } = DateTime.Now;
 
@@ -86,6 +72,28 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
 
         UpdateCurrentStepIndex();
         IsLoading = false;
+    }
+
+    protected string PickUpLocation
+    {
+        get
+        {
+            if (User.UserAccess == "Manager" || User.UserAccess == "Staff")
+            {
+                if (User.Office == Offices.RMD.ToString())
+                {
+                    return "Records Management Division";
+                }
+                else
+                {
+                    return "Human Resource Management Division";
+                }
+            }
+            else
+            {
+                return "Records Management Division";
+            }
+        }
     }
 
     protected async Task OnStatusChange(string newStatus)
@@ -132,7 +140,7 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
         {
             foreach (var record in RMDRecords)
             {
-                
+
                 if (!record.IsAvailable)
                 {
                     allFilesSelected = true;
@@ -151,7 +159,7 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
         {
             foreach (var record in HRMDRecords)
             {
-                
+
                 if (!record.IsAvailable)
                 {
                     allFilesSelected = true;
@@ -170,7 +178,7 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
         {
             foreach (var record in SelectedRecordRequest.RequestedRecords)
             {
-                
+
                 if (!record.IsAvailable)
                 {
                     allFilesSelected = true;
@@ -185,7 +193,7 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
                 }
             }
         }
-        
+
         if (allFilesSelected)
         {
             IsModalVisible = true;
@@ -228,16 +236,17 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
         IsLoading = true;
         IsModalVisible = false;
         await OnUploadDocument();
-        await OnStatusChange(RecordRequestStates.Claimed.ToString());
+        await OnStatusChange("For Release");
         ActiveTabIndex = 3;
         StateHasChanged();
         IsLoading = false;
     }
 
-    protected void OnClaim()
+    protected async Task OnClaim()
     {
         IsLoading = true;
         IsModalVisible = false;
+        await OnStatusChange(RecordRequestStates.Claimed.ToString());
         NavigationManager.NavigateTo("/request-management");
         StateHasChanged();
         IsLoading = false;
@@ -270,12 +279,16 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
                 CurrentStepIndex = 1;
                 break;
 
-            case var status when status == RecordRequestStates.ForRelease.ToString():
+            case var status when status == RecordRequestStates.ForRelease.ToString() || SelectedRecordRequest.Status == "For Release":
                 CurrentStepIndex = 2;
                 break;
 
-            default:
+            case var status when status == RecordRequestStates.Claimed.ToString():
                 CurrentStepIndex = 3;
+                break;
+
+            default:
+                CurrentStepIndex = 0;
                 break;
         }
     }
