@@ -14,21 +14,18 @@
     <p class="sub-heading">
         Oops! Looks like you don't have permission to access this page
     </p>
+
+    @if (isUserDeact || HasExceptions)
+    {
+        <button @onclick="RedirectToLogin" class="redirect-to-login-btn">Redirect to Login</button>
+    }
     <AuthorizeView>
-        <Authorized>
-            @if (isUserDeact)
-            {
-                <button @onclick="RedirectToLogin" class="dashboard-btn">Redirect to Login</button>
-            }
-            else
-            {
-                <button @onclick="RedirectToDashboard" class="dashboard-btn">Go Back to Dashboard</button>
-            }
-           
+        <Authorized>            
+                <button @onclick="RedirectToDashboard" class="dashboard-btn">Go Back to Dashboard</button>                       
         </Authorized>
-        <NotAuthorized>
+       @*  <NotAuthorized>
             <button @onclick="RedirectToLogin" class="dashboard-btn">Redirect to Login</button>
-        </NotAuthorized>
+        </NotAuthorized> *@
     </AuthorizeView>
     
 </div>
@@ -38,6 +35,8 @@
     [Inject] protected IUsersService usersService { get; set; } = default!;
     [Inject] private IToastService _ToastService { get; set; } = default!;
 
+    protected bool HasExceptions = false;
+
 
     private void RedirectToDashboard()
     {
@@ -46,8 +45,9 @@
 
     private void RedirectToLogin()
     {
-        NavigationManager.NavigateToLogout("authentication/logout");
+        NavigationManager.NavigateTo("/login", true);
     }
+
     [CascadingParameter]
     private Task<AuthenticationState> AuthenticationStateAsync { get; set; } = default!;
     private bool isUserDeact = false;
@@ -73,12 +73,20 @@
                             _ToastService.ShowError("Oops! It looks like this user is not currently available. Please try again later.");
                         }
                     }
+
+                    HasExceptions = false;
                 }
                 catch (Exception ex) when (ex is ApiException<ProblemDetails> apiExtension)
                 {
                     var problemDetails = apiExtension.Result;
                     var error = problemDetails.AdditionalProperties.ContainsKey("error") ? problemDetails.AdditionalProperties["error"].ToString() : problemDetails.AdditionalProperties["errors"].ToString();
                     _ToastService.ShowError(error);
+                    HasExceptions = true;
+                }
+                catch(Exception ex)
+                {
+                    Console.WriteLine(ex.Message.ToString());
+                    HasExceptions = true;
                 }
             }
         }
@@ -118,6 +126,24 @@
             margin-bottom: 0;
         }
 
+        #error-status-container button.redirect-to-login-btn {
+            min-width: 340px;
+            border: 2px solid #634792;
+            background-color: #FFF;
+            color: #634792;
+
+            font-size: 14px;
+            font-style: normal;
+            font-weight: 600;
+            line-height: normal;
+            padding: 12px 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 40px;
+            box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.10), 0px 1px 3px 0px rgba(0, 0, 0, 0.10), 0px 5px 5px 0px rgba(0, 0, 0, 0.09), 0px 11px 7px 0px rgba(0, 0, 0, 0.05), 0px 20px 8px 0px rgba(0, 0, 0, 0.01), 0px 31px 9px 0px rgba(0, 0, 0, 0.00);
+        }
+        
         #error-status-container button.dashboard-btn {
             color: #fefefe;
             font-size: 14px;

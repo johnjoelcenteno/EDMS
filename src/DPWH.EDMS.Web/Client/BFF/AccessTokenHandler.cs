@@ -38,13 +38,13 @@ public class AccessTokenHandler : DelegatingHandler
                 }
                 else
                 {
-                    //_navManager.NavigateTo("/401", true);
+                    Console.WriteLine("Something went wrong on fetching token.");
                 }
             }
-            //else
-            //{
-            //    _navManager.NavigateTo("/401", true);
-            //}
+            else
+            {
+                Console.WriteLine("Something went wrong on user authentication.");
+            }
 
         }
         catch (Exception ex)
