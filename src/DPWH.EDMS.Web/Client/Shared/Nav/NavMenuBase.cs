@@ -89,36 +89,11 @@ public class NavMenuBase: RxBaseComponent
             Role = GetRoleLabel(role);
 
             // TEST: Get current user menus
-            var currentUserMenusRes = await NavigationService
-                .QueryByNavType(NavType.CurrentUserMenu.ToString(), new DataSourceRequest() { Skip = 0 });
-            var currentUserMenus = GenericHelper.GetListByDataSource<Api.Contracts.MenuItemModel>(currentUserMenusRes.Data);
-            var navMenus2All = Mapper.Map<List<MenuModel>>(currentUserMenus);
-            NavMenus2 = navMenus2All.Where(x => x.Level == 0).ToList();
-
-            foreach (var menu in NavMenus2)
-            {
-                var children = navMenus2All
-                    .Where(x => x.Level == 1 && x.ParentId == menu.Id)
-                    .OrderBy(x => x.SortOrder)
-                    .ToList();
-                if (children.Any())
-                {
-                    menu.Children = children;
-
-                    foreach (var submenu in menu.Children)
-                    {
-                        var grandChildren = navMenus2All
-                        .Where(x => x.Level == 2 && x.ParentId == submenu.Id)
-                        .OrderBy(x => x.SortOrder)
-                        .ToList();
-
-                        if (grandChildren.Any())
-                        {
-                            submenu.Children = grandChildren;
-                        }
-                    }
-                }
-            }
+            //var currentUserMenusRes = await NavigationService
+            //    .QueryByNavType(NavType.CurrentUserMenu.ToString(), new DataSourceRequest() { Skip = 0 });
+            //var currentUserMenus = GenericHelper.GetListByDataSource<Api.Contracts.MenuItemModel>(currentUserMenusRes.Data);
+            //var navMenus2All = Mapper.Map<List<MenuModel>>(currentUserMenus);
+            //NavMenus2 = navMenus2All.Where(x => x.Level == 0).ToList();
 
             //foreach (var menu in NavMenus2)
             //{
@@ -129,29 +104,30 @@ public class NavMenuBase: RxBaseComponent
             //    if (children.Any())
             //    {
             //        menu.Children = children;
-            //        var grandChildren = navMenus2All
-            //            .Where(x => x.Level == 2 && x.ParentId == menu.Id)
+
+            //        foreach (var submenu in menu.Children)
+            //        {
+            //            var grandChildren = navMenus2All
+            //            .Where(x => x.Level == 2 && x.ParentId == submenu.Id)
             //            .OrderBy(x => x.SortOrder)
             //            .ToList();
 
-            //        if (grandChildren.Any())
-            //        {
-            //            // todo
+            //            if (grandChildren.Any())
+            //            {
+            //                submenu.Children = grandChildren;
+            //            }
             //        }
             //    }
             //}
 
             // TEST: Get settings menus
-            var settingsMenusRes = await NavigationService.QueryByNavType(NavType.Settings.ToString(), new DataSourceRequest() { Skip = 0 });
-            var settingsMenus = GenericHelper.GetListByDataSource<Api.Contracts.MenuItemModel>(settingsMenusRes.Data).OrderBy(menu => menu.SortOrder).ToList(); 
-            NavSettings = Mapper.Map<List<MenuModel>>(settingsMenus);
-
+            //var settingsMenusRes = await NavigationService.QueryByNavType(NavType.Settings.ToString(), new DataSourceRequest() { Skip = 0 });
+            //var settingsMenus = GenericHelper.GetListByDataSource<Api.Contracts.MenuItemModel>(settingsMenusRes.Data).OrderBy(menu => menu.SortOrder).ToList(); 
+            //NavSettings = Mapper.Map<List<MenuModel>>(settingsMenus);
 
             NavMenus = MenuDataService.GetMenuItems().Where(m => m.AuthorizedRoles.Any(r => r == role)).ToList();
-
-            //NavMenus = MenuDataService.GetMenuItems().Where(m => m.AuthorizedRoles.Any(r => r == role)).ToList();
-            //NavMenus2 = MenuDataService.GetMenuItems2().Where(m => m.AuthorizedRoles.Any(r => r == role)).ToList();
-            //NavSettings = MenuDataService.GetSettingsItems().Where(m => m.AuthorizedRoles.Any(r => r == role)).ToList();
+            NavMenus2 = MenuDataService.GetMenuItems2().Where(m => m.AuthorizedRoles.Any(r => r == role)).ToList();
+            NavSettings = MenuDataService.GetSettingsItems().Where(m => m.AuthorizedRoles.Any(r => r == role)).ToList();
         }
     }
 
