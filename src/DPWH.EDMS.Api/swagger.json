@@ -5928,6 +5928,10 @@
           "recordUri": {
             "type": "string",
             "nullable": true
+          },
+          "docVersion": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false

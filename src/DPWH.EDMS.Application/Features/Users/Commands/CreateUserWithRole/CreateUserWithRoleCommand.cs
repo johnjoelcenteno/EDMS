@@ -113,17 +113,27 @@ internal sealed class CreateUserWithRoleHandler : IRequestHandler<CreateUserWith
 
                 var claims = await _userManager.GetClaimsAsync(user);
 
-                var edmsClaim = claims.FirstOrDefault(x => x.Type == "client" && x.Value == "EDMS");
-                if (edmsClaim is null)
-                {                    
-                    var addClientClaimResult = await _userManager.AddClaimAsync(user, new Claim("client", "EDMS"));
+                //check if the user has one of the supported roles in EDMS
+                var existingEDMSUser = false;
+                foreach (var claim in claims.Where(c => c.Type == JwtClaimTypes.Role))
+                {
+                    var isExist = ApplicationRoles.UserAccessMapping.ContainsKey(claim.Value);
+                    if (isExist)
+                    {
+                        existingEDMSUser = true;
+                        break;
+                    }
+                }
+
+                if (!existingEDMSUser)
+                {
                     var addRoleClaimResult = await _userManager.AddClaimAsync(user, new Claim(JwtClaimTypes.Role, command.Role));
 
                     return new CreateUserWithRoleResult
                     {
                         Id = user.Id,
                         UserName = user.UserName!,
-                        Email = user.Email!,                        
+                        Email = user.Email!,
                         Role = command.Role,
                         UserAccess = ApplicationRoles.GetDisplayRoleName(command.Role),
                         CreatedBy = user.CreatedBy
@@ -134,7 +144,7 @@ internal sealed class CreateUserWithRoleHandler : IRequestHandler<CreateUserWith
                     _logger.LogError("User `{Email}` already exists", command.Email);
                     throw new AppException($"User `{command.Email}` already exists");
                 }
-            }            
+            }
         }
 
         if (ApplicationPolicies.NoLicenseUsers.Contains(command.Role))

@@ -12,7 +12,8 @@ public static class RecordMappers
             Id = entity.Id,
             EmployeeId = entity.EmployeeId,
             RecordName = entity.RecordName,
-            RecordTypeId = entity.RecordTypeId            
+            RecordTypeId = entity.RecordTypeId,
+            DocVersion = entity.Created.ToString("MMddyyyy")
         };
     }
 }
