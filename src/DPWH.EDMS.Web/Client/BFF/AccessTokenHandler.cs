@@ -38,19 +38,19 @@ public class AccessTokenHandler : DelegatingHandler
                 }
                 else
                 {
-                    _navManager.NavigateTo("/401", true);
+                    Console.WriteLine("Something went wrong on fetching token.");
                 }
             }
             else
             {
-                _navManager.NavigateTo("/401", true);
+                Console.WriteLine("Something went wrong on user authentication.");
             }
 
         }
         catch (Exception ex)
         {
             //_logger.LogError(ex.Message, ex);
-            _navManager.NavigateTo("/401", true);
+            //_navManager.NavigateTo("/401", true);
         }
 
         return await base.SendAsync(request, cancellationToken);

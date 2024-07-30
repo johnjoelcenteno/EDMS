@@ -11,7 +11,7 @@ using Telerik.Blazor.Components;
 
 namespace DPWH.EDMS.Web.Client.Shared.Nav;
 
-public class NavMenuBase: RxBaseComponent
+public class NavMenuBase : RxBaseComponent
 {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateAsync { get; set; }
     //[Inject] public required AuthRxService AuthRxService { get; set; }
@@ -50,9 +50,9 @@ public class NavMenuBase: RxBaseComponent
                 SelectedLevel1Item = default;
             }
 
-            #pragma warning disable BL0005 // Component parameter should not be set outside of its component.
+#pragma warning disable BL0005 // Component parameter should not be set outside of its component.
             DrawerRef.Expanded = expanded;
-            #pragma warning restore BL0005 // Component parameter should not be set outside of its component.
+#pragma warning restore BL0005 // Component parameter should not be set outside of its component.
         }));
 
     }
@@ -68,7 +68,7 @@ public class NavMenuBase: RxBaseComponent
         if (user.Identity is not null && user.Identity.IsAuthenticated)
         {
             var roles = user.Claims.Where(c => c.Type == "role")!.ToList();
-           
+
             var role = roles.FirstOrDefault(role => !string.IsNullOrEmpty(role.Value) && role.Value.Contains(ApplicationRoles.RolePrefix))?.Value ?? string.Empty;
 
             var firstnameValue = user.Claims.FirstOrDefault(x => x.Type == "firstname")?.Value;
@@ -125,7 +125,7 @@ public class NavMenuBase: RxBaseComponent
 
     protected void OnToggleLevel1Item(MenuModel item)
     {
-        if( item.Children != null && item.Children.Count() > 0)
+        if (item.Children != null && item.Children.Count() > 0)
         {
             ToggleLevel1Item(item);
         }

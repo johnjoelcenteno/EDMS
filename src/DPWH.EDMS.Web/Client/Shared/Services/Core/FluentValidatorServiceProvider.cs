@@ -16,6 +16,8 @@ public static class FluentValidatorServiceProvider
         services.AddTransient<IValidator<ConfigModel>,AddEditDataLibraryRequestFormValidator>();
         services.AddTransient<IValidator<RecordsLibraryModel>,AddEditRecordTypeFormValidator>();
         services.AddTransient<IValidator<SignatoryManagementModel>, AddEditSignatoryFormValidator>();
+        services.AddTransient<IValidator<CreateMenuItemModel>, CreateMenuItemValidator>();
+        services.AddTransient<IValidator<Api.Contracts.MenuItemModel>, UpdateMenuItemValidator>();
 
         return services;
     }

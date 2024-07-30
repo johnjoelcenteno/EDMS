@@ -23,6 +23,7 @@ public interface IWriteRepository
     DbSet<ChangeLog> ChangeLogs { get; }
     DbSet<Agency> Agencies { get; }    
     DbSet<DataSyncLog> DataSyncLogs { get; }
+    DbSet<MenuItem> MenuItems { get; }
     DatabaseFacade Database { get; }
     Task<int> SaveChangesAsync(CancellationToken token = default);
 }

@@ -1,0 +1,69 @@
+﻿@page "/navmanager"
+@using DPWH.EDMS.Api.Contracts
+
+@inherits NavManagerBase
+
+<EdmsLoader Visible="@IsLoading" />
+
+<h3><span class="bi me-2 material-symbols-outlined">account_tree</span> Nav Manager</h3>
+
+<hr />
+
+<div class="d-flex flex-row mt-3">
+    <TelerikCard Width="100%">
+        <CardBody>
+            <div class="d-flex flex-row justify-content-end">
+                <TelerikButton Class="mb-2"
+                               Icon="@FontIcon.Plus"
+                               ThemeColor="@ThemeConstants.Button.ThemeColor.Primary"
+                               OnClick="GoToCreateMenuItem">
+                    Create Menu
+                </TelerikButton>
+            </div>
+            <div class="d-flex flex-column">
+                @if (GridData != null && !XSmall)
+                {
+                    <TelerikGrid TItem="MenuItemModel"
+                                 @bind-PageSize="@PageSize"
+                                 Height="@GridHeight"
+                                 FilterMode="GridFilterMode.FilterRow"
+                                 Sortable=true
+                                 Data="GridData"
+                                 OnStateChanged="@OnStateChanged"
+                                 @ref="GridRef"
+                                 Context="item">
+                        <GridSettings>
+                            <GridPagerSettings PageSizes="@PageSizes">
+                            </GridPagerSettings>
+                        </GridSettings>
+                        <GridColumns>
+                            <GridColumn Field=@nameof(MenuItemModel.Text) Title="Text" />                                
+                            <GridColumn Field=@nameof(MenuItemModel.Url) Title="Url" />                                
+                            <GridColumn Field=@nameof(MenuItemModel.SortOrder) Title="Sort Order" />                                
+                            <GridColumn Field=@nameof(MenuItemModel.Level) Title="Level" />
+                            <GridColumn Field=@nameof(MenuItemModel.NavType) Title="Type" />
+                            <GridColumn Field=@nameof(MenuItemModel.ParentId) Title="Parent" />     
+                            <GridCommandColumn Width="260px">
+                                <GridCommandButton Icon="@SvgIcon.Pencil" OnClick="HandleEditMenuItem" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary"></GridCommandButton>
+                                <GridCommandButton Icon="@SvgIcon.Trash" OnClick="HandleDeleteMenuItem"></GridCommandButton>
+                            </GridCommandColumn>
+                        </GridColumns>
+                    </TelerikGrid>
+                }
+                else
+                {
+                    <span>No Data to display.</span>
+                }
+                <TelerikPager PageChanged="@PageChangedHandler"
+                              Total="TotalItems"
+                              ButtonCount="6"
+                              PageSize="@PageSize"
+                              PageSizeChanged="@PageSizeChangedHandler"
+                              PageSizes="@(new List<int?> {5, 10, 20})"
+                              Page="@Page">
+                </TelerikPager>
+            </div>
+
+        </CardBody>
+    </TelerikCard>
+</div>

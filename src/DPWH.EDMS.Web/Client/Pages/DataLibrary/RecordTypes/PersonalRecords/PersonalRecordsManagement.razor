@@ -244,7 +244,7 @@
                 @switch (GetOpenbtn)
                 {
                     case "Add":
-                        <RecordTypesRequestForm HandleOnCancel="OnCancel" HandleCreateOnSubmit="OnSave" Type="Add" EditItem="@NewConfig" DataType="@DataLibraryEnum.PersonalRecords.GetDescription()"/>
+                        <RecordTypesRequestForm HandleOnCancel="OnCancel" HandleCreateOnSubmit="OnSave" Type="Add" EditItem="@NewConfig" DataType="@DataLibraryEnum.PersonalRecords.GetDescription()" />
                         break;
                     case "Edit":
                         <RecordTypesRequestForm HandleOnCancel="OnCancel" HandleCreateOnSubmit="OnUpdateItem" Type="Edit" EditItem="@NewConfig" DataType="@DataLibraryEnum.PersonalRecords.GetDescription()" />

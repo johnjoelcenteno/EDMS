@@ -30,6 +30,18 @@ public static class ApiEndpoints
 
     }
 
+    public static class Navigation
+    {
+        private const string Base = $"{ApiBase}/Navigation";
+
+        public const string Query = $"{Base}/Query";
+        public const string QueryByNavType = $"{Base}/QueryByNavType/{{navType}}";
+        public const string GetById = $"{Base}/{{id:guid}}";
+        public const string Create = $"{Base}/Create";
+        public const string Update = $"{Base}/{{id:guid}}";
+        public const string Delete = $"{Base}/{{id:guid}}";
+    }
+
     public static class RecordRequest
     {
         private const string Base = $"{ApiBase}/recordrequests";

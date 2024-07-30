@@ -10,7 +10,7 @@ namespace DPWH.EDMS.Web.Client.Pages.DataLibrary.RecordTypes.DPWHIssuances;
 
 public class DPWHIssuanceManagementBase : RecordTypesFormComponentBase
 {
-  
+
 
 
     #region Boolean Declaration

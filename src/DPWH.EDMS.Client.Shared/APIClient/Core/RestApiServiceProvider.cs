@@ -1,6 +1,7 @@
 using DPWH.EDMS.Client.Shared.APIClient.Services.DataLibrary;
 using DPWH.EDMS.Client.Shared.APIClient.Services.Licenses;
 using DPWH.EDMS.Client.Shared.APIClient.Services.Lookups;
+using DPWH.EDMS.Client.Shared.APIClient.Services.Navigation;
 using DPWH.EDMS.Client.Shared.APIClient.Services.RecordManagement;
 using DPWH.EDMS.Client.Shared.APIClient.Services.RecordRequestSupportingFiles;
 using DPWH.EDMS.Client.Shared.APIClient.Services.RecordTypes;
@@ -28,6 +29,7 @@ public static class RestApiServiceProvider
         services.AddScoped<ISignatoryManagementService, SignatoryManagementService>();
         services.AddScoped<ISystemReportService, SystemReportService>();
         services.AddScoped<IReportsService, ReportsService>();
+        services.AddScoped<INavigationService, NavigationService>();
         return services;
     }
 }

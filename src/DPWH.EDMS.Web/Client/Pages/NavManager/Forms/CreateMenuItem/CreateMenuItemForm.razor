@@ -1,0 +1,105 @@
+﻿@page "/navmanager/create"
+@using DPWH.EDMS.Api.Contracts
+
+@inherits CreateMenuItemFormBase
+
+<EdmsLoader Visible="@IsLoading" />
+
+<h3>Create Menu Item</h3>
+<hr />
+<EditForm Model="SelectedItem" OnSubmit="@HandleOnSubmitCallback">
+    <FluentValidationValidator @ref="FluentValidationValidator" DisableAssemblyScanning="@true"></FluentValidationValidator>
+    <TelerikCard Class="edms-card-form">
+        <CardBody>
+            <div class="d-flex flex-row">
+                <p Class="mb-0 py-1 fw-bold">Menu Item</p>
+            </div>
+            <CardSeparator Class="my-2"></CardSeparator>
+            <div class="form-group">
+                <div class="row m-0">
+                    <div class="col-md-6 col-12 p-2">
+                        <label for="text">Text</label>
+                        <InputText id="text" class="form-control" @bind-Value="SelectedItem.Text" />
+                        <ValidationMessage For="@(() => SelectedItem.Text)" class="text-danger" />
+                    </div>
+                    <div class="col-md-6 col-12 p-2">
+                        <label for="url">Page URL</label>
+                        <InputText id="url" class="form-control" @bind-Value="SelectedItem.Url" />
+                        <ValidationMessage For="@(() => SelectedItem.Url)" class="text-danger" />
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="row m-0">
+                    <div class="col-md-6 col-12 p-2">
+                        <label for="icon">Icon</label>
+                        <InputText id="icon" class="form-control" @bind-Value="SelectedItem.Icon" />
+                        <ValidationMessage For="@(() => SelectedItem.Icon)" class="text-danger" />
+                    </div>
+                    <div class="col-md-6 col-12 p-2">
+                        <label for="url">Nav Type</label>
+                        <TelerikDropDownList Data="@NavTypeList"
+                                             @bind-Value="SelectedItem.NavType"
+                                             Filterable="true"
+                                             ValueField="@nameof(MenuItemModel.NavType)"
+                                             TextField="@nameof(MenuItemModel.NavType)"
+                                             DefaultText="Select" />
+                        <ValidationMessage For="@(() => SelectedItem.NavType)" class="text-danger" />
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="row m-0">
+
+                    <div class="col-md-6 col-12 p-2">
+                        <label for="sortOrder">Sort Order</label>
+                        <InputNumber id="sortOrder" class="form-control" @bind-Value="SelectedItem.SortOrder" />
+                        <ValidationMessage For="@(() => SelectedItem.SortOrder)" class="text-danger" />
+                    </div>
+                    <div class="col-md-6 col-12 p-2">
+                        <label for="level">Level</label>
+                        <InputNumber id="level" class="form-control" @bind-Value="SelectedItem.Level" />
+                        <ValidationMessage For="@(() => SelectedItem.Level)" class="text-danger" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row m-0">
+                        <div class="col-md-6 col-12 p-2">
+                            <label for="dateRequested">Parent</label>
+                            <TelerikDropDownList Data="@MenuItemList"
+                                                 @bind-Value="SelectedItem.ParentId"
+                                                 Filterable="true"
+                                                 ValueField="@nameof(MenuItemModel.Id)"
+                                                 TextField="@nameof(MenuItemModel.Text)"
+                                                 DefaultText="Select" />
+                            <ValidationMessage For="@(() => SelectedItem.ParentId)" class="text-danger" />
+                        </div>
+                        <div class="col-md-6 col-12 p-2">
+                            <label for="url">Authorized Roles</label>
+
+                            <TelerikMultiSelect Data="@AuthorizedRoleList"
+                                                TItem="string"
+                                                TValue="string"
+                                                OnChange="HandleSelectRoles"
+                                                @bind-Value="SelectedAuthorizedRoleList"
+                                                Placeholder="-">
+                            </TelerikMultiSelect>
+                            <ValidationMessage For="@(() => SelectedItem.AuthorizedRoles)" class="text-danger" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </CardBody>
+    </TelerikCard>
+    <div class="edms-card-form my-3">
+        <div class="d-flex flex-row justify-content-between">
+            <TelerikButton @onclick="HandleOnCancelCallback"
+                           FillMode="@ThemeConstants.Button.FillMode.Outline" ThemeColor="@ThemeConstants.Button.ThemeColor.Secondary">
+                Cancel
+            </TelerikButton>
+            <TelerikButton ButtonType="ButtonType.Submit" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary">
+                Save
+            </TelerikButton>
+        </div>
+    </div>
+</EditForm>

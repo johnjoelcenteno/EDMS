@@ -54,6 +54,9 @@ public class AppDataContext : DbContext, IReadRepository, IWriteRepository
     public DbSet<RecordType> RecordTypes { get; set; }
     public IQueryable<RecordType> RecordTypesView => RecordTypes.AsNoTracking();
 
+    public DbSet<MenuItem> MenuItems { get; set; }
+    public IQueryable<MenuItem> MenuItemsView => MenuItems.AsNoTracking();
+
     public DbSet<Signatory> Signatories { get; set; }
     public IQueryable<Signatory> SignatoriesView => Signatories.AsNoTracking();
 

@@ -14,7 +14,7 @@ using Telerik.DataSource;
 
 namespace DPWH.EDMS.Web.Client.Shared.RecordRequest.RequestForm;
 
-public class RecordTypesFormComponentBase : GridBase<RecordsLibraryModel> 
+public class RecordTypesFormComponentBase : GridBase<RecordsLibraryModel>
 {
     #region Dependency Injection
     [Inject] public required IRecordTypesService RecordTypesService { get; set; }
@@ -28,8 +28,8 @@ public class RecordTypesFormComponentBase : GridBase<RecordsLibraryModel>
 
     #region Parameter
     [Parameter] public EventCallback<RecordsLibraryModel> HandleCreateOnSubmit { get; set; }
-    [Parameter] public EventCallback HandleOnCancel {  get; set; }
-    [Parameter] public string Type {  get; set; }
+    [Parameter] public EventCallback HandleOnCancel { get; set; }
+    [Parameter] public string Type { get; set; }
     [Parameter] public RecordsLibraryModel EditItem { get; set; }
     [Parameter] public string DataType { get; set; }
 
@@ -55,11 +55,11 @@ public class RecordTypesFormComponentBase : GridBase<RecordsLibraryModel>
     protected string? SearchCreatedBy { get; set; }
     protected DateTime? SelectedCreated { get; set; }
 
-    protected TelerikDialog DialogReference = new();    
+    protected TelerikDialog DialogReference = new();
     #region Submit Events
     protected async Task HandleOnSubmitCallback()
     {
-        if(await FluentValidationValidator!.ValidateAsync())
+        if (await FluentValidationValidator!.ValidateAsync())
         {
             await HandleCreateOnSubmit.InvokeAsync(NewConfig);
         }
@@ -103,7 +103,7 @@ public class RecordTypesFormComponentBase : GridBase<RecordsLibraryModel>
     }
     protected async Task LoadCurrentValues()
     {
-        if(EditItem.Name != null && Type == "Edit")
+        if (EditItem.Name != null && Type == "Edit")
         {
             NewConfig.Name = EditItem.Name;
             NewConfig.Id = EditItem.Id;
@@ -116,8 +116,8 @@ public class RecordTypesFormComponentBase : GridBase<RecordsLibraryModel>
         {
             NewConfig.Category = DataType;
         }
-        
-    
+
+
 
     }
     #endregion

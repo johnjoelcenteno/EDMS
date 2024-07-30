@@ -56,7 +56,7 @@ public class EmployeeRecordsManagementBase : RecordTypesFormComponentBase
         GetGridMenuItems();
     }
 
-    
+
 
 
     protected async void OnItemClick(GridMenuItemModel item)
@@ -196,32 +196,32 @@ public class EmployeeRecordsManagementBase : RecordTypesFormComponentBase
         }
 
 
-            if (string.IsNullOrEmpty(item.Section) || string.IsNullOrEmpty(item.Office))
-            {
-                IsSectionEmpty = string.IsNullOrEmpty(item.Section);
-                IsOfficeEmpty = string.IsNullOrEmpty(item.Office);
+        if (string.IsNullOrEmpty(item.Section) || string.IsNullOrEmpty(item.Office))
+        {
+            IsSectionEmpty = string.IsNullOrEmpty(item.Section);
+            IsOfficeEmpty = string.IsNullOrEmpty(item.Office);
 
-            }
-            else
+        }
+        else
+        {
+            var data = new UpdateRecordTypeModel
             {
-                var data = new UpdateRecordTypeModel
+                IsActive = true,
+                Category = "Employee Documents",
+                Name = item.Name,
+                Section = item.Section,
+                Office = item.Office
+            };
+            await ExceptionHandlerService.HandleApiException(async () =>
+            {
+                var res = await RecordTypesService.UpdateRecordTypesAsync(item.Id, data);
+                if (res != null)
                 {
-                    IsActive = true,
-                    Category = "Employee Documents",
-                    Name = item.Name,
-                    Section = item.Section,
-                    Office = item.Office
-                };
-                await ExceptionHandlerService.HandleApiException(async () =>
-                {
-                    var res = await RecordTypesService.UpdateRecordTypesAsync(item.Id, data);
-                    if (res != null)
-                    {
-                        IsOpen = false;
-                    }
+                    IsOpen = false;
+                }
 
-                }, null, $"{data.Name} Successfully Updated!");
-            }
+            }, null, $"{data.Name} Successfully Updated!");
+        }
 
         await LoadLibraryData();
         IsLoading = false;
@@ -232,10 +232,10 @@ public class EmployeeRecordsManagementBase : RecordTypesFormComponentBase
         IsConfirm = false;
         IsLoading = true;
 
-            await ExceptionHandlerService.HandleApiException(async () =>
-            {
-                var res = await RecordTypesService.DeleteRecordTypesAsync(Guid.Parse(id));
-            }, null, $"{NewConfig.Name} Successfully Deleted!");
+        await ExceptionHandlerService.HandleApiException(async () =>
+        {
+            var res = await RecordTypesService.DeleteRecordTypesAsync(Guid.Parse(id));
+        }, null, $"{NewConfig.Name} Successfully Deleted!");
         await LoadLibraryData();
         IsLoading = false;
     }
