@@ -1,12 +1,8 @@
-﻿using AutoMapper;
-using DPWH.EDMS.Api.Contracts;
-using DPWH.EDMS.Client.Shared.APIClient.Services.Navigation;
-using DPWH.EDMS.Client.Shared.Configurations;
+﻿using DPWH.EDMS.Client.Shared.Configurations;
 using DPWH.EDMS.Client.Shared.Models;
 using DPWH.EDMS.Components;
 using DPWH.EDMS.Components.Helpers;
 using DPWH.EDMS.IDP.Core.Constants;
-using DPWH.EDMS.Shared.Enums;
 using DPWH.EDMS.Web.Client.Shared.Services.Navigation;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -15,14 +11,12 @@ using Telerik.Blazor.Components;
 
 namespace DPWH.EDMS.Web.Client.Shared.Nav;
 
-public class NavMenuBase : RxBaseComponent
+public class NavMenuBase: RxBaseComponent
 {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateAsync { get; set; }
     //[Inject] public required AuthRxService AuthRxService { get; set; }
     [Inject] public required ConfigManager ConfigManager { get; set; }
     [Inject] public required IMenuDataService MenuDataService { get; set; }
-    [Inject] public required IMapper Mapper { get; set; }
-    [Inject] public required INavigationService NavigationService { get; set; }
     [Inject] public required NavRx NavRx { get; set; }
 
     protected bool IsNavMenuCollapsed = false;
@@ -56,70 +50,44 @@ public class NavMenuBase : RxBaseComponent
                 SelectedLevel1Item = default;
             }
 
-#pragma warning disable BL0005 // Component parameter should not be set outside of its component.
+            #pragma warning disable BL0005 // Component parameter should not be set outside of its component.
             DrawerRef.Expanded = expanded;
-#pragma warning restore BL0005 // Component parameter should not be set outside of its component.
+            #pragma warning restore BL0005 // Component parameter should not be set outside of its component.
         }));
 
     }
+
     private async Task SetMenu()
     {
         if (AuthenticationStateAsync is null)
             return;
-
-        //var menus = MenuDataService.GetMenuItems();
 
         var authState = await AuthenticationStateAsync;
         var user = authState.User;
 
         if (user.Identity is not null && user.Identity.IsAuthenticated)
         {
-            var roleValue = user.Claims.FirstOrDefault(c => c.Type == "role")!.Value;
+            var roles = user.Claims.Where(c => c.Type == "role")!.ToList();
+           
+            var role = roles.FirstOrDefault(role => !string.IsNullOrEmpty(role.Value) && role.Value.Contains(ApplicationRoles.RolePrefix))?.Value ?? string.Empty;
+
             var firstnameValue = user.Claims.FirstOrDefault(x => x.Type == "firstname")?.Value;
             var lastnameValue = user.Claims.FirstOrDefault(x => x.Type == "lastname")?.Value;
             var office = user.Claims.FirstOrDefault(x => x.Type == "office")?.Value;
-            if (!string.IsNullOrEmpty(firstnameValue) && !string.IsNullOrEmpty(lastnameValue))
-            {
-                var displayValue = $"{firstnameValue} {lastnameValue}";
-                DisplayName = GenericHelper.CapitalizeFirstLetter(displayValue);
-            }
-            else
-            {
-                DisplayName = "---";
-            }
-            if (!string.IsNullOrEmpty(office))
-            {
-                Office = GetOfficeName(office);
-            }
-            else
-            {
-                Office = "---";
-            }
-            Role = GetRoleLabel(roleValue);
 
-            try
-            {
-                // TEST: Get current user menus
-                var currentUserMenusRes = await NavigationService.QueryByNavType(NavType.CurrentUserMenu.ToString(), new DataSourceRequest() { Skip = 0 });
-                var currentUserMenus = GenericHelper.GetListByDataSource<Api.Contracts.MenuItemModel>(currentUserMenusRes.Data);
-                NavMenus2 = Mapper.Map<List<MenuModel>>(currentUserMenus);
+            DisplayName = (!string.IsNullOrEmpty(firstnameValue) && !string.IsNullOrEmpty(lastnameValue))
+                ? GenericHelper.CapitalizeFirstLetter($"{firstnameValue} {lastnameValue}")
+                : "---";
 
-                // TEST: Get settings menus
-                var settingsMenusRes = await NavigationService.QueryByNavType(NavType.Settings.ToString(), new DataSourceRequest() { Skip = 0 });
-                var settingsMenus = GenericHelper.GetListByDataSource<Api.Contracts.MenuItemModel>(settingsMenusRes.Data).OrderBy(menu => menu.SortOrder).ToList(); ;
-                NavSettings = Mapper.Map<List<MenuModel>>(settingsMenus);
+            Office = !string.IsNullOrEmpty(office) ? GetOfficeName(office) : "---";
+            Role = GetRoleLabel(role);
 
-
-                NavMenus = MenuDataService.GetMenuItems().Where(m => m.AuthorizedRoles.Any(r => r == roleValue)).ToList();
-                //NavMenus2 = MenuDataService.GetMenuItems2().Where(m => m.AuthorizedRoles.Any(r => r == roleValue)).ToList();
-            }
-            catch (Exception ex)
-            {
-                var x = ex.Message;
-                throw;
-            }
+            NavMenus = MenuDataService.GetMenuItems().Where(m => m.AuthorizedRoles.Any(r => r == role)).ToList();
+            NavMenus2 = MenuDataService.GetMenuItems2().Where(m => m.AuthorizedRoles.Any(r => r == role)).ToList();
+            NavSettings = MenuDataService.GetSettingsItems().Where(m => m.AuthorizedRoles.Any(r => r == role)).ToList();
         }
     }
+
     protected string GetOfficeName(string officeCode)
     {
         return officeCode switch
@@ -157,7 +125,7 @@ public class NavMenuBase : RxBaseComponent
 
     protected void OnToggleLevel1Item(MenuModel item)
     {
-        if (item.Children != null && item.Children.Count() > 0)
+        if( item.Children != null && item.Children.Count() > 0)
         {
             ToggleLevel1Item(item);
         }

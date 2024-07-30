@@ -67,17 +67,40 @@
                 <div class="row">
                     <div class="col">
                         <p class="mb-1"><b>Record(s) Requested</b></p>
-                        @if (SelectedRecordRequest.RequestedRecords != null && SelectedRecordRequest.RequestedRecords.Count > 0 && GroupedRecords != null)
+                        @if (User.Office == Offices.RMD.ToString() && RMDRecords != null)
                         {
-                            @foreach (var office in GroupedRecords)
+                            <p><b>@Offices.RMD.ToString())</b></p>
+                            <ul>
+                                @foreach (var record in RMDRecords)
+                                {
+                                    <li>@record.RecordType</li>
+                                }
+                            </ul>
+                        }
+                        else if (User.Office == Offices.HRMD.ToString() && HRMDRecords != null)
+                        {
+                            <p><b>@Offices.HRMD.ToString())</b></p>
+                            <ul>
+                                @foreach (var record in HRMDRecords)
+                                {
+                                    <li>@record.RecordType</li>
+                                }
+                            </ul>
+                        }
+                        else
+                        {
+                            if (SelectedRecordRequest.RequestedRecords != null && SelectedRecordRequest.RequestedRecords.Count > 0 && GroupedRecords != null)
                             {
-                                <p><b>@office.Key</b></p>
-                                <ul>
-                                    @foreach (var recordType in office)
-                                    {
-                                        <li>@recordType</li>
-                                    }
-                                </ul>
+                                @foreach (var office in GroupedRecords)
+                                {
+                                    <p><b>@office.Key</b></p>
+                                    <ul>
+                                        @foreach (var recordType in office)
+                                        {
+                                            <li>@recordType</li>
+                                        }
+                                    </ul>
+                                }                                
                             }
                         }
                     </div>
@@ -103,7 +126,7 @@
                     @StepperFragment
                     <div class="d-flex gap-3 justify-content-center">
                         <TelerikButton OnClick="OnCancel" FillMode="@ThemeConstants.Button.FillMode.Outline">Cancel</TelerikButton>
-                        <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.Status == RecordRequestStates.Reviewed.ToString())">Submit</TelerikButton>
+                        <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.Status == RecordRequestStates.Submitted.ToString())">Submit</TelerikButton>
                     </div>
                 </div>
             }
@@ -128,7 +151,7 @@
                             @foreach (var record in RMDRecords)
                             {
                                 <div>
-                                    <TelerikCheckBox Id="@record.RecordType" @bind-Value="@record.IsAvailable" Enabled="SelectedRecordRequest.Status == RecordRequestStates.Reviewed.ToString()" />
+                                    <TelerikCheckBox Id="@record.RecordType" @bind-Value="@record.IsAvailable" Enabled="SelectedRecordRequest.Status == RecordRequestStates.Submitted.ToString()" />
                                     <label for="@record.RecordType">@record.RecordType</label>
                                 </div>
                             }
@@ -138,7 +161,7 @@
                             @foreach (var record in HRMDRecords)
                             {
                                 <div>
-                                    <TelerikCheckBox Id="@record.RecordType" @bind-Value="@record.IsAvailable" Enabled="SelectedRecordRequest.Status == RecordRequestStates.Reviewed.ToString()" />
+                                    <TelerikCheckBox Id="@record.RecordType" @bind-Value="@record.IsAvailable" Enabled="SelectedRecordRequest.Status == RecordRequestStates.Submitted.ToString()" />
                                     <label for="@record.RecordType">@record.RecordType</label>
                                 </div>
                             }
@@ -148,7 +171,7 @@
                             @foreach (var record in SelectedRecordRequest.RequestedRecords)
                             {
                                 <div>
-                                    <TelerikCheckBox Id="@record.RecordType" @bind-Value="@record.IsAvailable" Enabled="SelectedRecordRequest.Status == RecordRequestStates.Reviewed.ToString()" />
+                                    <TelerikCheckBox Id="@record.RecordType" @bind-Value="@record.IsAvailable" Enabled="SelectedRecordRequest.Status == RecordRequestStates.Submitted.ToString()" />
                                     <label for="@record.RecordType">@record.RecordType</label>
                                 </div>
                             }
@@ -158,7 +181,7 @@
             </div>
         </div>
     </TabStripTab>
-    <TabStripTab Title="Release" Disabled="@(CurrentStepIndex <= 1)">
+    <TabStripTab Title="Release" Disabled="@(CurrentStepIndex < 1)">
         <div class="row">
             @if (!XSmall)
             {
@@ -166,7 +189,7 @@
                     @StepperFragment
                     <div class="d-flex gap-3 justify-content-center">
                         <TelerikButton OnClick="OnCancel" FillMode="@ThemeConstants.Button.FillMode.Outline">Cancel</TelerikButton>
-                        <TelerikButton OnClick="ValidateRecordsFileSelect" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.Status == RecordRequestStates.ForRelease.ToString())">Submit</TelerikButton>
+                        <TelerikButton OnClick="ValidateRecordsFileSelect" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.Status == RecordRequestStates.Reviewed.ToString())">Submit</TelerikButton>
                     </div>
                 </div>
             }
@@ -190,23 +213,23 @@
                 </div>
                 @if (User.Office == Offices.RMD.ToString() && RMDRecords != null)
                 {
-                    @foreach (var record in RMDRecords)
+                    foreach (var record in RMDRecords)
                     {
                         <div class="row mb-1">
                             <div class="d-flex col">
                                 <label class="align-content-center">@record.RecordType</label>
                             </div>
                             <div class="col">
-                                @if (SelectedRecordRequest.Status != RecordRequestStates.ForRelease.ToString() && !string.IsNullOrEmpty(record.Uri))
+                                @if (SelectedRecordRequest.Status != RecordRequestStates.Reviewed.ToString() && !string.IsNullOrEmpty(record.Uri))
                                 {
                                     HasNoRecords = false;
 
                                     <div class="text-end">
-                                        <NavLink class="telerik-blazor k-button k-button-solid k-rounded-md k-button-md k-button-solid-base" target="_blank" href=@record.Uri>View Uploaded Record</NavLink>
+                                        <NavLink class="fw-bolder" target="_blank" href=@record.Uri>View Uploaded Record</NavLink>
                                     </div>
                                 }
-                                else {
-                                    
+                                else
+                                {
                                     if (!record.IsAvailable)
                                     {
                                         HasNoRecords = true;
@@ -236,29 +259,27 @@
                 }
                 else if (User.Office == Offices.HRMD.ToString() && HRMDRecords != null)
                 {
-                    @foreach (var record in HRMDRecords)
+                    foreach (var record in HRMDRecords)
                     {
                         <div class="row mb-1">
                             <div class="d-flex col">
                                 <label class="align-content-center">@record.RecordType</label>
                             </div>
                             <div class="col">
-                                @if (SelectedRecordRequest.Status != RecordRequestStates.ForRelease.ToString() && !string.IsNullOrEmpty(record.Uri))
+                                @if (SelectedRecordRequest.Status != RecordRequestStates.Reviewed.ToString() && !string.IsNullOrEmpty(record.Uri))
                                 {
                                     HasNoRecords = false;
                                     <div class="text-end">
-                                        <NavLink class="telerik-blazor k-button k-button-solid k-rounded-md k-button-md k-button-solid-base" target="_blank" href=@record.Uri>View Uploaded Record</NavLink>
+                                        <NavLink class="fw-bolder" target="_blank" href=@record.Uri>View Uploaded Record</NavLink>
                                     </div>
                                 }
                                 else
                                 {
-                                    
-
                                     if (!record.IsAvailable)
                                     {
                                         HasNoRecords = true;
-                                        <div class="d-flex col">
-                                            <label class="fw-bolder align-content-center">No Record Available</label>
+                                        <div class="text-end">
+                                            <label class="fw-bolder">No Record Available</label>
                                         </div>
                                     }
                                     else
@@ -276,37 +297,34 @@
                                             </SelectFilesButtonTemplate>
                                         </TelerikFileSelect>
                                     }
-
                                 }
                             </div>
-                        </div>                        
+                        </div>
                     }
                 }
                 else
                 {
-                    @foreach (var record in SelectedRecordRequest.RequestedRecords)
+                    foreach (var record in SelectedRecordRequest.RequestedRecords)
                     {
                         <div class="row mb-1">
                             <div class="d-flex col">
                                 <label class="align-content-center">@record.RecordType</label>
                             </div>
                             <div class="col">
-                                @if (SelectedRecordRequest.Status != RecordRequestStates.ForRelease.ToString() && !string.IsNullOrEmpty(record.Uri))
+                                @if (SelectedRecordRequest.Status != RecordRequestStates.Reviewed.ToString() && !string.IsNullOrEmpty(record.Uri))
                                 {
                                     HasNoRecords = false;
                                     <div class="text-end">
-                                        <NavLink class="telerik-blazor k-button k-button-solid k-rounded-md k-button-md k-button-solid-base" target="_blank" href=@record.Uri>View Uploaded Record</NavLink>
+                                        <NavLink class="fw-bolder" target="_blank" href=@record.Uri>View Uploaded Record</NavLink>
                                     </div>
                                 }
                                 else
                                 {
-                                    
-
                                     if (!record.IsAvailable)
                                     {
                                         HasNoRecords = true;
-                                        <div class="d-flex col">
-                                            <label class="fw-bolder align-content-center">No Record Available</label>
+                                        <div class="text-end">
+                                            <label class="fw-bolder">No Record Available</label>
                                         </div>
                                     }
                                     else
@@ -338,26 +356,22 @@
                         <div class="col">
                             <p><b>CERTIFICATE OF NO RECORDS</b></p>
                         </div>
-                        <div class="d-flex col gap-4 justify-content-start">
-                            <a class="view-export-btn bg-transparent" target="_blank" href="@($"certificate-of-no-records/{RequestId}")">View</a>
-                            <a class="view-export-btn bg-transparent" target="_blank" href="@($"certificate-of-no-records/{RequestId}/exporting")">Export</a>
+                        <div class="d-flex col gap-4 justify-content-end">
+                            <NavLink class="fw-bolder" target="_blank" href="@($"certificate-of-no-records/{RequestId}")">View</NavLink>
+                            <NavLink class="fw-bolder" target="_blank" href="@($"certificate-of-no-records/{RequestId}/exporting")">Export</NavLink>
                         </div>
                     </div>
                 }
-                
+
                 <div class="row mb-2">
                     <p><b>Select Office for Pickup</b></p>
                     <p>@PickUpLocation</p>
-
-                    @* <div class="col mt-2">
-                        <TelerikTextBox Placeholder="@PickUpLocation" Enabled="false"></TelerikTextBox>
-                    </div> *@
                 </div>
 
             </div>
         </div>
     </TabStripTab>
-    <TabStripTab Title="Claim" Disabled="@(CurrentStepIndex <= 2)">
+    <TabStripTab Title="Claim" Disabled="@(CurrentStepIndex < 2)">
         <div class="row">
             @if (!XSmall)
             {
@@ -365,7 +379,7 @@
                     @StepperFragment
                     <div class="d-flex gap-3 justify-content-center">
                         <TelerikButton OnClick="OnCancel" FillMode="@ThemeConstants.Button.FillMode.Outline">Cancel</TelerikButton>
-                        <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.Status == RecordRequestStates.Claimed.ToString())">Submit</TelerikButton>
+                        <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.Status == RecordRequestStates.ForRelease.ToString() || SelectedRecordRequest.Status == "For Release")">Submit</TelerikButton>
                     </div>
                 </div>
             }
@@ -405,25 +419,69 @@
                     <div class="row mb-1">
                         <div>
                             <p class="mb-1"><b>Documents Received</b></p>
-                            <p>For pickup at HRMD</p>
-                            <ul>
-                                @foreach (var record in SelectedRecordRequest.RequestedRecords)
+                            @if (User.Office == Offices.RMD.ToString() && RMDRecords != null)
+                            {
+                                <p>For pickup at RMD</p>
+                                <ul>
+                                    @foreach (var record in RMDRecords)
+                                    {
+                                        <li>@record.RecordType</li>
+                                    }
+                                </ul>
+                            }
+                            else if (User.Office == Offices.HRMD.ToString() && HRMDRecords != null)
+                            {
+                                <p>For pickup at HRMD</p>
+                                <ul>
+                                    @foreach (var record in HRMDRecords)
+                                    {
+                                        <li>@record.RecordType</li>
+                                    }
+                                </ul>
+                            }
+                            else
+                            {
+                                if (SelectedRecordRequest.RequestedRecords != null && SelectedRecordRequest.RequestedRecords.Count > 0 && GroupedRecords != null)
                                 {
-                                    <li>@record.RecordType</li>
+                                    @foreach (var office in GroupedRecords)
+                                    {
+                                        <p><b>For pickup at @office.Key</b></p>
+                                        <ul>
+                                            @foreach (var recordType in office)
+                                            {
+                                                <li>@recordType</li>
+                                            }
+                                        </ul>
+                                    }
                                 }
-                            </ul>
+                            }
                         </div>
                     </div>
-                    <div class="row mb-3">
-                        <div class="col">
-                            <p><b>TRANSMITTAL RECEIPT</b></p>
+                    @if (!string.IsNullOrEmpty(User.Office))
+                    {
+                        <div class="row mb-3">
+                            <div class="col">
+                                <p><b>TRANSMITTAL RECEIPT</b></p>
+                            </div>
+                            <div class="d-flex col gap-4 justify-content-end">
+                                <a class="view-export-btn bg-transparent" target="_blank" href="@($"transmittal-receipt/{RequestId}")">View</a>
+                                <a class="view-export-btn bg-transparent" target="_blank" href="@($"transmittal-receipt/{RequestId}/exporting")">Export</a>
+                            </div>
                         </div>
-                        <div class="d-flex col gap-4 justify-content-end">
-                            <a class="view-export-btn bg-transparent" target="_blank" href="@($"transmittal-receipt/{RequestId}")">View</a>
-                            <a class="view-export-btn bg-transparent" target="_blank" href="@($"transmittal-receipt/{RequestId}/exporting")">Export</a>
+                    }
+                    else
+                    {
+                        <div class="row mb-3">
+                            <div class="col">
+                                <p><b>TRANSMITTAL RECEIPT UNAVAILABLE :</b></p>
+                            </div>
+                            <div class="d-flex col gap-4 justify-content-start">
+                                <p class="d-flex fw-normal text-danger">No office detected.</p>
+                            </div>
                         </div>
-                    </div>
-                    
+
+                    }
+
                     <div class="row">
                         <div class="col align-content-center">
                             <p><b>UPLOAD RECEIVED TRANSMITTAL RECEIPT</b></p>
@@ -456,7 +514,7 @@
             <div class="row my-3">
                 <div class="d-flex gap-3 justify-content-center">
                     <TelerikButton OnClick="OnCancel" FillMode="@ThemeConstants.Button.FillMode.Outline">Cancel</TelerikButton>
-                    <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.Status == RecordRequestStates.Reviewed.ToString())">Submit</TelerikButton>
+                    <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.Status == RecordRequestStates.Submitted.ToString())">Submit</TelerikButton>
                 </div>
             </div>
             break;
@@ -464,7 +522,7 @@
             <div class="row my-3">
                 <div class="d-flex gap-3 justify-content-center">
                     <TelerikButton OnClick="OnCancel" FillMode="@ThemeConstants.Button.FillMode.Outline">Cancel</TelerikButton>
-                    <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.Status == RecordRequestStates.ForRelease.ToString())">Submit</TelerikButton>
+                    <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.Status == RecordRequestStates.Reviewed.ToString())">Submit</TelerikButton>
                 </div>
             </div>
             break;
@@ -472,7 +530,7 @@
             <div class="row my-3">
                 <div class="d-flex gap-3 justify-content-center">
                     <TelerikButton OnClick="OnCancel" FillMode="@ThemeConstants.Button.FillMode.Outline">Cancel</TelerikButton>
-                    <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.Status == RecordRequestStates.Claimed.ToString())">Submit</TelerikButton>
+                    <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.Status == RecordRequestStates.ForRelease.ToString()  || SelectedRecordRequest.Status == "For Release")">Submit</TelerikButton>
                 </div>
             </div>
             break;
@@ -527,7 +585,7 @@
         <WindowAction Name="Close" />
     </WindowActions>
 </TelerikWindow>
- 
+
 @code {
     private RenderFragment StepperFragment => @<div>
         <div class="row my-2">
