@@ -29,20 +29,6 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
     protected int MaxFileSize { get; set; } = 4 * 1024 * 1024;
     protected bool HasNoRecords { get; set; } = false;
     protected List<string> AllowedExtensions { get; set; } = new List<string>() { ".docx", ".pdf" };
-    protected string PickUpLocation
-    {
-        get
-        {
-            if (User.UserAccess == "Manager" || User.UserAccess == "Staff")
-            {
-                return User.Office;
-            }
-            else
-            {
-                return Offices.RMD.ToString();
-            }
-        }
-    }
 
     // For Uploads
     protected Dictionary<Guid, UploadRequestedRecordDocumentModel> UploadRequestedRecords { get; set; } = new();
@@ -86,6 +72,28 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
 
         UpdateCurrentStepIndex();
         IsLoading = false;
+    }
+
+    protected string PickUpLocation
+    {
+        get
+        {
+            if (User.UserAccess == "Manager" || User.UserAccess == "Staff")
+            {
+                if (User.Office == Offices.RMD.ToString())
+                {
+                    return "Records Management Division";
+                }
+                else
+                {
+                    return "Human Resource Management Division";
+                }
+            }
+            else
+            {
+                return "Records Management Division";
+            }
+        }
     }
 
     protected async Task OnStatusChange(string newStatus)

@@ -16,7 +16,7 @@ public class RequestDetailsOverviewBase : RxBaseComponent
     [Inject] public required IToastService ToastService { get; set; }
     protected RecordRequestModel SelectedRecordRequest { get; set; } = new();
     protected string CancelReturnUrl = string.Empty;
-    protected IEnumerable<IGrouping<string, string>>? GroupedRecords;
+    protected IEnumerable<IGrouping<string, RequestedRecordModel>>? GroupedRecords;
     protected List<RequestedRecordModel>? RMDRecords;
     protected List<RequestedRecordModel>? HRMDRecords;
 
@@ -41,7 +41,7 @@ public class RequestDetailsOverviewBase : RxBaseComponent
                 }
 
                 GroupedRecords = recordReq.Data.RequestedRecords
-                .GroupBy(r => r.Office, r => r.RecordType);
+                .GroupBy(r => r.Office);
 
                 RMDRecords = recordReq.Data.RequestedRecords
                 .Where(r => r.Office == "RMD")
