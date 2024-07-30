@@ -56,18 +56,14 @@
                     <p style="text-indent: 0pt;text-align: left;"><br /></p>
                     <table style="border-collapse:collapse;margin-left:5.924pt" cellspacing="0">
                         <tr style="height:14pt">
-                            <td style="width:74pt">
-                                <p class="s1" style="padding-left: 2pt;text-indent: 0pt;line-height: 12pt;text-align: left;">Control No.</p>
+                            <td style="width:174pt">
+                                <p class="s1" style="padding-left: 2pt;text-indent: 0pt;line-height: 12pt;text-align: left;">Control No. <span class="fw-normal">@SelectedRecordRequest?.ControlNumber</span></p>
                             </td>
-                            <td style="width:124pt">
-                                <p class="s2" style="text-indent: 0pt;line-height: 12pt;text-align: left;">@SelectedRecordRequest?.ControlNumber</p>
+                           
+                            <td style="width:217pt">
+                                <p class="s1" style="padding-left: 29pt;text-indent: 0pt;line-height: 12pt;text-align: left;">Release Date: <span class="fw-normal">@GenericHelper.GetDateDisplay(DateTime.Now)</span></p>
                             </td>
-                            <td style="width:117pt">
-                                <p class="s1" style="padding-left: 29pt;text-indent: 0pt;line-height: 12pt;text-align: left;">Release Date:</p>
-                            </td>
-                            <td style="width:99pt">
-                                <p class="s2" style="text-indent: 0pt;line-height: 12pt;text-align: left;">@GenericHelper.GetDateDisplay(DateTime.Now)</p>
-                            </td>
+                            
                         </tr>
                     </table>
                     <p style="text-indent: 0pt;text-align: left;"><br /></p>
@@ -168,7 +164,8 @@
                                 <p class="s2" style="padding-left: 2pt;text-indent: 0pt;text-align: left;">Released by:</p>
                             </td>
                             <td style="width:285pt;border-bottom-style:solid;border-bottom-width:1pt">
-                                <p class="s2" style="padding-left: 5pt;text-indent: 0pt;text-align: left;"> </p>
+                              
+                                <p class="s2" style="padding-left: 5pt;text-indent: 0pt;text-align: center;">@(User.LastName + ", " + User.FirstName)</p>
                             </td>
                         </tr>
                         <tr style="height:17pt">

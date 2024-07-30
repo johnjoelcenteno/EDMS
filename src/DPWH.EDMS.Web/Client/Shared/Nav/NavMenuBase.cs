@@ -56,45 +56,38 @@ public class NavMenuBase: RxBaseComponent
         }));
 
     }
+
     private async Task SetMenu()
     {
         if (AuthenticationStateAsync is null)
             return;
-
-        //var menus = MenuDataService.GetMenuItems();
 
         var authState = await AuthenticationStateAsync;
         var user = authState.User;
 
         if (user.Identity is not null && user.Identity.IsAuthenticated)
         {
-            var roleValue = user.Claims.FirstOrDefault(c => c.Type == "role")!.Value;
+            var roles = user.Claims.Where(c => c.Type == "role")!.ToList();
+           
+            var role = roles.FirstOrDefault(role => !string.IsNullOrEmpty(role.Value) && role.Value.Contains(ApplicationRoles.RolePrefix))?.Value ?? string.Empty;
+
             var firstnameValue = user.Claims.FirstOrDefault(x => x.Type == "firstname")?.Value;
             var lastnameValue = user.Claims.FirstOrDefault(x => x.Type == "lastname")?.Value;
             var office = user.Claims.FirstOrDefault(x => x.Type == "office")?.Value;
-            if (!string.IsNullOrEmpty(firstnameValue) && !string.IsNullOrEmpty(lastnameValue))
-            {
-                var displayValue = $"{firstnameValue} {lastnameValue}";
-                DisplayName = GenericHelper.CapitalizeFirstLetter(displayValue);
-            }
-            else
-            {
-                DisplayName = "---";
-            }
-            if (!string.IsNullOrEmpty(office))
-            {
-                Office = GetOfficeName(office);
-            }
-            else
-            {
-                Office = "---";
-            }
-            Role = GetRoleLabel(roleValue);
-            NavMenus = MenuDataService.GetMenuItems().Where(m => m.AuthorizedRoles.Any(r => r == roleValue)).ToList();
-            NavMenus2 = MenuDataService.GetMenuItems2().Where(m => m.AuthorizedRoles.Any(r => r == roleValue)).ToList();
-            NavSettings = MenuDataService.GetSettingsItems().Where(m => m.AuthorizedRoles.Any(r => r == roleValue)).ToList();            
-        }        
+
+            DisplayName = (!string.IsNullOrEmpty(firstnameValue) && !string.IsNullOrEmpty(lastnameValue))
+                ? GenericHelper.CapitalizeFirstLetter($"{firstnameValue} {lastnameValue}")
+                : "---";
+
+            Office = !string.IsNullOrEmpty(office) ? GetOfficeName(office) : "---";
+            Role = GetRoleLabel(role);
+
+            NavMenus = MenuDataService.GetMenuItems().Where(m => m.AuthorizedRoles.Any(r => r == role)).ToList();
+            NavMenus2 = MenuDataService.GetMenuItems2().Where(m => m.AuthorizedRoles.Any(r => r == role)).ToList();
+            NavSettings = MenuDataService.GetSettingsItems().Where(m => m.AuthorizedRoles.Any(r => r == role)).ToList();
+        }
     }
+
     protected string GetOfficeName(string officeCode)
     {
         return officeCode switch

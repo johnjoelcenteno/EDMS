@@ -165,6 +165,13 @@ public class RequestFormComponentBase : RxBaseComponent
     #region Submit Events
     protected async Task HandleOnSubmitCallback()
     {
+        var res = await FluentValidationValidator!.ValidateAsync();
+       
+        if (!res)
+        {
+            return;
+        }
+
         if (await FluentValidationValidator!.ValidateAsync() && IsValidIdValid() && IsAuthorizedDocumentValid())
         {
             if (HandleCreateOnSubmit.HasDelegate)
@@ -180,7 +187,7 @@ public class RequestFormComponentBase : RxBaseComponent
             await HandleOnCancel.InvokeAsync();
         }
     }
-    protected void HandleRequestRecords()
+    protected async void HandleRequestRecords()
     {
         HashSet<Guid> set = new HashSet<Guid>();
 
@@ -188,6 +195,8 @@ public class RequestFormComponentBase : RxBaseComponent
         set.UnionWith(SelectedEmployeeRecordList);
 
         SelectedItem.RequestedRecords = set;
+
+        await FluentValidationValidator!.ValidateAsync();
     }
     protected void HandleOnInit()
     {

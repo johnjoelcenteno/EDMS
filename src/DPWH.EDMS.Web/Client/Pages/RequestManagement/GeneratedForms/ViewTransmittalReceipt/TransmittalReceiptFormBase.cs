@@ -69,7 +69,7 @@ public class TransmittalReceiptFormBase : ComponentBase
         var authState = await AuthenticationStateAsync!;
         var user = authState.User;
         var userId = user.GetUserId();
-
+         
         var userRes = await UsersService.GetById(userId);
 
         if (userRes.Success)
@@ -85,7 +85,17 @@ public class TransmittalReceiptFormBase : ComponentBase
         if (user.Identity is not null && user.Identity.IsAuthenticated)
         {
             var roleValue = user.Claims.FirstOrDefault(c => c.Type == "role")!.Value;
+            var firstnameValue = user.Claims.FirstOrDefault(x => x.Type == "firstname")!.Value;
+            var lastnameValue = user.Claims.FirstOrDefault(x => x.Type == "lastname")!.Value;
+
             UserRole = GetRoleLabel(roleValue);
+
+            if (firstnameValue != null && lastnameValue != null)
+            {
+                User.FirstName = firstnameValue;
+                User.LastName = lastnameValue;
+            }
+
         }
     }
     protected string GetOfficeName(string officeCode)

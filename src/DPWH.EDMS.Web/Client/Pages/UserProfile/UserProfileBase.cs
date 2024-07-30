@@ -42,18 +42,22 @@ public class UserProfileBase : RxBaseComponent
         var user = authState.User;
         if (user.Identity is not null && user.Identity.IsAuthenticated)
         {
+            var roleValue2 = user.Claims.Where(c => c.Type == "role")!.ToList();
+            var selectedRole2 = roleValue2.FirstOrDefault(role => !string.IsNullOrEmpty(role.Value) && role.Value.Contains(ApplicationRoles.RolePrefix))?.Value ?? string.Empty;
+
             var userId = user.Claims.FirstOrDefault(c => c.Type == "sub")!.Value;
             var roleValue = user.Claims.FirstOrDefault(c => c.Type == "role")!.Value;
             var userRes = await UserService.GetById(Guid.Parse(userId));
-            Role = GetRoleLabel(roleValue);
+            Role = GetRoleLabel(selectedRole2);
+
             if (userRes.Success)
             {
                 CurrentUser = Mapper.Map<UserModel>(userRes.Data);
             }
         }
     }
-    private string GetRoleLabel(string roleValue)
+    private string GetRoleLabel(string selectedRole2)
     {
-        return ApplicationRoles.GetDisplayRoleName(roleValue, "Unknown Role");
+        return ApplicationRoles.GetDisplayRoleName(selectedRole2, "Unknown Role");
     }
 }
