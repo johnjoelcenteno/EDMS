@@ -43,7 +43,8 @@
                                              Filterable="true"
                                              ValueField="@nameof(MenuItemModel.NavType)"
                                              TextField="@nameof(MenuItemModel.NavType)"
-                                             DefaultText="Select" />
+                                             DefaultText="Select"
+                                             Enabled="SelectedParent == null" />
                         <ValidationMessage For="@(() => SelectedItem.NavType)" class="text-danger" />
                     </div>
                 </div>
@@ -58,7 +59,7 @@
                     </div>
                     <div class="col-md-6 col-12 p-2">
                         <label for="level">Level</label>
-                        <InputNumber id="level" class="form-control" @bind-Value="SelectedItem.Level" />
+                        <InputNumber id="level" class="form-control" @bind-Value="SelectedItem.Level" disabled="@(SelectedParent != null)" />
                         <ValidationMessage For="@(() => SelectedItem.Level)" class="text-danger" />
                     </div>
                 </div>
@@ -71,6 +72,7 @@
                                                  Filterable="true"
                                                  ValueField="@nameof(MenuItemModel.Id)"
                                                  TextField="@nameof(MenuItemModel.Text)"
+                                                 OnChange="HandleParentSelect"
                                                  DefaultText="Select" />
                             <ValidationMessage For="@(() => SelectedItem.ParentId)" class="text-danger" />
                         </div>
@@ -82,6 +84,7 @@
                                                 TValue="string"
                                                 OnChange="HandleSelectRoles"
                                                 @bind-Value="SelectedAuthorizedRoleList"
+                                                Enabled="SelectedParent == null"
                                                 Placeholder="-">
                             </TelerikMultiSelect>
                             <ValidationMessage For="@(() => SelectedItem.AuthorizedRoles)" class="text-danger" />
@@ -98,7 +101,7 @@
                 Cancel
             </TelerikButton>
             <TelerikButton ButtonType="ButtonType.Submit" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary">
-                Update
+                Save
             </TelerikButton>
         </div>
     </div>

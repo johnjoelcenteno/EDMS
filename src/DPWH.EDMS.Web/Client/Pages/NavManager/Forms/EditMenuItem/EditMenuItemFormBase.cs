@@ -20,6 +20,7 @@ public class EditMenuItemFormBase : RxBaseComponent
     [Parameter] public EventCallback HandleOnCancel { get; set; }
     [Parameter] public required string Id { get; set; }
     protected MenuItemModel SelectedItem { get; set; } = new();
+    protected MenuItemModel? SelectedParent { get; set; }
 
     // Lists
     protected List<MenuItemModel> MenuItemList = new();
@@ -55,8 +56,8 @@ public class EditMenuItemFormBase : RxBaseComponent
         SelectedItem.Expanded = false;
         //SelectedItem.AuthorizedRoles = new List<string>();
         //SelectedItem.NavType = NavType.MainMenu.ToString();
-        await LoadItem();
-        await LoadMenuItems();
+        await LoadItem();        
+        await HandleParentSelect();
 
         IsLoading = false;
     }
@@ -69,6 +70,7 @@ public class EditMenuItemFormBase : RxBaseComponent
         {
             SelectedItem = res.Data;
             SelectedAuthorizedRoleList = res.Data.AuthorizedRoles.ToList();
+            await LoadMenuItems();
         }
     }
 
@@ -81,7 +83,7 @@ public class EditMenuItemFormBase : RxBaseComponent
         if (res.Errors == null)
         {
             var list = GenericHelper.GetListByDataSource<MenuItemModel>(res.Data);
-            MenuItemList = list;
+            MenuItemList = list.Where(x => x.Id != SelectedItem.Id).ToList();
         }
         else
         {
@@ -107,6 +109,30 @@ public class EditMenuItemFormBase : RxBaseComponent
                 ToastService.ShowError("Something went wront on creating menu item!");
             }
         }
+    }
+
+    protected async Task HandleParentSelect()
+    {
+        IsLoading = true;
+        Guid parentId = SelectedItem.ParentId ?? Guid.Empty;
+        if (GenericHelper.IsGuidHasValue(parentId))
+        {
+            var parentRes = await NavigationService.GetById(parentId);
+            if (parentRes.Success)
+            {
+                SelectedParent = parentRes.Data;
+                SelectedItem.AuthorizedRoles = SelectedParent.AuthorizedRoles;
+                SelectedAuthorizedRoleList = SelectedItem.AuthorizedRoles.ToList();
+                SelectedItem.Level = SelectedParent.Level + 1;
+                SelectedItem.NavType = SelectedParent.NavType;
+                StateHasChanged();
+            }
+        }
+        else
+        {
+            SelectedParent = null;
+        }
+        IsLoading = false;
     }
 
     protected void HandleSelectRoles()

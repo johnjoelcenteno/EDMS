@@ -1,4 +1,7 @@
-﻿using DPWH.EDMS.Client.Shared.Configurations;
+﻿using AutoMapper;
+using DPWH.EDMS.Api.Contracts;
+using DPWH.EDMS.Client.Shared.APIClient.Services.Navigation;
+using DPWH.EDMS.Client.Shared.Configurations;
 using DPWH.EDMS.Client.Shared.Models;
 using DPWH.EDMS.Components;
 using DPWH.EDMS.Components.Helpers;
@@ -8,7 +11,6 @@ using DPWH.EDMS.Shared.Enums;
 using DPWH.EDMS.Web.Client.Shared.Services.Navigation;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
-using System.Security.Claims;
 using Telerik.Blazor.Components;
 
 namespace DPWH.EDMS.Web.Client.Shared.Nav;
@@ -19,6 +21,8 @@ public class NavMenuBase : RxBaseComponent
     //[Inject] public required AuthRxService AuthRxService { get; set; }
     [Inject] public required ConfigManager ConfigManager { get; set; }
     [Inject] public required IMenuDataService MenuDataService { get; set; }
+    [Inject] public required INavigationService NavigationService { get; set; }
+    [Inject] public required IMapper Mapper { get; set; }
     [Inject] public required NavRx NavRx { get; set; }
 
     protected bool IsNavMenuCollapsed = false;
@@ -85,8 +89,43 @@ public class NavMenuBase : RxBaseComponent
             Role = GetRoleLabel(role);
 
             NavMenus = MenuDataService.GetMenuItems().Where(m => m.AuthorizedRoles.Any(r => r == role)).ToList();
-            NavMenus2 = MenuDataService.GetMenuItems2().Where(m => m.AuthorizedRoles.Any(r => r == role)).ToList();
+            //NavMenus2 = MenuDataService.GetMenuItems2().Where(m => m.AuthorizedRoles.Any(r => r == role)).ToList();
             NavSettings = MenuDataService.GetSettingsItems().Where(m => m.AuthorizedRoles.Any(r => r == role)).ToList();
+
+            NavMenus2 = await MenuDataService.GetNavigationMenuAsync(NavType.CurrentUserMenu);
+
+            // DO NOT DELETE: FOR REFERENCE
+            // TEST: Get current user menus
+            //var currentUserMenusRes = await NavigationService
+            //    .QueryByNavType(NavType.CurrentUserMenu.ToString(), new DataSourceRequest() { Skip = 0 });
+            //var currentUserMenus = GenericHelper.GetListByDataSource<Api.Contracts.MenuItemModel>(currentUserMenusRes.Data);
+            //var navMenus2All = Mapper.Map<List<MenuModel>>(currentUserMenus);
+            //NavMenus2 = navMenus2All.Where(x => x.Level == 0).OrderBy(x => x.SortOrder).ToList();
+
+            //foreach (var menu in NavMenus2)
+            //{
+            //    var children = navMenus2All
+            //        .Where(x => x.Level == 1 && x.ParentId == menu.Id)
+            //        .OrderBy(x => x.SortOrder)
+            //        .ToList();
+            //    if (children.Any())
+            //    {
+            //        menu.Children = children;
+
+            //        foreach (var submenu in menu.Children)
+            //        {
+            //            var grandChildren = navMenus2All
+            //            .Where(x => x.Level == 2 && x.ParentId == submenu.Id)
+            //            .OrderBy(x => x.SortOrder)
+            //            .ToList();
+
+            //            if (grandChildren.Any())
+            //            {
+            //                submenu.Children = grandChildren;
+            //            }
+            //        }
+            //    }
+            //}
         }
     }
 
