@@ -52,7 +52,10 @@ public class CreateMenuItemFormBase : RxBaseComponent
     {
         IsLoading = true;
 
+        // set defaults
+        SelectedItem.AuthorizedRoles = new List<string>();
         SelectedItem.Expanded = false;
+
         //SelectedItem.AuthorizedRoles = new List<string>();
         //SelectedItem.NavType = NavType.MainMenu.ToString();
 
