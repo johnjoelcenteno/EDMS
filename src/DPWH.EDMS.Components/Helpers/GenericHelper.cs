@@ -96,6 +96,20 @@ namespace DPWH.EDMS.Components.Helpers
 
             return "N/A";
         }
+
+        public static string GetTimeDisplay(DateTimeOffset? dt, string format = "hh:mm tt")
+        {
+            if (dt.HasValue)
+            {
+                var dtUtc = new DateTimeOffset(dt!.Value.DateTime, TimeSpan.Zero);
+                var dtRes = dtUtc!.ToLocalTime();
+
+                return dtRes.ToString(format);
+            }
+
+            return "N/A";
+        }
+
         public static string GetYearDisplay(DateTimeOffset? dt, string format = "yyyy")
         {
             if (dt.HasValue)

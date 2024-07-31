@@ -6,5 +6,8 @@ namespace DPWH.EDMS.Client.Shared.APIClient.Services.RecordRequestSupportingFile
     {
         Task<CreateResponse> Upload(FileParameter document, RecordRequestProvidedDocumentTypes? documentType, Guid? documentTypeId);
         Task<CreateResponse> UploadRequestedRecord(FileParameter document, Guid? id);
+        Task<CreateResponse> UploadTransmittalReceipt(System.DateTimeOffset dateReceived, System.DateTimeOffset timeReceived, FileParameter document, Guid? id);
+        Task<GetTransmittalReceiptModelBaseApiResponse> GetTransmittalReceipt(Guid id);
+
     }
 }
