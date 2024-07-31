@@ -3,6 +3,8 @@ using DPWH.EDMS.Client.Shared.Models;
 using DPWH.EDMS.Components;
 using DPWH.EDMS.Components.Helpers;
 using DPWH.EDMS.IDP.Core.Constants;
+using DPWH.EDMS.IDP.Core.Extensions;
+using DPWH.EDMS.Shared.Enums;
 using DPWH.EDMS.Web.Client.Shared.Services.Navigation;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -69,11 +71,11 @@ public class NavMenuBase : RxBaseComponent
         {
             var roles = user.Claims.Where(c => c.Type == "role")!.ToList();
 
-            var role = roles.FirstOrDefault(role => !string.IsNullOrEmpty(role.Value) && role.Value.Contains(ApplicationRoles.RolePrefix))?.Value ?? string.Empty;
+            var role = roles.FirstOrDefault(role => !string.IsNullOrEmpty(role.Value) && role.Value.Contains(ApplicationRoles.RolePrefix))?.Value ?? ClaimsPrincipalExtensions.GetRole(user);
 
-            var firstnameValue = user.Claims.FirstOrDefault(x => x.Type == "firstname")?.Value;
-            var lastnameValue = user.Claims.FirstOrDefault(x => x.Type == "lastname")?.Value;
-            var office = user.Claims.FirstOrDefault(x => x.Type == "office")?.Value;
+            var firstnameValue = ClaimsPrincipalExtensions.GetFirstName(user);
+            var lastnameValue = ClaimsPrincipalExtensions.GetLastName(user);
+            var office = ClaimsPrincipalExtensions.GetOffice(user);
 
             DisplayName = (!string.IsNullOrEmpty(firstnameValue) && !string.IsNullOrEmpty(lastnameValue))
                 ? GenericHelper.CapitalizeFirstLetter($"{firstnameValue} {lastnameValue}")
@@ -92,11 +94,12 @@ public class NavMenuBase : RxBaseComponent
     {
         return officeCode switch
         {
-            "RMD" => "Records Management Division",
-            "HRMD" => "Human Resource Management Division",
+            nameof(Offices.RMD) => "Records Management Division",
+            nameof(Offices.HRMD) => "Human Resource Management Division",
             _ => string.Empty
         };
     }
+
     private string GetRoleLabel(string roleValue)
     {
         return ApplicationRoles.GetDisplayRoleName(roleValue, "Unknown Role");
