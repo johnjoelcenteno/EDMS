@@ -19,21 +19,22 @@ public class CreateMenuItemFormBase : RxBaseComponent
 
     [Parameter] public EventCallback HandleOnCancel { get; set; }
     protected CreateMenuItemModel SelectedItem { get; set; } = new();
+    protected MenuItemModel? SelectedParent { get; set; }
 
     // Lists
     protected List<MenuItemModel> MenuItemList = new();
 
-    protected List<string> NavTypeList = new List<string>() { 
-        NavType.MainMenu.ToString(), 
-        NavType.CurrentUserMenu.ToString(), 
-        NavType.Settings.ToString() 
+    protected List<string> NavTypeList = new List<string>() {
+        NavType.MainMenu.ToString(),
+        NavType.CurrentUserMenu.ToString(),
+        NavType.Settings.ToString()
     };
 
     protected List<string> AuthorizedRoleList = new List<string>() {
-        ApplicationRoles.SuperAdmin, 
+        ApplicationRoles.SuperAdmin,
         ApplicationRoles.SystemAdmin,
-        ApplicationRoles.Manager, 
-        ApplicationRoles.ITSupport, 
+        ApplicationRoles.Manager,
+        ApplicationRoles.ITSupport,
         ApplicationRoles.Staff,
         ApplicationRoles.EndUser,
         ApplicationRoles.Deactivated,
@@ -96,6 +97,29 @@ public class CreateMenuItemFormBase : RxBaseComponent
         }
     }
 
+    protected async Task HandleParentSelect()
+    {
+        IsLoading = true;
+        Guid parentId = SelectedItem.ParentId ?? Guid.Empty;
+        if (GenericHelper.IsGuidHasValue(parentId))
+        {
+            var parentRes = await NavigationService.GetById(parentId);
+            if (parentRes.Success)
+            {
+                SelectedParent = parentRes.Data;
+                SelectedItem.AuthorizedRoles = SelectedParent.AuthorizedRoles;
+                SelectedAuthorizedRoleList = SelectedItem.AuthorizedRoles.ToList();
+                SelectedItem.Level = SelectedParent.Level + 1;
+                SelectedItem.NavType = SelectedParent.NavType;
+                StateHasChanged();
+            }
+        }
+        else
+        {
+            SelectedParent = null;  
+        }
+        IsLoading = false;
+    }
     protected void HandleSelectRoles()
     {
         SelectedItem.AuthorizedRoles = SelectedAuthorizedRoleList;

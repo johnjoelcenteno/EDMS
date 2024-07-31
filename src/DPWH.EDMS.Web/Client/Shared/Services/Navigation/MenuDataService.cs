@@ -1,11 +1,74 @@
-﻿using DPWH.EDMS.Client.Shared.Models;
+﻿using AutoMapper;
+using DPWH.EDMS.Api.Contracts;
+using DPWH.EDMS.Client.Shared.APIClient.Services.Navigation;
+using DPWH.EDMS.Client.Shared.Models;
+using DPWH.EDMS.Components.Helpers;
 using DPWH.EDMS.IDP.Core.Constants;
+using DPWH.EDMS.Shared.Enums;
 using DPWH.EDMS.Web.Client.Shared.Services.Navigation.Helpers;
+using Telerik.Pivot.Core;
 
 namespace DPWH.EDMS.Web.Client.Shared.Services.Navigation;
 
 public class MenuDataService : IMenuDataService
 {
+    private readonly INavigationService NavigationService;
+    private readonly IMapper Mapper;
+
+    public MenuDataService(INavigationService navigationService, IMapper mapper)
+    {
+        NavigationService = navigationService;
+        Mapper = mapper;
+    }
+
+    // 3 Level Nav UI Builder
+    public async Task<List<MenuModel>> GetNavigationMenuAsync(NavType navType)
+    {
+        // Create a request object with dynamic parameters
+        var dataSourceRequest = new DataSourceRequest { Skip = 0};
+
+        // Fetch the raw menu items data from the data source based on the provided navType
+        var menuRes = await NavigationService.QueryByNavType(navType.ToString(), dataSourceRequest);
+        var menus = GenericHelper.GetListByDataSource<Api.Contracts.MenuItemModel>(menuRes.Data);
+
+        // Map the raw data to the MenuModel type
+        var navMenusAll = Mapper.Map<List<MenuModel>>(menus);
+
+        // Get top-level menus
+        var navMenusLevel0 = navMenusAll.Where(x => x.Level == 0).OrderBy(x => x.SortOrder).ToList();
+
+        // Organize the menus into a hierarchical structure
+        foreach (var menu in navMenusLevel0)
+        {
+            // Get first-level children
+            var children = navMenusAll
+                .Where(x => x.Level == 1 && x.ParentId == menu.Id)
+                .OrderBy(x => x.SortOrder)
+                .ToList();
+
+            if (children.Any())
+            {
+                menu.Children = children;
+
+                foreach (var submenu in menu.Children)
+                {
+                    // Get second-level children (grandchildren)
+                    var grandChildren = navMenusAll
+                        .Where(x => x.Level == 2 && x.ParentId == submenu.Id)
+                        .OrderBy(x => x.SortOrder)
+                        .ToList();
+
+                    if (grandChildren.Any())
+                    {
+                        submenu.Children = grandChildren;
+                    }
+                }
+            }
+        }
+
+        return navMenusLevel0;
+    }
+
     public IEnumerable<MenuModel> GetMenuItems() =>
         new List<MenuModel>
         {
