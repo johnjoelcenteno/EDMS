@@ -49,7 +49,7 @@ public class UserFormBase : RxBaseComponent
     protected TelerikDialog dialogReference = new();
     public string SelectedRegionalOffice { get; set; }
     public string SelectedImplementingOffice { get; set; }
-    public string SelectedUserRole { get; set; } 
+    public string SelectedUserRole { get; set; }
     protected string SelectedAcord { get; set; }
     protected string UserRole { get; set; }
     protected string Role { get; set; }
@@ -107,10 +107,10 @@ public class UserFormBase : RxBaseComponent
                 User.UserAccess = selectedUser.Data.UserAccess;
                 User.Office = selectedUser.Data.Office;
                 User.Created = selectedUser.Data.CreatedDate;
-                User.CreatedBy = selectedUser.Data.CreatedBy; 
+                User.CreatedBy = selectedUser.Data.CreatedBy;
             }
             OnSelectedChange(true);
-        }  
+        }
         await ExceptionHandlerService.HandleApiException(
             async () =>
             {
@@ -145,7 +145,7 @@ public class UserFormBase : RxBaseComponent
             DropDownListRef.DefaultText = SelectedUserRole;
         }
         SelectedRegionalOffice = User.RegionalOffice;
-        SelectedImplementingOffice = User.DistrictEngineeringOffice; 
+        SelectedImplementingOffice = User.DistrictEngineeringOffice;
         await OnRegionOfficeChanged();
         IsLoading = false;
         dialogReference.Refresh();
@@ -298,7 +298,10 @@ public class UserFormBase : RxBaseComponent
         }
         else
         {
-            OnRegion = false;
+            if (Type != "Add")
+            {
+                OnRegion = false;
+            }
             _ResetDropDownOnOfficeChanged();
         }
     }
@@ -565,12 +568,12 @@ public class UserFormBase : RxBaseComponent
             {
                 editedUser.DistrictEngineeringOffice = string.Empty;
             }
-             
+
             IsSaving = true;
             IsLoading = true;
 
-            if (LicenseLimit <= 0 )
-            { 
+            if (LicenseLimit <= 0)
+            {
                 ToastService.ShowWarning("Insufficient License!");
                 IsSaving = false;
                 IsLoading = false;
@@ -594,10 +597,10 @@ public class UserFormBase : RxBaseComponent
             };
 
             if (update != null)
-            { 
+            {
                 try
                 {
-                    var res = await UserService.Update(UserId, update); 
+                    var res = await UserService.Update(UserId, update);
                     ToastService.ShowSuccess("User Updated successfully!");
                     User.EmployeeId = string.Empty;
                     NavManager.NavigateTo("/user-management");
@@ -615,7 +618,7 @@ public class UserFormBase : RxBaseComponent
         IsSaving = false;
         IsLoading = false;
     }
-        private async Task LoadUserRegion()
+    private async Task LoadUserRegion()
     {
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         var user = authState.User;
@@ -676,7 +679,7 @@ public class UserFormBase : RxBaseComponent
         if (string.IsNullOrEmpty(User.DistrictEngineeringOffice) || User.DistrictEngineeringOffice == "Select")
         {
             OnDistrict = false;
-        } 
+        }
     }
 }
 
