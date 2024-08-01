@@ -1,0 +1,31 @@
+﻿@page "/edms/login"
+
+@inject NavigationManager NavManager
+
+<div id="edms-login" class="container">
+    <TelerikCard Class="px-5 py-3">
+        <div class="d-flex flex-column gap-3 align-items-center">
+            <span id="login-icon" class="material-symbols-outlined">passkey</span>
+            <TelerikButton Class="w-100" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" OnClick="GoToLogin">Log In to Continue</TelerikButton>
+        </div>
+    </TelerikCard>
+</div>
+
+@code {
+    protected void GoToLogin()
+    {
+        NavManager.NavigateTo("/bff/login", true);
+    }
+}
+
+<style>
+    #edms-login {
+        max-width: 500px;
+        width: 100%;
+    }
+
+    #login-icon {
+        font-size: 110px;
+        color: #4641ad;
+    }
+</style>

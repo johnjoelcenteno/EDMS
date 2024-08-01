@@ -4,7 +4,10 @@
 @using DPWH.EDMS.Web.Client.Shared.Services.Navigation
 
 @inherits LayoutComponentBase
+
 @inject NavRx NavRx
+@inject NavigationManager NavManager
+
 
 <TelerikMediaQuery Media="(max-width: 480px)" OnChange="((changed) => XSmall = changed)"></TelerikMediaQuery>
 
@@ -22,7 +25,9 @@
                 <NavMenu />
             </div>
 
-            <article class="content px-4" style="margin-left: @(IsSidebarExpanded ? "320px" : "64px"); @(XSmall ? "margin-left: 0px; margin-top: 64px" : "")">
+            <article class="content px-4" 
+                style="margin-left: @(IsEdmsLogin() ? "0" : (IsSidebarExpanded ? "320px" : "64px")); 
+                    @(XSmall ? "margin-left: 0px; margin-top: 64px" : "")">
                 @Body
             </article>
         </main>
@@ -41,4 +46,6 @@
             StateHasChanged();
         });
     }
+
+    protected bool IsEdmsLogin() => NavManager.Uri.EndsWith("/edms/login", StringComparison.OrdinalIgnoreCase);
 }

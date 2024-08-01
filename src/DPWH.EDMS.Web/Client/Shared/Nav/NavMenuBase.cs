@@ -182,4 +182,6 @@ public class NavMenuBase : RxBaseComponent
         IsNavMenuCollapsed = !IsNavMenuCollapsed;
         StateHasChanged();
     }
+
+    protected bool IsEdmsLogin() => NavManager.Uri.EndsWith("/edms/login", StringComparison.OrdinalIgnoreCase);
 }
