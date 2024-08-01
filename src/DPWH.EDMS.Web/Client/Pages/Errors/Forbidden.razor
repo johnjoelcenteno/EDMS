@@ -4,7 +4,7 @@
 
 <div id="error-status-container" class="container">
     @* <img src="_content/DPWH.NGOBIA.Components/images/status-errors/403.svg" /> *@
-    <img src="_content/DPWH.NGOBIA.Components/images/unauthorized_access.svg" />
+    <img src="_content/DPWH.EDMS.Components/images/unauthorized_access.svg" />
     <p class="heading">Forbidden Access</p>
     <p class="sub-heading">
         Oops! It seems you've reached a page you don't have permission to view. We apologize for any inconvenience.
@@ -18,7 +18,7 @@
 
     private void RedirectToLogin()
     {
-        NavigationManager.NavigateToLogout("authentication/logout");
+        NavigationManager.NavigateTo("login");
     }
 }
 
