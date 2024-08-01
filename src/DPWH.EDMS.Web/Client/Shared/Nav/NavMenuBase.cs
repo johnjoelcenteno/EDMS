@@ -89,10 +89,10 @@ public class NavMenuBase : RxBaseComponent
             Role = GetRoleLabel(role);
 
             NavMenus = MenuDataService.GetMenuItems().Where(m => m.AuthorizedRoles.Any(r => r == role)).ToList();
-            NavMenus2 = MenuDataService.GetMenuItems2().Where(m => m.AuthorizedRoles.Any(r => r == role)).ToList();
+            //NavMenus2 = MenuDataService.GetMenuItems2().Where(m => m.AuthorizedRoles.Any(r => r == role)).ToList();
             NavSettings = MenuDataService.GetSettingsItems().Where(m => m.AuthorizedRoles.Any(r => r == role)).ToList();
 
-            //NavMenus2 = await MenuDataService.GetNavigationMenuAsync(NavType.CurrentUserMenu);
+            NavMenus2 = await MenuDataService.GetNavigationMenuAsync(NavType.CurrentUserMenu);
 
             // DO NOT DELETE: FOR REFERENCE
             // TEST: Get current user menus
