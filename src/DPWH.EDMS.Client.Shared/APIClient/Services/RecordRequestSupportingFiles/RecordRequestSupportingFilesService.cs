@@ -22,4 +22,14 @@ public class RecordRequestSupportingFilesService : IRecordRequestSupportingFiles
     {
         return _client.UploadRequestedRecordFileAsync(document, id);
     }
+
+    public Task<CreateResponse> UploadTransmittalReceipt(System.DateTimeOffset dateReceived, System.DateTimeOffset timeReceived, FileParameter document, Guid? id)
+    {
+        return _client.UploadTransmittalReceiptFileAsync(dateReceived, timeReceived, document, id);
+    }
+
+    public Task<GetTransmittalReceiptModelBaseApiResponse> GetTransmittalReceipt(Guid id)
+    {
+        return _client.GetTransmittalReceiptAsync(id);
+    }
 }

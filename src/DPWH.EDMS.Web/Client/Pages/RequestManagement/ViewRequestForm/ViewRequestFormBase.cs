@@ -19,25 +19,30 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
     [Inject] public required IUsersService UsersService { get; set; }
     [Inject] public required IRecordRequestSupportingFilesService RecordRequestSupportingFilesService { get; set; }
     [Inject] public required NavigationManager NavigationManager { get; set; }
-
+    protected GetTransmittalReceiptModelBaseApiResponse GetTransmittalRecceipt { get; set; } = new();
     protected UpdateResponseBaseApiResponse? UpdateResponse;
     protected GetUserByIdResult User = new GetUserByIdResult();
     protected int ActiveTabIndex { get; set; } = 0;
-    protected int CurrentStepIndex { get; set; }
+    protected int ProgressIndex { get; set; }
     protected bool IsModalVisible { get; set; }
     protected int MinFileSize { get; set; } = 1024;
     protected int MaxFileSize { get; set; } = 4 * 1024 * 1024;
     protected bool HasNoRecords { get; set; } = false;
     protected List<string> AllowedExtensions { get; set; } = new List<string>() { ".docx", ".pdf" };
+    protected DateTimeOffset DateReceived { get; set; } = DateTimeOffset.Now;
+    protected DateTimeOffset TimeReceived { get; set; } = DateTimeOffset.Now;
+    protected DateTime MaxDate = DateTime.Now;
 
     // For Uploads
     protected Dictionary<Guid, UploadRequestedRecordDocumentModel> UploadRequestedRecords { get; set; } = new();
-    protected string? ValidationMessage { get; set; }
+    protected UploadTransmittalReceiptDocumentModel? SelectedTransmittalReceipt { get; set; }
+
+    // Validation
+    protected string? RequestedRecordValidation { get; set; }
+    protected string? TransmittalValidation { get; set; }
 
     // Placeholders
     protected string? Remarks { get; set; }
-    protected DateTime? DateReceived { get; set; } = DateTime.Now;
-    protected DateTime? TimeReceived { get; set; } = DateTime.Now;
 
     protected override void OnParametersSet()
     {
@@ -49,6 +54,7 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
 
         IsLoading = true;
         await FetchUser();
+        await GetTransmittalData();
 
         await LoadData((res) =>
         {
@@ -70,8 +76,39 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
             });
         });
 
-        UpdateCurrentStepIndex();
+        UpdateProgressIndex();
         IsLoading = false;
+    }
+
+    protected async Task FetchUser()
+    {
+        var authState = await AuthenticationStateAsync!;
+        var user = authState.User;
+        var userId = user.GetUserId();
+
+        var userRes = await UsersService.GetById(userId);
+
+        if (userRes.Success)
+        {
+            User.UserAccess = userRes.Data.UserAccess;
+            User.Office = userRes.Data.Office;
+        }
+        else
+        {
+            ToastService.ShowError("Something went wrong on fetching user data");
+        }
+    }
+
+    protected async Task GetTransmittalData()
+    {
+        try
+        {
+            GetTransmittalRecceipt = await RecordRequestSupportingFilesService.GetTransmittalReceipt(Guid.Parse(RequestId));
+        }
+        catch (Exception)
+        {
+
+        }
     }
 
     protected string PickUpLocation
@@ -108,7 +145,7 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
         if (UpdateResponse.Success)
         {
             SelectedRecordRequest.Status = newStatus;
-            UpdateCurrentStepIndex();
+            UpdateProgressIndex();
         }
     }
 
@@ -133,7 +170,7 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
 
     protected void ValidateRecordsFileSelect()
     {
-        ValidationMessage = string.Empty;
+        RequestedRecordValidation = string.Empty;
         bool allFilesSelected = true;
 
         if (User.Office == Offices.RMD.ToString() && RMDRecords != null)
@@ -200,18 +237,21 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
         }
         else
         {
-            ValidationMessage = "Please select a file for each requested record.";
+            RequestedRecordValidation = "Please select a file for each requested record.";
         }
     }
 
-    protected async Task OnUploadDocument()
+    protected void ValidateTransmittalFileSelect()
     {
-        foreach (var uploadRecord in UploadRequestedRecords.Values)
+        TransmittalValidation = string.Empty;
+
+        if (SelectedTransmittalReceipt != null && SelectedTransmittalReceipt?.Document != null)
         {
-            if (uploadRecord.Document != null)
-            {
-                await RecordRequestSupportingFilesService.UploadRequestedRecord(uploadRecord.Document, uploadRecord.Id);
-            }
+            IsModalVisible = true;
+        }
+        else
+        {
+            TransmittalValidation = "Transmittal Receipt is required.";
         }
     }
 
@@ -219,14 +259,32 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
     {
         IsLoading = true;
         IsModalVisible = false;
-        await OnStatusChange(RecordRequestStates.Reviewed.ToString());
+
+        foreach (var uploadRecord in UploadRequestedRecords.Values)
+        {
+            if (uploadRecord.Document != null)
+            {
+                await RecordRequestSupportingFilesService.UploadRequestedRecord(uploadRecord.Document, uploadRecord.Id);
+            }
+        }
 
         foreach (var record in SelectedRecordRequest.RequestedRecords)
         {
             await UpdateIsAvailable(record);
         }
 
+        await OnStatusChange(RecordRequestStates.Reviewed.ToString());
         ActiveTabIndex = 2;
+        StateHasChanged();
+        IsLoading = false;
+    }
+
+    protected async Task OnApprove()
+    {
+        IsLoading = true;
+        IsModalVisible = false;
+        await OnStatusChange(RecordRequestStates.Approved.ToString());
+        ActiveTabIndex = 3;
         StateHasChanged();
         IsLoading = false;
     }
@@ -235,9 +293,8 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
     {
         IsLoading = true;
         IsModalVisible = false;
-        await OnUploadDocument();
         await OnStatusChange("For Release");
-        ActiveTabIndex = 3;
+        ActiveTabIndex = 4;
         StateHasChanged();
         IsLoading = false;
     }
@@ -246,51 +303,16 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
     {
         IsLoading = true;
         IsModalVisible = false;
+
+        if (SelectedTransmittalReceipt?.Document != null)
+        {
+            await RecordRequestSupportingFilesService.UploadTransmittalReceipt(DateReceived, TimeReceived, SelectedTransmittalReceipt.Document, SelectedTransmittalReceipt.RecordRequestId);
+        }
+
         await OnStatusChange(RecordRequestStates.Claimed.ToString());
         NavigationManager.NavigateTo("/request-management");
         StateHasChanged();
         IsLoading = false;
-    }
-
-    protected async Task FetchUser()
-    {
-        var authState = await AuthenticationStateAsync!;
-        var user = authState.User;
-        var userId = user.GetUserId();
-
-        var userRes = await UsersService.GetById(userId);
-
-        if (userRes.Success)
-        {
-            User.UserAccess = userRes.Data.UserAccess;
-            User.Office = userRes.Data.Office;
-        }
-        else
-        {
-            ToastService.ShowError("Something went wrong on fetching user data");
-        }
-    }
-
-    private void UpdateCurrentStepIndex()
-    {
-        switch (SelectedRecordRequest.Status)
-        {
-            case var status when status == RecordRequestStates.Reviewed.ToString():
-                CurrentStepIndex = 1;
-                break;
-
-            case var status when status == RecordRequestStates.ForRelease.ToString() || SelectedRecordRequest.Status == "For Release":
-                CurrentStepIndex = 2;
-                break;
-
-            case var status when status == RecordRequestStates.Claimed.ToString():
-                CurrentStepIndex = 3;
-                break;
-
-            default:
-                CurrentStepIndex = 0;
-                break;
-        }
     }
 
     protected async void OnSelectDocument(FileSelectEventArgs args, Guid recordId)
@@ -316,15 +338,15 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
 
             if (User.Office == Offices.RMD.ToString() && RMDRecords != null && RMDRecords.All(r => UploadRequestedRecords.ContainsKey(r.Id) && UploadRequestedRecords[r.Id].Document != null))
             {
-                ValidationMessage = string.Empty;
+                RequestedRecordValidation = string.Empty;
             }
             else if (User.Office == Offices.HRMD.ToString() && HRMDRecords != null && HRMDRecords.All(r => UploadRequestedRecords.ContainsKey(r.Id) && UploadRequestedRecords[r.Id].Document != null))
             {
-                ValidationMessage = string.Empty;
+                RequestedRecordValidation = string.Empty;
             }
             else if (SelectedRecordRequest.RequestedRecords.All(r => UploadRequestedRecords.ContainsKey(r.Id) && UploadRequestedRecords[r.Id].Document != null))
             {
-                ValidationMessage = string.Empty;
+                RequestedRecordValidation = string.Empty;
             }
         }
 
@@ -339,15 +361,49 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
         }
     }
 
-
-    protected async void OnSelectTransmittal(FileSelectEventArgs args)
+    protected async void OnSelectTransmittalReceipt(FileSelectEventArgs args)
     {
+        SelectedTransmittalReceipt = new UploadTransmittalReceiptDocumentModel()
+        {
+            Document = null!,
+            RecordRequestId = Guid.Parse(RequestId)
+        };
 
+        SelectedTransmittalReceipt.Document = await DocumentService.GetFileToUpload(args);
+        TransmittalValidation = string.Empty;
+
+        StateHasChanged();
     }
 
-    protected async void OnRemoveTransmittal(FileSelectEventArgs args)
+    protected void OnRemoveTransmittalReceipt(FileSelectEventArgs args)
     {
+        SelectedTransmittalReceipt = null;
+    }
 
+    private void UpdateProgressIndex()
+    {
+        switch (SelectedRecordRequest.Status)
+        {
+            case var status when status == RecordRequestStates.Reviewed.ToString():
+                ProgressIndex = 1;
+                break;
+
+            case var status when status == RecordRequestStates.Approved.ToString():
+                ProgressIndex = 2;
+                break;
+
+            case var status when status == RecordRequestStates.ForRelease.ToString() || SelectedRecordRequest.Status == "For Release":
+                ProgressIndex = 3;
+                break;
+
+            case var status when status == RecordRequestStates.Claimed.ToString():
+                ProgressIndex = 4;
+                break;
+
+            default:
+                ProgressIndex = 0;
+                break;
+        }
     }
 
     public void ValueChangeHandler(int newStep)
