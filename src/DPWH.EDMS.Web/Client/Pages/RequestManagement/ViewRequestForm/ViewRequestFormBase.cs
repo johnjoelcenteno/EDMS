@@ -29,8 +29,9 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
     protected int MaxFileSize { get; set; } = 4 * 1024 * 1024;
     protected bool HasNoRecords { get; set; } = false;
     protected List<string> AllowedExtensions { get; set; } = new List<string>() { ".docx", ".pdf" };
-    protected DateTimeOffset DateReceived { get; set; }
-    protected DateTimeOffset TimeReceived { get; set; }
+    protected DateTimeOffset DateReceived { get; set; } = DateTimeOffset.Now;
+    protected DateTimeOffset TimeReceived { get; set; } = DateTimeOffset.Now;
+    protected DateTime MaxDate = DateTime.Now;
 
     // For Uploads
     protected Dictionary<Guid, UploadRequestedRecordDocumentModel> UploadRequestedRecords { get; set; } = new();
@@ -259,6 +260,14 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
         IsLoading = true;
         IsModalVisible = false;
 
+        foreach (var uploadRecord in UploadRequestedRecords.Values)
+        {
+            if (uploadRecord.Document != null)
+            {
+                await RecordRequestSupportingFilesService.UploadRequestedRecord(uploadRecord.Document, uploadRecord.Id);
+            }
+        }
+
         foreach (var record in SelectedRecordRequest.RequestedRecords)
         {
             await UpdateIsAvailable(record);
@@ -270,11 +279,22 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
         IsLoading = false;
     }
 
+    protected async Task OnApprove()
+    {
+        IsLoading = true;
+        IsModalVisible = false;
+        await OnStatusChange(RecordRequestStates.Approved.ToString());
+        ActiveTabIndex = 3;
+        StateHasChanged();
+        IsLoading = false;
+    }
+
     protected async Task OnRelease()
     {
         IsLoading = true;
         IsModalVisible = false;
-        await OnUploadDocument();
+        await OnStatusChange("For Release");
+        ActiveTabIndex = 4;
         StateHasChanged();
         IsLoading = false;
     }
@@ -283,7 +303,12 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
     {
         IsLoading = true;
         IsModalVisible = false;
-        await OnUploadTransmittalReceipt();
+
+        if (SelectedTransmittalReceipt?.Document != null)
+        {
+            await RecordRequestSupportingFilesService.UploadTransmittalReceipt(DateReceived, TimeReceived, SelectedTransmittalReceipt.Document, SelectedTransmittalReceipt.RecordRequestId);
+        }
+
         await OnStatusChange(RecordRequestStates.Claimed.ToString());
         NavigationManager.NavigateTo("/request-management");
         StateHasChanged();
@@ -355,27 +380,6 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
         SelectedTransmittalReceipt = null;
     }
 
-    protected async Task OnUploadDocument()
-    {
-        foreach (var uploadRecord in UploadRequestedRecords.Values)
-        {
-            if (uploadRecord.Document != null)
-            {
-                await RecordRequestSupportingFilesService.UploadRequestedRecord(uploadRecord.Document, uploadRecord.Id);
-                await OnStatusChange("For Release");
-                ActiveTabIndex = 3;
-            }
-        }
-    }
-
-    protected async Task OnUploadTransmittalReceipt()
-    {
-        if (SelectedTransmittalReceipt?.Document != null)
-        {
-            await RecordRequestSupportingFilesService.UploadTransmittalReceipt(DateReceived, TimeReceived, SelectedTransmittalReceipt.Document, SelectedTransmittalReceipt.RecordRequestId);
-        }
-    }
-
     private void UpdateProgressIndex()
     {
         switch (SelectedRecordRequest.Status)
@@ -384,12 +388,16 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
                 ProgressIndex = 1;
                 break;
 
-            case var status when status == RecordRequestStates.ForRelease.ToString() || SelectedRecordRequest.Status == "For Release":
+            case var status when status == RecordRequestStates.Approved.ToString():
                 ProgressIndex = 2;
                 break;
 
-            case var status when status == RecordRequestStates.Claimed.ToString():
+            case var status when status == RecordRequestStates.ForRelease.ToString() || SelectedRecordRequest.Status == "For Release":
                 ProgressIndex = 3;
+                break;
+
+            case var status when status == RecordRequestStates.Claimed.ToString():
+                ProgressIndex = 4;
                 break;
 
             default:
