@@ -268,13 +268,7 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
             }
         }
 
-        foreach (var record in SelectedRecordRequest.RequestedRecords)
-        {
-            await UpdateIsAvailable(record);
-        }
-
         await OnStatusChange(RecordRequestStates.Reviewed.ToString());
-        ActiveTabIndex = 2;
         StateHasChanged();
         IsLoading = false;
     }
@@ -283,8 +277,13 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
     {
         IsLoading = true;
         IsModalVisible = false;
+
+        //foreach (var record in SelectedRecordRequest.RequestedRecords)
+        //{
+        //    await UpdateIsAvailable(record);
+        //}
+
         await OnStatusChange(RecordRequestStates.Approved.ToString());
-        ActiveTabIndex = 3;
         StateHasChanged();
         IsLoading = false;
     }
@@ -293,8 +292,13 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
     {
         IsLoading = true;
         IsModalVisible = false;
+
+        //foreach (var record in SelectedRecordRequest.RequestedRecords)
+        //{
+        //    await UpdateIsAvailable(record);
+        //}
+
         await OnStatusChange("For Release");
-        ActiveTabIndex = 4;
         StateHasChanged();
         IsLoading = false;
     }
@@ -384,24 +388,27 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
     {
         switch (SelectedRecordRequest.Status)
         {
+            case var status when status == RecordRequestStates.Submitted.ToString():
+                ProgressIndex = 0;
+                ActiveTabIndex = 1;
+                break;
             case var status when status == RecordRequestStates.Reviewed.ToString():
                 ProgressIndex = 1;
+                ActiveTabIndex = 2;
                 break;
-
             case var status when status == RecordRequestStates.Approved.ToString():
                 ProgressIndex = 2;
+                ActiveTabIndex = 3;
                 break;
-
             case var status when status == RecordRequestStates.ForRelease.ToString() || SelectedRecordRequest.Status == "For Release":
                 ProgressIndex = 3;
+                ActiveTabIndex = 4;
                 break;
-
             case var status when status == RecordRequestStates.Claimed.ToString():
                 ProgressIndex = 4;
+                ActiveTabIndex = 0;
                 break;
-
             default:
-                ProgressIndex = 0;
                 break;
         }
     }
