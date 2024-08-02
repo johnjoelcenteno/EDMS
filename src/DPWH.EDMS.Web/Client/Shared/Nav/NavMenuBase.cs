@@ -88,11 +88,14 @@ public class NavMenuBase : RxBaseComponent
             Office = !string.IsNullOrEmpty(office) ? GetOfficeName(office) : "---";
             Role = GetRoleLabel(role);
 
+            // default static menus
             NavMenus = MenuDataService.GetMenuItems().Where(m => m.AuthorizedRoles.Any(r => r == role)).ToList();
             //NavMenus2 = MenuDataService.GetMenuItems2().Where(m => m.AuthorizedRoles.Any(r => r == role)).ToList();
-            NavSettings = MenuDataService.GetSettingsItems().Where(m => m.AuthorizedRoles.Any(r => r == role)).ToList();
+            //NavSettings = MenuDataService.GetSettingsItems().Where(m => m.AuthorizedRoles.Any(r => r == role)).ToList();
 
+            // api integrated menus
             NavMenus2 = await MenuDataService.GetNavigationMenuAsync(NavType.CurrentUserMenu);
+            NavSettings = await MenuDataService.GetNavigationMenuAsync(NavType.Settings);
 
             // DO NOT DELETE: FOR REFERENCE
             // TEST: Get current user menus

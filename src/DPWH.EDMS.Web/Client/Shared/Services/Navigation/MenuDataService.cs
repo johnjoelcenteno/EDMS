@@ -3,12 +3,10 @@ using DPWH.EDMS.Api.Contracts;
 using DPWH.EDMS.Client.Shared.APIClient.Services.Navigation;
 using DPWH.EDMS.Client.Shared.Models;
 using DPWH.EDMS.Components.Helpers;
-using DPWH.EDMS.IDP.Core.Constants;
 using DPWH.EDMS.Shared.Enums;
 using DPWH.EDMS.Web.Client.Shared.Services.ExceptionHandler;
 using DPWH.EDMS.Web.Client.Shared.Services.Navigation.Helpers;
 using Microsoft.AspNetCore.Components;
-using Telerik.Pivot.Core;
 
 namespace DPWH.EDMS.Web.Client.Shared.Services.Navigation;
 
@@ -326,50 +324,3 @@ public class MenuDataService : IMenuDataService
         }
         };
 }
-
-
-/** DON'T DELETE, FOR REFERENCE: **/
-
-//new ()
-//{
-//    Text = "Test Parent",
-//    Url = "",
-//    Icon = "home",
-//    Children = new List<MenuModel>{
-//        new ()
-//        {
-//            Text = "Test Child",
-//            Url = "/test-child-link",
-//            Icon = "people",
-//            Children = default,
-//            Level = 1,
-//            SortOrder = 0,
-//            AuthorizedRoles = new List<string>{}
-//        },
-//        new ()
-//        {
-//            Text = "Test Child 2",
-//            Url = "",
-//            Icon = "people",
-//            Children = new List<MenuModel>{
-//                 new ()
-//                {
-//                    Text = "Test Grand Child 1",
-//                    Url = "/test-grandchild-link",
-//                    Icon = "people",
-//                    Children = default,
-//                    Level = 2,
-//                    SortOrder = 0,
-//                    AuthorizedRoles = new List<string>{}
-//                },
-//            },
-//            Level = 1,
-//            SortOrder = 0,
-//            AuthorizedRoles = new List<string>{}
-//        },
-//    },
-//    Level = 0,
-//    SortOrder = 0,
-//    AuthorizedRoles = new List<string>{}
-//},
-
