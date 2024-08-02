@@ -13,7 +13,7 @@ public class SystemReportService : ISystemReportService
     private readonly SystemClient _client;
     public SystemReportService(IHttpClientFactory httpClientFactory,ConfigManager configManager)
     {
-        var httpClient = httpClientFactory.CreateClient(configManager.BaseApiClientName);
+        var httpClient = httpClientFactory.CreateClient(configManager.WebServerClientName);
         _client = new SystemClient(httpClient);
     }
     public async Task<CreateResponse> CreateSystemReport(CreateSystemLogsRequest body)

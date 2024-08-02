@@ -9,7 +9,7 @@ public class NavigationService : INavigationService
 
     public NavigationService(IHttpClientFactory httpClientFactory, ConfigManager configManager)
     {
-        var httpClient = httpClientFactory.CreateClient(configManager.BaseApiClientName);
+        var httpClient = httpClientFactory.CreateClient(configManager.WebServerClientName);
         _client = new NavigationClient(httpClient);
     }
 

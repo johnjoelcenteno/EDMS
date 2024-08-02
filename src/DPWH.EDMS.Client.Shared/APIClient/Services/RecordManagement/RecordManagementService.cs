@@ -8,9 +8,9 @@ public class RecordManagementService : IRecordManagementService
     private readonly Records_ManagementClient _client;
 
     public RecordManagementService(IHttpClientFactory httpClientFactory, ConfigManager configManager)
-    {
-        var httpClient = httpClientFactory.CreateClient(configManager.BaseApiClientName);
-        _client = new Records_ManagementClient(httpClient);
+    {        
+        var httpClient = httpClientFactory.CreateClient(configManager.WebServerClientName);        
+        _client = new Records_ManagementClient(httpClient);        
     }
 
     public async Task<CreateResponse> Create(CreateRecordModel request)

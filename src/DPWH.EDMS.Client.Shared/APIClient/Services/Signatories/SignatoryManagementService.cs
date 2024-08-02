@@ -8,7 +8,7 @@ public class SignatoryManagementService : ISignatoryManagementService
 
     public SignatoryManagementService(IHttpClientFactory httpClientFactory, ConfigManager configManager)
     {
-        var httpClient = httpClientFactory.CreateClient(configManager.BaseApiClientName);
+        var httpClient = httpClientFactory.CreateClient(configManager.WebServerClientName);
         _client = new SignatoriesClient(httpClient);
     }
 

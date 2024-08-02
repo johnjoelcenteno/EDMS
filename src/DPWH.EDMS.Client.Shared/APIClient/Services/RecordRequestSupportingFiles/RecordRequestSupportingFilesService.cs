@@ -9,7 +9,7 @@ public class RecordRequestSupportingFilesService : IRecordRequestSupportingFiles
 
     public RecordRequestSupportingFilesService(IHttpClientFactory httpClientFactory, ConfigManager configManager)
     {
-        var httpClient = httpClientFactory.CreateClient(configManager.BaseApiClientName);
+        var httpClient = httpClientFactory.CreateClient(configManager.WebServerClientName);
         _client = new RecordRequestSupportingFilesClient(httpClient);
     }
 

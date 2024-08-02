@@ -61,7 +61,7 @@ internal sealed class CreateUserWithRoleHandler : IRequestHandler<CreateUserWith
         var user = await _userManager.Users
             .Include(u => u.EmployeeInfo)
             .Include(u => u.UserBasicInfo)
-            .FirstOrDefaultAsync(u => u.Email == command.Email, cancellationToken);
+            .FirstOrDefaultAsync(u => u.UserName == command.Email, cancellationToken);
 
         if (user is not null)
         {
@@ -96,10 +96,8 @@ internal sealed class CreateUserWithRoleHandler : IRequestHandler<CreateUserWith
                 //update/add claims
                 var userClaims = new List<Claim>();
 
-                var roleClaim = new Claim("role", command.Role);
-                var clientClaim = new Claim("client", "EDMS");
-                userClaims.Add(roleClaim);
-                userClaims.Add(clientClaim);
+                var roleClaim = new Claim("role", command.Role);                
+                userClaims.Add(roleClaim);                
                 var addRoleClaimResult = await _userManager.AddClaimsAsync(user, userClaims);
                 if (!addRoleClaimResult.Succeeded) throw new AppException(addRoleClaimResult.Errors.First().Description);
 
@@ -197,11 +195,9 @@ internal sealed class CreateUserWithRoleHandler : IRequestHandler<CreateUserWith
             {
                 var userClaims = new List<Claim>();
                 var roleClaim = new Claim(JwtClaimTypes.Role, command.Role);
-                var nameClaim = new Claim(JwtClaimTypes.Name, command.FirstName + " " + command.LastName);
-                var clientClaim = new Claim("client", "EDMS");
+                var nameClaim = new Claim(JwtClaimTypes.Name, command.FirstName + " " + command.LastName);                
                 userClaims.Add(roleClaim);
-                userClaims.Add(nameClaim);
-                userClaims.Add(clientClaim);
+                userClaims.Add(nameClaim);                
 
                 var addRoleClaimResult = await _userManager.AddClaimsAsync(newUser, userClaims);
 

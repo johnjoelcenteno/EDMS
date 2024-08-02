@@ -9,7 +9,7 @@ public class UsersService : IUsersService
 
     public UsersService(IHttpClientFactory httpClientFactory, ConfigManager configManager)
     {
-        var httpClient = httpClientFactory.CreateClient(configManager.BaseApiClientName);
+        var httpClient = httpClientFactory.CreateClient(configManager.WebServerClientName);
         _client = new UsersClient(httpClient);
     }
 

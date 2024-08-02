@@ -8,7 +8,7 @@ public class DpwhIntegrationsService : IDpwhIntegrationsService
     private readonly DpwhIntegrationsClient _client; 
     public DpwhIntegrationsService(IHttpClientFactory httpClientFactory, ConfigManager configManager)
     {
-        var httpClient = httpClientFactory.CreateClient(configManager.BaseApiClientName);
+        var httpClient = httpClientFactory.CreateClient(configManager.WebServerClientName);
         _client = new DpwhIntegrationsClient(httpClient); 
     } 
     public async Task<EmployeeBaseApiResponse> GetByEmployeeId(string id)

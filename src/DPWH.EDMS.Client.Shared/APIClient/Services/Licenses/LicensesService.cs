@@ -14,7 +14,7 @@ public class LicensesService : ILicensesService
 
     public LicensesService(IHttpClientFactory httpClientFactory, ConfigManager configManager)
     {
-        var httpClient = httpClientFactory.CreateClient(configManager.BaseApiClientName);
+        var httpClient = httpClientFactory.CreateClient(configManager.WebServerClientName);
         _client = new LicensesClient(httpClient);
     }
 
