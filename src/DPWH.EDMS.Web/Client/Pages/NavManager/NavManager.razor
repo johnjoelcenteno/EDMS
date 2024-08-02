@@ -1,5 +1,8 @@
 ﻿@page "/navmanager"
 @using DPWH.EDMS.Api.Contracts
+@using DPWH.EDMS.IDP.Core.Constants
+
+@attribute [Authorize(Roles = $"{ApplicationRoles.SystemAdmin},{ApplicationRoles.SuperAdmin}")]
 
 @inherits NavManagerBase
 
