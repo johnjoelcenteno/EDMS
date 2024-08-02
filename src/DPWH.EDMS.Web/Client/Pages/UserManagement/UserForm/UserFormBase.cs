@@ -443,7 +443,7 @@ public class UserFormBase : RxBaseComponent
 
                 IsSaving = true;
 
-                if (LicenseLimit <= 0 && User.Role != "dpwh_edms_enduser")
+                if (LicenseLimit <= 0 && User.Role != ApplicationRoles.EndUser)
                 {
                     ToastService.ShowWarning("Insufficient License!");
                     IsLoading = false;
