@@ -67,6 +67,7 @@ public class UserFormBase : RxBaseComponent
     protected bool IsSaving { get; set; } = false;
     protected bool IsManager { get; set; } = false;
     protected bool UserCategory { get; set; } = false;
+    protected bool OnSearched { get; set; } = false;
     protected double LicenseLimit = 0;
     protected double LicenseUsed = 0;
     protected double TotalUsers = 0;
@@ -202,7 +203,7 @@ public class UserFormBase : RxBaseComponent
                     UserModel.Email = res.Data.NetworkId + "@dpwh.gov.ph";
                     UserModel.Position = res.Data.PlantillaPosition;
                     UserModel.DesignationTitle = res.Data.DesignationTitle;
-
+                    OnSearched = true;
                 }
                 else
                 {
@@ -237,7 +238,7 @@ public class UserFormBase : RxBaseComponent
 
         }
         IsLoading = false;
-        await LoadUserRegion();
+        //await LoadUserRegion();
     }
     protected void ClearNotif()
     {
@@ -366,7 +367,7 @@ public class UserFormBase : RxBaseComponent
             LicenseInfo = ApplicationPolicies.NoLicenseUsers.Contains(User.Role) ?
                 "This will not consume a license" :
                 "This role consumes a license";
-
+            OnEmpRole = true;
         }
         if (Role == ApplicationRoles.Manager)
         {
@@ -421,10 +422,9 @@ public class UserFormBase : RxBaseComponent
         //validateRegion();
         if (OnRegion != false && OnDistrict != false)
         {
-            if (User.Role != "Select")
+            if (User.Role != null)
             {
-
-                if (User.RegionalOffice == null)
+                if (User.RegionalOffice == null || User.RegionalOffice == "Select")
                 {
                     user.RegionalOffice = string.Empty;
                 }
@@ -432,7 +432,7 @@ public class UserFormBase : RxBaseComponent
                 {
                     user.RegionalOffice = User.RegionalOffice;
                 }
-                if (User.DistrictEngineeringOffice == null)
+                if (User.DistrictEngineeringOffice == null || User.DistrictEngineeringOffice == "Select")
                 {
                     user.DistrictEngineeringOffice = string.Empty;
                 }
@@ -443,7 +443,7 @@ public class UserFormBase : RxBaseComponent
 
                 IsSaving = true;
 
-                if (LicenseLimit <= 0 && User.Role != "dpwh_enduser")
+                if (LicenseLimit <= 0 && User.Role != ApplicationRoles.EndUser)
                 {
                     ToastService.ShowWarning("Insufficient License!");
                     IsLoading = false;

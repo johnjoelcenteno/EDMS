@@ -164,7 +164,7 @@
                                     {
                                         <a>@LicenseInfo</a>
                                     }
-                                    if (LicenseLimit <= 0 && User.Role != "dpwh_enduser")
+                                    if (LicenseLimit <= 0 && User.Role != ApplicationRoles.EndUser)
                                     {
                                         <div class="insuf-license">
                                             <div class="text-center">
@@ -260,7 +260,7 @@
                                    FillMode="@ThemeConstants.Button.FillMode.Outline" ThemeColor="@ThemeConstants.Button.ThemeColor.Secondary">
                         Cancel
                     </TelerikButton>
-                    <TelerikButton ThemeColor="@(ThemeConstants.Button.ThemeColor.Primary)" OnClick="@(() => AddUser(User))">Submit</TelerikButton>
+                    <TelerikButton ThemeColor="@(ThemeConstants.Button.ThemeColor.Primary)" OnClick="@(() => AddUser(User))" Enabled="@(OnSearched == true)">Submit</TelerikButton>
                 </div>
             </div>
         } 
@@ -270,6 +270,10 @@
 
 <style>
     .SearchStatus {
+        font-size: 12px;
+        color: red;
+    } 
+    .employeeRole {
         font-size: 12px;
         color: red;
     }
