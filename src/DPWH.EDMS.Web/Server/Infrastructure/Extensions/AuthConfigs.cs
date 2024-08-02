@@ -1,6 +1,6 @@
 ﻿using DPWH.EDMS.Client.Shared.Configurations;
+using Duende.Bff.Yarp;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.IdentityModel.Tokens;
 
 namespace DPWH.EDMS.Web.Server.Infrastructure.Extensions;
 
@@ -8,7 +8,7 @@ public static class AuthConfigs
 {
     public static void AddAuthServices(this IServiceCollection services, OidcConfig oidcSettings, IConfiguration configuration)
     {
-        services.AddBff();
+        services.AddBff().AddRemoteApis();
 
         services.AddAuthentication(options =>
         {
@@ -18,8 +18,11 @@ public static class AuthConfigs
         })
             .AddCookie("cookie", options =>
             {
-                options.Cookie.Name = "__Host-blazor";
+                options.Cookie.Name = "__Host-EDMS";
                 options.Cookie.SameSite = SameSiteMode.Strict;
+                options.Cookie.MaxAge = TimeSpan.FromHours(24);
+                // set session lifetime
+                options.ExpireTimeSpan = TimeSpan.FromHours(24);                
             })
             .AddOpenIdConnect("oidc", options =>
             {

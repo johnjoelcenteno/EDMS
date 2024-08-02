@@ -46,14 +46,15 @@ builder.Services.AddTransient<AntiforgeryHandler>();
 builder.Services.AddScoped<AccessTokenHandler>();
 
 
-builder.Services.AddHttpClient(configManager.BaseApiClientName, client =>
-{
-    client.BaseAddress = new Uri(configManager.BaseApiUrl);
-}).AddHttpMessageHandler<AccessTokenHandler>(); 
+//builder.Services.AddHttpClient(configManager.BaseApiClientName, client =>
+//{
+//    client.BaseAddress = new Uri(configManager.BaseApiUrl);
+//}).AddHttpMessageHandler<AccessTokenHandler>(); 
 
 // Server HTTP Client
 builder.Services.AddHttpClient(configManager.WebServerClientName, client => client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress))
     .AddHttpMessageHandler<AntiforgeryHandler>();
+
 builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient(configManager.WebServerClientName));
 
 

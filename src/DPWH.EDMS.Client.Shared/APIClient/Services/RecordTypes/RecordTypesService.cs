@@ -1,10 +1,5 @@
 ﻿using DPWH.EDMS.Api.Contracts;
 using DPWH.EDMS.Client.Shared.Configurations;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DPWH.EDMS.Client.Shared.APIClient.Services.RecordTypes;
 
@@ -14,7 +9,7 @@ public class RecordTypesService : IRecordTypesService
 
     public RecordTypesService(IHttpClientFactory httpClientFactory,ConfigManager configManager)
     {
-        var httpClient = httpClientFactory.CreateClient(configManager.BaseApiClientName);
+        var httpClient = httpClientFactory.CreateClient(configManager.WebServerClientName);
         _client = new RecordTypesClient(httpClient);
     }
 

@@ -1,8 +1,6 @@
 using DPWH.EDMS.Web.Server.Infrastructure.Extensions;
-using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
-using DPWH.EDMS.Client.Shared.APIClient.Core;
 using DPWH.EDMS.Client.Shared.Configurations;
-using DPWH.EDMS.IDP.Core.Constants;
+using Duende.Bff;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -47,6 +45,8 @@ app.UseBff();
 app.UseAuthorization();
 
 app.MapBffManagementEndpoints();
+app.MapRemoteBffApiEndpoint("/r", configManager.BaseApiUrl)
+    .RequireAccessToken(TokenType.User);
 
 app.MapRazorPages();
 app.MapControllers().RequireAuthorization().AsBffApiEndpoint();

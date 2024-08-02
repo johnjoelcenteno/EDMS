@@ -31,17 +31,23 @@ public class AccessTokenController : ControllerBase
             var token = await HttpContext.GetUserAccessTokenAsync();
             //token.Expiration = DateTime.UtcNow.AddHours(-1); // TEST EXPIRATION
 
-            return _IsTokenValid(token) ? new JsonResult(token.AccessToken) : null;
+            //_logger.LogInformation("Token detail: {@Token}", token);
+
+            return new JsonResult(token.AccessToken);
+            //return IsTokenValid(token) ? new JsonResult(token.AccessToken) : Ok(null);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "An error occurred while retrieving the access token.");
-            return StatusCode(500, "An error occurred while retrieving the access token.");
+            //return StatusCode(500, "An error occurred while retrieving the access token.");
+            throw;
         }
     }
 
-    private bool _IsTokenValid(UserToken token)
+    private bool IsTokenValid(UserToken token)
     {
-        return !token.IsError && DateTimeOffset.UtcNow < token.Expiration.UtcDateTime;
+       
+        var result = !token.IsError && DateTimeOffset.UtcNow < token.Expiration.UtcDateTime;
+        return result;
     }
 }

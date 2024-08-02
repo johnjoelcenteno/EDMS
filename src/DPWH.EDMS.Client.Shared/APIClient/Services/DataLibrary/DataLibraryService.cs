@@ -11,7 +11,7 @@ public class DataLibraryService : IDataLibraryService
 
     public DataLibraryService(IHttpClientFactory httpClientFactory, ConfigManager configManager)
     {
-        var httpClient = httpClientFactory.CreateClient(configManager.BaseApiClientName);
+        var httpClient = httpClientFactory.CreateClient(configManager.WebServerClientName);
         _client = new DataLibrariesClient(httpClient);
     }
 

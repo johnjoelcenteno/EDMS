@@ -14,7 +14,7 @@ public class ReportsService : IReportsService
 
     public ReportsService(IHttpClientFactory httpClientFactory,ConfigManager configManager)
     {
-        var httpClient = httpClientFactory.CreateClient(configManager.BaseApiClientName);
+        var httpClient = httpClientFactory.CreateClient(configManager.WebServerClientName);
         _client = new ReportsClient(httpClient);
     }
     public async Task<DataSourceResult> QueryUser(DataSourceRequest request)

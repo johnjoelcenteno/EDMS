@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Http;
 
 public class AccessTokenHandler : DelegatingHandler
 {
@@ -31,6 +32,14 @@ public class AccessTokenHandler : DelegatingHandler
         {
             if (user.Identity != null && user.Identity.IsAuthenticated)
             {
+                //var responseMessage1 = await _httpClient.GetAsync("r/api/lookups");
+                //var responseMessage2 = await _httpClient.GetAsync("/r/api/lookups");
+
+                //var responseContent1 = await responseMessage1.Content.ReadAsStringAsync();
+                //var responseContent2 = await responseMessage2.Content.ReadAsStringAsync();
+
+                
+
                 var tokenRes = await _httpClient.GetFromJsonAsync<string>(_accessTokenEndpoint);
                 if (!string.IsNullOrEmpty(tokenRes))
                 {
