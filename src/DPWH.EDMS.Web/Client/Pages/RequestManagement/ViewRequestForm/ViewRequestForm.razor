@@ -409,14 +409,14 @@
                     {
                         <div class="d-flex flex-row align-items-center" style="height:45px;">
                             <div classs="col">
-                                <TelerikCheckBox Id="@record.RecordType" @bind-Value="@record.IsAvailable" Enabled="SelectedRecordRequest.Status == RecordRequestStates.Reviewed.ToString()" />
+                                @* <TelerikCheckBox Id="@record.RecordType" @bind-Value="@record.IsAvailable" Enabled="SelectedRecordRequest.Status == RecordRequestStates.Reviewed.ToString()" /> *@
                                 <label for="@record.RecordType">@record.RecordType</label>
                             </div>
                             @if (record.Uri != null)
                             {
                                 <div class="col text-end">
-                                    <TelerikButton>Sign</TelerikButton>
-                                    <NavLink class="fw-bolder ms-3" href="@record.Uri" target="_blank">View</NavLink>
+                                    <TelerikButton>Approve</TelerikButton>
+                                    @* <NavLink class="fw-bolder ms-3" href="@record.Uri" target="_blank">View</NavLink> *@
                                 </div>
                             }
                             else
@@ -437,14 +437,14 @@
                     {
                         <div class="d-flex flex-row align-items-center" style="height:45px;">
                             <div classs="col">
-                                <TelerikCheckBox Id="@record.RecordType" @bind-Value="@record.IsAvailable" Enabled="SelectedRecordRequest.Status == RecordRequestStates.Reviewed.ToString()" />
+                                @* <TelerikCheckBox Id="@record.RecordType" @bind-Value="@record.IsAvailable" Enabled="SelectedRecordRequest.Status == RecordRequestStates.Reviewed.ToString()" /> *@
                                 <label for="@record.RecordType">@record.RecordType</label>
                             </div>
                             @if (record.Uri != null)
                             {
                                 <div class="col text-end">
-                                    <TelerikButton>Sign</TelerikButton>
-                                    <NavLink class="fw-bolder ms-3" href="@record.Uri" target="_blank">View</NavLink>
+                                    <TelerikButton>Approve</TelerikButton>
+                                    @* <NavLink class="fw-bolder ms-3" href="@record.Uri" target="_blank">View</NavLink> *@
                                 </div>
                             }
                             else
@@ -469,14 +469,14 @@
                                 {
                                     <div class="d-flex flex-row align-items-center" style="height:45px;">
                                         <div classs="col">
-                                            <TelerikCheckBox Id="@record.RecordType" @bind-Value="@record.IsAvailable" Enabled="SelectedRecordRequest.Status == RecordRequestStates.Reviewed.ToString()" />
+                                            @* <TelerikCheckBox Id="@record.RecordType" @bind-Value="@record.IsAvailable" Enabled="SelectedRecordRequest.Status == RecordRequestStates.Reviewed.ToString()" /> *@
                                             <label for="@record.RecordType">@record.RecordType</label>
                                         </div>
                                         @if (record.Uri != null)
                                         {
                                             <div class="col text-end">
-                                                <TelerikButton>Sign</TelerikButton>
-                                                <NavLink class="fw-bolder ms-3" href="@record.Uri" target="_blank">View</NavLink>
+                                                <TelerikButton>Approve</TelerikButton>
+                                                @* <NavLink class="fw-bolder ms-3" href="@record.Uri" target="_blank">View</NavLink> *@
                                             </div>
                                         }
                                         else
@@ -526,7 +526,7 @@
                     {
                         <div class="d-flex flex-row align-items-center" style="height:45px;">
                             <div classs="col">
-                                <TelerikCheckBox Id="@record.RecordType" @bind-Value="@record.IsAvailable" Enabled="SelectedRecordRequest.Status == RecordRequestStates.Approved.ToString()" />
+                                @* <TelerikCheckBox Id="@record.RecordType" @bind-Value="@record.IsAvailable" Enabled="SelectedRecordRequest.Status == RecordRequestStates.Approved.ToString()" /> *@
                                 <label for="@record.RecordType">@record.RecordType</label>
                             </div>
                             @if (record.Uri != null)
@@ -553,7 +553,7 @@
                     {
                         <div class="d-flex flex-row align-items-center" style="height:45px;">
                             <div classs="col">
-                                <TelerikCheckBox Id="@record.RecordType" @bind-Value="@record.IsAvailable" Enabled="SelectedRecordRequest.Status == RecordRequestStates.Approved.ToString()" />
+                                @* <TelerikCheckBox Id="@record.RecordType" @bind-Value="@record.IsAvailable" Enabled="SelectedRecordRequest.Status == RecordRequestStates.Approved.ToString()" /> *@
                                 <label for="@record.RecordType">@record.RecordType</label>
                             </div>
                             @if (record.Uri != null)
@@ -584,7 +584,7 @@
                                 {
                                     <div class="d-flex flex-row align-items-center">
                                         <div classs="col">
-                                            <TelerikCheckBox Id="@record.RecordType" @bind-Value="@record.IsAvailable" Enabled="SelectedRecordRequest.Status == RecordRequestStates.Approved.ToString()" />
+                                            @* <TelerikCheckBox Id="@record.RecordType" @bind-Value="@record.IsAvailable" Enabled="SelectedRecordRequest.Status == RecordRequestStates.Approved.ToString()" /> *@
                                             <label for="@record.RecordType">@record.RecordType</label>
                                         </div>
                                         @if (record.Uri != null)
@@ -817,7 +817,6 @@
             case 2:
                 <div class="row mb-3">
                     <p><b>Request has been signed and approved</b></p>
-                    <p class="text-secondary">Please confirm</p>
                 </div>
                 <div class="d-flex gap-3 justify-content-center">
                     <TelerikButton OnClick="@(() => IsModalVisible = false)" FillMode="@ThemeConstants.Button.FillMode.Outline">Cancel</TelerikButton>
@@ -827,7 +826,6 @@
             case 3:
                 <div class="row mb-3">
                     <p><b>Records are now ready for release</b></p>
-                    <p>Please confirm</p>
                 </div>
                 <div class="d-flex gap-3 justify-content-center">
                     <TelerikButton OnClick="@(() => IsModalVisible = false)" FillMode="@ThemeConstants.Button.FillMode.Outline">Cancel</TelerikButton>
@@ -836,9 +834,7 @@
                 break;
             case 4:
                 <div class="row mb-3">
-                    <p>Request has been claimed</p>
-                    <p>Please confirm</p>
-
+                    <p><b>Request has been claimed</b></p>
                 </div>
                 <div class="d-flex gap-3 justify-content-center">
                     <TelerikButton OnClick="@(() => IsModalVisible = false)" FillMode="@ThemeConstants.Button.FillMode.Outline">Cancel</TelerikButton>
@@ -863,6 +859,7 @@
             <StepperSteps>
                 <StepperStep Label="Submit"></StepperStep>
                 <StepperStep Label=@(XSmall ? "Review" : "Review & Evaluate")></StepperStep>
+                <StepperStep Label="Approve"></StepperStep>
                 <StepperStep Label="Release"></StepperStep>
                 <StepperStep Label="Claim"></StepperStep>
             </StepperSteps>
