@@ -180,9 +180,12 @@ public class UserFormBase : RxBaseComponent
         User.FirstName = string.Empty;
         User.LastName = string.Empty;
         User.Role = "Select";
+        User.Office = string.Empty;
 
         User.Email = string.Empty;
         SelectedAcord = "add";
+        UserCategory = false;
+        OnSearched = false;
     }
     protected async Task OnSearchEmployeeID(string id)
     {
