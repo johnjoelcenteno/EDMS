@@ -29,7 +29,7 @@ internal sealed class GetUserByIdHandler(
         }
 
         var claims = await userManager.GetClaimsAsync(user);
-        var roleClaim = claims.FirstOrDefault(c => c.Type == "role");
+        var roleClaim = claims.FirstOrDefault(roleClaim => !string.IsNullOrEmpty(roleClaim.Value) && roleClaim.Value.Contains(ApplicationRoles.RolePrefix))?.Value ?? string.Empty;
 
         return new GetUserByIdResult
         {
@@ -41,8 +41,8 @@ internal sealed class GetUserByIdHandler(
             MiddleInitial = user.UserBasicInfo?.MiddleInitial,
             LastName = user.UserBasicInfo?.LastName,
             MobileNumber = user.PhoneNumber,
-            Role = roleClaim?.Value,
-            UserAccess = ApplicationRoles.GetDisplayRoleName(roleClaim?.Value),
+            Role = roleClaim.ToString(),
+            UserAccess = ApplicationRoles.GetDisplayRoleName(roleClaim.ToString()),
             Department = user.EmployeeInfo?.Department,
             Position = user.EmployeeInfo?.Position,
             RegionalOfficeRegion = user.EmployeeInfo?.RegionalOfficeRegion,

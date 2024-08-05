@@ -3,9 +3,12 @@ using DPWH.EDMS.Domain.Exceptions;
 using DPWH.EDMS.IDP.Core.Constants;
 using DPWH.EDMS.IDP.Core.Entities;
 using MediatR;
+using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System.Security.Claims;
 
 namespace DPWH.EDMS.Application.Features.Users.Queries.GetUserById;
 
@@ -16,7 +19,7 @@ internal class GetUserByEmployeeIdHandler : IRequestHandler<GetUserByEmployeeId,
     private readonly ILogger<GetUserByEmployeeIdHandler> _logger;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IReadAppIdpRepository _repository;
-
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateAsync { get; set; }
     public GetUserByEmployeeIdHandler(ILogger<GetUserByEmployeeIdHandler> logger, UserManager<ApplicationUser> userManager, IReadAppIdpRepository repository)
     {
         _logger = logger;
@@ -32,8 +35,8 @@ internal class GetUserByEmployeeIdHandler : IRequestHandler<GetUserByEmployeeId,
 
         if (user is not null)
         {
-            var claims = await _userManager.GetClaimsAsync(user);
-            var roleClaim = claims.FirstOrDefault(c => c.Type == "role");
+            var claims = await _userManager.GetClaimsAsync(user); 
+            var roleClaim = claims.FirstOrDefault(roleClaim => !string.IsNullOrEmpty(roleClaim.Value) && roleClaim.Value.Contains(ApplicationRoles.RolePrefix))?.Value ?? string.Empty;
 
             return new GetUserByIdResult
             {
@@ -44,8 +47,8 @@ internal class GetUserByEmployeeIdHandler : IRequestHandler<GetUserByEmployeeId,
                 MiddleInitial = user.UserBasicInfo?.MiddleInitial,
                 LastName = user.UserBasicInfo?.LastName,
                 MobileNumber = user.PhoneNumber,
-                Role = roleClaim?.Value,
-                UserAccess = ApplicationRoles.GetDisplayRoleName(roleClaim?.Value),
+                Role = roleClaim,
+                UserAccess = ApplicationRoles.GetDisplayRoleName(roleClaim),
                 Department = user.EmployeeInfo?.Department,
                 Position = user.EmployeeInfo?.Position,
                 RegionalOfficeRegion = user.EmployeeInfo?.RegionalOfficeRegion,
