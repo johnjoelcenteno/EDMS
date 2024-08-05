@@ -117,7 +117,7 @@ public class RecordsBase : GridBase<LookupRecordModels>
                     {
                         Id = item.Id,
                         RecordName = item.Name,
-                        Documents = GridData.Where(items => items.RecordName == item.Name).Select(items => new RecordModels
+                        Documents = GridData.Where(items => items.RecordTypeId == item.Id).Select(items => new RecordModels
                         {
                             Id = items.Id,
                             RecordName = items.RecordName,
