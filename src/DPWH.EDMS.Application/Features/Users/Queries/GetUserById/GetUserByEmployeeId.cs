@@ -19,7 +19,6 @@ internal class GetUserByEmployeeIdHandler : IRequestHandler<GetUserByEmployeeId,
     private readonly ILogger<GetUserByEmployeeIdHandler> _logger;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IReadAppIdpRepository _repository;
-    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateAsync { get; set; }
     public GetUserByEmployeeIdHandler(ILogger<GetUserByEmployeeIdHandler> logger, UserManager<ApplicationUser> userManager, IReadAppIdpRepository repository)
     {
         _logger = logger;
