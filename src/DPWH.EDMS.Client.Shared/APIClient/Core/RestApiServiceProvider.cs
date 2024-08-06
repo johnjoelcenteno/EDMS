@@ -1,3 +1,4 @@
+using DPWH.EDMS.Client.Shared.APIClient.Services.AuditLog;
 using DPWH.EDMS.Client.Shared.APIClient.Services.DataLibrary;
 using DPWH.EDMS.Client.Shared.APIClient.Services.Licenses;
 using DPWH.EDMS.Client.Shared.APIClient.Services.Lookups;
@@ -10,8 +11,7 @@ using DPWH.EDMS.Client.Shared.APIClient.Services.RequestManagement;
 using DPWH.EDMS.Client.Shared.APIClient.Services.Signatories;
 using DPWH.EDMS.Client.Shared.APIClient.Services.SystemReport;
 using DPWH.NGOBIA.Client.Shared.APIClient.Services.Users;
-using Microsoft.Extensions.DependencyInjection;
-
+using Microsoft.Extensions.DependencyInjection; 
 namespace DPWH.EDMS.Client.Shared.APIClient.Core;
 
 public static class RestApiServiceProvider
@@ -30,6 +30,8 @@ public static class RestApiServiceProvider
         services.AddScoped<ISystemReportService, SystemReportService>();
         services.AddScoped<IReportsService, ReportsService>();
         services.AddScoped<INavigationService, NavigationService>();
+        services.AddScoped<IAuditLogService, AuditLogService>();
+        
         return services;
     }
 }

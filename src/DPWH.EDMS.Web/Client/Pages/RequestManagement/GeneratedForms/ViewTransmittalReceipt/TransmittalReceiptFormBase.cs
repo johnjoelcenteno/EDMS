@@ -23,6 +23,7 @@ public class TransmittalReceiptFormBase : ComponentBase
     [Inject] public required IExceptionHandlerService ExceptionHandlerService { get; set; }
     [Inject] public required IToastService ToastService { get; set; }
     [Inject] public required IUsersService UsersService { get; set; }
+    [Inject] public required NavigationManager Navigate {  get; set; }
     [Inject] protected DrawingService drawingService { get; set; } = default!;
     protected bool IsLoading { get; set; } = false;
     protected RecordRequestModel SelectedRecordRequest { get; set; } = new();
@@ -41,7 +42,9 @@ public class TransmittalReceiptFormBase : ComponentBase
             SelectedRecordRequest = res;
             
         });
-         
+
+        await InvokeAsync(StateHasChanged);
+
         IsLoading = false;
     }
 
@@ -82,13 +85,17 @@ public class TransmittalReceiptFormBase : ComponentBase
             ToastService.ShowError("Something went wrong on fetching user data");
         }
 
+        if (string.IsNullOrEmpty(User.Office))
+        {
+            Navigate.NavigateTo("/404");
+        }
         if (user.Identity is not null && user.Identity.IsAuthenticated)
         {
             var roles = user.Claims.Where(c => c.Type == "role")!.ToList();
-            var role = roles.FirstOrDefault(role => !string.IsNullOrEmpty(role.Value) && role.Value.Contains(ApplicationRoles.RolePrefix))?.Value ?? string.Empty;
+            var role = roles.FirstOrDefault(role => !string.IsNullOrEmpty(role.Value) && role.Value.Contains(ApplicationRoles.RolePrefix))?.Value ?? ClaimsPrincipalExtensions.GetRole(user);
 
-            var firstnameValue = user.Claims.FirstOrDefault(x => x.Type == "firstname")!.Value;
-            var lastnameValue = user.Claims.FirstOrDefault(x => x.Type == "lastname")!.Value;
+            var firstnameValue = ClaimsPrincipalExtensions.GetFirstName(user);
+            var lastnameValue = ClaimsPrincipalExtensions.GetLastName(user);
 
             UserRole = GetRoleLabel(role);
 
@@ -97,9 +104,9 @@ public class TransmittalReceiptFormBase : ComponentBase
                 User.FirstName = firstnameValue;
                 User.LastName = lastnameValue;
             }
-
         }
     }
+
     protected string GetOfficeName(string officeCode)
     {
         return officeCode switch

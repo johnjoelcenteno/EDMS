@@ -60,7 +60,7 @@ window.saveAsFile = (fileName, content) => {
 
 function raiseResizeEvent() {
 
-    var assemblyName = 'DPWH.NGOBIA.Web'; // Set this to your Blazor app's assembly name
+    var assemblyName = 'DPWH.EDMS.Web'; // Set this to your Blazor app's assembly name
     var method = 'RaiseWindowResizeEvent';
     DotNet.invokeMethodAsync(assemblyName, method, Math.floor(window.innerWidth), Math.floor(window.innerHeight));
 
