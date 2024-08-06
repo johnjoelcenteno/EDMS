@@ -1,5 +1,6 @@
 ﻿@page "/my-records"
 @using DPWH.EDMS.Api.Contracts
+@using DPWH.EDMS.Client.Shared.Models
 @inherits RecordsBase
 @inject NavigationManager Navigation
 @attribute [Authorize(Policy = "RequireActiveRoles")]
@@ -24,28 +25,39 @@
 
                 @if (GetEmployeeRecords.Data != null && !XSmall)
                 {
-                    <TelerikGrid TItem="GetLookupResult"
+                    <TelerikGrid TItem="LookupRecordModels"
                                  @bind-PageSize="@PageSize"
-                                 Height="@GridHeight"
+                                 OnRowClick="@OnRowClickHandler"
                                  FilterMode="GridFilterMode.FilterRow"
                                  Sortable=true
                                  Pageable=true
-                                 Data="GetEmployeeRecords.Data"
+                                 Data="GetRecordType"
                                  OnStateChanged="@OnStateChanged"
                                  @ref="GridRef"
-                                 Context="employee">
+                                 Context="docContext">
                         <GridSettings>
                             <GridPagerSettings PageSizes="@PageSizes">
                             </GridPagerSettings>
                         </GridSettings>
+                        <DetailTemplate>
+                            @{
+                                var document = docContext as LookupRecordModels;
+                                <TelerikGrid Data="document.Documents" TItem="RecordModels" Sortable="true" Pageable="true" PageSize="5">
+                                    <GridColumns>
+                                        <GridColumn Field=@nameof(RecordModel.DocVersion) Title="Document Version" />
+                                        <GridColumn Field=@nameof(RecordModel.RecordName) Title="Document Name" />
+                                        <GridCommandColumn Width="5%">
+                                            <GridCommandButton Class="commandButton" Command="ExportData" OnClick="@viewData">View</GridCommandButton>
+                                        </GridCommandColumn>
+                                        <GridCommandColumn Width="5%">
+                                            <GridCommandButton Class="commandButton">Export</GridCommandButton>
+                                        </GridCommandColumn>
+                                    </GridColumns>
+                                </TelerikGrid>
+                            }
+                        </DetailTemplate>
                         <GridColumns>
-                            <GridColumn Field=@nameof(GetLookupResult.Name) Title="Document Name" />
-                            <GridCommandColumn Width="5%">
-                                <GridCommandButton Class="commandButton" Command="ExportData" OnClick="@viewData">View</GridCommandButton>
-                            </GridCommandColumn>
-                            <GridCommandColumn Width="5%">
-                                <GridCommandButton Class="commandButton">Export</GridCommandButton>
-                            </GridCommandColumn>
+                            <GridColumn Field=@nameof(RecordModel.RecordName) Title="Document Name" />
                         </GridColumns>
                     </TelerikGrid>
                 }
