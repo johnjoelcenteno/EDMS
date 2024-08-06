@@ -105,7 +105,7 @@
                 <div class="form-group p-2">
                     <label for="suppDocType">Authorization Document</label>
                     <TelerikDropDownList Data="@AuthorizeDocTypeList"
-                                         @bind-Value="SelectedPurpose"
+                                         @bind-Value="SelectedAuthorizedDocTypeId"
                                          ValueField="@nameof(GetAuthorizationDocumentsResult.Id)"
                                          TextField="@nameof(GetAuthorizationDocumentsResult.Name)"
                                          DefaultText="Select" />
@@ -163,8 +163,8 @@
                 <label for="remarks">Purpose</label>
                 <TelerikDropDownList Data="@PurposeList"
                                      @bind-Value="SelectedItem.Purpose"
-                                     ValueField="@nameof(GetAuthorizationDocumentsResult.Name)"
-                                     TextField="@nameof(GetAuthorizationDocumentsResult.Name)"
+                                     ValueField="@nameof(GetLookupResult.Name)"
+                                     TextField="@nameof(GetLookupResult.Name)"
                                      DefaultText="Select" />
                 <ValidationMessage For="@(() => SelectedItem.Purpose)" class="text-danger" />
             </div>
