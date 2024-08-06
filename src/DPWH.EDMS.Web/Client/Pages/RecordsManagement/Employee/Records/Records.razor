@@ -1,6 +1,7 @@
 ﻿@using DPWH.EDMS.Api.Contracts
 @using DPWH.EDMS.Components.Helpers
 @using DPWH.EDMS.Web.Client.Pages.RecordsManagement.Employee.Records.Model
+@using System.Globalization
 
 @inherits RecordsBase
 
@@ -54,7 +55,15 @@
                                 </GridPagerSettings>
                             </GridSettings>
                             <GridColumns>
-                                <GridColumn Field=@nameof(RecordDocumentModel.DocVersion) Title="Document Version" />
+                                <GridColumn Field=@nameof(RecordDocumentModel.DocVersion) Title="Document Version">
+                                    <Template>
+                                        @{
+                                            var data = context as RecordDocumentModel;
+                                            var date = DateTime.ParseExact(data!.DocVersion, "MMddyyyy", CultureInfo.InvariantCulture);
+                                            <p>@GenericHelper.GetDateDisplay(date)</p>
+                                         }
+                                    </Template>
+                                </GridColumn>
                                 <GridColumn Field=@nameof(RecordDocumentModel.RecordName) Title="Document Name" />
 
                                 <GridColumn Width="5%">
