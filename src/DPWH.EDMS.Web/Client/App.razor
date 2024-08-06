@@ -28,7 +28,9 @@
         <NotFound>
             <PageTitle>Not found</PageTitle>
             <LayoutView Layout="@typeof(MainLayout)">
-                404 - Page not found
+                @{
+                    NavigationManager.NavigateTo("/404");
+                 }
             </LayoutView>
         </NotFound>
     </Router>

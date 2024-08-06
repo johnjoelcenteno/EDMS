@@ -1,74 +1,191 @@
 ﻿@using DPWH.EDMS.Api.Contracts
 @using DPWH.EDMS.Components.Helpers
+@using DPWH.EDMS.Web.Client.Pages.RecordsManagement.Employee.Records.Model
+@using System.Globalization
+
 @inherits RecordsBase
 
-<EdmsLoader Visible="IsLoading" />
+<EdmsLoader Visible="IsLoading" /> 
 
-@if (GridData != null && !XSmall)
-{
-    <TelerikGrid TItem="RecordModel"
-                 @bind-PageSize="@PageSize"
-                 Height="@GridHeight"
-                 FilterMode="GridFilterMode.None"
-                 Sortable=true
-                 Data="GridData"
-                 OnStateChanged="@OnStateChanged"
-                 @ref="GridRef"
-                 Context="item"
-                 OnRowClick="GoToSelectedItemOverview">
-        <GridSettings>
-            <GridPagerSettings PageSizes="@PageSizes">
-            </GridPagerSettings>
-        </GridSettings>
-        <GridColumns>
-            <GridColumn Field=@nameof(RecordModel.RecordName) Title="Name" Filterable="false" />
-            <GridColumn Field=@nameof(RecordModel.RecordUri) Title="Uri" Filterable="false" />
-            <GridCommandColumn Title="Actions">
-                <GridCommandButton Class="commandButton" Command="ExportData">View</GridCommandButton>
-                <GridCommandButton Class="commandButton">Export</GridCommandButton>
-            </GridCommandColumn>
-        </GridColumns>
-    </TelerikGrid>
-}
-else if (GridData != null && XSmall)
-{
-    <TelerikGrid TItem="RecordModel"
-                 @bind-PageSize="@PageSize"
-                 Height="@GridHeight"
-                 FilterMode="GridFilterMode.None"
-                 Sortable=true
-                 Data="GridData"
-                 OnStateChanged="@OnStateChanged"
-                 @ref="GridRef"
-                 Context="item"
-                 OnRowClick="GoToSelectedItemOverview">
-        <GridSettings>
-            <GridPagerSettings PageSizes="@PageSizes">
-            </GridPagerSettings>
-        </GridSettings>
-        <DetailTemplate>
-            @{
-                var prop = item as RecordModel;
-                <div class="d-flex flex-column">
-                    <p><b>Record Name: </b>@item.RecordName</p>
-                    <p><b>Record Uri: </b>@item.RecordUri</p>
-                </div>
-            }
-        </DetailTemplate>
-        <GridColumns>
-            <GridColumn Field=@nameof(RecordModel.RecordName) Title="Full Name" />
-        </GridColumns>
-    </TelerikGrid>
-}
-else
-{
-    <span>No Data to display.</span>
-}
-<TelerikPager PageChanged="@PageChangedHandler"
-              Total="TotalItems"
-              ButtonCount="6"
-              PageSize="@PageSize"
-              PageSizeChanged="@PageSizeChangedHandler"
-              PageSizes="@(new List<int?> {5, 10, 20})"
-              Page="@Page">
-</TelerikPager>
+<TelerikMediaQuery Media="(max-width: 480px)" OnChange="((changed) => XSmall = changed)"></TelerikMediaQuery>
+
+<div class="mobile-property-grid">
+
+    @if (GetEmployeeRecords.Data != null && !XSmall)
+    {
+       @*  <div class="d-flex flex-row justify-content-end">
+            <TelerikButton Class="mb-2"
+                           Icon="@FontIcon.Plus"
+                           ThemeColor="@ThemeConstants.Button.ThemeColor.Primary"
+                           OnClick="GoToAddNewRecord">
+                Add Request
+            </TelerikButton>
+        </div> *@
+        <TelerikGrid TItem="GetLookupResult"
+                     @bind-PageSize="@PageSize"
+                     Height="@GridHeight"
+                     FilterMode="GridFilterMode.FilterRow"
+                     Sortable=true
+                     Pageable=true
+                     Data="GetEmployeeRecords.Data"
+                     OnStateChanged="@OnStateChanged"
+                     @ref="GridRef"
+                     Context="docversion">
+            <GridSettings>
+                <GridPagerSettings PageSizes="@PageSizes">
+                </GridPagerSettings>
+            </GridSettings>
+            <DetailTemplate>
+                @{
+                    var recordType = docversion as GetLookupResult;
+                    var recordVersions = RecordDocuments.Where(x => x.RecordTypeId == recordType.Id).ToList();
+                    @if (recordVersions != null && recordVersions.Count > 0)
+                    {
+                       
+                        <TelerikGrid Class="grid-no-scroll"
+                                     TItem="RecordDocumentModel"
+                                     @bind-PageSize="@pageAction"
+                                     Height="@GridHeight"
+                                     FilterMode="@GridFilterMode.FilterRow"
+                                     Sortable=true
+                                     Pageable=true
+                                     Data="recordVersions">
+                            <GridSettings>
+                                <GridPagerSettings PageSizes="@PageSizesChild">
+                                </GridPagerSettings>
+                            </GridSettings>
+                            <GridColumns>
+                                <GridColumn Field=@nameof(RecordDocumentModel.DocVersion) Title="Document Version">
+                                    <Template>
+                                        @{
+                                            var data = context as RecordDocumentModel;
+                                            var date = DateTime.ParseExact(data!.DocVersion, "MMddyyyy", CultureInfo.InvariantCulture);
+                                            <p>@GenericHelper.GetDateDisplay(date)</p>
+                                         }
+                                    </Template>
+                                </GridColumn>
+                                <GridColumn Field=@nameof(RecordDocumentModel.RecordName) Title="Document Name" />
+
+                                <GridColumn Width="5%">
+                                  <Template>
+                                        <TelerikButton OnClick="@(() => viewData(recordType))">View</TelerikButton>
+                                        
+                                  </Template>
+                                </GridColumn>
+                                <GridColumn Width="5%">
+                                    <Template>
+                                        <TelerikButton OnClick="@(() => viewData(recordType))">Export</TelerikButton>
+                                    </Template>
+                                </GridColumn>
+                            </GridColumns>
+                        </TelerikGrid>
+                    }
+                    else
+                    {
+                        <div class="d-flex justify-content-around">
+                            <span>No Data to display.</span>
+                        </div>
+                    }
+                }
+            </DetailTemplate>
+            <GridColumns>
+                <GridColumn Field=@nameof(GetLookupResult.Name) Title="Document Name" />
+            </GridColumns>
+        </TelerikGrid>
+    }
+    else if (GetEmployeeRecords.Data != null && XSmall)
+    {
+        <TelerikGrid TItem="GetLookupResult"
+                     @bind-PageSize="@PageSize"
+                     Height="@GridHeight"
+                     FilterMode="GridFilterMode.FilterRow"
+                     Sortable=true
+                     Pageable=true
+                     Data="GetEmployeeRecords.Data"
+                     Context="employee">
+            <GridSettings>
+                <GridPagerSettings PageSizes="@PageSizes">
+                </GridPagerSettings>
+            </GridSettings>
+            <DetailTemplate>
+                @{
+                    var recordType = employee as GetLookupResult;
+                    var recordVersions = RecordDocuments.Where(x => x.RecordTypeId == recordType.Id).ToList();
+                    @if (recordVersions != null && recordVersions.Count > 0)
+                    {
+                        <TelerikGrid Class="grid-no-scroll"
+                                     TItem="RecordDocumentModel"
+                                     @bind-PageSize="@pageAction"
+                                     Height="@GridHeight"
+                                     FilterMode="@GridFilterMode.FilterRow"
+                                     Sortable=true
+                                     Pageable=true
+                                     Data="recordVersions">
+                            <GridSettings>
+                                <GridPagerSettings PageSizes="@PageSizesChild">
+                                </GridPagerSettings>
+                            </GridSettings>
+                            <GridColumns>
+                               
+                                <GridColumn Field=@nameof(RecordDocumentModel.RecordName) Title="Document Name">
+                                    <Template>
+                                        @{
+                                            var record = context as RecordDocumentModel;
+                                        }
+                                        <div class="d-flex justify-content-center">
+                                            <a class="fw-bolder text-decoration-underline" target="_blank" href="@($"my-records/{recordType.Id}")">@record!.RecordName</a>
+                                        </div>
+                                    </Template>
+                                </GridColumn>
+ 
+                            </GridColumns>
+                        </TelerikGrid>
+                    }
+                    else
+                    {
+                        <div class="d-flex justify-content-around">
+                            <span>No Data to display.</span>
+                        </div>
+                    }
+                }
+            </DetailTemplate>
+            <GridColumns>
+                <GridColumn Field=@nameof(GetLookupResult.Name) Title="Document Name"/>
+            </GridColumns>
+        </TelerikGrid>
+    }
+    else
+    {
+        <span>No Data to display.</span>
+    }
+</div>
+<style>
+    .mobile-property-grid .k-hierarchy-cell .k-svg-i-plus svg path {
+        d: path('M352 256 160 384V128l192 128z');
+        fill: #7f56d9;
+    }
+
+    .mobile-property-grid .k-hierarchy-cell .k-svg-i-minus svg path {
+        d: path('M256 352 128 160h256L256 352z');
+        fill: #7f56d9;
+    }
+
+    .grid-no-scroll .k-grid-content {
+        overflow-y: auto;
+    }
+
+    .grid-no-scroll .k-grid-header,
+    .grid-no-scroll .k-grid-footer {
+        padding-right: 0; /* version 2.26 and older requires !important here */
+    }
+
+    .grid-no-scroll .k-grid-header-wrap,
+    .grid-no-scroll .k-grid-footer-wrap {
+        border-right-width: 0;
+    }
+     
+    .k-grid a {
+        color: #38339B;
+        text-decoration: underline;
+    }
+</style>

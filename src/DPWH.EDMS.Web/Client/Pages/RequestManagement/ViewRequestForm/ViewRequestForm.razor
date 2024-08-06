@@ -414,6 +414,7 @@
                             </div>
                             @if (record.Uri != null)
                             {
+                               
                                 <div class="col text-end">
                                     <TelerikButton>Approve</TelerikButton>
                                     @* <NavLink class="fw-bolder ms-3" href="@record.Uri" target="_blank">View</NavLink> *@
@@ -421,6 +422,7 @@
                             }
                             else
                             {
+                               
                                 <div class="col text-end">
                                     <p class="fw-bolder">No Record Found</p>
                                 </div>
@@ -442,6 +444,7 @@
                             </div>
                             @if (record.Uri != null)
                             {
+                                 
                                 <div class="col text-end">
                                     <TelerikButton>Approve</TelerikButton>
                                     @* <NavLink class="fw-bolder ms-3" href="@record.Uri" target="_blank">View</NavLink> *@
@@ -449,6 +452,7 @@
                             }
                             else
                             {
+                                
                                 <div class="col text-end">
                                     <p class="fw-bolder">No Record Found</p>
                                 </div>
@@ -474,6 +478,7 @@
                                         </div>
                                         @if (record.Uri != null)
                                         {
+                                            HasNoRecords = true;
                                             <div class="col text-end">
                                                 <TelerikButton>Approve</TelerikButton>
                                                 @* <NavLink class="fw-bolder ms-3" href="@record.Uri" target="_blank">View</NavLink> *@
@@ -481,6 +486,7 @@
                                         }
                                         else
                                         {
+                                            HasNoRecords = false;
                                             <div class="col text-end">
                                                 <p class="fw-bolder">No Record Found</p>
                                             </div>
@@ -491,6 +497,8 @@
                         }
                     }
                 }
+                 
+
             </div>
         </div>
     </TabStripTab>
@@ -531,12 +539,14 @@
                             </div>
                             @if (record.Uri != null)
                             {
+                                HasNoRecords = false;
                                 <div class="col text-end">
                                     <NavLink class="fw-bolder" href="@record.Uri" target="_blank">View</NavLink>
                                 </div>
                             }
                             else
                             {
+                                HasNoRecords = true;
                                 <div class="col text-end">
                                     <p class="fw-bolder">No Record Found</p>
                                 </div>
@@ -604,6 +614,18 @@
                             </div>
                         }
                     }
+                }
+                @if (HasNoRecords && User.Office == Offices.RMD.ToString())
+                {
+                    <div class="row my-4">
+                        <div class="col">
+                            <p><b>CERTIFICATE OF NO RECORDS</b></p>
+                        </div>
+                        <div class="d-flex col gap-4 justify-content-end">
+                            <NavLink class="fw-bolder" target="_blank" href="@($"certificate-of-no-records/{RequestId}")">View</NavLink>
+                            <NavLink class="fw-bolder" target="_blank" href="@($"certificate-of-no-records/{RequestId}/exporting")">Export</NavLink>
+                        </div>
+                    </div>
                 }
             </div>
         </div>

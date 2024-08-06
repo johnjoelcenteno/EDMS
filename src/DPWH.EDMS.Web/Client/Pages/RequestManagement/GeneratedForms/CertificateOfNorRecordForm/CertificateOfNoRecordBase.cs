@@ -7,17 +7,24 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using DPWH.EDMS.IDP.Core.Extensions;
 using DPWH.EDMS.Web.Client.Shared.Services.Drawing;
+using DPWH.EDMS.Shared.Enums;
+using DPWH.EDMS.Client.Shared.APIClient.Services.Signatories;
+using DPWH.EDMS.Components.Components.ReusableGrid;
+using DPWH.EDMS.Client.Shared.Models;
+using DPWH.EDMS.Components.Helpers;
+using DPWH.EDMS.Client.Shared.APIClient.Services.DataLibrary;
 
 namespace DPWH.EDMS.Web.Client.Pages.RequestManagement.GeneratedForms.CertificateOfNorRecordForm;
 
-public class CertificateOfNoRecordBase : ComponentBase
+public class CertificateOfNoRecordBase : GridBase<SignatoriesModel>
 {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateAsync { get; set; }
     [Parameter] public required string RequestId { get; set; }
     [Inject] public required IRequestManagementService RequestManagementService { get; set; }
-    [Inject] public required IExceptionHandlerService ExceptionHandlerService { get; set; }
-    [Inject] public required IToastService ToastService { get; set; }
+    [Inject] public required IExceptionHandlerService ExceptionHandlerService { get; set; } 
     [Inject] public required IUsersService UsersService { get; set; }
+    [Inject] public required ISignatoryManagementService SignatoryManagementService { get; set; }
+    [Inject] public required NavigationManager Navigate { get; set; }
     [Inject] protected DrawingService drawingService { get; set; } = default!;
     protected bool IsLoading { get; set; } = false;
     [Parameter] public required string IsExporting { get; set; }
@@ -35,6 +42,8 @@ public class CertificateOfNoRecordBase : ComponentBase
             SelectedRecordRequest = res;
 
         });
+        await GetSignatories();
+        await InvokeAsync(StateHasChanged);
 
         IsLoading = false;
     }
@@ -58,6 +67,26 @@ public class CertificateOfNoRecordBase : ComponentBase
         });
     }
 
+    private async Task GetSignatories()
+    {
+        IsLoading = true;
+
+        await ExceptionHandlerService.HandleApiException(async () =>
+        {
+            ServiceCb = SignatoryManagementService.Query;
+
+            var filters = new List<Filter>();
+            AddTextSearchFilter(filters, nameof(SignatoriesModel.DocumentType), "Certificate of no record", "contains");
+           
+            SearchFilterRequest.Logic = DataSourceHelper.AND_LOGIC;
+            SearchFilterRequest.Filters = filters.Any() ? filters : null;
+            await LoadData();
+
+        });
+
+        IsLoading = false;
+    }
+   
     protected async Task FetchUser()
     {
         var authState = await AuthenticationStateAsync!;
@@ -75,16 +104,21 @@ public class CertificateOfNoRecordBase : ComponentBase
         {
             ToastService.ShowError("Something went wrong on fetching user data");
         }
+        if (string.IsNullOrEmpty(User.Office))
+        {
+            Navigate.NavigateTo("/404");
+        }
     }
     protected string GetOfficeName(string officeCode)
     {
         return officeCode switch
         {
-            "RMD" => "Records Management Division",
-            "HRMD" => "Human Resource Management Division",
+            nameof(Offices.RMD) => "Records Management Division",
+            nameof(Offices.HRMD) => "Human Resource Management Division",
             _ => string.Empty
         };
     }
+
     protected async Task ExportPdf()
     {
         IsLoading = true;
@@ -92,6 +126,7 @@ public class CertificateOfNoRecordBase : ComponentBase
         if (SelectedRecordRequest?.RequestedRecords is null)
             return;
 
+       
         var options = new { padding = "0cm", margin = "0cm", paperSize = "A4", scale = 0.7, multiPage = true, landscape = false, };
         var data = await drawingService.ExportPdf(PdfContainerRef, options);
         await drawingService.SaveAs(data, $"Certificate-Of-No-Records-{DateTime.Now.ToString("MMM dd, yyyy")}.pdf");
