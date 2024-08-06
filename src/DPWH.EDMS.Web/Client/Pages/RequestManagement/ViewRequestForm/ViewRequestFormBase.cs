@@ -24,10 +24,11 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
     protected GetUserByIdResult User = new GetUserByIdResult();
     protected int ActiveTabIndex { get; set; } = 0;
     protected int ProgressIndex { get; set; }
-    protected bool IsModalVisible { get; set; }
     protected int MinFileSize { get; set; } = 1024;
     protected int MaxFileSize { get; set; } = 4 * 1024 * 1024;
     protected bool HasNoRecords { get; set; } = false;
+    protected bool IsModalVisible { get; set; }
+    protected bool IsRecordUploadEnabled { get; set; } = false;
     protected List<string> AllowedExtensions { get; set; } = new List<string>() { ".docx", ".pdf" };
     protected DateTimeOffset DateReceived { get; set; } = DateTimeOffset.Now;
     protected DateTimeOffset TimeReceived { get; set; } = DateTimeOffset.Now;
@@ -43,6 +44,20 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
 
     // Placeholders
     protected string? Remarks { get; set; }
+    protected TelerikRadioGroup<ListItem, int?>? RadioGroupRef { get; set; }
+    protected int? RadioGroupValue { get; set; }
+
+    protected List<ListItem> RadioGroupData { get; set; } = new List<ListItem>()
+    {
+        new ListItem { Id = 1, Text = "TC" },
+        new ListItem { Id = 2, Text = "MC" }
+    };
+
+    protected class ListItem
+    {
+        public int Id { get; set; }
+        public string? Text { get; set; }
+    }
 
     protected override void OnParametersSet()
     {
@@ -260,15 +275,25 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
         IsLoading = true;
         IsModalVisible = false;
 
-        foreach (var uploadRecord in UploadRequestedRecords.Values)
+        if (UploadRequestedRecords != null && UploadRequestedRecords.Count > 0)
         {
-            if (uploadRecord.Document != null)
+            foreach (var uploadRecord in UploadRequestedRecords.Values)
             {
-                await RecordRequestSupportingFilesService.UploadRequestedRecord(uploadRecord.Document, uploadRecord.Id);
+                if (uploadRecord.Document != null)
+                {
+                    await RecordRequestSupportingFilesService.UploadRequestedRecord(uploadRecord.Document, uploadRecord.Id);
+                }
             }
         }
 
         await OnStatusChange(RecordRequestStates.Reviewed.ToString());
+
+        await LoadData((res) =>
+        {
+            SelectedRecordRequest = res;
+
+        });
+
         StateHasChanged();
         IsLoading = false;
     }
@@ -277,12 +302,6 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
     {
         IsLoading = true;
         IsModalVisible = false;
-
-        //foreach (var record in SelectedRecordRequest.RequestedRecords)
-        //{
-        //    await UpdateIsAvailable(record);
-        //}
-
         await OnStatusChange(RecordRequestStates.Approved.ToString());
         StateHasChanged();
         IsLoading = false;
@@ -292,12 +311,6 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
     {
         IsLoading = true;
         IsModalVisible = false;
-
-        //foreach (var record in SelectedRecordRequest.RequestedRecords)
-        //{
-        //    await UpdateIsAvailable(record);
-        //}
-
         await OnStatusChange("For Release");
         StateHasChanged();
         IsLoading = false;
@@ -384,17 +397,19 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
         SelectedTransmittalReceipt = null;
     }
 
-    private void UpdateProgressIndex()
+    protected void UpdateProgressIndex()
     {
         switch (SelectedRecordRequest.Status)
         {
             case var status when status == RecordRequestStates.Submitted.ToString():
                 ProgressIndex = 0;
                 ActiveTabIndex = 1;
+                IsRecordUploadEnabled = true;
                 break;
             case var status when status == RecordRequestStates.Reviewed.ToString():
                 ProgressIndex = 1;
                 ActiveTabIndex = 2;
+                IsRecordUploadEnabled = false;
                 break;
             case var status when status == RecordRequestStates.Approved.ToString():
                 ProgressIndex = 2;
