@@ -137,22 +137,22 @@ public class RecordsBase : GridBase<LookupRecordModels>
         Console.WriteLine(selectedId?.Id);
         NavigationManager.NavigateTo($"/my-records/{selectedId.Id}");
     }
-    protected async void SetFilterGrid(string id)
-    {
-        var document = GetRecordType;
-        var filters = new List<Api.Contracts.Filter>();
+    //protected async void SetFilterGrid()
+    //{
+    //    var document = GetRecordType;
+    //    var filters = new List<Api.Contracts.Filter>();
 
-        AddTextSearchFilterIfNotNull(filters, nameof(LookupRecordModels.EmployeeId), EmployeeId?.ToString(), "eq");
-        AddTextSearchFilterIfNotNull(filters, nameof(LookupRecordModels.Documents), SearchDocVersion, "contains");
-        AddTextSearchFilterIfNotNull(filters, nameof(LookupRecordModels.RecordName), SearchName, "contains");
+    //    AddTextSearchFilterIfNotNull(filters, nameof(LookupRecordModels.EmployeeId), EmployeeId?.ToString(), "eq");
+    //    AddTextSearchFilterIfNotNull(filters, nameof(LookupRecordModels.Documents), SearchDocVersion, "contains");
+    //    AddTextSearchFilterIfNotNull(filters, nameof(LookupRecordModels.RecordName), SearchName, "contains");
 
-        SearchFilterRequest.Logic = DataSourceHelper.AND_LOGIC;
-        SearchFilterRequest.Filters = filters.Any() ? filters : null;
+    //    SearchFilterRequest.Logic = DataSourceHelper.AND_LOGIC;
+    //    SearchFilterRequest.Filters = filters.Any() ? filters : null;
 
-        await LoadData();
+    //    await LoadData();
 
-        StateHasChanged();
-    }
+    //    StateHasChanged();
+    //}
     private void AddTextSearchFilterIfNotNull(List<Api.Contracts.Filter> filters, string fieldName, string? value, string operation)
     {
         if (!string.IsNullOrEmpty(value))

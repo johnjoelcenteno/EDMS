@@ -1,6 +1,8 @@
 ﻿@page "/my-records"
 @using DPWH.EDMS.Api.Contracts
 @using DPWH.EDMS.Client.Shared.Models
+@using DPWH.EDMS.Components.Helpers
+@using System.Globalization
 @inherits RecordsBase
 @inject NavigationManager Navigation
 @attribute [Authorize(Policy = "RequireActiveRoles")]
@@ -42,62 +44,18 @@
                         <DetailTemplate>
                             @{
                                 var document = docContext as LookupRecordModels;
-                                <TelerikGrid Data="GridData.Where(item => item.RecordTypeId == document.Id).ToList()" FilterMode="GridFilterMode.FilterRow" Pageable="true" PageSize="5">
+                                <TelerikGrid Data="GridData.Where(item => item.RecordTypeId == document.Id).ToList()" FilterMode="GridFilterMode.FilterRow" Sortable="true" Pageable="true" PageSize="5">
                                     <GridColumns>
-                                        <GridColumn Field=@nameof(RecordModel.DocVersion) Title="Document Version">
-                                            <FilterCellTemplate>
-                                                <TelerikTextBox Value="@SearchDocVersion"
-                                                                ValueChanged="@((string? val) =>
-                                               {
-                                                  SearchDocVersion = val;
-
-                                                  SetFilterGrid(nameof(RecordModel.Id));
-
-                                               })">
-
-                                                </TelerikTextBox>
-
-                                                <TelerikButton ButtonType="ButtonType.Button"
-                                                               Class="k-clear-button-visible ml-sm"
-                                                               Icon="@SvgIcon.FilterClear"
-                                                               Enabled="@(!string.IsNullOrEmpty(SearchDocVersion))"
-                                                               OnClick="@(() =>
-                                               {
-                                                 SearchDocVersion = null;
-
-                                                 SetFilterGrid(nameof(RecordModel.Id));
-
-                                              })">
-                                                </TelerikButton>
-                                            </FilterCellTemplate>
+                                        <GridColumn Field=@nameof(RecordModels.DocVersion) Title="Document Version">
+                                            <Template>
+                                                @{
+                                                    var data = context as LookupRecordModels;
+                                                    var date = DateTime.ParseExact(data!.DocVersion, "MMddyyyy", CultureInfo.InvariantCulture);
+                                                    <p>@GenericHelper.GetDateDisplay(date)</p>
+                                                }
+                                            </Template>
                                         </GridColumn>
-                                        <GridColumn Field=@nameof(RecordModel.RecordName) Title="Document Version">
-                                            <FilterCellTemplate>
-                                                <TelerikTextBox Value="@SearchName"
-                                                                ValueChanged="@((string? val) =>
-                                               {
-                                                  SearchName = val;
-
-                                                  SetFilterGrid(nameof(RecordModel.Id));
-
-                                               })">
-
-                                                </TelerikTextBox>
-
-                                                <TelerikButton ButtonType="ButtonType.Button"
-                                                               Class="k-clear-button-visible ml-sm"
-                                                               Icon="@SvgIcon.FilterClear"
-                                                               Enabled="@(!string.IsNullOrEmpty(SearchName))"
-                                                               OnClick="@(() =>
-                                               {
-                                                 SearchName = null;
-
-                                                 SetFilterGrid(nameof(RecordModel.Id));
-
-                                              })">
-                                                </TelerikButton>
-                                            </FilterCellTemplate>
-                                        </GridColumn>
+                                        <GridColumn Field=@nameof(RecordModels.RecordName) Title="Document Name" />
                                         <GridCommandColumn Width="5%">
                                             <GridCommandButton Class="commandButton" Command="ExportData" OnClick="@viewData">View</GridCommandButton>
                                         </GridCommandColumn>
