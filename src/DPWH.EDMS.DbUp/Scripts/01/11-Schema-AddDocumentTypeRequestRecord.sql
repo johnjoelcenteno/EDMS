@@ -11,5 +11,5 @@ IF NOT EXISTS (
     ALTER TABLE
         RequestedRecords
     ADD
-        [DocumentType] NVARCHAR(50) NOT NULL;
+        [DocumentType] NVARCHAR(50) NULL;
 END

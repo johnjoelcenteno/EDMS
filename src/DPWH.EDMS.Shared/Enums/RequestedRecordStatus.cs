@@ -2,6 +2,17 @@
 
 public enum RequestedRecordStatus
 {
-    Pending,    
+    Pending,
+    NoRecord,
+    Evaluated,
+    Signed,
     Completed    
+}
+
+public enum OfficeRequestedRecordStatus
+{
+    NA,
+    Pending,
+    Evaluated,
+    Completed
 }
