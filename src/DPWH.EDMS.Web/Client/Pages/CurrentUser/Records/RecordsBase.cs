@@ -1,5 +1,4 @@
-﻿using DocumentFormat.OpenXml.InkML;
-using DPWH.EDMS.Api.Contracts;
+﻿using DPWH.EDMS.Api.Contracts;
 using DPWH.EDMS.Client.Shared.APIClient.Services.Lookups;
 using DPWH.EDMS.Client.Shared.APIClient.Services.RecordManagement;
 using DPWH.EDMS.Client.Shared.MockModels;
@@ -27,8 +26,6 @@ public class RecordsBase : GridBase<LookupRecordModels>
     protected MockCurrentData CurrentData { get; set; }
     protected List<LookupRecordModels> GetRecordType = new List<LookupRecordModels>();
     protected List<Document> DocumentList = new List<Document>();
-    protected string? SearchDocVersion { get; set; }
-    protected string? SearchName { get; set; }
     public IEnumerable<TreeItem> Data { get; set; }
     public IEnumerable<object> ExpandedItems { get; set; }
     protected GetLookupResultIEnumerableBaseApiResponse GetEmployeeRecords { get; set; } = new GetLookupResultIEnumerableBaseApiResponse();
@@ -120,7 +117,14 @@ public class RecordsBase : GridBase<LookupRecordModels>
                     {
                         Id = item.Id,
                         RecordName = item.Name,
-                 
+                        Documents = GridData.Where(items => items.RecordTypeId == item.Id).Select(items => new RecordModels
+                        {
+                            Id = items.Id,
+                            RecordName = items.RecordName,
+                            RecordTypeId = items.RecordTypeId,
+                            RecordUri = items.RecordUri,
+                            DocVersion = items.DocVersion,
+                        }).ToList(),
                      
                     }).ToList();
             GetRecordType = convertedData;
@@ -136,22 +140,6 @@ public class RecordsBase : GridBase<LookupRecordModels>
         //Int32.TryParse(samp, out sampNumber);
         Console.WriteLine(selectedId?.Id);
         NavigationManager.NavigateTo($"/my-records/{selectedId.Id}");
-    }
-    protected async void SetFilterGrid(string id)
-    {
-        var document = GetRecordType;
-        var filters = new List<Api.Contracts.Filter>();
-
-        AddTextSearchFilterIfNotNull(filters, nameof(LookupRecordModels.EmployeeId), EmployeeId?.ToString(), "eq");
-        AddTextSearchFilterIfNotNull(filters, nameof(LookupRecordModels.Documents), SearchDocVersion, "contains");
-        AddTextSearchFilterIfNotNull(filters, nameof(LookupRecordModels.RecordName), SearchName, "contains");
-
-        SearchFilterRequest.Logic = DataSourceHelper.AND_LOGIC;
-        SearchFilterRequest.Filters = filters.Any() ? filters : null;
-
-        await LoadData();
-
-        StateHasChanged();
     }
     private void AddTextSearchFilterIfNotNull(List<Api.Contracts.Filter> filters, string fieldName, string? value, string operation)
     {
