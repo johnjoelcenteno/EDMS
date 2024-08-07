@@ -444,12 +444,12 @@ namespace DPWH.EDMS.Api.Contracts
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<CreateResponse> UploadRequestedRecordFileAsync(FileParameter document, System.Guid? id);
+        System.Threading.Tasks.Task<CreateResponse> UploadRequestedRecordFileAsync(FileParameter document, System.Guid? id, string documentType);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<CreateResponse> UploadRequestedRecordFileAsync(FileParameter document, System.Guid? id, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<CreateResponse> UploadRequestedRecordFileAsync(FileParameter document, System.Guid? id, string documentType, System.Threading.CancellationToken cancellationToken);
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -2654,6 +2654,9 @@ namespace DPWH.EDMS.Api.Contracts
 
         [Newtonsoft.Json.JsonProperty("uri", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string Uri { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("documentType", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string DocumentType { get; set; }
 
     }
 

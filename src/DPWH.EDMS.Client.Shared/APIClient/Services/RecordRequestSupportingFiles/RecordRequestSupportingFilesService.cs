@@ -18,9 +18,9 @@ public class RecordRequestSupportingFilesService : IRecordRequestSupportingFiles
         return _client.UploadSupportingFileAsync(document, documentType, documentTypeId);
     }
 
-    public Task<CreateResponse> UploadRequestedRecord(FileParameter document, Guid? id)
+    public Task<CreateResponse> UploadRequestedRecord(FileParameter document, Guid? id, string DocumentType)
     {
-        return _client.UploadRequestedRecordFileAsync(document, id);
+        return _client.UploadRequestedRecordFileAsync(document, id, DocumentType);
     }
 
     public Task<CreateResponse> UploadTransmittalReceipt(System.DateTimeOffset dateReceived, System.DateTimeOffset timeReceived, FileParameter document, Guid? id)

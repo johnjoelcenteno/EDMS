@@ -1795,6 +1795,7 @@
             "multipart/form-data": {
               "schema": {
                 "required": [
+                  "DocumentType",
                   "Id"
                 ],
                 "type": "object",
@@ -1806,6 +1807,9 @@
                   "Id": {
                     "type": "string",
                     "format": "uuid"
+                  },
+                  "DocumentType": {
+                    "type": "string"
                   }
                 }
               },
@@ -1814,6 +1818,9 @@
                   "style": "form"
                 },
                 "Id": {
+                  "style": "form"
+                },
+                "DocumentType": {
                   "style": "form"
                 }
               }
@@ -2190,9 +2197,9 @@
           "404": {
             "description": "Not Found",
             "content": {
-              "text/plain; api-version=1.0": {
+              "application/json; api-version=1.0": {
                 "schema": {
-                  "type": "string"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -6242,6 +6249,10 @@
             "type": "boolean"
           },
           "uri": {
+            "type": "string",
+            "nullable": true
+          },
+          "documentType": {
             "type": "string",
             "nullable": true
           }

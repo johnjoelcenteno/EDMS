@@ -30,7 +30,6 @@ public static class RestApiServiceProvider
         services.AddScoped<ISystemReportService, SystemReportService>();
         services.AddScoped<IReportsService, ReportsService>();
         services.AddScoped<INavigationService, NavigationService>();
-        services.AddScoped<IAuditLogService, AuditLogService>();
         
         return services;
     }

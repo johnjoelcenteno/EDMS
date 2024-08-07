@@ -281,7 +281,9 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
             {
                 if (uploadRecord.Document != null)
                 {
-                    await RecordRequestSupportingFilesService.UploadRequestedRecord(uploadRecord.Document, uploadRecord.Id);
+                    // I set temporary hard code string here 
+                    // Needed for adriannes request
+                    await RecordRequestSupportingFilesService.UploadRequestedRecord(uploadRecord.Document, uploadRecord.Id, "TC");
                 }
             }
         }

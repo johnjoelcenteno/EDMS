@@ -102,6 +102,7 @@ public static class RecordRequestSupportingFilesEndpoint
             var request = new
             {
                 model.Id,
+                model.DocumentType,
                 File = model.Document,
                 Filename = model.Document?.FileName
             };
@@ -116,7 +117,7 @@ public static class RecordRequestSupportingFilesEndpoint
             }
 
             var uri = await blobService.Put(WellKnownContainers.RequestedRecordFiles, request.Id.ToString(), data, request.File.ContentType, metadata);
-            var command = new SaveRequestedRecordFileCommand(model.Id, uri);
+            var command = new SaveRequestedRecordFileCommand(model.Id, model.DocumentType, uri);
             var response = await mediator.Send(command, token);
 
             return TypedResults.Ok(response);
