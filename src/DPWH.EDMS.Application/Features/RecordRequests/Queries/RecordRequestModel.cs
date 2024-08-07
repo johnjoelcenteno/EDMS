@@ -12,6 +12,8 @@ public record RecordRequestModel
     public string? OtherPurpose { get; set; }
     public string? Remarks { get; set; }
     public string Status { get; set; }
+    public string? HRMDRequestStatus { get; set; }
+    public string? RMDRequestStatus { get; set; }
     public string? FullName { get; set; }
     public List<RecordRequestDocumentModel> Files { get; set; } = new();
     public List<RequestedRecordModel> RequestedRecords { get; set; } = new();

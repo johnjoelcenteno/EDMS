@@ -6049,6 +6049,14 @@
             "type": "string",
             "nullable": true
           },
+          "hrmdRequestStatus": {
+            "type": "string",
+            "nullable": true
+          },
+          "rmdRequestStatus": {
+            "type": "string",
+            "nullable": true
+          },
           "fullName": {
             "type": "string",
             "nullable": true

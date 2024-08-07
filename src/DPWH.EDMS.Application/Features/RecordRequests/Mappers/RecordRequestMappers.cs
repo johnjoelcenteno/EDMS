@@ -34,6 +34,8 @@ public static class RecordRequestMappers
             OtherPurpose = entity.OtherPurpose,
             Remarks = entity.Remarks,
             Status = entity.Status,
+            HRMDRequestStatus = entity.HRMDRequestStatus,
+            RMDRequestStatus = entity.RMDRequestStatus,
             Files = entity.Files?.Select(entityFile => new RecordRequestDocumentModel
             {
                 Id = entityFile.Id,
