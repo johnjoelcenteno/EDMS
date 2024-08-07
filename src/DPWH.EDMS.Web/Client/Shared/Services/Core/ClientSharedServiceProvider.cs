@@ -1,4 +1,5 @@
 ﻿using DPWH.EDMS.Api.Contracts;
+using DPWH.EDMS.Client.Shared.APIClient.Services.AuditLog;
 using DPWH.EDMS.Client.Shared.APIClient.Services.DpwhIntegrations;
 using DPWH.EDMS.Web.Client.Pages.Home.HomeService;
 using DPWH.EDMS.Web.Client.Shared.Services.Document;
@@ -20,6 +21,7 @@ public static class SharedServiceProvider
         services.AddScoped<IDpwhIntegrationsService, DpwhIntegrationsService>();
         services.AddScoped<IExceptionPISHandlerService, ExceptionPISHandlerService>();
         services.AddScoped<IExcelExportService, ExcelExportService>();
+        services.AddScoped<IAuditLogService, AuditLogService>();
         services.AddScoped<IAuditTrailExportService, AuditTrailExportService>();
         services.AddScoped<OverviewFilterService>();
         services.AddScoped<NavRx>();

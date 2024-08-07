@@ -7,7 +7,7 @@ using System.Security.Claims;
 
 namespace DPWH.EDMS.Application.Features.RecordRequests.Commands.SaveRequestedRecordFile;
 
-public record class SaveRequestedRecordFileCommand(Guid Id, string Uri) : IRequest<CreateResponse>;
+public record class SaveRequestedRecordFileCommand(Guid Id, string DocumentType, string Uri) : IRequest<CreateResponse>;
 internal sealed class SaveRequestedRecordFileHandler(IWriteRepository writeRepository, ClaimsPrincipal principal) : IRequestHandler<SaveRequestedRecordFileCommand, CreateResponse>
 {
     public async Task<CreateResponse> Handle(SaveRequestedRecordFileCommand request, CancellationToken cancellationToken)
@@ -18,6 +18,7 @@ internal sealed class SaveRequestedRecordFileHandler(IWriteRepository writeRepos
             ?? throw new AppException("No requested record available");
 
         requestedRecord.Update(model.Uri);
+        requestedRecord.UpdateDocumentType(model.DocumentType);
 
         await writeRepository.SaveChangesAsync(cancellationToken);
 

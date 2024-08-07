@@ -1,4 +1,6 @@
-﻿using DPWH.EDMS.Application.Features.RecordsManagement.Commands.CreateRecord;
+﻿using DPWH.EDMS.Application;
+using DPWH.EDMS.Application.Features.RecordsManagement.Commands.CreateRecord;
+using DPWH.EDMS.Application.Features.RecordsManagement.Commands.DeleteRecord;
 using DPWH.EDMS.Application.Features.RecordsManagement.Queries;
 using DPWH.EDMS.Application.Features.RecordsManagement.Queries.GetRecordById;
 using DPWH.EDMS.Application.Features.RecordsManagement.Queries.GetRecordsByEmployeeIdQuery;
@@ -77,7 +79,10 @@ public static class RecordsEndpoint
 
         app.MapDelete(ApiEndpoints.RecordManagement.Delete, async (Guid id, IMediator mediator) =>
         {
-            return "Ok";
+            var result = await mediator.Send(new DeleteRecordRequests(id));
+            var actionResult = new BaseApiResponse<Guid>(result);
+
+            return Results.Ok(actionResult);
         })
         .WithName("DeleteRecord")
         .WithTags(TagName)
@@ -85,7 +90,7 @@ public static class RecordsEndpoint
         .WithApiVersionSet(ApiVersioning.VersionSet)
         .HasApiVersion(1.0)
         .Produces<DeleteResponse>(StatusCodes.Status200OK)
-        .Produces(StatusCodes.Status404NotFound)
+        .Produces<ProblemDetails>(StatusCodes.Status404NotFound)
         .Produces<ProblemDetails>(StatusCodes.Status500InternalServerError);
 
         return app;

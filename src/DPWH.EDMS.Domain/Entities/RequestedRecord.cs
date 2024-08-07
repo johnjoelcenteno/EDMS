@@ -33,6 +33,10 @@ public class RequestedRecord
     {
         Uri = uri;
     }
+    public void UpdateDocumentType(string documentype)
+    {
+        DocumentType = documentype;
+    }
     public Guid Id { get; private set; }
 
     [ForeignKey(nameof(RecordRequestId))]
@@ -46,6 +50,7 @@ public class RequestedRecord
     public string Office { get; private set; }
     public string Status { get; private set; }
     public bool IsAvailable { get; private set; }
+    public string DocumentType { get; private set; }
     public string? Uri { get; private set; }
 
 }
