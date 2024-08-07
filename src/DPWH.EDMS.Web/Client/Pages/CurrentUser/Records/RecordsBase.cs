@@ -131,7 +131,7 @@ public class RecordsBase : GridBase<LookupRecordModels>
 
     public async Task viewData(GridCommandEventArgs args)
     {
-        RecordModels? selectedId = args.Item as RecordModels;
+        LookupRecordModels? selectedId = args.Item as LookupRecordModels;
 
         //Int32.TryParse(samp, out sampNumber);
         Console.WriteLine(selectedId?.Id);
