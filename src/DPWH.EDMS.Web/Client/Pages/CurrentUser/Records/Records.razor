@@ -1,6 +1,8 @@
 ﻿@page "/my-records"
 @using DPWH.EDMS.Api.Contracts
 @using DPWH.EDMS.Client.Shared.Models
+@using DPWH.EDMS.Components.Helpers
+@using System.Globalization
 @inherits RecordsBase
 @inject NavigationManager Navigation
 @attribute [Authorize(Policy = "RequireActiveRoles")]
@@ -42,10 +44,18 @@
                         <DetailTemplate>
                             @{
                                 var document = docContext as LookupRecordModels;
-                                <TelerikGrid Data="document.Documents" TItem="RecordModels" Sortable="true" Pageable="true" PageSize="5">
+                                <TelerikGrid Data="GridData.Where(item => item.RecordTypeId == document.Id).ToList()" FilterMode="GridFilterMode.FilterRow" Sortable="true" Pageable="true" PageSize="5">
                                     <GridColumns>
-                                        <GridColumn Field=@nameof(RecordModel.DocVersion) Title="Document Version" />
-                                        <GridColumn Field=@nameof(RecordModel.RecordName) Title="Document Name" />
+                                        <GridColumn Field=@nameof(RecordModels.DocVersion) Title="Document Version">
+                                            <Template>
+                                                @{
+                                                    var data = context as LookupRecordModels;
+                                                    var date = DateTime.ParseExact(data!.DocVersion, "MMddyyyy", CultureInfo.InvariantCulture);
+                                                    <p>@GenericHelper.GetDateDisplay(date)</p>
+                                                }
+                                            </Template>
+                                        </GridColumn>
+                                        <GridColumn Field=@nameof(RecordModels.RecordName) Title="Document Name" />
                                         <GridCommandColumn Width="5%">
                                             <GridCommandButton Class="commandButton" Command="ExportData" OnClick="@viewData">View</GridCommandButton>
                                         </GridCommandColumn>
