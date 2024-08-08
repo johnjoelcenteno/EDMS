@@ -25,6 +25,8 @@ using DPWH.EDMS.Web.Client.Shared.Services.ExceptionHandlerPIS;
 using DPWH.EDMS.IDP.Core.Constants;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using DocumentFormat.OpenXml.Office2010.Excel;
+using DPWH.EDMS.Web.Client.Shared.Services.ExceptionHandlerEmployee;
 
 namespace DPWH.EDMS.Web.Client.Pages.UserManagement.UserForm;
 
@@ -35,11 +37,11 @@ public class UserFormBase : RxBaseComponent
     [Inject] public required ILicensesService LicensesService { get; set; }
     [Inject] public required IExceptionHandlerService ExceptionHandlerService { get; set; }
     [Inject] public required IExceptionPISHandlerService ExceptionPISHandlerService { get; set; }
-
+    [Inject] public required IExceptionHandlerEmployeeService ExceptionHandlerEmployeeService { get; set; }
     [Inject] public required IDpwhIntegrationsService DpwhIntegrationService { get; set; }
     [Inject] public required IToastService ToastService { get; set; }
     [Inject] public required AuthenticationStateProvider AuthenticationStateProvider { get; set; }
-    //[Inject] public required IAddressManagerService AddressManagerService { get; set; }
+    [Inject] public required IUsersService UsersService { get; set; }
     [Parameter] public EventCallback HandleCreateOnSubmit { get; set; }
     [Parameter] public EventCallback HandleOnCancel { get; set; }
     [Parameter] public string Type { get; set; }
@@ -50,12 +52,12 @@ public class UserFormBase : RxBaseComponent
     public string SelectedRegionalOffice { get; set; }
     public string SelectedImplementingOffice { get; set; }
     public string SelectedUserRole { get; set; }
-    protected string SelectedAcord { get; set; }
     protected string UserRole { get; set; }
     protected string Role { get; set; }
     protected string RegionOffice { get; set; }
     protected string DistrictOffice { get; set; }
     protected string CentralOffice = "Central Office";
+    protected string OnSearchEmployeeId { get; set; }
     //protected string SelectedOffice { get; set; }
     protected string LicenseInfo { get; set; }
     protected string UserName { get; set; }
@@ -68,6 +70,8 @@ public class UserFormBase : RxBaseComponent
     protected bool IsManager { get; set; } = false;
     protected bool UserCategory { get; set; } = false;
     protected bool OnSearched { get; set; } = false;
+    protected bool ExistingUser { get; set; } = false;
+
     protected double LicenseLimit = 0;
     protected double LicenseUsed = 0;
     protected double TotalUsers = 0;
@@ -144,6 +148,7 @@ public class UserFormBase : RxBaseComponent
             SelectedUserRole = User.Role;
             dialogReference.Refresh();
             DropDownListRef.DefaultText = SelectedUserRole;
+            OnSearched = true;
         }
         SelectedRegionalOffice = User.RegionalOffice;
         SelectedImplementingOffice = User.DistrictEngineeringOffice;
@@ -183,7 +188,6 @@ public class UserFormBase : RxBaseComponent
         User.Office = string.Empty;
 
         User.Email = string.Empty;
-        SelectedAcord = "add";
         UserCategory = false;
         OnSearched = false;
     }
@@ -192,45 +196,59 @@ public class UserFormBase : RxBaseComponent
         IsLoading = true;
         if (id != null)
         {
-            await ExceptionPISHandlerService.HandleApiException(
-            async () =>
-            {
-                var res = await DpwhIntegrationService.GetByEmployeeId(id);
-                if (res.Success)
-                {
-                    UserModel = new UserManagementModel();
-                    UserModel.EmployeeId = id;
-                    UserModel.FirstName = res.Data.FirstName;
-                    UserModel.MiddleName = res.Data.MiddleInitial;
-                    UserModel.LastName = res.Data.FamilyName;
-                    UserModel.Email = res.Data.NetworkId + "@dpwh.gov.ph";
-                    UserModel.Position = res.Data.PlantillaPosition;
-                    UserModel.DesignationTitle = res.Data.DesignationTitle;
-                    OnSearched = true;
-                }
-                else
-                {
-                    ToastService.ShowError(id + " not found");
-                }
+            await ExceptionHandlerEmployeeService.HandleApiException(
+           async () =>
+           {
+               var res = await UsersService.GetUserByEmployeeId(id);
+               if (res.Success)
+               {
+                   if (res.Data != null)
+                   {
+                       UserModel = new UserManagementModel();
+                       UserModel.EmployeeId = id;
+                       UserModel.FirstName = res.Data.FirstName;
+                       UserModel.MiddleName = res.Data.MiddleInitial;
+                       UserModel.LastName = res.Data.LastName;
+                       UserModel.Email = res.Data.UserName;
+                       UserModel.Position = res.Data.Position;
+                       UserModel.DesignationTitle = res.Data.DesignationTitle;
+                       UserModel.RegionalOffice = res.Data.RegionalOfficeRegion;
+                       UserModel.DistrictEngineeringOffice = res.Data.DistrictEngineeringOffice;
 
-                var fullName = UserModel.LastName + ", " + UserModel.FirstName + " " + UserModel.MiddleName;
-                User.FullName = fullName;
+                       OnSearched = true;
+                       OnEmpId = true;
+                       //user exist on NGOBIA
+                       ExistingUser = true;
+                   }
+                   var fullName = UserModel.LastName + ", " + UserModel.FirstName + " " + UserModel.MiddleName;
+                   User.FullName = fullName;
 
-                SelectedAcord = "add";
-                User.FirstName = UserModel.FirstName;
-                User.MiddleName = UserModel.MiddleName;
-                User.LastName = UserModel.LastName;
-                User.Email = UserModel.Email;
-                User.Position = UserModel.Position;
-                User.DesignationTitle = UserModel.DesignationTitle;
-                ClearNotif();
-            }, null, null, true, async (bool empId, bool pisSearch) => await PISException(empId, pisSearch)
-            );
+                   User.FirstName = UserModel.FirstName;
+                   if (UserModel.MiddleName == null)
+                   {
+                       User.MiddleName = string.Empty;
+                   }
+                   else
+                   {
+                       User.MiddleName = UserModel.MiddleName;
+                   } 
+                   User.LastName = UserModel.LastName;
+                   User.Email = UserModel.Email;
+                   User.Position = UserModel.Position;
+                   User.DesignationTitle = UserModel.DesignationTitle;
+                   User.RegionalOffice = UserModel.RegionalOffice;
+                   User.DistrictEngineeringOffice = UserModel.DistrictEngineeringOffice;
+                   SelectedRegionalOffice = User.RegionalOffice;
+                   SelectedImplementingOffice = User.DistrictEngineeringOffice;
+                   await OnRegionOfficeChanged();
 
+               }
+
+           }, null, null, true, async (bool empId, bool pisSearch) => await EmployeeException(empId, pisSearch)
+                );
         }
         else
         {
-            SelectedAcord = "add";
             User.FirstName = string.Empty;
             User.LastName = string.Empty;
             User.FullName = string.Empty;
@@ -238,10 +256,13 @@ public class UserFormBase : RxBaseComponent
             User.DesignationTitle = string.Empty;
             User.Role = string.Empty;
             User.Email = string.Empty;
-
+            SelectedRegionalOffice = string.Empty;
+            SelectedImplementingOffice = string.Empty;
         }
+
         IsLoading = false;
         //await LoadUserRegion();
+        OnSearchEmployeeId = id;
     }
     protected void ClearNotif()
     {
@@ -255,12 +276,13 @@ public class UserFormBase : RxBaseComponent
 
     protected async Task PISException(bool empId, bool searchPIS)
     {
-        // status code 500
+        // status code 400
         if (OnEmpId)
         {
             OnEmpId = empId;
             OnSearchPis = searchPIS;
             ClearSearch();
+
         }
         // status code 404 or any status code
         else
@@ -270,7 +292,62 @@ public class UserFormBase : RxBaseComponent
             await OnSearchEmployeeID(User.EmployeeId);
         }
     }
+    protected async Task EmployeeException(bool empId, bool searchPIS)
+    {
+        // status code 500
+        if (OnEmpId)
+        { 
+            await ExceptionPISHandlerService.HandleApiException(
+           async () =>
+           {
+               var res = await DpwhIntegrationService.GetByEmployeeId(User.EmployeeId);
+               if (res.Success)
+               {
+                   UserModel = new UserManagementModel();
+                   UserModel.EmployeeId = User.EmployeeId;
+                   UserModel.FirstName = res.Data.FirstName;
+                   UserModel.MiddleName = res.Data.MiddleInitial;
+                   UserModel.LastName = res.Data.FamilyName;
+                   UserModel.Email = res.Data.NetworkId + "@dpwh.gov.ph";
+                   UserModel.Position = res.Data.PlantillaPosition;
+                   UserModel.DesignationTitle = res.Data.DesignationTitle;
+                   OnSearched = true;
+                   ExistingUser = false;
+               }
+               else
+               {
+                   ToastService.ShowError(User.EmployeeId + " not found");
+               }
 
+               var fullName = UserModel.LastName + ", " + UserModel.FirstName + " " + UserModel.MiddleName;
+               User.FullName = fullName;
+ 
+               User.FirstName = UserModel.FirstName;
+               if (UserModel.MiddleName == null)
+               {
+                   User.MiddleName = string.Empty;
+               }
+               else
+               {
+                   User.MiddleName = UserModel.MiddleName;
+               }
+               User.LastName = UserModel.LastName;
+               User.Email = UserModel.Email;
+               User.Position = UserModel.Position;
+               User.DesignationTitle = UserModel.DesignationTitle;
+               ClearNotif();
+               OnEmpId = true;
+           }, null, null, true, async (bool empId, bool pisSearch) => await PISException(empId, pisSearch)
+               );
+        }
+        // status code 404 or any status code
+        else
+        {
+            OnEmpId = empId;
+            OnSearchPis = searchPIS;
+            await OnSearchEmployeeID(User.EmployeeId);
+        }
+    }
     protected async Task OnRegionOfficeChanged()
     {
 

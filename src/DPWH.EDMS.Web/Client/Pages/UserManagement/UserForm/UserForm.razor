@@ -116,7 +116,7 @@
                                                              DefaultText="Select"
                                                              AdaptiveMode="@AdaptiveMode.Auto"
                                                              OnChange="OnRegionOfficeChanged"
-                                                             Enabled="@(!Type.Contains("View") && OnSearched == true)"
+                                                             Enabled="@(!Type.Contains("View") && OnSearched == true && ExistingUser == false)"
                                                              @ref="RegionOfficeRef">
                                         </TelerikDropDownList>
                                         <TelerikValidationMessage For="@(() => User.RegionalOffice)" />
@@ -137,7 +137,7 @@
                                                          DefaultText="Select"
                                                          AdaptiveMode="@AdaptiveMode.Auto"
                                                          OnChange="OnChangeOffice"
-                                                         Enabled="@(!Type.Contains("View") && OnSearched == true)"
+                                                         Enabled="@(!Type.Contains("View") && OnSearched == true && ExistingUser == false)"
                                                          @ref="ImplementRef">
                                     </TelerikDropDownList>
                                     <TelerikValidationMessage For="@(() => User.DistrictEngineeringOffice)" />

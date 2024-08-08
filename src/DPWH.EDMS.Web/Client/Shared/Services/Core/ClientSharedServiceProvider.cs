@@ -5,6 +5,7 @@ using DPWH.EDMS.Web.Client.Pages.Home.HomeService;
 using DPWH.EDMS.Web.Client.Shared.Services.Document;
 using DPWH.EDMS.Web.Client.Shared.Services.Drawing;
 using DPWH.EDMS.Web.Client.Shared.Services.ExceptionHandler;
+using DPWH.EDMS.Web.Client.Shared.Services.ExceptionHandlerEmployee;
 using DPWH.EDMS.Web.Client.Shared.Services.ExceptionHandlerPIS;
 using DPWH.EDMS.Web.Client.Shared.Services.Export;
 using DPWH.EDMS.Web.Client.Shared.Services.Export.ExportAuditTrail;
@@ -21,6 +22,8 @@ public static class SharedServiceProvider
         services.AddScoped<IDpwhIntegrationsService, DpwhIntegrationsService>();
         services.AddScoped<IExceptionPISHandlerService, ExceptionPISHandlerService>();
         services.AddScoped<IExcelExportService, ExcelExportService>();
+        services.AddScoped<IExceptionHandlerEmployeeService, ExceptionHandlerEmployeeService>();
+
         services.AddScoped<IAuditLogService, AuditLogService>();
         services.AddScoped<IAuditTrailExportService, AuditTrailExportService>();
         services.AddScoped<OverviewFilterService>();
