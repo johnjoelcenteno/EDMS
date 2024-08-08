@@ -13,7 +13,7 @@ public record GetAuditLogsQuery(DataSourceRequest DataSourceRequest) : IRequest<
 
 internal sealed class GetAuditLogsHandler : IRequestHandler<GetAuditLogsQuery, DataSourceResult>
 {
-    public static readonly string[] Categories = { "Inventory", "User Management", "User" };
+    public static readonly string[] Categories = { "Request Management", "Inventory", "User Management", "User" };
     public const string ExpectedDateFormat = "yyyy-MM-dd";
 
     private readonly ILogger<GetAuditLogsHandler> _logger;
@@ -40,6 +40,10 @@ internal sealed class GetAuditLogsHandler : IRequestHandler<GetAuditLogsQuery, D
 
         var query = category switch
         {
+            "Request Management" => _repository.ChangeLogsView
+               .Include(c => c.Changes)
+               .Where(c => c.ActionDate >= from && c.ActionDate <= to && c.Entity == "RecordRequest"),
+
             "Inventory" => _repository.ChangeLogsView
                 .Include(c => c.Changes)
                 .Where(c => c.ActionDate >= from && c.ActionDate <= to && c.Entity == "Asset"),
