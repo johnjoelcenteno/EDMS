@@ -40,6 +40,7 @@ internal sealed class GetAuditLogsHandler : IRequestHandler<GetAuditLogsQuery, D
 
         var query = category switch
         {
+            //Ongoing audit trail report
             "Request Management" => _repository.ChangeLogsView
                .Include(c => c.Changes)
                .Where(c => c.ActionDate >= from && c.ActionDate <= to && c.Entity == "RecordRequest"),
