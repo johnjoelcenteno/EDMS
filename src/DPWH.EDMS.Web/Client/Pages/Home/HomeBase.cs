@@ -268,4 +268,17 @@ public class HomeBase : GridBase<RecordRequestModel>
             SeriesTopRequest = GetTopRequestList.Select(d => (object)d.Total).ToList();
         }
     }
+    protected void GoToSelectedItem(GridRowClickEventArgs args)
+    {
+        IsLoading = true;
+
+        var selectedItem = args.Item as RecordRequestModel;
+
+        if (selectedItem != null)
+        {
+            NavManager.NavigateTo("request-management/view-request-form/" + selectedItem.Id.ToString());
+        }
+
+        IsLoading = false;
+    }
 }
