@@ -1,11 +1,12 @@
 ﻿using DPWH.EDMS.Application.Contracts.Persistence;
+using DPWH.EDMS.Application.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace DPWH.EDMS.Application.Features.RecordsManagement.Commands.DeleteRecord;
 
-public record class DeleteRecordRequests(Guid Id) : IRequest<Guid>;
-public class DeleteRecord : IRequestHandler<DeleteRecordRequests, Guid>
+public record class DeleteRecordRequests(Guid Id) : IRequest<DeleteResponse>;
+public class DeleteRecord : IRequestHandler<DeleteRecordRequests, DeleteResponse>
 {
     private readonly IWriteRepository _writeRepository;
 
@@ -13,14 +14,15 @@ public class DeleteRecord : IRequestHandler<DeleteRecordRequests, Guid>
     {
         _writeRepository = writeRepository;
     }
-    public async Task<Guid> Handle(DeleteRecordRequests request, CancellationToken cancellationToken)
+    public async Task<DeleteResponse> Handle(DeleteRecordRequests request, CancellationToken cancellationToken)
     {
         var record = await _writeRepository.Records.FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
-        if (record is null) throw new Exception("No records found");
-
-        _writeRepository.Records.Remove(record);
-        await _writeRepository.SaveChangesAsync();
-
-        return record.Id;
+        if (record != null)
+        {
+            _writeRepository.Records.Remove(record);
+            await _writeRepository.SaveChangesAsync(cancellationToken);
+            return new DeleteResponse(request.Id);
+        }
+        return new DeleteResponse(request.Id) { Success = false, Error = $"The request not found {request.Id}" };
     }
 }
