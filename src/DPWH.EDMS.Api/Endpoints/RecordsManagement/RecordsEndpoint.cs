@@ -80,9 +80,8 @@ public static class RecordsEndpoint
         app.MapDelete(ApiEndpoints.RecordManagement.Delete, async (Guid id, IMediator mediator) =>
         {
             var result = await mediator.Send(new DeleteRecordRequests(id));
-            var actionResult = new BaseApiResponse<Guid>(result);
-
-            return Results.Ok(actionResult);
+            
+            return result;
         })
         .WithName("DeleteRecord")
         .WithTags(TagName)

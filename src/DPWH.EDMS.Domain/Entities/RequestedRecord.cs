@@ -50,7 +50,7 @@ public class RequestedRecord
     public string Office { get; private set; }
     public string Status { get; private set; }
     public bool IsAvailable { get; private set; }
-    public string DocumentType { get; private set; }
+    public string? DocumentType { get; private set; }
     public string? Uri { get; private set; }
 
 }

@@ -110,6 +110,7 @@ public static class RecordRequestSupportingFilesEndpoint
             var metadata = new Dictionary<string, string>();
 
             byte[] data;
+           
             using (var memoryStream = new MemoryStream())
             {
                 await model.Document.CopyToAsync(memoryStream);
