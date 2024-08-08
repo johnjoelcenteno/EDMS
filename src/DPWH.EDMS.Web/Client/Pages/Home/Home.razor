@@ -58,6 +58,7 @@
                                  Sortable=true
                                  Data="GridData"
                                  OnStateChanged="@OnStateChanged"
+                                 OnRowClick="GoToSelectedItem"
                                  @ref="GridRef"
                                  Context="item">
                         <GridSettings>
@@ -472,5 +473,9 @@
         
         padding-inline-end: 0px;
         
+    }
+
+    .k-grid .k-table-row {
+        cursor: pointer;
     }
 </style>
