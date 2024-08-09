@@ -8,6 +8,7 @@ using DPWH.EDMS.Web.Client.Shared.Services.Document;
 using DPWH.NGOBIA.Client.Shared.APIClient.Services.Users;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using System.Security.Claims;
 using Telerik.Blazor.Components;
 
 namespace DPWH.EDMS.Web.Client.Pages.RequestManagement.ViewRequestForm;
@@ -48,6 +49,7 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
 
     // Copy Type Radio Button
     protected TelerikRadioGroup<RecordCopyTypeItem, string>? RecordCopyTypeRef { get; set; }
+    protected ClaimsPrincipal ClaimsPrincipal { get; set; }
     protected List<RecordCopyTypeItem> RecordCopyTypeData { get; set; } = new List<RecordCopyTypeItem>()
     {
         new RecordCopyTypeItem { Value = "TC", Text = "TC" },
@@ -101,7 +103,7 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
         var authState = await AuthenticationStateAsync!;
         var user = authState.User;
         var userId = user.GetUserId();
-
+        ClaimsPrincipal = user;
         var userRes = await UsersService.GetById(userId);
 
         if (userRes.Success)
@@ -167,7 +169,15 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
             UpdateProgressIndex();
         }
     }
-
+    protected string GetOfficeName(string officeCode)
+    {
+        return officeCode switch
+        {
+            nameof(Offices.RMD) => "Records Management Division",
+            nameof(Offices.HRMD) => "Human Resource Management Division",
+            _ => string.Empty
+        };
+    }
     protected async Task UpdateIsAvailable(RequestedRecordModel record)
     {
         try

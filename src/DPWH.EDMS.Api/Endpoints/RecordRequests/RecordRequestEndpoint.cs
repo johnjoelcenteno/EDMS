@@ -1,4 +1,5 @@
 ﻿using DPWH.EDMS.Application.Features.RecordRequests.Commands.CreateRecordRequest;
+using DPWH.EDMS.Application.Features.RecordRequests.Commands.UpdateOfficeStatus;
 using DPWH.EDMS.Application.Features.RecordRequests.Commands.UpdateRecordRequestStatus;
 using DPWH.EDMS.Application.Features.RecordRequests.Commands.UpdateRequestedRecordIsAvailable;
 using DPWH.EDMS.Application.Features.RecordRequests.Queries;
@@ -193,6 +194,21 @@ public static class RecordRequestEndpoint
         .Produces(StatusCodes.Status404NotFound)
         .Produces<ProblemDetails>(StatusCodes.Status500InternalServerError);
 
+        app.MapPut(ApiEndpoints.RecordRequest.UpdateOfficeStatus, async (UpdateOfficeStatus model, IMediator mediator, CancellationToken cancellationToken) =>
+        {
+            var result = await mediator.Send(new UpdateOfficeStatusCommand(model), cancellationToken);
+
+            return result;
+        })
+           .WithName("UpdateOfficeStatus")
+           .WithTags(TagName)
+           .WithDescription("Update office request status")
+           .WithApiVersionSet(ApiVersioning.VersionSet)
+           .HasApiVersion(1.0)
+           .Produces<UpdateResponse>(StatusCodes.Status200OK)
+           .Produces<ProblemDetails>(StatusCodes.Status404NotFound)
+           .Produces<ProblemDetails>(StatusCodes.Status400BadRequest)
+           .Produces<ProblemDetails>(StatusCodes.Status500InternalServerError);
         return app;
     }
 }

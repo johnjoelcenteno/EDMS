@@ -50,6 +50,26 @@ public class RecordRequest : EntityBase
 
         SetModified(modifiedBy);
     }
+    
+    public void UpdateOfficeStatus(OfficeRequestedRecordStatus status, string modifiedBy, Offices? office)
+    {
+        if (office == null)
+            return;
+
+        var statusProperty = office switch
+        {
+            Offices.RMD => nameof(RMDRequestStatus),
+            Offices.HRMD => nameof(HRMDRequestStatus),
+            _ => null
+        };
+
+        if (statusProperty != null)
+        {
+            GetType().GetProperty(statusProperty)?.SetValue(this, status.ToString());
+        }
+
+    }
+
     public int ControlNumber { get; private set; }
     public string? EmployeeNumber { get; private set; }
     public string? Email { get; private set; }
