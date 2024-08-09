@@ -1,5 +1,6 @@
 ﻿@page "/request-management/view-request-form/{RequestId}"
 @inherits ViewRequestFormBase
+@using DPWH.EDMS.Client.Shared.Models
 @using DPWH.EDMS.Components.Helpers
 @using DPWH.EDMS.Shared.Enums
 
@@ -107,7 +108,7 @@
                 </div>
                 <div class="row mb-3">
                     <p><b>Purpose</b></p>
-                    <p>@SelectedRecordRequest.Purpose</p>
+                    <p>@(SelectedRecordRequest.Purpose == "Other" ? $"Other - {SelectedRecordRequest.OtherPurpose}" : SelectedRecordRequest.Purpose)</p>
                 </div>
                 <div class="row mb-3">
                     <p><b>Remarks</b></p>
@@ -127,7 +128,7 @@
                     <div class="d-flex gap-3 justify-content-center">
                         <TelerikButton OnClick="OnCancel" FillMode="@ThemeConstants.Button.FillMode.Outline">Cancel</TelerikButton>
                         <TelerikButton OnClick="@(() => IsRecordUploadEnabled = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.Status == RecordRequestStates.Reviewed.ToString() && IsRecordUploadEnabled == false)">Edit</TelerikButton>
-                        <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.Status == RecordRequestStates.Submitted.ToString() || IsRecordUploadEnabled == true)">Submit</TelerikButton>
+                        <TelerikButton OnClick="OnSubmitReview" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.Status == RecordRequestStates.Submitted.ToString() || IsRecordUploadEnabled == true)">Submit</TelerikButton>
                     </div>
                 </div>
             }
@@ -163,12 +164,13 @@
                             @if (SelectedRecordRequest.Status == RecordRequestStates.Submitted.ToString() || IsRecordUploadEnabled == true)
                             {
                                 <div class="col-2 align-content-center">
-                                    <TelerikRadioGroup @ref="@RadioGroupRef"
-                                                       Data="@RadioGroupData"
-                                                       @bind-Value="@RadioGroupValue"
-                                                       ValueField="@nameof(ListItem.Id)"
-                                                       TextField="@nameof(ListItem.Text)"
-                                                       Layout="RadioGroupLayout.Horizontal">
+                                    <TelerikRadioGroup Data="@RecordCopyTypeData"
+                                                       @bind-Value="record.DocumentType"
+                                                       TextField="@nameof(RecordCopyTypeItem.Text)"
+                                                       ValueField="@nameof(RecordCopyTypeItem.Value)"
+                                                       OnChange="@(() => OnCopyTypeChanged(record.Id))"
+                                                       Layout="RadioGroupLayout.Horizontal"
+                                                       Enabled="@(IsFileSelected(record.Id))">
                                     </TelerikRadioGroup>
                                 </div>
 
@@ -188,8 +190,26 @@
                                     </TelerikFileSelect>
                                 </div>
                             }
+                            else if (record.Uri != null && record.DocumentType != null)
+                            {
+                                <div class="col-2 text-center">
+                                    <p><b>@(record.DocumentType == "TC" ? "True Copy" : "Machine Copy")</b></p>
+                                </div>
+                                <div class="col-3 text-center">
+                                    <NavLink class="fw-bolder" href="@record.Uri" target="_blank">View</NavLink>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="col-3 text-center">
+                                    <p><b>No Record</b></p>
+                                </div>
+                            }
                         </div>
                     }
+                    <div class="@(XSmall ? "text-danger mb-3" : "text-danger text-end mb-3")">
+                        <p>@RecordCopyValidation</p>
+                    </div>
                 }
                 else if (User.Office == Offices.HRMD.ToString() && HRMDRecords != null)
                 {
@@ -206,12 +226,13 @@
                             @if (SelectedRecordRequest.Status == RecordRequestStates.Submitted.ToString() || IsRecordUploadEnabled == true)
                             {
                                 <div class="col-2 align-content-center">
-                                    <TelerikRadioGroup @ref="@RadioGroupRef"
-                                                       Data="@RadioGroupData"
-                                                       @bind-Value="@RadioGroupValue"
-                                                       ValueField="@nameof(ListItem.Id)"
-                                                       TextField="@nameof(ListItem.Text)"
-                                                       Layout="RadioGroupLayout.Horizontal">
+                                    <TelerikRadioGroup Data="@RecordCopyTypeData"
+                                                       @bind-Value="record.DocumentType"
+                                                       TextField="@nameof(RecordCopyTypeItem.Text)"
+                                                       ValueField="@nameof(RecordCopyTypeItem.Value)"
+                                                       OnChange="@(() => OnCopyTypeChanged(record.Id))"
+                                                       Layout="RadioGroupLayout.Horizontal"
+                                                       Enabled="@(IsFileSelected(record.Id))">
                                     </TelerikRadioGroup>
                                 </div>
 
@@ -231,6 +252,21 @@
                                     </TelerikFileSelect>
                                 </div>
                             }
+                            else if (record.Uri != null && record.DocumentType != null)
+                            {
+                                <div class="col-2 text-center">
+                                    <p><b>@(record.DocumentType == "TC" ? "True Copy" : "Machine Copy")</b></p>
+                                </div>
+                                <div class="col-3 text-center">
+                                    <NavLink class="fw-bolder" href="@record.Uri" target="_blank">View</NavLink>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="col-3 text-center">
+                                    <p><b>No Record</b></p>
+                                </div>
+                            }
                         </div>
                     }
                 }
@@ -245,19 +281,20 @@
                             </div>
                             foreach (var record in office)
                             {
-                                <div class="row mb-2">
+                                <div class="row mb-1">
                                     <div class="d-flex col">
-                                        <label class="align-content-center">&ensp;@record.RecordType</label>
+                                        <label class="align-content-center">@record.RecordType</label>
                                     </div>
-                                    @if (SelectedRecordRequest.Status == RecordRequestStates.Submitted.ToString())
+                                    @if (SelectedRecordRequest.Status == RecordRequestStates.Submitted.ToString() || IsRecordUploadEnabled == true)
                                     {
                                         <div class="col-2 align-content-center">
-                                            <TelerikRadioGroup @ref="@RadioGroupRef"
-                                                               Data="@RadioGroupData"
-                                                               @bind-Value="@RadioGroupValue"
-                                                               ValueField="@nameof(ListItem.Id)"
-                                                               TextField="@nameof(ListItem.Text)"
-                                                               Layout="RadioGroupLayout.Horizontal">
+                                            <TelerikRadioGroup Data="@RecordCopyTypeData"
+                                                               @bind-Value="record.DocumentType"
+                                                               TextField="@nameof(RecordCopyTypeItem.Text)"
+                                                               ValueField="@nameof(RecordCopyTypeItem.Value)"
+                                                               OnChange="@(() => OnCopyTypeChanged(record.Id))"
+                                                               Layout="RadioGroupLayout.Horizontal"
+                                                               Enabled="@(IsFileSelected(record.Id))">
                                             </TelerikRadioGroup>
                                         </div>
 
@@ -275,6 +312,21 @@
                                                     Select Record
                                                 </SelectFilesButtonTemplate>
                                             </TelerikFileSelect>
+                                        </div>
+                                    }
+                                    else if (record.Uri != null && record.DocumentType != null)
+                                    {
+                                        <div class="col-2 text-center">
+                                            <p><b>@(record.DocumentType == "TC" ? "True Copy" : "Machine Copy")</b></p>
+                                        </div>
+                                        <div class="col-3 text-center">
+                                            <NavLink class="fw-bolder" href="@record.Uri" target="_blank">View</NavLink>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="col-3 text-center">
+                                            <p><b>No Record</b></p>
                                         </div>
                                     }
                                 </div>
@@ -423,7 +475,7 @@
                     @StepperFragment
                     <div class="d-flex gap-3 justify-content-center">
                         <TelerikButton OnClick="OnCancel" FillMode="@ThemeConstants.Button.FillMode.Outline">Cancel</TelerikButton>
-                        <TelerikButton OnClick="ValidateRecordsFileSelect" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.Status == RecordRequestStates.Approved.ToString())">Submit</TelerikButton>
+                        <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.Status == RecordRequestStates.Approved.ToString())">Submit</TelerikButton>
                     </div>
                 </div>
             }
