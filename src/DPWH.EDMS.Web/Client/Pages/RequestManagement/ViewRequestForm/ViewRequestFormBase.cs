@@ -169,7 +169,15 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
             UpdateProgressIndex();
         }
     }
-
+    protected string GetOfficeName(string officeCode)
+    {
+        return officeCode switch
+        {
+            nameof(Offices.RMD) => "Records Management Division",
+            nameof(Offices.HRMD) => "Human Resource Management Division",
+            _ => string.Empty
+        };
+    }
     protected async Task UpdateIsAvailable(RequestedRecordModel record)
     {
         try

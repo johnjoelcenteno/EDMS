@@ -19,7 +19,13 @@
         var office = ClaimsPrincipalExtensions.GetOffice(ClaimsPrincipal);
     }
     @if(!string.IsNullOrEmpty(office)){
-        <p>@GetOfficeName(office) Status : @(office.Contains("RMD") ? SelectedRecordRequest.HrmdRequestStatus : SelectedRecordRequest.RmdRequestStatus) </p>
+
+        //Test purposes only
+        //Changes be made by adrianne
+        <div class="row">
+            <p>HRDM : <span class="fw-bolder">@SelectedRecordRequest.HrmdRequestStatus</span></p>
+            <p>RDM : <span class="fw-bolder">@SelectedRecordRequest.RmdRequestStatus</span></p>
+        </div>
     }
      
 </div>

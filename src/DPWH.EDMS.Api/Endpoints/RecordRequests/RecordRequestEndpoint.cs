@@ -197,6 +197,7 @@ public static class RecordRequestEndpoint
         app.MapPut(ApiEndpoints.RecordRequest.UpdateOfficeStatus, async (UpdateOfficeStatus model, IMediator mediator, CancellationToken cancellationToken) =>
         {
             var result = await mediator.Send(new UpdateOfficeStatusCommand(model), cancellationToken);
+
             return result;
         })
            .WithName("UpdateOfficeStatus")
@@ -204,8 +205,8 @@ public static class RecordRequestEndpoint
            .WithDescription("Update office request status")
            .WithApiVersionSet(ApiVersioning.VersionSet)
            .HasApiVersion(1.0)
-           .Produces<BaseApiResponse<UpdateResponse>>()
-           .Produces(StatusCodes.Status404NotFound)
+           .Produces<UpdateResponse>(StatusCodes.Status200OK)
+           .Produces<ProblemDetails>(StatusCodes.Status404NotFound)
            .Produces<ProblemDetails>(StatusCodes.Status400BadRequest)
            .Produces<ProblemDetails>(StatusCodes.Status500InternalServerError);
         return app;

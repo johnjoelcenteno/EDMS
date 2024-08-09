@@ -22,13 +22,12 @@ internal sealed class UpdateOfficeStatusHandler(IWriteRepository writeRepository
         var model = request.Model;
         var record = _writeRepository.RecordRequests.FirstOrDefault(x => x.Id == model.Id)
             ?? throw new AppException("No record request found");
-
+         
         var status = EnumExtensions.GetValueFromDescription<OfficeRequestedRecordStatus>(model.Status);
         var office = EnumExtensions.GetValueFromDescription<Offices>(_principal.GetOffice()!);
 
         record.UpdateOfficeStatus(status, _principal.GetUserName(), office);
 
-        _writeRepository.RecordRequests.Update(record);
         await _writeRepository.SaveChangesAsync(cancellationToken);
         return new UpdateResponse(record.Id);
     }
