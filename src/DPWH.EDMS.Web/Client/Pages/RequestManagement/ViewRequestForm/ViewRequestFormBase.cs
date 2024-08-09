@@ -34,29 +34,30 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
     protected DateTimeOffset TimeReceived { get; set; } = DateTimeOffset.Now;
     protected DateTime MaxDate = DateTime.Now;
 
-    // For Uploads
+    // Uploads
     protected Dictionary<Guid, UploadRequestedRecordDocumentModel> UploadRequestedRecords { get; set; } = new();
     protected UploadTransmittalReceiptDocumentModel? SelectedTransmittalReceipt { get; set; }
 
     // Validation
+    protected string? RecordCopyValidation { get; set; }
     protected string? RequestedRecordValidation { get; set; }
     protected string? TransmittalValidation { get; set; }
 
     // Placeholders
     protected string? Remarks { get; set; }
-    protected TelerikRadioGroup<ListItem, int?>? RadioGroupRef { get; set; }
-    protected int? RadioGroupValue { get; set; }
 
-    protected List<ListItem> RadioGroupData { get; set; } = new List<ListItem>()
+    // Copy Type Radio Button
+    protected TelerikRadioGroup<RecordCopyTypeItem, string>? RecordCopyTypeRef { get; set; }
+    protected List<RecordCopyTypeItem> RecordCopyTypeData { get; set; } = new List<RecordCopyTypeItem>()
     {
-        new ListItem { Id = 1, Text = "TC" },
-        new ListItem { Id = 2, Text = "MC" }
+        new RecordCopyTypeItem { Value = "TC", Text = "TC" },
+        new RecordCopyTypeItem { Value = "MC", Text = "MC" }
     };
 
-    protected class ListItem
+    protected class RecordCopyTypeItem
     {
-        public int Id { get; set; }
         public string? Text { get; set; }
+        public string? Value { get; set; }
     }
 
     protected override void OnParametersSet()
@@ -69,7 +70,6 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
 
         IsLoading = true;
         await FetchUser();
-        await GetTransmittalData();
 
         await LoadData((res) =>
         {
@@ -91,6 +91,7 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
             });
         });
 
+        await GetTransmittalData();
         UpdateProgressIndex();
         IsLoading = false;
     }
@@ -116,13 +117,16 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
 
     protected async Task GetTransmittalData()
     {
-        try
+        if (SelectedRecordRequest.Status == RecordRequestStates.Claimed.ToString())
         {
-            GetTransmittalRecceipt = await RecordRequestSupportingFilesService.GetTransmittalReceipt(Guid.Parse(RequestId));
-        }
-        catch (Exception)
-        {
+            try
+            {
+                GetTransmittalRecceipt = await RecordRequestSupportingFilesService.GetTransmittalReceipt(Guid.Parse(RequestId));
+            }
+            catch (Exception)
+            {
 
+            }
         }
     }
 
@@ -183,77 +187,136 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
         }
     }
 
-    protected void ValidateRecordsFileSelect()
+    //protected void ValidateRecordsFileSelect()
+    //{
+    //    RequestedRecordValidation = string.Empty;
+    //    bool allFilesSelected = true;
+
+    //    if (User.Office == Offices.RMD.ToString() && RMDRecords != null)
+    //    {
+    //        foreach (var record in RMDRecords)
+    //        {
+
+    //            if (!record.IsAvailable)
+    //            {
+    //                allFilesSelected = true;
+    //            }
+    //            else
+    //            {
+    //                if (!UploadRequestedRecords.ContainsKey(record.Id) || UploadRequestedRecords[record.Id].Document == null)
+    //                {
+    //                    allFilesSelected = false;
+    //                    break;
+    //                }
+    //            }
+    //        }
+    //    }
+    //    else if (User.Office == Offices.HRMD.ToString() && HRMDRecords != null)
+    //    {
+    //        foreach (var record in HRMDRecords)
+    //        {
+
+    //            if (!record.IsAvailable)
+    //            {
+    //                allFilesSelected = true;
+    //            }
+    //            else
+    //            {
+    //                if (!UploadRequestedRecords.ContainsKey(record.Id) || UploadRequestedRecords[record.Id].Document == null)
+    //                {
+    //                    allFilesSelected = false;
+    //                    break;
+    //                }
+    //            }
+    //        }
+    //    }
+    //    else
+    //    {
+    //        foreach (var record in SelectedRecordRequest.RequestedRecords)
+    //        {
+
+    //            if (!record.IsAvailable)
+    //            {
+    //                allFilesSelected = true;
+    //            }
+    //            else
+    //            {
+    //                if (!UploadRequestedRecords.ContainsKey(record.Id) || UploadRequestedRecords[record.Id].Document == null)
+    //                {
+    //                    allFilesSelected = false;
+    //                    break;
+    //                }
+    //            }
+    //        }
+    //    }
+
+    //    if (allFilesSelected)
+    //    {
+    //        IsModalVisible = true;
+    //    }
+    //    else
+    //    {
+    //        RequestedRecordValidation = "Please select a file for each requested record.";
+    //    }
+    //}
+
+    protected bool ValidateRecordsCopyType()
     {
-        RequestedRecordValidation = string.Empty;
-        bool allFilesSelected = true;
+        RecordCopyValidation = string.Empty;
+        bool allHasCopyType = true;
+
+        List<RequestedRecordModel> recordsToCheck = new List<RequestedRecordModel>();
 
         if (User.Office == Offices.RMD.ToString() && RMDRecords != null)
         {
-            foreach (var record in RMDRecords)
-            {
-
-                if (!record.IsAvailable)
-                {
-                    allFilesSelected = true;
-                }
-                else
-                {
-                    if (!UploadRequestedRecords.ContainsKey(record.Id) || UploadRequestedRecords[record.Id].Document == null)
-                    {
-                        allFilesSelected = false;
-                        break;
-                    }
-                }
-            }
+            recordsToCheck = RMDRecords;
         }
         else if (User.Office == Offices.HRMD.ToString() && HRMDRecords != null)
         {
-            foreach (var record in HRMDRecords)
-            {
-
-                if (!record.IsAvailable)
-                {
-                    allFilesSelected = true;
-                }
-                else
-                {
-                    if (!UploadRequestedRecords.ContainsKey(record.Id) || UploadRequestedRecords[record.Id].Document == null)
-                    {
-                        allFilesSelected = false;
-                        break;
-                    }
-                }
-            }
+            recordsToCheck = HRMDRecords;
         }
         else
         {
-            foreach (var record in SelectedRecordRequest.RequestedRecords)
-            {
+            recordsToCheck = SelectedRecordRequest.RequestedRecords.ToList();
+        }
 
-                if (!record.IsAvailable)
+        foreach (var record in recordsToCheck)
+        {
+            if (UploadRequestedRecords.ContainsKey(record.Id) && UploadRequestedRecords[record.Id].Document != null)
+            {
+                if (string.IsNullOrEmpty(UploadRequestedRecords[record.Id].DocumentType))
                 {
-                    allFilesSelected = true;
-                }
-                else
-                {
-                    if (!UploadRequestedRecords.ContainsKey(record.Id) || UploadRequestedRecords[record.Id].Document == null)
-                    {
-                        allFilesSelected = false;
-                        break;
-                    }
+                    allHasCopyType = false;
+                    break;
                 }
             }
         }
 
-        if (allFilesSelected)
+        if (!allHasCopyType)
         {
-            IsModalVisible = true;
+            RequestedRecordValidation = "Please select a copy type for each selected record.";
         }
         else
         {
-            RequestedRecordValidation = "Please select a file for each requested record.";
+            RequestedRecordValidation = string.Empty;
         }
+
+        return allHasCopyType;
+    }
+
+    protected void OnCopyTypeChanged(Guid recordId)
+    {
+        if (UploadRequestedRecords.ContainsKey(recordId))
+        {
+            var record = SelectedRecordRequest.RequestedRecords.FirstOrDefault(r => r.Id == recordId);
+            if (record != null)
+            {
+                UploadRequestedRecords[recordId].DocumentType = record.DocumentType;
+            }
+        }
+
+        ValidateRecordsCopyType();
+        StateHasChanged();
     }
 
     protected void ValidateTransmittalFileSelect()
@@ -270,6 +333,22 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
         }
     }
 
+    protected void OnSubmitReview()
+    {
+        bool isValid = ValidateRecordsCopyType();
+
+        if (isValid)
+        {
+            IsModalVisible = true;
+        }
+        else
+        {
+            IsModalVisible = false;
+        }
+
+        StateHasChanged();
+    }
+
     protected async Task OnReview()
     {
         IsLoading = true;
@@ -279,11 +358,9 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
         {
             foreach (var uploadRecord in UploadRequestedRecords.Values)
             {
-                if (uploadRecord.Document != null)
+                if (uploadRecord.Document != null && uploadRecord.DocumentType != null)
                 {
-                    // I set temporary hard code string here 
-                    // Needed for adriannes request
-                    await RecordRequestSupportingFilesService.UploadRequestedRecord(uploadRecord.Document, uploadRecord.Id, "TC");
+                    await RecordRequestSupportingFilesService.UploadRequestedRecord(uploadRecord.Document, uploadRecord.Id, uploadRecord.DocumentType);
                 }
             }
         }
@@ -345,37 +422,45 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
             if (UploadRequestedRecords.ContainsKey(recordId))
             {
                 UploadRequestedRecords[recordId].Document = document;
+                UploadRequestedRecords[recordId].DocumentType = requestedRecord.DocumentType;
             }
             else
             {
                 UploadRequestedRecords[recordId] = new UploadRequestedRecordDocumentModel()
                 {
                     Document = document,
-                    Id = recordId
+                    Id = recordId,
+                    DocumentType = requestedRecord.DocumentType
                 };
             }
 
-            if (User.Office == Offices.RMD.ToString() && RMDRecords != null && RMDRecords.All(r => UploadRequestedRecords.ContainsKey(r.Id) && UploadRequestedRecords[r.Id].Document != null))
-            {
-                RequestedRecordValidation = string.Empty;
-            }
-            else if (User.Office == Offices.HRMD.ToString() && HRMDRecords != null && HRMDRecords.All(r => UploadRequestedRecords.ContainsKey(r.Id) && UploadRequestedRecords[r.Id].Document != null))
-            {
-                RequestedRecordValidation = string.Empty;
-            }
-            else if (SelectedRecordRequest.RequestedRecords.All(r => UploadRequestedRecords.ContainsKey(r.Id) && UploadRequestedRecords[r.Id].Document != null))
-            {
-                RequestedRecordValidation = string.Empty;
-            }
+            //if (User.Office == Offices.RMD.ToString() && RMDRecords != null && RMDRecords.All(r => UploadRequestedRecords.ContainsKey(r.Id) && UploadRequestedRecords[r.Id].Document != null))
+            //{
+            //    RequestedRecordValidation = string.Empty;
+            //}
+            //else if (User.Office == Offices.HRMD.ToString() && HRMDRecords != null && HRMDRecords.All(r => UploadRequestedRecords.ContainsKey(r.Id) && UploadRequestedRecords[r.Id].Document != null))
+            //{
+            //    RequestedRecordValidation = string.Empty;
+            //}
+            //else if (SelectedRecordRequest.RequestedRecords.All(r => UploadRequestedRecords.ContainsKey(r.Id) && UploadRequestedRecords[r.Id].Document != null))
+            //{
+            //    RequestedRecordValidation = string.Empty;
+            //}
         }
 
         StateHasChanged();
+    }
+
+    protected bool IsFileSelected(Guid recordId)
+    {
+        return UploadRequestedRecords.ContainsKey(recordId) && UploadRequestedRecords[recordId].Document != null;
     }
 
     protected void OnRemoveDocument(FileSelectEventArgs args, Guid recordId)
     {
         if (UploadRequestedRecords.ContainsKey(recordId))
         {
+            UploadRequestedRecords[recordId].DocumentType = null;
             UploadRequestedRecords.Remove(recordId);
         }
     }
