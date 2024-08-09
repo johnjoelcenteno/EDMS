@@ -3,6 +3,7 @@
 @using DPWH.EDMS.Client.Shared.Models
 @using DPWH.EDMS.Components.Helpers
 @using DPWH.EDMS.Shared.Enums
+@using DPWH.EDMS.IDP.Core.Extensions
 
 <TelerikMediaQuery Media="(max-width: 480px)" OnChange="((changed) => XSmall = changed)"></TelerikMediaQuery>
 <EdmsBreadcrumbs Data="@BreadcrumbItems" />
@@ -13,7 +14,15 @@
 <div class="d-flex flex-row align-items-center mb-2">
     <p>Control Number: @SelectedRecordRequest.ControlNumber | Name: @SelectedRecordRequest.FullName</p>
 </div>
-
+<div class="d-flex flex-row align-items-center mb-2">
+    @{
+        var office = ClaimsPrincipalExtensions.GetOffice(ClaimsPrincipal);
+    }
+    @if(!string.IsNullOrEmpty(office)){
+        <p>@GetOfficeName(office) Status : @(office.Contains("RMD") ? SelectedRecordRequest.HrmdRequestStatus : SelectedRecordRequest.RmdRequestStatus) </p>
+    }
+     
+</div>
 <hr />
 <TelerikTabStrip @bind-ActiveTabIndex="@ActiveTabIndex">
     <TabStripTab Title="Overview">

@@ -37,6 +37,11 @@ public class RequestedRecord
     {
         DocumentType = documentype;
     }
+    public void UpdateDocumentStatus(RequestedRecordStatus status)
+    {
+        Status = status.ToString();
+
+    }
     public Guid Id { get; private set; }
 
     [ForeignKey(nameof(RecordRequestId))]

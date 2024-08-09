@@ -55,6 +55,7 @@ public static class ApiEndpoints
         public const string Create = $"{Base}/create";
         public const string UpdateStatus = $"{Base}/update/status";
         public const string Delete = $"{Base}/delete";
+        public const string UpdateOfficeStatus = $"{Base}/update/officestatus";
         public const string Count = $"{Base}/count/{{status}}";
         public const string UpdateRequestedRecordIsAvailable = $"{Base}/updateRequestedRecordIsAvailable";
         public static class Documents
@@ -72,6 +73,7 @@ public static class ApiEndpoints
             public const string UpdateFileProperties = $"{Base}/{{assetId:guid}}/files/{{documentType}}/properties";
             public const string SaveFinancialFile = $"{Base}/{{assetId:guid}}/funding-history";
             public const string UpdateFinancialFileProperties = $"{Base}/{{assetId:guid}}/funding-history/properties";
+            public const string UpdateRecordsRequestDocumentStatus = $"{Base}/documentstatus";
         }
     }
 

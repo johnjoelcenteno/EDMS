@@ -10,6 +10,7 @@ using DPWH.EDMS.Application.Features.RecordRequests.Commands.SaveRequestedRecord
 using DPWH.EDMS.Application.Features.RecordRequests.Commands.SaveTransmittalReceipt;
 using Microsoft.AspNetCore.Mvc;
 using DPWH.EDMS.Application.Features.RecordRequests.Queries.GetTransmittalReceipt;
+using DPWH.EDMS.Application.Features.RecordRequests.Commands.UpdateRecordsRequestDocumentStatus;
 
 namespace DPWH.EDMS.Api.Endpoints.RecordRequests;
 
@@ -178,7 +179,22 @@ public static class RecordRequestSupportingFilesEndpoint
         .WithDescription("Get supporting file by id")
         .DisableAntiforgery()
         .Produces<BaseApiResponse<RecordRequestDocumentModel>>(StatusCodes.Status200OK)
-        .Produces<ValidationFailureResponse>(StatusCodes.Status400BadRequest); ;
+        .Produces<ValidationFailureResponse>(StatusCodes.Status400BadRequest);
+
+        app.MapPut(ApiEndpoints.RecordRequest.Documents.UpdateRecordsRequestDocumentStatus, async (UpdateRecordsRequestDocumentStatus model, IMediator mediator, CancellationToken cancellationToken) =>
+        {
+            var result = await mediator.Send(new UpdateRecordsRequestDocumentStatusCommand(model), cancellationToken);
+            return result;
+        })
+         .WithName("UpdateDocumentStatus")
+         .WithTags(TagName)
+         .WithDescription("Update requested record status")
+         .WithApiVersionSet(ApiVersioning.VersionSet)
+         .HasApiVersion(1.0)
+         .Produces<BaseApiResponse<UpdateResponse>>()
+         .Produces(StatusCodes.Status404NotFound)
+         .Produces<ProblemDetails>(StatusCodes.Status400BadRequest)
+         .Produces<ProblemDetails>(StatusCodes.Status500InternalServerError);
 
         //app.MapDelete(ApiEndpoints.Assets.AssetDocuments.DeleteDocument, async (
         //        Guid assetId,
