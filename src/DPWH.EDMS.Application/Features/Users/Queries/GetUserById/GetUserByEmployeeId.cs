@@ -57,7 +57,7 @@ internal class GetUserByEmployeeIdHandler : IRequestHandler<GetUserByEmployeeId,
                 CreatedBy = user.CreatedBy,
                 CreatedDate = user.Created
             };
-        }
+        } 
 
         _logger.LogError("User with id `{EmployeeId}` not found", request.EmployeeId);
         throw new AppException("User not found");
