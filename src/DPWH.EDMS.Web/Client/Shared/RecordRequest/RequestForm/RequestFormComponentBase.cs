@@ -130,7 +130,10 @@ public class RequestFormComponentBase : RxBaseComponent
 
         if (res.Success)
         {
-            PurposeList = res.Data.ToList();
+            PurposeList = res.Data
+                .OrderBy(p => p.Name.ToLower() == "other" ? 1 : 0) // sort order hack
+                .ThenBy(p => p.Name) // Sort Alphabetically
+                .ToList();
         }
         else
         {
@@ -166,7 +169,7 @@ public class RequestFormComponentBase : RxBaseComponent
     protected async Task HandleOnSubmitCallback()
     {
         var validationRes = await FluentValidationValidator!.ValidateAsync();
-       
+
         if (validationRes && IsValidIdValid() && IsAuthorizedDocumentValid())
         {
             if (HandleCreateOnSubmit.HasDelegate)
