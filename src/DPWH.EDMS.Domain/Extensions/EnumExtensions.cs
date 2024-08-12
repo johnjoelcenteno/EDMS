@@ -25,6 +25,17 @@ public static class EnumExtensions
         throw new AppException($"Enum not found: '{description}' in {typeof(T).Name}" );        
     }
 
+    public static T GetValueFromName<T>(string name) where T : Enum
+    {
+        foreach (var field in typeof(T).GetFields())
+        {
+            if (string.Equals(field.Name, name, StringComparison.OrdinalIgnoreCase))
+                return (T)field.GetValue(null);
+        }
+
+        throw new AppException($"Enum not found: '{name}' in {typeof(T).Name}");
+    }
+
     public static string GetDescriptionFromValue<T>(string value) where T : Enum
     {
         foreach (var field in typeof(T).GetFields())
