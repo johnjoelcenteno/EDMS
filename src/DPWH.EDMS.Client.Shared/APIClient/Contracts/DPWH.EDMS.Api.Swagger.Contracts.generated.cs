@@ -716,12 +716,12 @@ namespace DPWH.EDMS.Api.Contracts
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<UpdateResponseBaseApiResponse> UpdateOfficeStatusAsync(UpdateOfficeStatus body);
+        System.Threading.Tasks.Task<UpdateResponse> UpdateOfficeStatusAsync(UpdateOfficeStatus body);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<UpdateResponseBaseApiResponse> UpdateOfficeStatusAsync(UpdateOfficeStatus body, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<UpdateResponse> UpdateOfficeStatusAsync(UpdateOfficeStatus body, System.Threading.CancellationToken cancellationToken);
 
     }
 
