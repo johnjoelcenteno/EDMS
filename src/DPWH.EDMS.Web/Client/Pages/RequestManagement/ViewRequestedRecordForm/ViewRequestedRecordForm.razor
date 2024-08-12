@@ -21,7 +21,7 @@
     <div class="container page-legal-size">
         @if (!string.IsNullOrEmpty(RequestedRecord.Uri))
         {
-            <iframe src="@RequestedRecord.Uri" height="100%" width="100%" title="Iframe Example"></iframe>
+            <iframe src="@RequestedRecord.Uri" height="100%" width="100%" title="@RequestedRecord.RecordType"></iframe>
         }
     </div>
 }
