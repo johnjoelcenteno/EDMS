@@ -236,7 +236,7 @@ public static class UsersEndpoint
                 return Results.BadRequest(new ValidationFailureResponse() { Errors = [new ValidationResponse() { Message = "Invalid SignatoriesId", PropertyName = "SignatoriesId" }] });
             }
 
-            var uri = await blobService.Put(WellKnownContainers.RecordRequestSupportingFiles, request.Id.ToString(), data, request.File.ContentType, metadata);
+            var uri = await blobService.Put(WellKnownContainers.UserDocuments, request.Id.ToString(), data, request.File.ContentType, metadata);
 
             var command = new UpdateSignatoryUriRequest(model.SignatoriesId, uri);
 
