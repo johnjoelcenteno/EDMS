@@ -18,7 +18,8 @@
     @{
         var office = ClaimsPrincipalExtensions.GetOffice(ClaimsPrincipal);
     }
-    @if(!string.IsNullOrEmpty(office)){
+    @if (!string.IsNullOrEmpty(office))
+    {
 
         //Test purposes only
         //Changes be made by adrianne
@@ -27,7 +28,7 @@
             <p>RDM : <span class="fw-bolder">@SelectedRecordRequest.RmdRequestStatus</span></p>
         </div>
     }
-     
+
 </div>
 <hr />
 <TelerikTabStrip @bind-ActiveTabIndex="@ActiveTabIndex">
@@ -116,7 +117,7 @@
                                             <li>@record.RecordType</li>
                                         }
                                     </ul>
-                                }                                
+                                }
                             }
                         }
                     </div>
@@ -153,7 +154,7 @@
                     <div class="row mb-3">
                         @StepperFragment
                     </div>
-                    <hr />  
+                    <hr />
                 }
                 <div class="row my-2">
                     <h5>Record(s) Requested</h5>
@@ -399,14 +400,14 @@
                             </div>
                             @if (record.Uri != null)
                             {
-                               
+
                                 <div class="col text-end">
-                                    <TelerikButton OnClick="@OnDocumentOpen">Approve</TelerikButton>
+                                    <TelerikButton OnClick="@(() => OnDocumentOpen(record.Id.ToString()))">Approve</TelerikButton>
                                 </div>
                             }
                             else
                             {
-                               
+
                                 <div class="col text-end">
                                     <p class="fw-bolder">No Record Found</p>
                                 </div>
@@ -427,14 +428,14 @@
                             </div>
                             @if (record.Uri != null)
                             {
-                                 
+
                                 <div class="col text-end">
-                                    <TelerikButton>Approve</TelerikButton>
+                                    <TelerikButton OnClick="@(() => OnDocumentOpen(record.Id.ToString()))">Approve</TelerikButton>
                                 </div>
                             }
                             else
                             {
-                                
+
                                 <div class="col text-end">
                                     <p class="fw-bolder">No Record Found</p>
                                 </div>
@@ -461,7 +462,7 @@
                                         {
                                             HasNoRecords = true;
                                             <div class="col text-end">
-                                                <TelerikButton>Approve</TelerikButton>
+                                                <TelerikButton OnClick="@(() => OnDocumentOpen(record.Id.ToString()))">Approve</TelerikButton>
                                             </div>
                                         }
                                         else
@@ -477,7 +478,7 @@
                         }
                     }
                 }
-                 
+
 
             </div>
         </div>
@@ -771,7 +772,7 @@
     <div class="row my-3">
         <div class="d-flex gap-3 justify-content-center">
             <TelerikButton OnClick="OnCancel" FillMode="@ThemeConstants.Button.FillMode.Outline">Cancel</TelerikButton>
-            
+
             @switch (ActiveTabIndex)
             {
                 case 1:

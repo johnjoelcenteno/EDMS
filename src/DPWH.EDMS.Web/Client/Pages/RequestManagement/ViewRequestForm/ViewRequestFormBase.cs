@@ -155,9 +155,9 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
         }
     }
 
-    protected void OnDocumentOpen()
+    protected void OnDocumentOpen(string documentId)
     {
-        IsDocumentVisible = !IsDocumentVisible;
+        NavigationManager.NavigateTo($"/request-management/requested-record/{RequestId}/{documentId}");
     }
     protected async Task OnStatusChange(string newStatus)
     {
