@@ -89,11 +89,12 @@ public class NavMenuBase : RxBaseComponent
             Role = GetRoleLabel(role);
 
             // default static menus
-            NavMenus = MenuDataService.GetMenuItems().Where(m => m.AuthorizedRoles.Any(r => r == role)).ToList();
+            //NavMenus = MenuDataService.GetMenuItems().Where(m => m.AuthorizedRoles.Any(r => r == role)).ToList();
             //NavMenus2 = MenuDataService.GetMenuItems2().Where(m => m.AuthorizedRoles.Any(r => r == role)).ToList();
             //NavSettings = MenuDataService.GetSettingsItems().Where(m => m.AuthorizedRoles.Any(r => r == role)).ToList();
 
             // api integrated menus
+            NavMenus = await MenuDataService.GetNavigationMenuAsync(NavType.MainMenu);
             NavMenus2 = await MenuDataService.GetNavigationMenuAsync(NavType.CurrentUserMenu);
             NavSettings = await MenuDataService.GetNavigationMenuAsync(NavType.Settings);
 
