@@ -2,8 +2,9 @@
 
 public enum RequestedRecordStatus
 {
-    Submitted,
     Pending,
+    NoRecord,
+    Evaluated,
     Completed
 }
 
