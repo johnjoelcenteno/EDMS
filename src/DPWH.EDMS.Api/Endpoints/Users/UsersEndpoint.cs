@@ -1,17 +1,24 @@
 using DPWH.EDMS.Api.Endpoints;
+using DPWH.EDMS.Application.Contracts.Services;
 using DPWH.EDMS.Application.Features.AuditLogs.Commands.CreateModifyAccessLog;
+using DPWH.EDMS.Application.Features.RecordRequests.Commands.SaveUploadedFile;
+using DPWH.EDMS.Application.Features.Signatories.Commands;
+using DPWH.EDMS.Application.Features.Signatories.Queries;
 using DPWH.EDMS.Application.Features.Users.Commands.CreateUser;
 using DPWH.EDMS.Application.Features.Users.Commands.CreateUserWithRole;
 using DPWH.EDMS.Application.Features.Users.Commands.DeactivateUser;
 using DPWH.EDMS.Application.Features.Users.Commands.RemoveUser;
 using DPWH.EDMS.Application.Features.Users.Commands.UpdateUser;
+using DPWH.EDMS.Application.Features.Users.Commands.UploadSignature;
 using DPWH.EDMS.Application.Features.Users.Queries.GetUserById;
 using DPWH.EDMS.Application.Features.Users.Queries.GetUsers;
 using DPWH.EDMS.Application.Models;
 using DPWH.EDMS.IDP.Core.Constants;
+using DPWH.EDMS.Infrastructure.Storage;
 using KendoNET.DynamicLinq;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using System.Reflection.Metadata.Ecma335;
 
 namespace DPWH.EDMS.Api.Endpoints.Users;
 
@@ -196,6 +203,52 @@ public static class UsersEndpoint
             .Produces<BaseApiResponse<DeactivateUserResult>>()
             .Produces<ProblemDetails>(StatusCodes.Status400BadRequest)
             .Produces<ProblemDetails>(StatusCodes.Status500InternalServerError);
+
+        app.MapPost(ApiEndpoints.Users.UploadSignature, async (
+               [AsParameters] UploadSignatureRequest model,
+               IMediator mediator,
+               IBlobService blobService,
+               CancellationToken token,
+               ILogger<Program> logger) =>
+        {
+            var request = new
+            {
+                Id = Guid.NewGuid(),
+                File = model.Signature,
+                Filename = model.Signature?.FileName
+            };
+
+            var metadata = new Dictionary<string, string>();
+
+            byte[] data;
+            using (var memoryStream = new MemoryStream())
+            {
+                await model.Signature.CopyToAsync(memoryStream);
+                data = memoryStream.ToArray();
+            }
+
+            metadata.Add("DocumentType", "Signature");
+            metadata.Add("SignatoriesId", model.SignatoriesId.ToString());
+
+            var signatory = await mediator.Send(new GetByIdRequest(model.SignatoriesId));
+            if (signatory is null)
+            {
+                return Results.BadRequest(new ValidationFailureResponse() { Errors = [new ValidationResponse() { Message = "Invalid SignatoriesId", PropertyName = "SignatoriesId" }] });
+            }
+
+            var uri = await blobService.Put(WellKnownContainers.RecordRequestSupportingFiles, request.Id.ToString(), data, request.File.ContentType, metadata);
+
+            var command = new UpdateSignatoryUriRequest(model.SignatoriesId, uri);
+
+            var response = await mediator.Send(command, token);
+            return TypedResults.Ok(new UpdateResponse(response));
+        })
+           .WithName("UploadSignature")
+           .WithTags(TagName)
+           .WithDescription("Upload manager signatory")
+           .DisableAntiforgery()
+           .Produces<UpdateResponse>(StatusCodes.Status200OK)
+           .Produces<ValidationFailureResponse>(StatusCodes.Status400BadRequest);
 
         return app;
     }

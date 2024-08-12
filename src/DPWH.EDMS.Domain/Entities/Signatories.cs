@@ -39,6 +39,7 @@ public class Signatory : EntityBase
     public string? Office2 { get; private set; }
     public int SignatoryNo { get; private set; }
     public bool IsActive { get; private set; }
+    public string? UriSignature { get; set; }
 
     public void Deactivate(string updatedBy)
     {
@@ -69,5 +70,10 @@ public class Signatory : EntityBase
         Office2 = office2;
         SignatoryNo = signatoryNo;
         SetModified(updatedBy);
+    }
+    
+    public void UpdateUriSignature(string uriSignature)
+    {
+        UriSignature = uriSignature;
     }
 }
