@@ -29,6 +29,7 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
     protected int MaxFileSize { get; set; } = 4 * 1024 * 1024;
     protected bool HasNoRecords { get; set; } = false;
     protected bool IsModalVisible { get; set; }
+    protected bool IsDocumentVisible { get; set; }
     protected bool IsRecordUploadEnabled { get; set; } = false;
     protected List<string> AllowedExtensions { get; set; } = new List<string>() { ".docx", ".pdf" };
     protected DateTimeOffset DateReceived { get; set; } = DateTimeOffset.Now;
@@ -154,6 +155,10 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
         }
     }
 
+    protected void OnDocumentOpen()
+    {
+        IsDocumentVisible = !IsDocumentVisible;
+    }
     protected async Task OnStatusChange(string newStatus)
     {
         var request = new UpdateRecordRequestStatus

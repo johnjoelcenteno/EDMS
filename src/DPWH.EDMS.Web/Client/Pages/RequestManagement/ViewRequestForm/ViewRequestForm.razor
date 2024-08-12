@@ -142,8 +142,8 @@
                     @StepperFragment
                     <div class="d-flex gap-3 justify-content-center">
                         <TelerikButton OnClick="OnCancel" FillMode="@ThemeConstants.Button.FillMode.Outline">Cancel</TelerikButton>
-                        <TelerikButton OnClick="@(() => IsRecordUploadEnabled = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.Status == RecordRequestStates.Reviewed.ToString() && IsRecordUploadEnabled == false)">Edit</TelerikButton>
-                        <TelerikButton OnClick="OnSubmitReview" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.Status == RecordRequestStates.Submitted.ToString() || IsRecordUploadEnabled == true)">Submit</TelerikButton>
+                        <TelerikButton OnClick="@(() => IsRecordUploadEnabled = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.Status == OfficeRequestedRecordStatus.Reviewed.ToString() && IsRecordUploadEnabled == false)">Edit</TelerikButton>
+                        <TelerikButton OnClick="OnSubmitReview" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.Status == OfficeRequestedRecordStatus.Submitted.ToString() || IsRecordUploadEnabled == true)">Submit</TelerikButton>
                     </div>
                 </div>
             }
@@ -176,7 +176,7 @@
                             <div class="d-flex col">
                                 <label class="align-content-center">@record.RecordType</label>
                             </div>
-                            @if (SelectedRecordRequest.Status == RecordRequestStates.Submitted.ToString() || IsRecordUploadEnabled == true)
+                            @if (SelectedRecordRequest.Status == OfficeRequestedRecordStatus.Submitted.ToString() || IsRecordUploadEnabled == true)
                             {
                                 <div class="col-2 align-content-center">
                                     <TelerikRadioGroup Data="@RecordCopyTypeData"
@@ -238,7 +238,7 @@
                             <div class="d-flex col">
                                 <label class="align-content-center">@record.RecordType</label>
                             </div>
-                            @if (SelectedRecordRequest.Status == RecordRequestStates.Submitted.ToString() || IsRecordUploadEnabled == true)
+                            @if (SelectedRecordRequest.Status == OfficeRequestedRecordStatus.Submitted.ToString() || IsRecordUploadEnabled == true)
                             {
                                 <div class="col-2 align-content-center">
                                     <TelerikRadioGroup Data="@RecordCopyTypeData"
@@ -300,7 +300,7 @@
                                     <div class="d-flex col">
                                         <label class="align-content-center">@record.RecordType</label>
                                     </div>
-                                    @if (SelectedRecordRequest.Status == RecordRequestStates.Submitted.ToString() || IsRecordUploadEnabled == true)
+                                    @if (SelectedRecordRequest.Status == OfficeRequestedRecordStatus.Submitted.ToString() || IsRecordUploadEnabled == true)
                                     {
                                         <div class="col-2 align-content-center">
                                             <TelerikRadioGroup Data="@RecordCopyTypeData"
@@ -368,7 +368,7 @@
                     @StepperFragment
                     <div class="d-flex gap-3 justify-content-center">
                         <TelerikButton OnClick="OnCancel" FillMode="@ThemeConstants.Button.FillMode.Outline">Cancel</TelerikButton>
-                        <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.Status == RecordRequestStates.Reviewed.ToString())">Submit</TelerikButton>
+                        <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.Status == OfficeRequestedRecordStatus.Reviewed.ToString())">Submit</TelerikButton>
                     </div>
                 </div>
             }
@@ -401,7 +401,7 @@
                             {
                                
                                 <div class="col text-end">
-                                    <TelerikButton>Approve</TelerikButton>
+                                    <TelerikButton OnClick="@OnDocumentOpen">Approve</TelerikButton>
                                 </div>
                             }
                             else
@@ -490,7 +490,7 @@
                     @StepperFragment
                     <div class="d-flex gap-3 justify-content-center">
                         <TelerikButton OnClick="OnCancel" FillMode="@ThemeConstants.Button.FillMode.Outline">Cancel</TelerikButton>
-                        <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.Status == RecordRequestStates.Approved.ToString())">Submit</TelerikButton>
+                        <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.Status == OfficeRequestedRecordStatus.Approved.ToString())">Submit</TelerikButton>
                     </div>
                 </div>
             }
@@ -615,7 +615,7 @@
                     @StepperFragment
                     <div class="d-flex gap-3 justify-content-center">
                         <TelerikButton OnClick="OnCancel" FillMode="@ThemeConstants.Button.FillMode.Outline">Cancel</TelerikButton>
-                        <TelerikButton OnClick="ValidateTransmittalFileSelect" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.Status == RecordRequestStates.ForRelease.ToString() || SelectedRecordRequest.Status == "For Release")">Submit</TelerikButton>
+                        <TelerikButton OnClick="ValidateTransmittalFileSelect" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.Status == OfficeRequestedRecordStatus.ForRelease.ToString() || SelectedRecordRequest.Status == "For Release")">Submit</TelerikButton>
                     </div>
                 </div>
             }
@@ -734,7 +734,7 @@
                         <div class="col align-content-center">
                             <p><b>@(string.IsNullOrEmpty(GetTransmittalRecceipt.Data?.Uri) ? "UPLOAD RECEIVED TRANSMITTAL RECEIPT" : "RECEIVED TRANSMITTAL RECEIPT")</b></p>
                         </div>
-                        @if (!string.IsNullOrEmpty(GetTransmittalRecceipt.Data?.Uri) && SelectedRecordRequest.Status == RecordRequestStates.Claimed.ToString())
+                        @if (!string.IsNullOrEmpty(GetTransmittalRecceipt.Data?.Uri) && SelectedRecordRequest.Status == OfficeRequestedRecordStatus.Claimed.ToString())
                         {
                             <div class="col text-end">
                                 <NavLink class="fw-bolder text-end" href="@GetTransmittalRecceipt.Data.Uri" target="_blank">View</NavLink>
@@ -775,16 +775,16 @@
             @switch (ActiveTabIndex)
             {
                 case 1:
-                    <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.Status == RecordRequestStates.Reviewed.ToString())">Submit</TelerikButton>
+                    <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.Status == OfficeRequestedRecordStatus.Reviewed.ToString())">Submit</TelerikButton>
                     break;
                 case 2:
-                    <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.Status == RecordRequestStates.Approved.ToString())">Submit</TelerikButton>
+                    <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.Status == OfficeRequestedRecordStatus.Approved.ToString())">Submit</TelerikButton>
                     break;
                 case 3:
-                    <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.Status == RecordRequestStates.ForRelease.ToString() || SelectedRecordRequest.Status == "For Release")">Submit</TelerikButton>
+                    <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.Status == OfficeRequestedRecordStatus.ForRelease.ToString() || SelectedRecordRequest.Status == "For Release")">Submit</TelerikButton>
                     break;
                 case 4:
-                    <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.Status == RecordRequestStates.Claimed.ToString())">Submit</TelerikButton>
+                    <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.Status == OfficeRequestedRecordStatus.Claimed.ToString())">Submit</TelerikButton>
                     break;
                 default:
                     break;
