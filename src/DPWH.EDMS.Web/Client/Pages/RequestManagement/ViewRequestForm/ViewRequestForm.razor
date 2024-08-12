@@ -16,19 +16,14 @@
 </div>
 <div class="d-flex flex-row align-items-center mb-2">
     @{
-        var office = ClaimsPrincipalExtensions.GetOffice(ClaimsPrincipal);
+        var office = ClaimsPrincipalExtensions.GetOffice(ClaimsPrincipal!);
     }
-    @if (!string.IsNullOrEmpty(office))
-    {
-
-        //Test purposes only
-        //Changes be made by adrianne
+    @if (!string.IsNullOrEmpty(office)){
         <div class="row">
-            <p>HRDM : <span class="fw-bolder">@SelectedRecordRequest.HrmdRequestStatus</span></p>
-            <p>RDM : <span class="fw-bolder">@SelectedRecordRequest.RmdRequestStatus</span></p>
+            <p>RMD Request Status : <span class="fw-bolder">@SelectedRecordRequest.RmdRequestStatus</span></p>
+            <p>HRMD Request Status : <span class="fw-bolder">@SelectedRecordRequest.HrmdRequestStatus</span></p>
         </div>
     }
-
 </div>
 <hr />
 <TelerikTabStrip @bind-ActiveTabIndex="@ActiveTabIndex">
@@ -135,7 +130,7 @@
             </div>
         </div>
     </TabStripTab>
-    <TabStripTab Title="@(!XSmall ? "Review and Evaluate" : "Review")">
+    <TabStripTab Title="Review and Evaluate">
         <div class="row">
             @if (!XSmall)
             {
@@ -143,8 +138,16 @@
                     @StepperFragment
                     <div class="d-flex gap-3 justify-content-center">
                         <TelerikButton OnClick="OnCancel" FillMode="@ThemeConstants.Button.FillMode.Outline">Cancel</TelerikButton>
-                        <TelerikButton OnClick="@(() => IsRecordUploadEnabled = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.Status == OfficeRequestedRecordStatus.Reviewed.ToString() && IsRecordUploadEnabled == false)">Edit</TelerikButton>
-                        <TelerikButton OnClick="OnSubmitReview" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.Status == OfficeRequestedRecordStatus.Submitted.ToString() || IsRecordUploadEnabled == true)">Submit</TelerikButton>
+                        @if (User.Office == Offices.RMD.ToString())
+                        {
+                            <TelerikButton OnClick="@(() => IsRecordUploadEnabled = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.RmdRequestStatus == OfficeRequestedRecordStatus.Reviewed.ToString() && IsRecordUploadEnabled == false)">Edit</TelerikButton>
+                            <TelerikButton OnClick="OnSubmitReview" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.RmdRequestStatus == OfficeRequestedRecordStatus.Submitted.ToString() || IsRecordUploadEnabled == true)">Submit</TelerikButton>                            
+                        }
+                        else if (User.Office == Offices.HRMD.ToString())
+                        {
+                            <TelerikButton OnClick="@(() => IsRecordUploadEnabled = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.HrmdRequestStatus == OfficeRequestedRecordStatus.Reviewed.ToString() && IsRecordUploadEnabled == false)">Edit</TelerikButton>
+                            <TelerikButton OnClick="OnSubmitReview" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.HrmdRequestStatus == OfficeRequestedRecordStatus.Submitted.ToString() || IsRecordUploadEnabled == true)">Submit</TelerikButton>
+                        }
                     </div>
                 </div>
             }
@@ -177,7 +180,7 @@
                             <div class="d-flex col">
                                 <label class="align-content-center">@record.RecordType</label>
                             </div>
-                            @if (SelectedRecordRequest.Status == OfficeRequestedRecordStatus.Submitted.ToString() || IsRecordUploadEnabled == true)
+                            @if (SelectedRecordRequest.RmdRequestStatus == OfficeRequestedRecordStatus.Submitted.ToString() || IsRecordUploadEnabled == true)
                             {
                                 <div class="col-2 align-content-center">
                                     <TelerikRadioGroup Data="@RecordCopyTypeData"
@@ -239,7 +242,7 @@
                             <div class="d-flex col">
                                 <label class="align-content-center">@record.RecordType</label>
                             </div>
-                            @if (SelectedRecordRequest.Status == OfficeRequestedRecordStatus.Submitted.ToString() || IsRecordUploadEnabled == true)
+                            @if (SelectedRecordRequest.HrmdRequestStatus == OfficeRequestedRecordStatus.Submitted.ToString() || IsRecordUploadEnabled == true)
                             {
                                 <div class="col-2 align-content-center">
                                     <TelerikRadioGroup Data="@RecordCopyTypeData"
@@ -301,7 +304,7 @@
                                     <div class="d-flex col">
                                         <label class="align-content-center">@record.RecordType</label>
                                     </div>
-                                    @if (SelectedRecordRequest.Status == OfficeRequestedRecordStatus.Submitted.ToString() || IsRecordUploadEnabled == true)
+                                    @if ((SelectedRecordRequest.RmdRequestStatus == OfficeRequestedRecordStatus.Submitted.ToString() && SelectedRecordRequest.HrmdRequestStatus == OfficeRequestedRecordStatus.Submitted.ToString()) || IsRecordUploadEnabled == true)
                                     {
                                         <div class="col-2 align-content-center">
                                             <TelerikRadioGroup Data="@RecordCopyTypeData"
@@ -361,7 +364,7 @@
             </div>
         </div>
     </TabStripTab>
-    <TabStripTab Title="Approve" Disabled="@(ProgressIndex < 1)">
+    <TabStripTab Title="Approve" Disabled="@(ProgressIndex < 1)" Visible="@(User.Office != Offices.HRMD.ToString())">
         <div class="row">
             @if (!XSmall)
             {
@@ -369,7 +372,15 @@
                     @StepperFragment
                     <div class="d-flex gap-3 justify-content-center">
                         <TelerikButton OnClick="OnCancel" FillMode="@ThemeConstants.Button.FillMode.Outline">Cancel</TelerikButton>
-                        <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.Status == OfficeRequestedRecordStatus.Reviewed.ToString())">Submit</TelerikButton>
+                        @if (User.Office == Offices.RMD.ToString())
+                        {
+                            <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.RmdRequestStatus == OfficeRequestedRecordStatus.Reviewed.ToString())">Submit</TelerikButton>
+                        }
+                        else if (User.Office == Offices.HRMD.ToString())
+                        {
+                            <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.HrmdRequestStatus == OfficeRequestedRecordStatus.Reviewed.ToString())">Submit</TelerikButton>
+                        }
+
                     </div>
                 </div>
             }
@@ -483,7 +494,7 @@
             </div>
         </div>
     </TabStripTab>
-    <TabStripTab Title="Release" Disabled="@(ProgressIndex < 2)">
+    <TabStripTab Title="Release" Disabled="@(User.Office == Offices.RMD.ToString() ? ProgressIndex < 2 : ProgressIndex < 1)">
         <div class="row">
             @if (!XSmall)
             {
@@ -491,7 +502,14 @@
                     @StepperFragment
                     <div class="d-flex gap-3 justify-content-center">
                         <TelerikButton OnClick="OnCancel" FillMode="@ThemeConstants.Button.FillMode.Outline">Cancel</TelerikButton>
-                        <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.Status == OfficeRequestedRecordStatus.Approved.ToString())">Submit</TelerikButton>
+                        @if (User.Office == Offices.RMD.ToString())
+                        {
+                            <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.RmdRequestStatus == OfficeRequestedRecordStatus.Approved.ToString())">Submit</TelerikButton>
+                        }
+                        else if (User.Office == Offices.HRMD.ToString())
+                        {
+                            <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.HrmdRequestStatus == OfficeRequestedRecordStatus.Reviewed.ToString())">Submit</TelerikButton>
+                        }
                     </div>
                 </div>
             }
@@ -608,7 +626,7 @@
             </div>
         </div>
     </TabStripTab>
-    <TabStripTab Title="Claim" Disabled="@(ProgressIndex < 3)">
+    <TabStripTab Title="Claim" Disabled="@(User.Office == Offices.RMD.ToString() ? ProgressIndex < 3 : ProgressIndex < 2)">
         <div class="row">
             @if (!XSmall)
             {
@@ -616,7 +634,14 @@
                     @StepperFragment
                     <div class="d-flex gap-3 justify-content-center">
                         <TelerikButton OnClick="OnCancel" FillMode="@ThemeConstants.Button.FillMode.Outline">Cancel</TelerikButton>
-                        <TelerikButton OnClick="ValidateTransmittalFileSelect" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.Status == OfficeRequestedRecordStatus.ForRelease.ToString() || SelectedRecordRequest.Status == "For Release")">Submit</TelerikButton>
+                        @if (User.Office == Offices.RMD.ToString())
+                        {
+                            <TelerikButton OnClick="ValidateTransmittalFileSelect" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.RmdRequestStatus == OfficeRequestedRecordStatus.ForRelease.ToString())">Submit</TelerikButton>
+                        }
+                        else if (User.Office == Offices.HRMD.ToString())
+                        {
+                            <TelerikButton OnClick="ValidateTransmittalFileSelect" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.HrmdRequestStatus == OfficeRequestedRecordStatus.ForRelease.ToString())">Submit</TelerikButton>
+                        }
                     </div>
                 </div>
             }
@@ -646,9 +671,9 @@
                     <div class="row">
                         <div class="col-sm-12 col-md-4 mb-3">
                             <label class="mb-1"><b>Date Received</b></label>
-                            @if (GetTransmittalRecceipt.Data != null)
+                            @if (GetTransmittalReceipt.Data != null)
                             {
-                                <p>@GenericHelper.GetDateDisplay(GetTransmittalRecceipt.Data.DateReceived)</p>
+                                <p>@GenericHelper.GetDateDisplay(GetTransmittalReceipt.Data.DateReceived)</p>
                             }
                             else
                             {
@@ -657,9 +682,9 @@
                         </div>
                         <div class="col-sm-12 col-md-4 mb-3">
                             <label class="mb-1"><b>Time Received</b></label>
-                            @if (GetTransmittalRecceipt.Data != null)
+                            @if (GetTransmittalReceipt.Data != null)
                             {
-                                <p>@GenericHelper.GetTimeDisplay(GetTransmittalRecceipt.Data.TimeReceived)</p>
+                                <p>@GenericHelper.GetTimeDisplay(GetTransmittalReceipt.Data.TimeReceived)</p>
                             }
                             else
                             {
@@ -727,18 +752,18 @@
                                 <p><b>TRANSMITTAL RECEIPT UNAVAILABLE :</b></p>
                             </div>
                             <div class="d-flex col gap-4 justify-content-start">
-                                <p class="d-flex fw-normal text-danger">No office detected.</p>
+                                <p class="d-flex fw-normal text-danger">No assigned office.</p>
                             </div>
                         </div>
                     }
                     <div class="row mb-2">
                         <div class="col align-content-center">
-                            <p><b>@(string.IsNullOrEmpty(GetTransmittalRecceipt.Data?.Uri) ? "UPLOAD RECEIVED TRANSMITTAL RECEIPT" : "RECEIVED TRANSMITTAL RECEIPT")</b></p>
+                            <p><b>@(string.IsNullOrEmpty(GetTransmittalReceipt.Data?.Uri) ? "UPLOAD RECEIVED TRANSMITTAL RECEIPT" : "RECEIVED TRANSMITTAL RECEIPT")</b></p>
                         </div>
-                        @if (!string.IsNullOrEmpty(GetTransmittalRecceipt.Data?.Uri) && SelectedRecordRequest.Status == OfficeRequestedRecordStatus.Claimed.ToString())
+                        @if (GetTransmittalReceipt.Data != null && !string.IsNullOrEmpty(GetTransmittalReceipt.Data?.Uri))
                         {
                             <div class="col text-end">
-                                <NavLink class="fw-bolder text-end" href="@GetTransmittalRecceipt.Data.Uri" target="_blank">View</NavLink>
+                                <NavLink class="fw-bolder text-end" href="@GetTransmittalReceipt.Data.Uri" target="_blank">View</NavLink>
                             </div>
                         }
                         else
@@ -773,22 +798,44 @@
         <div class="d-flex gap-3 justify-content-center">
             <TelerikButton OnClick="OnCancel" FillMode="@ThemeConstants.Button.FillMode.Outline">Cancel</TelerikButton>
 
-            @switch (ActiveTabIndex)
+            @if (User.Office == Offices.RMD.ToString())
             {
-                case 1:
-                    <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.Status == OfficeRequestedRecordStatus.Reviewed.ToString())">Submit</TelerikButton>
-                    break;
-                case 2:
-                    <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.Status == OfficeRequestedRecordStatus.Approved.ToString())">Submit</TelerikButton>
-                    break;
-                case 3:
-                    <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.Status == OfficeRequestedRecordStatus.ForRelease.ToString() || SelectedRecordRequest.Status == "For Release")">Submit</TelerikButton>
-                    break;
-                case 4:
-                    <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.Status == OfficeRequestedRecordStatus.Claimed.ToString())">Submit</TelerikButton>
-                    break;
-                default:
-                    break;
+                switch (ActiveTabIndex)
+                {
+                    case 1:
+                        <TelerikButton OnClick="@(() => IsRecordUploadEnabled = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.RmdRequestStatus == OfficeRequestedRecordStatus.Reviewed.ToString() && IsRecordUploadEnabled == false)">Edit</TelerikButton>
+                        <TelerikButton OnClick="OnSubmitReview" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.RmdRequestStatus == OfficeRequestedRecordStatus.Submitted.ToString() || IsRecordUploadEnabled == true)">Submit</TelerikButton>
+                        break;
+                    case 2:
+                        <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.RmdRequestStatus == OfficeRequestedRecordStatus.Reviewed.ToString())">Submit</TelerikButton>
+                        break;
+                    case 3:
+                        <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.RmdRequestStatus == OfficeRequestedRecordStatus.Approved.ToString())">Submit</TelerikButton>
+                        break;
+                    case 4:
+                        <TelerikButton OnClick="ValidateTransmittalFileSelect" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.RmdRequestStatus == OfficeRequestedRecordStatus.ForRelease.ToString())">Submit</TelerikButton>
+                        break;
+                    default:
+                        break;
+                }                
+            }
+            else if (User.Office == Offices.HRMD.ToString())
+            {
+                switch (ActiveTabIndex)
+                {
+                    case 1:
+                        <TelerikButton OnClick="@(() => IsRecordUploadEnabled = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.HrmdRequestStatus == OfficeRequestedRecordStatus.Reviewed.ToString() && IsRecordUploadEnabled == false)">Edit</TelerikButton>
+                        <TelerikButton OnClick="OnSubmitReview" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.HrmdRequestStatus == OfficeRequestedRecordStatus.Submitted.ToString() || IsRecordUploadEnabled == true)">Submit</TelerikButton>
+                        break;
+                    case 2:
+                        <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.HrmdRequestStatus == OfficeRequestedRecordStatus.Reviewed.ToString())">Submit</TelerikButton>
+                        break;
+                    case 3:
+                        <TelerikButton OnClick="ValidateTransmittalFileSelect" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.HrmdRequestStatus == OfficeRequestedRecordStatus.ForRelease.ToString())">Submit</TelerikButton>
+                        break;
+                    default:
+                        break;
+                }
             }
         </div>
     </div>
@@ -858,11 +905,21 @@
         </div>
         <TelerikStepper Value="@ProgressIndex" ValueChanged="@ValueChangeHandler" Linear="true" Orientation="@(!XSmall ? StepperOrientation.Vertical: StepperOrientation.Horizontal)">
             <StepperSteps>
+            @if (User.Office == Offices.RMD.ToString())
+            {
                 <StepperStep Label="Submit"></StepperStep>
-                <StepperStep Label=@(XSmall ? "Review" : "Review & Evaluate")></StepperStep>
+                <StepperStep Label="Review & Evaluate"></StepperStep>
                 <StepperStep Label="Approve"></StepperStep>
                 <StepperStep Label="Release"></StepperStep>
                 <StepperStep Label="Claim"></StepperStep>
+            }
+            else if (User.Office == Offices.HRMD.ToString())
+            {
+                <StepperStep Label="Submit"></StepperStep>
+                <StepperStep Label="Review & Evaluate"></StepperStep>
+                <StepperStep Label="Release"></StepperStep>
+                <StepperStep Label="Claim"></StepperStep>
+            }
             </StepperSteps>
         </TelerikStepper>
     </div>;

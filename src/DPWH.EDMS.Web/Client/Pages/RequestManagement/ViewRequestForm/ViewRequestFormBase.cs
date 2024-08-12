@@ -20,8 +20,10 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
     [Inject] public required IUsersService UsersService { get; set; }
     [Inject] public required IRecordRequestSupportingFilesService RecordRequestSupportingFilesService { get; set; }
     [Inject] public required NavigationManager NavigationManager { get; set; }
-    protected GetTransmittalReceiptModelBaseApiResponse GetTransmittalRecceipt { get; set; } = new();
+    protected GetTransmittalReceiptModelBaseApiResponse GetTransmittalReceipt { get; set; } = new();
     protected UpdateResponseBaseApiResponse? UpdateResponse;
+    protected UpdateResponse? UpdateOfficeStatus;
+
     protected GetUserByIdResult User = new GetUserByIdResult();
     protected int ActiveTabIndex { get; set; } = 0;
     protected int ProgressIndex { get; set; }
@@ -50,7 +52,7 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
 
     // Copy Type Radio Button
     protected TelerikRadioGroup<RecordCopyTypeItem, string>? RecordCopyTypeRef { get; set; }
-    protected ClaimsPrincipal ClaimsPrincipal { get; set; }
+    protected ClaimsPrincipal? ClaimsPrincipal { get; set; }
     protected List<RecordCopyTypeItem> RecordCopyTypeData { get; set; } = new List<RecordCopyTypeItem>()
     {
         new RecordCopyTypeItem { Value = "TC", Text = "TC" },
@@ -120,11 +122,11 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
 
     protected async Task GetTransmittalData()
     {
-        if (SelectedRecordRequest.Status == OfficeRequestedRecordStatus.Claimed.ToString())
+        if ((User.Office == Offices.RMD.ToString() && SelectedRecordRequest.RmdRequestStatus == OfficeRequestedRecordStatus.Claimed.ToString()) || (User.Office == Offices.HRMD.ToString() && SelectedRecordRequest.HrmdRequestStatus == OfficeRequestedRecordStatus.Claimed.ToString()))
         {
             try
             {
-                GetTransmittalRecceipt = await RecordRequestSupportingFilesService.GetTransmittalReceipt(Guid.Parse(RequestId));
+                GetTransmittalReceipt = await RecordRequestSupportingFilesService.GetTransmittalReceipt(Guid.Parse(RequestId));
             }
             catch (Exception)
             {
@@ -159,6 +161,32 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
     {
         NavigationManager.NavigateTo($"/request-management/requested-record/{RequestId}/{documentId}");
     }
+
+    protected async Task OnOfficeStatusChange(string newOfficeStatus)
+    {
+        var request = new UpdateOfficeStatus
+        {
+            Id = SelectedRecordRequest.Id,
+            Status = newOfficeStatus
+        };
+
+        UpdateOfficeStatus = await RequestManagementService.UpdateOfficeStatus(request);
+
+        if (UpdateOfficeStatus.Success)
+        {
+            if (User.Office == Offices.RMD.ToString())
+            {
+                SelectedRecordRequest.RmdRequestStatus = newOfficeStatus;
+            }
+            else if (User.Office == Offices.HRMD.ToString())
+            {
+                SelectedRecordRequest.HrmdRequestStatus = newOfficeStatus;
+            }
+
+            UpdateProgressIndex();
+        }
+    }
+
     protected async Task OnStatusChange(string newStatus)
     {
         var request = new UpdateRecordRequestStatus
@@ -168,12 +196,8 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
         };
 
         UpdateResponse = await RequestManagementService.UpdateStatus(request);
-        if (UpdateResponse.Success)
-        {
-            SelectedRecordRequest.Status = newStatus;
-            UpdateProgressIndex();
-        }
     }
+
     protected string GetOfficeName(string officeCode)
     {
         return officeCode switch
@@ -380,12 +404,12 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
             }
         }
 
-        await OnStatusChange(OfficeRequestedRecordStatus.Reviewed.ToString());
+        await OnOfficeStatusChange(OfficeRequestedRecordStatus.Reviewed.ToString());
+        await OnStatusChange(RecordRequestStates.Pending.ToString());
 
         await LoadData((res) =>
         {
             SelectedRecordRequest = res;
-
         });
 
         StateHasChanged();
@@ -396,7 +420,7 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
     {
         IsLoading = true;
         IsModalVisible = false;
-        await OnStatusChange(OfficeRequestedRecordStatus.Approved.ToString());
+        await OnOfficeStatusChange(OfficeRequestedRecordStatus.Approved.ToString());
         StateHasChanged();
         IsLoading = false;
     }
@@ -405,7 +429,7 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
     {
         IsLoading = true;
         IsModalVisible = false;
-        await OnStatusChange("For Release");
+        await OnOfficeStatusChange(OfficeRequestedRecordStatus.ForRelease.ToString());
         StateHasChanged();
         IsLoading = false;
     }
@@ -419,8 +443,15 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
         {
             await RecordRequestSupportingFilesService.UploadTransmittalReceipt(DateReceived, TimeReceived, SelectedTransmittalReceipt.Document, SelectedTransmittalReceipt.RecordRequestId);
         }
+        await OnOfficeStatusChange(OfficeRequestedRecordStatus.Claimed.ToString());
 
-        await OnStatusChange(OfficeRequestedRecordStatus.Claimed.ToString());
+        if ((SelectedRecordRequest.RmdRequestStatus == OfficeRequestedRecordStatus.NA.ToString() && SelectedRecordRequest.HrmdRequestStatus == OfficeRequestedRecordStatus.Claimed.ToString())
+            || (SelectedRecordRequest.RmdRequestStatus == OfficeRequestedRecordStatus.Claimed.ToString() && SelectedRecordRequest.HrmdRequestStatus == OfficeRequestedRecordStatus.NA.ToString())
+            || (SelectedRecordRequest.RmdRequestStatus == OfficeRequestedRecordStatus.Claimed.ToString() && SelectedRecordRequest.HrmdRequestStatus == OfficeRequestedRecordStatus.Claimed.ToString()))
+        {
+            await OnStatusChange(RecordRequestStates.Completed.ToString());
+        }
+
         NavigationManager.NavigateTo("/request-management");
         StateHasChanged();
         IsLoading = false;
@@ -501,32 +532,61 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
 
     protected void UpdateProgressIndex()
     {
-        switch (SelectedRecordRequest.Status)
+        if (User.Office == Offices.RMD.ToString())
         {
-            case var status when status == OfficeRequestedRecordStatus.Submitted.ToString():
-                ProgressIndex = 0;
-                ActiveTabIndex = 1;
-                IsRecordUploadEnabled = true;
-                break;
-            case var status when status == OfficeRequestedRecordStatus.Reviewed.ToString():
-                ProgressIndex = 1;
-                ActiveTabIndex = 2;
-                IsRecordUploadEnabled = false;
-                break;
-            case var status when status == OfficeRequestedRecordStatus.Approved.ToString():
-                ProgressIndex = 2;
-                ActiveTabIndex = 3;
-                break;
-            case var status when status == OfficeRequestedRecordStatus.ForRelease.ToString() || SelectedRecordRequest.Status == "For Release":
-                ProgressIndex = 3;
-                ActiveTabIndex = 4;
-                break;
-            case var status when status == OfficeRequestedRecordStatus.Claimed.ToString():
-                ProgressIndex = 4;
-                ActiveTabIndex = 0;
-                break;
-            default:
-                break;
+            switch (SelectedRecordRequest.RmdRequestStatus)
+            {
+                case var status when status == OfficeRequestedRecordStatus.Submitted.ToString():
+                    ProgressIndex = 0;
+                    ActiveTabIndex = 1;
+                    IsRecordUploadEnabled = true;
+                    break;
+                case var status when status == OfficeRequestedRecordStatus.Reviewed.ToString():
+                    ProgressIndex = 1;
+                    ActiveTabIndex = 2;
+                    IsRecordUploadEnabled = false;
+                    break;
+                case var status when status == OfficeRequestedRecordStatus.Approved.ToString():
+                    ProgressIndex = 2;
+                    ActiveTabIndex = 3;
+                    break;
+                case var status when status == OfficeRequestedRecordStatus.ForRelease.ToString():
+                    ProgressIndex = 3;
+                    ActiveTabIndex = 4;
+                    break;
+                case var status when status == OfficeRequestedRecordStatus.Claimed.ToString():
+                    ProgressIndex = 4;
+                    ActiveTabIndex = 0;
+                    break;
+                default:
+                    break;
+            }
+        }
+        else if (User.Office == Offices.HRMD.ToString())
+        {
+            switch (SelectedRecordRequest.HrmdRequestStatus)
+            {
+                case var status when status == OfficeRequestedRecordStatus.Submitted.ToString():
+                    ProgressIndex = 0;
+                    ActiveTabIndex = 1;
+                    IsRecordUploadEnabled = true;
+                    break;
+                case var status when status == OfficeRequestedRecordStatus.Reviewed.ToString():
+                    ProgressIndex = 1;
+                    ActiveTabIndex = 3;
+                    IsRecordUploadEnabled = false;
+                    break;
+                case var status when status == OfficeRequestedRecordStatus.ForRelease.ToString():
+                    ProgressIndex = 2;
+                    ActiveTabIndex = 4;
+                    break;
+                case var status when status == OfficeRequestedRecordStatus.Claimed.ToString():
+                    ProgressIndex = 3;
+                    ActiveTabIndex = 0;
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
