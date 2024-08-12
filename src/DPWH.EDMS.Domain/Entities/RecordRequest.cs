@@ -37,8 +37,8 @@ public class RecordRequest : EntityBase
             Status = RecordRequestStates.Submitted.ToString(),
             RequestedRecords = [],
             FullName = fullName,
-            HRMDRequestStatus = OfficeRequestedRecordStatus.NA.ToString(),
-            RMDRequestStatus = OfficeRequestedRecordStatus.NA.ToString()
+            HRMDRequestStatus = OfficeRequestedRecordStatus.Submitted.ToString(),
+            RMDRequestStatus = OfficeRequestedRecordStatus.Submitted.ToString()
         };
         entity.SetCreated(createdBy);
         return entity;
