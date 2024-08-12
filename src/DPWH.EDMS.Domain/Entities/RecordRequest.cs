@@ -98,8 +98,8 @@ public class RecordRequest : EntityBase
     public string? OtherPurpose { get; private set; }
     public string? Remarks {  get; private set; }
     public string Status { get; private set; }
-    public string? HRMDRequestStatus { get; set; }
-    public string? RMDRequestStatus { get; set; }
+    public string? HRMDRequestStatus { get; private set; }
+    public string? RMDRequestStatus { get; private set; }
     public string? FullName { get; set; }
     public virtual IList<RequestedRecord> RequestedRecords { get; set; }
     public virtual IList<RecordRequestDocument>? Files { get; set; }
