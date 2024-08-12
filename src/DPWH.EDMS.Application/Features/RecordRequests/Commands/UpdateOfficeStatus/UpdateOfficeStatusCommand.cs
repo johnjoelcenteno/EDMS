@@ -24,7 +24,7 @@ internal sealed class UpdateOfficeStatusHandler(IWriteRepository writeRepository
             ?? throw new AppException("No record request found");
          
         var status = EnumExtensions.GetValueFromDescription<OfficeRequestedRecordStatus>(model.Status);
-        var office = EnumExtensions.GetValueFromDescription<Offices>(_principal.GetOffice()!);
+        var office = EnumExtensions.GetValueFromName<Offices>(_principal.GetOffice()!);
 
         record.UpdateOfficeStatus(status, _principal.GetUserName(), office);
 

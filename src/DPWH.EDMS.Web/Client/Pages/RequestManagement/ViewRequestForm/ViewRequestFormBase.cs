@@ -29,6 +29,7 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
     protected int MaxFileSize { get; set; } = 4 * 1024 * 1024;
     protected bool HasNoRecords { get; set; } = false;
     protected bool IsModalVisible { get; set; }
+    protected bool IsDocumentVisible { get; set; }
     protected bool IsRecordUploadEnabled { get; set; } = false;
     protected List<string> AllowedExtensions { get; set; } = new List<string>() { ".docx", ".pdf" };
     protected DateTimeOffset DateReceived { get; set; } = DateTimeOffset.Now;
@@ -119,7 +120,7 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
 
     protected async Task GetTransmittalData()
     {
-        if (SelectedRecordRequest.Status == RecordRequestStates.Claimed.ToString())
+        if (SelectedRecordRequest.Status == OfficeRequestedRecordStatus.Claimed.ToString())
         {
             try
             {
@@ -154,6 +155,10 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
         }
     }
 
+    protected void OnDocumentOpen()
+    {
+        IsDocumentVisible = !IsDocumentVisible;
+    }
     protected async Task OnStatusChange(string newStatus)
     {
         var request = new UpdateRecordRequestStatus
@@ -375,7 +380,7 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
             }
         }
 
-        await OnStatusChange(RecordRequestStates.Reviewed.ToString());
+        await OnStatusChange(OfficeRequestedRecordStatus.Reviewed.ToString());
 
         await LoadData((res) =>
         {
@@ -391,7 +396,7 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
     {
         IsLoading = true;
         IsModalVisible = false;
-        await OnStatusChange(RecordRequestStates.Approved.ToString());
+        await OnStatusChange(OfficeRequestedRecordStatus.Approved.ToString());
         StateHasChanged();
         IsLoading = false;
     }
@@ -415,7 +420,7 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
             await RecordRequestSupportingFilesService.UploadTransmittalReceipt(DateReceived, TimeReceived, SelectedTransmittalReceipt.Document, SelectedTransmittalReceipt.RecordRequestId);
         }
 
-        await OnStatusChange(RecordRequestStates.Claimed.ToString());
+        await OnStatusChange(OfficeRequestedRecordStatus.Claimed.ToString());
         NavigationManager.NavigateTo("/request-management");
         StateHasChanged();
         IsLoading = false;
@@ -498,25 +503,25 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
     {
         switch (SelectedRecordRequest.Status)
         {
-            case var status when status == RecordRequestStates.Submitted.ToString():
+            case var status when status == OfficeRequestedRecordStatus.Submitted.ToString():
                 ProgressIndex = 0;
                 ActiveTabIndex = 1;
                 IsRecordUploadEnabled = true;
                 break;
-            case var status when status == RecordRequestStates.Reviewed.ToString():
+            case var status when status == OfficeRequestedRecordStatus.Reviewed.ToString():
                 ProgressIndex = 1;
                 ActiveTabIndex = 2;
                 IsRecordUploadEnabled = false;
                 break;
-            case var status when status == RecordRequestStates.Approved.ToString():
+            case var status when status == OfficeRequestedRecordStatus.Approved.ToString():
                 ProgressIndex = 2;
                 ActiveTabIndex = 3;
                 break;
-            case var status when status == RecordRequestStates.ForRelease.ToString() || SelectedRecordRequest.Status == "For Release":
+            case var status when status == OfficeRequestedRecordStatus.ForRelease.ToString() || SelectedRecordRequest.Status == "For Release":
                 ProgressIndex = 3;
                 ActiveTabIndex = 4;
                 break;
-            case var status when status == RecordRequestStates.Claimed.ToString():
+            case var status when status == OfficeRequestedRecordStatus.Claimed.ToString():
                 ProgressIndex = 4;
                 ActiveTabIndex = 0;
                 break;
