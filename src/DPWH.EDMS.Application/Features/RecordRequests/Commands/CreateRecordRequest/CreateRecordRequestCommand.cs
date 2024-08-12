@@ -58,10 +58,12 @@ internal sealed class CreateRecordRequestCommandHandler(IWriteRepository writeRe
         {
             var recordType = recordTypes.FirstOrDefault(x => x.Id == providedRequestedRecord);
 
+            recordRequest.OnCreateOfficeStatus(OfficeRequestedRecordStatus.Submitted, Enum.Parse<Offices>(recordType.Office));
+
             var requestedRecord = RequestedRecord.Create(recordRequest.Id, providedRequestedRecord, recordType.Name, recordType.Office);
             recordRequest.RequestedRecords.Add(requestedRecord);
         }
-
+        
         if (isAuthorizedRep)
         {
             //If Claimant is Representative, we need atleast valid ID            

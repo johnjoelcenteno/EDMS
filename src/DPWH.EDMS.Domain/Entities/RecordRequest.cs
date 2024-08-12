@@ -37,11 +37,29 @@ public class RecordRequest : EntityBase
             Status = RecordRequestStates.Submitted.ToString(),
             RequestedRecords = [],
             FullName = fullName,
-            HRMDRequestStatus = OfficeRequestedRecordStatus.Submitted.ToString(),
-            RMDRequestStatus = OfficeRequestedRecordStatus.Submitted.ToString()
+            HRMDRequestStatus = OfficeRequestedRecordStatus.NA.ToString(),
+            RMDRequestStatus = OfficeRequestedRecordStatus.NA.ToString(),
         };
         entity.SetCreated(createdBy);
         return entity;
+    }
+    public void OnCreateOfficeStatus(OfficeRequestedRecordStatus status, Offices? office)
+    {
+        if (office == null)
+            return;
+
+        var statusProperty = office switch
+        {
+            Offices.RMD => nameof(RMDRequestStatus),
+            Offices.HRMD => nameof(HRMDRequestStatus),
+            _ => null
+        };
+
+        if (statusProperty != null)
+        {
+            GetType().GetProperty(statusProperty)?.SetValue(this, status.ToString());
+        }
+
     }
 
     public void UpdateStatus(RecordRequestStates status, string modifiedBy)
@@ -80,8 +98,8 @@ public class RecordRequest : EntityBase
     public string? OtherPurpose { get; private set; }
     public string? Remarks {  get; private set; }
     public string Status { get; private set; }
-    public string? HRMDRequestStatus { get; private set; }
-    public string? RMDRequestStatus { get; private set; }
+    public string? HRMDRequestStatus { get; set; }
+    public string? RMDRequestStatus { get; set; }
     public string? FullName { get; set; }
     public virtual IList<RequestedRecord> RequestedRecords { get; set; }
     public virtual IList<RecordRequestDocument>? Files { get; set; }
