@@ -15,13 +15,36 @@
 <div class="d-flex flex-row mt-3">
     <TelerikCard Width="100%">
         <CardBody>
-            <div class="d-flex flex-row justify-content-end">
+            @* <div class="d-flex flex-row justify-content-between gap-3">
+                <div class="d-flex gap-3">
+                    <TelerikButton Size="@ThemeConstants.Button.Size.Small" OnClick="ExportMenuJson">Export Menu as JSON</TelerikButton>
+                    <TelerikFileSelect AllowedExtensions="@AllowedExtensions"
+                                       OnSelect="@OnUpload"
+                                       Multiple="false"
+                                       Class="mt-2"
+                    Si>
+                        <SelectFilesButtonTemplate>
+                            <TelerikSvgIcon Icon="@SvgIcon.Upload" />
+                            Import Menu Items
+                        </SelectFilesButtonTemplate>
+                    </TelerikFileSelect>
+                </div>
                 <TelerikButton Class="mb-2"
                                Icon="@FontIcon.Plus"
                                ThemeColor="@ThemeConstants.Button.ThemeColor.Primary"
                                OnClick="GoToCreateMenuItem">
                     Create Menu
                 </TelerikButton>
+               
+            </div> *@
+            <div class="d-flex flex-row justify-content-end gap-3">
+                <TelerikButton Class="mb-2"
+                               Icon="@FontIcon.Plus"
+                               ThemeColor="@ThemeConstants.Button.ThemeColor.Primary"
+                               OnClick="GoToCreateMenuItem">
+                    Create Menu
+                </TelerikButton>
+
             </div>
             <div class="d-flex flex-column">
                 @if (GridData != null && !XSmall)
@@ -40,12 +63,12 @@
                             </GridPagerSettings>
                         </GridSettings>
                         <GridColumns>
-                            <GridColumn Field=@nameof(MenuItemModel.Text) Title="Text" />                                
-                            <GridColumn Field=@nameof(MenuItemModel.Url) Title="Url" />                                
-                            <GridColumn Field=@nameof(MenuItemModel.SortOrder) Title="Sort Order" />                                
+                            <GridColumn Field=@nameof(MenuItemModel.Text) Title="Text" />
+                            <GridColumn Field=@nameof(MenuItemModel.Url) Title="Url" />
+                            <GridColumn Field=@nameof(MenuItemModel.SortOrder) Title="Sort Order" />
                             <GridColumn Field=@nameof(MenuItemModel.Level) Title="Level" />
                             <GridColumn Field=@nameof(MenuItemModel.NavType) Title="Type" />
-                            <GridColumn Field=@nameof(MenuItemModel.ParentId) Title="Parent" />     
+                            <GridColumn Field=@nameof(MenuItemModel.ParentId) Title="Parent" />
                             <GridCommandColumn Width="260px">
                                 <GridCommandButton Icon="@SvgIcon.Pencil" OnClick="HandleEditMenuItem" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary"></GridCommandButton>
                                 <GridCommandButton Icon="@SvgIcon.Trash" OnClick="HandleDeleteMenuItem"></GridCommandButton>

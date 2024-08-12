@@ -47,6 +47,29 @@
     }
 }
 
+function b64toBlob(b64Data, contentType) {
+    contentType = contentType || '';
+    var sliceSize = 512;
+    var byteCharacters = atob(b64Data);
+    var byteArrays = [];
+
+    for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+        var slice = byteCharacters.slice(offset, offset + sliceSize);
+
+        var byteNumbers = new Array(slice.length);
+        for (var i = 0; i < slice.length; i++) {
+            byteNumbers[i] = slice.charCodeAt(i);
+        }
+
+        var byteArray = new Uint8Array(byteNumbers);
+        byteArrays.push(byteArray);
+    }
+
+    var blob = new Blob(byteArrays, { type: contentType });
+    return blob;
+}
+
+
 window.saveAsFile = (fileName, content) => {
     const blob = b64toBlob(content, 'application/octet-stream');
     const url = window.URL.createObjectURL(blob);
@@ -57,6 +80,7 @@ window.saveAsFile = (fileName, content) => {
     a.click();
     window.URL.revokeObjectURL(url);
 };
+
 
 function raiseResizeEvent() {
 
@@ -71,7 +95,7 @@ function unwrapDiv(div) {
         // Get the parent node of the element
         var parentElement = div.parentNode;
         var firstDiv = div.querySelectorAll("table");
-        var divsArray = [...firstDiv]; 
+        var divsArray = [...firstDiv];
         // Move all children of the element to its parent node
         while (div.firstChild) {
             parentElement.insertBefore(div.firstChild, div);
