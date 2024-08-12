@@ -9,6 +9,7 @@ public enum RequestedRecordStatus
 
 public enum OfficeRequestedRecordStatus
 {
+    NA,
     Submitted,
     Reviewed,
     Approved,
