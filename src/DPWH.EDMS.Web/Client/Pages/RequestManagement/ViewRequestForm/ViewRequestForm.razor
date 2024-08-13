@@ -15,15 +15,11 @@
     <p>Control Number: @SelectedRecordRequest.ControlNumber | Name: @SelectedRecordRequest.FullName</p>
 </div>
 <div class="d-flex flex-row align-items-center mb-2">
-    @{
-        var office = ClaimsPrincipalExtensions.GetOffice(ClaimsPrincipal!);
-    }
-    @if (!string.IsNullOrEmpty(office)){
-        <div class="row">
-            <p>RMD Request Status : <span class="fw-bolder">@SelectedRecordRequest.RmdRequestStatus</span></p>
-            <p>HRMD Request Status : <span class="fw-bolder">@SelectedRecordRequest.HrmdRequestStatus</span></p>
-        </div>
-    }
+    <div class="row">
+        <p>RMD Request Status : <span class="fw-bolder">@SelectedRecordRequest.RmdRequestStatus</span></p>
+        <p>HRMD Request Status : <span class="fw-bolder">@SelectedRecordRequest.HrmdRequestStatus</span></p>
+        <p>Request Status : <span class="fw-bolder">@SelectedRecordRequest.Status</span></p>
+    </div>
 </div>
 <hr />
 <TelerikTabStrip @bind-ActiveTabIndex="@ActiveTabIndex">
@@ -364,7 +360,7 @@
             </div>
         </div>
     </TabStripTab>
-    <TabStripTab Title="Approve" Disabled="@(ProgressIndex < 1)" Visible="@(User.Office != Offices.HRMD.ToString())">
+    <TabStripTab Title="Approve" Disabled="@(User.Office == Offices.RMD.ToString() && ProgressIndex < 1 )" Visible="@(User.Office != Offices.HRMD.ToString())">
         <div class="row">
             @if (!XSmall)
             {
@@ -398,7 +394,7 @@
                 <div class="row mb-2">
                     <p>Upload a signed copy of each document:</p>
                 </div>
-                @if (User.Office == Offices.RMD.ToString() && RMDRecords != null)
+                @if ((string.IsNullOrEmpty(User.Office) || User.Office == Offices.RMD.ToString()) && RMDRecords != null)
                 {
                     <div class="row">
                         <p><b>RMD</b></p>
@@ -411,42 +407,12 @@
                             </div>
                             @if (record.Uri != null)
                             {
-
                                 <div class="col text-end">
-                                    <TelerikButton OnClick="@(() => OnDocumentOpen(record.Id.ToString()))">Approve</TelerikButton>
+                                    <TelerikButton OnClick="@(() => OnDocumentOpen(record.Id.ToString()))" Enabled="@(!string.IsNullOrEmpty(User.Office))">Approve</TelerikButton>
                                 </div>
                             }
                             else
                             {
-
-                                <div class="col text-end">
-                                    <p class="fw-bolder">No Record Found</p>
-                                </div>
-                            }
-                        </div>
-                    }
-                }
-                else if (User.Office == Offices.HRMD.ToString() && HRMDRecords != null)
-                {
-                    <div class="row">
-                        <p><b>HRMD</b></p>
-                    </div>
-                    foreach (var record in HRMDRecords)
-                    {
-                        <div class="d-flex flex-row align-items-center" style="height:45px;">
-                            <div classs="col">
-                                <label for="@record.RecordType">@record.RecordType</label>
-                            </div>
-                            @if (record.Uri != null)
-                            {
-
-                                <div class="col text-end">
-                                    <TelerikButton OnClick="@(() => OnDocumentOpen(record.Id.ToString()))">Approve</TelerikButton>
-                                </div>
-                            }
-                            else
-                            {
-
                                 <div class="col text-end">
                                     <p class="fw-bolder">No Record Found</p>
                                 </div>
@@ -456,45 +422,14 @@
                 }
                 else
                 {
-                    if (GroupedRecords != null)
-                    {
-                        foreach (var office in GroupedRecords)
-                        {
-                            <div class="mb-2">
-                                <p><b>@office.Key</b></p>
-
-                                @foreach (var record in office)
-                                {
-                                    <div class="d-flex flex-row align-items-center" style="height:45px;">
-                                        <div classs="col">
-                                            <label for="@record.RecordType">@record.RecordType</label>
-                                        </div>
-                                        @if (record.Uri != null)
-                                        {
-                                            HasNoRecords = true;
-                                            <div class="col text-end">
-                                                <TelerikButton OnClick="@(() => OnDocumentOpen(record.Id.ToString()))">Approve</TelerikButton>
-                                            </div>
-                                        }
-                                        else
-                                        {
-                                            HasNoRecords = false;
-                                            <div class="col text-end">
-                                                <p class="fw-bolder">No Record Found</p>
-                                            </div>
-                                        }
-                                    </div>
-                                }
-                            </div>
-                        }
-                    }
+                    <div class="row my-2">
+                        <h5>No RMD Records to be Signed</h5>
+                    </div>
                 }
-
-
             </div>
         </div>
     </TabStripTab>
-    <TabStripTab Title="Release" Disabled="@(User.Office == Offices.RMD.ToString() ? ProgressIndex < 2 : ProgressIndex < 1)">
+    <TabStripTab Title="Release" Disabled="@(User.Office == Offices.RMD.ToString() ? ProgressIndex < 2 : User.Office == Offices.HRMD.ToString() ? ProgressIndex < 1 : false)">
         <div class="row">
             @if (!XSmall)
             {
@@ -626,7 +561,7 @@
             </div>
         </div>
     </TabStripTab>
-    <TabStripTab Title="Claim" Disabled="@(User.Office == Offices.RMD.ToString() ? ProgressIndex < 3 : ProgressIndex < 2)">
+    <TabStripTab Title="Claim" Disabled="@(User.Office == Offices.RMD.ToString() ? ProgressIndex < 3 : User.Office == Offices.HRMD.ToString() ? ProgressIndex < 2 : false)">
         <div class="row">
             @if (!XSmall)
             {
@@ -677,7 +612,7 @@
                             }
                             else
                             {
-                                <TelerikDatePicker @bind-Value="@DateReceived" Placeholder="Select Date" Max="MaxDate"></TelerikDatePicker>
+                                <TelerikDatePicker @bind-Value="@DateReceived" Placeholder="Select Date" Max="MaxDate" Enabled="!string.IsNullOrEmpty(User.Office)"></TelerikDatePicker>
                             }
                         </div>
                         <div class="col-sm-12 col-md-4 mb-3">
@@ -688,7 +623,7 @@
                             }
                             else
                             {
-                                <TelerikTimePicker @bind-Value="@TimeReceived" Placeholder="Select Time"></TelerikTimePicker>
+                                <TelerikTimePicker @bind-Value="@TimeReceived" Placeholder="Select Time" Enabled="!string.IsNullOrEmpty(User.Office)"></TelerikTimePicker>
                             }
                         </div>
                     </div>
@@ -745,17 +680,17 @@
                             </div>
                         </div>
                     }
-                    else
+                    @* else
                     {
                         <div class="row mb-3">
                             <div class="col">
                                 <p><b>TRANSMITTAL RECEIPT UNAVAILABLE :</b></p>
                             </div>
-                            <div class="d-flex col gap-4 justify-content-start">
-                                <p class="d-flex fw-normal text-danger">No assigned office.</p>
+                            <div class="d-flex col gap-4 justify-content-end">
+                                <p class="d-flex fw-normal text-danger">No assigned office</p>
                             </div>
                         </div>
-                    }
+                    } *@
                     <div class="row mb-2">
                         <div class="col align-content-center">
                             <p><b>@(string.IsNullOrEmpty(GetTransmittalReceipt.Data?.Uri) ? "UPLOAD RECEIVED TRANSMITTAL RECEIPT" : "RECEIVED TRANSMITTAL RECEIPT")</b></p>
@@ -774,7 +709,8 @@
                                                    OnRemove="OnRemoveTransmittalReceipt"
                                                    MaxFileSize="@MaxFileSize"
                                                    MinFileSize="@MinFileSize"
-                                                   Multiple="false">
+                                                   Multiple="false"
+                                                   Enabled="@(!string.IsNullOrEmpty(User.Office))">
                                     <SelectFilesButtonTemplate>
                                         <TelerikSvgIcon Icon="@SvgIcon.Upload" />
                                         Click to Upload
@@ -905,7 +841,7 @@
         </div>
         <TelerikStepper Value="@ProgressIndex" ValueChanged="@ValueChangeHandler" Linear="true" Orientation="@(!XSmall ? StepperOrientation.Vertical: StepperOrientation.Horizontal)">
             <StepperSteps>
-            @if (User.Office == Offices.RMD.ToString())
+                @if (string.IsNullOrEmpty(User.Office) || User.Office == Offices.RMD.ToString())
             {
                 <StepperStep Label="Submit"></StepperStep>
                 <StepperStep Label="Review & Evaluate"></StepperStep>

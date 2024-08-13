@@ -556,7 +556,7 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
                     break;
                 case var status when status == OfficeRequestedRecordStatus.Claimed.ToString():
                     ProgressIndex = 4;
-                    ActiveTabIndex = 0;
+                    ActiveTabIndex = 4;
                     break;
                 default:
                     break;
@@ -582,7 +582,7 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
                     break;
                 case var status when status == OfficeRequestedRecordStatus.Claimed.ToString():
                     ProgressIndex = 3;
-                    ActiveTabIndex = 0;
+                    ActiveTabIndex = 3;
                     break;
                 default:
                     break;
