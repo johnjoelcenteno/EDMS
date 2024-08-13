@@ -1,6 +1,5 @@
 ﻿using DPWH.EDMS.Api.Contracts;
 using DPWH.EDMS.Client.Shared.Configurations;
-using System.Collections.Generic;
 
 namespace DPWH.EDMS.Client.Shared.APIClient.Services.RequestManagement;
 
@@ -42,6 +41,11 @@ public class RequestManagementService : IRequestManagementService
     public async Task<UpdateResponseBaseApiResponse> UpdateStatus(UpdateRecordRequestStatus req)
     {
         return await _client.UpdateRecordRequestStatusAsync(req);
+    }
+
+    public async Task<UpdateResponse> UpdateOfficeStatus(UpdateOfficeStatus req)
+    {
+        return await _client.UpdateOfficeStatusAsync(req);
     }
 
     public async Task<DeleteResponse> Delete(Guid id)
