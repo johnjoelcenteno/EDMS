@@ -155,6 +155,7 @@ public static class ApiEndpoints
         public const string Get = $"{Base}/{{id:guid}}";
         public const string GetByEmployeeId = $"{Base}/{{employeeId}}";
         public const string Query = $"{Base}/query";
+        public const string UploadSignature = $"{Base}/Profile/UploadSignature";
     }
 
     public static class Roles

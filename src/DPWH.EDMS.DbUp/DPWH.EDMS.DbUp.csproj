@@ -22,6 +22,7 @@
     <None Remove="Scripts\01\10-Schema-AddMenuItems.sql" />
     <None Remove="Scripts\01\11-Schema-AddDocumentTypeRequestRecord.sql" />
     <None Remove="Scripts\01\12-Schema-UpdateRecordRequest.sql" />
+    <None Remove="Scripts\01\13-AddSignaturesUriSignature.sql" />
   </ItemGroup>
 
   <ItemGroup>
@@ -45,6 +46,7 @@
     <EmbeddedResource Include="Scripts\01\12-Schema-UpdateRecordRequest.sql" />
     <EmbeddedResource Include="Scripts\01\10-Schema-AddMenuItems.sql" />
     <EmbeddedResource Include="Scripts\01\09-Schema-AddRequestedRecordReceipt.sql" />
+    <EmbeddedResource Include="Scripts\01\13-AddSignaturesUriSignature.sql" />
   </ItemGroup>
   
 	<ItemGroup>

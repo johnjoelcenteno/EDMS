@@ -14,6 +14,7 @@ public static class WellKnownContainers
     public static readonly string MaintenanceRequestDocuments = "maintenancerequestdocuments";
     public static readonly string ProjectMonitoringDocuments = "projectmonitoringdocuments";
     public static readonly string ProjectMonitoringBuildingComponentImages = "projectmonitoringbuildingcomponentimages";
+    public static readonly string UserDocuments = "userdocuments";
 
 }
 
