@@ -15,28 +15,25 @@
 <div class="d-flex flex-row mt-3">
     <TelerikCard Width="100%">
         <CardBody>
-            @* <div class="d-flex flex-row justify-content-between gap-3">
-                <div class="d-flex gap-3">
-                    <TelerikButton Size="@ThemeConstants.Button.Size.Small" OnClick="ExportMenuJson">Export Menu as JSON</TelerikButton>
-                    <TelerikFileSelect AllowedExtensions="@AllowedExtensions"
-                                       OnSelect="@OnUpload"
-                                       Multiple="false"
-                                       Class="mt-2"
-                    Si>
-                        <SelectFilesButtonTemplate>
-                            <TelerikSvgIcon Icon="@SvgIcon.Upload" />
-                            Import Menu Items
-                        </SelectFilesButtonTemplate>
-                    </TelerikFileSelect>
-                </div>
-                <TelerikButton Class="mb-2"
-                               Icon="@FontIcon.Plus"
-                               ThemeColor="@ThemeConstants.Button.ThemeColor.Primary"
-                               OnClick="GoToCreateMenuItem">
-                    Create Menu
-                </TelerikButton>
-               
-            </div> *@
+            <div class="d-flex flex-row justify-content-between gap-3 align-items-center">
+                <TelerikFileSelect AllowedExtensions="@AllowedExtensions"
+                                   OnSelect="@OnUpload"
+                                   Multiple="false"
+                                   Class="mt-2">
+                    <SelectFilesButtonTemplate>
+                        <TelerikSvgIcon Icon="@SvgIcon.Upload" />
+                        Import Menu Items (JSON)
+                    </SelectFilesButtonTemplate>
+                </TelerikFileSelect>
+
+                <button
+                    style="height: 40px;"
+                    class="btn btn-outline-success"
+                    @onclick="ExportMenuJson">
+                    <p class="d-flex mb-0 align-items-center"><span class="bi me-2 material-symbols-outlined">download</span> Export Menus (JSON)</p>
+                </button>                
+            </div>
+            <hr />
             <div class="d-flex flex-row justify-content-end gap-3">
                 <TelerikButton Class="mb-2"
                                Icon="@FontIcon.Plus"
