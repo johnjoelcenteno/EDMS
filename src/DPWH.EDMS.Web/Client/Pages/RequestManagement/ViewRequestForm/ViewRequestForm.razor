@@ -196,7 +196,7 @@
                                                        MaxFileSize="@MaxFileSize"
                                                        MinFileSize="@MinFileSize"
                                                        Multiple="false"
-                                                       Enabled="@IsRecordUploadEnabled">
+                                                       Enabled="@(IsRecordUploadEnabled || !string.IsNullOrEmpty(User.Office))">
                                         <SelectFilesButtonTemplate>
                                             <TelerikSvgIcon Icon="@SvgIcon.Upload" />
                                             Select Record
@@ -206,17 +206,19 @@
                             }
                             else if (record.Uri != null && record.DocumentType != null)
                             {
-                                <div class="col-2 text-center">
+                                <div class="col-3">
                                     <p><b>@(record.DocumentType == "TC" ? "True Copy" : "Machine Copy")</b></p>
                                 </div>
-                                <div class="col-3 text-center">
+                                <div class="col-1">
                                     <NavLink class="fw-bolder" href="@record.Uri" target="_blank">View</NavLink>
                                 </div>
                             }
                             else
                             {
-                                <div class="col-3 text-center">
+                                <div class="col-3">
                                     <p><b>No Record</b></p>
+                                </div>
+                                <div class="col-1">
                                 </div>
                             }
                         </div>
@@ -258,7 +260,7 @@
                                                        MaxFileSize="@MaxFileSize"
                                                        MinFileSize="@MinFileSize"
                                                        Multiple="false"
-                                                       Enabled="@IsRecordUploadEnabled">
+                                                       Enabled="@(IsRecordUploadEnabled || !string.IsNullOrEmpty(User.Office))">
                                         <SelectFilesButtonTemplate>
                                             <TelerikSvgIcon Icon="@SvgIcon.Upload" />
                                             Select Record
@@ -268,17 +270,19 @@
                             }
                             else if (record.Uri != null && record.DocumentType != null)
                             {
-                                <div class="col-2 text-center">
+                                <div class="col-3">
                                     <p><b>@(record.DocumentType == "TC" ? "True Copy" : "Machine Copy")</b></p>
                                 </div>
-                                <div class="col-3 text-center">
+                                <div class="col-1">
                                     <NavLink class="fw-bolder" href="@record.Uri" target="_blank">View</NavLink>
                                 </div>
                             }
                             else
                             {
-                                <div class="col-3 text-center">
+                                <div class="col-3">
                                     <p><b>No Record</b></p>
+                                </div>
+                                <div class="col-1">
                                 </div>
                             }
                         </div>
@@ -320,7 +324,7 @@
                                                                MaxFileSize="@MaxFileSize"
                                                                MinFileSize="@MinFileSize"
                                                                Multiple="false"
-                                                               Enabled="@IsRecordUploadEnabled">
+                                                               Enabled="@(IsRecordUploadEnabled || !string.IsNullOrEmpty(User.Office))">
                                                 <SelectFilesButtonTemplate>
                                                     <TelerikSvgIcon Icon="@SvgIcon.Upload" />
                                                     Select Record
@@ -330,17 +334,19 @@
                                     }
                                     else if (record.Uri != null && record.DocumentType != null)
                                     {
-                                        <div class="col-2 text-center">
+                                        <div class="col-3">
                                             <p><b>@(record.DocumentType == "TC" ? "True Copy" : "Machine Copy")</b></p>
                                         </div>
-                                        <div class="col-3 text-center">
+                                        <div class="col-1">
                                             <NavLink class="fw-bolder" href="@record.Uri" target="_blank">View</NavLink>
                                         </div>
                                     }
                                     else
                                     {
-                                        <div class="col-3 text-center">
+                                        <div class="col-3">
                                             <p><b>No Record</b></p>
+                                        </div>
+                                        <div class="col-1">
                                         </div>
                                     }
                                 </div>
@@ -359,7 +365,7 @@
             </div>
         </div>
     </TabStripTab>
-    <TabStripTab Title="Approve" Disabled="@(User.Office == Offices.RMD.ToString() && ProgressIndex < 1 )" Visible="@(User.Office != Offices.HRMD.ToString())">
+    <TabStripTab Title="Approve" Disabled="@(User.Office == Offices.RMD.ToString() && ProgressIndex < 2 )" Visible="@(User.Office != Offices.HRMD.ToString())">
         <div class="row">
             @if (!XSmall)
             {
@@ -413,7 +419,7 @@
                             else
                             {
                                 <div class="col text-end">
-                                    <p class="fw-bolder">No Record Found</p>
+                                    <p class="fw-bolder">No Record</p>
                                 </div>
                             }
                         </div>
@@ -428,7 +434,7 @@
             </div>
         </div>
     </TabStripTab>
-    <TabStripTab Title="Release" Disabled="@(User.Office == Offices.RMD.ToString() ? ProgressIndex < 2 : User.Office == Offices.HRMD.ToString() ? ProgressIndex < 1 : false)">
+    <TabStripTab Title="Release" Disabled="@(User.Office == Offices.RMD.ToString() ? ProgressIndex < 3 : User.Office == Offices.HRMD.ToString() ? ProgressIndex < 2 : false)">
         <div class="row">
             @if (!XSmall)
             {
@@ -460,27 +466,29 @@
                 </div>
                 @if (User.Office == Offices.RMD.ToString() && RMDRecords != null)
                 {
-                    <div class="row">
+                    <div class="row mb-1">
                         <p><b>RMD</b></p>
                     </div>
                     foreach (var record in RMDRecords)
                     {
-                        <div class="d-flex flex-row align-items-center" style="height:45px;">
-                            <div classs="col">
+                        <div class="row">
+                            <div class="col mb-1">
                                 <label for="@record.RecordType">@record.RecordType</label>
                             </div>
                             @if (record.Uri != null)
                             {
                                 HasNoRecords = false;
-                                <div class="col text-end">
+                                
+                                <div class="d-flex col-2 gap-4 justify-content-center">
                                     <NavLink class="fw-bolder" href="@record.Uri" target="_blank">View</NavLink>
+                                    <NavLink class="fw-bolder" style="cursor: pointer;" @onclick="@(() => DownloadFromStream(record.Uri, $"{record.RecordType}.pdf"))">Export</NavLink>
                                 </div>
                             }
                             else
                             {
                                 HasNoRecords = true;
-                                <div class="col text-end">
-                                    <p class="fw-bolder">No Record Found</p>
+                                <div class="col-2 text-center">
+                                    <p class="fw-bolder">No Record</p>
                                 </div>
                             }
                         </div>
@@ -488,25 +496,26 @@
                 }
                 else if (User.Office == Offices.HRMD.ToString() && HRMDRecords != null)
                 {
-                    <div class="row">
+                    <div class="row mb-1">
                         <p><b>HRMD</b></p>
                     </div>
                     foreach (var record in HRMDRecords)
                     {
-                        <div class="d-flex flex-row align-items-center" style="height:45px;">
-                            <div classs="col">
+                        <div class="row">
+                            <div class="col mb-1">
                                 <label for="@record.RecordType">@record.RecordType</label>
                             </div>
                             @if (record.Uri != null)
                             {
-                                <div class="col text-end">
+                                <div class="d-flex col-2 gap-4 justify-content-center">
                                     <NavLink class="fw-bolder" href="@record.Uri" target="_blank">View</NavLink>
+                                    <NavLink class="fw-bolder" style="cursor: pointer;" @onclick="@(() => DownloadFromStream(record.Uri, $"{record.RecordType}.pdf"))">Export</NavLink>
                                 </div>
                             }
                             else
                             {
-                                <div class="col text-end">
-                                    <p class="fw-bolder">No Record Found</p>
+                                <div class="col-2 text-center">
+                                    <p class="fw-bolder">No Record</p>
                                 </div>
                             }
                         </div>
@@ -515,34 +524,61 @@
                 else
                 {
                     if (GroupedRecords != null)
-                    {
-                        foreach (var office in GroupedRecords)
+                    {   
+                        @foreach (var office in GroupedRecords)
                         {
-                            <div class="mb-2">
+                            <div class="row mb-3">
                                 <p><b>@office.Key</b></p>
-
                                 @foreach (var record in office)
                                 {
-                                    <div class="d-flex flex-row align-items-center">
-                                        <div classs="col">
+                                    <div class="row">
+                                        <div class="col mb-1">
                                             <label for="@record.RecordType">@record.RecordType</label>
                                         </div>
                                         @if (record.Uri != null)
                                         {
-                                            <div class="col text-end">
+                                            <div class="d-flex col-2 gap-4 justify-content-center">
                                                 <NavLink class="fw-bolder" href="@record.Uri" target="_blank">View</NavLink>
+                                                <NavLink class="fw-bolder" style="cursor: pointer;" @onclick="@(() => DownloadFromStream(record.Uri, $"{record.RecordType}.pdf"))">Export</NavLink>
                                             </div>
                                         }
                                         else
                                         {
-                                            <div class="col text-end">
-                                                <p class="fw-bolder">No Record Found</p>
+                                            <div class="col-2 text-center">
+                                                <p class="fw-bolder">No Record</p>
                                             </div>
                                         }
                                     </div>
                                 }
                             </div>
                         }
+                        @* foreach (var office in GroupedRecords)
+                        {
+                            <div class="row mb-1">
+                                <p><b>@office.Key</b></p>
+                            </div>
+                            foreach (var record in office)
+                            {
+                                <div class="row">
+                                    <div class="col mb-1">
+                                        <label for="@record.RecordType">@record.RecordType</label>
+                                    </div>
+                                    @if (record.Uri != null)
+                                    {
+                                        <div class="d-flex col-2 gap-4 justify-content-center">
+                                            <NavLink class="fw-bolder" href="@record.Uri" target="_blank">View</NavLink>
+                                            <NavLink class="fw-bolder" style="cursor: pointer;" @onclick="@(() => DownloadRecordFromStream(record.Uri, record.RecordType))">Export</NavLink>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="col-2 text-center">
+                                            <p class="fw-bolder">No Record</p>
+                                        </div>
+                                    }
+                                </div>
+                            }
+                        } *@
                     }
                 }
                 @if (HasNoRecords && User.Office == Offices.RMD.ToString())
@@ -551,7 +587,7 @@
                         <div class="col">
                             <p><b>CERTIFICATE OF NO RECORDS</b></p>
                         </div>
-                        <div class="d-flex col gap-4 justify-content-end">
+                        <div class="d-flex col-2 gap-4 justify-content-center">
                             <NavLink class="fw-bolder" target="_blank" href="@($"certificate-of-no-records/{RequestId}")">View</NavLink>
                             <NavLink class="fw-bolder" target="_blank" href="@($"certificate-of-no-records/{RequestId}/exporting")">Export</NavLink>
                         </div>
@@ -560,7 +596,7 @@
             </div>
         </div>
     </TabStripTab>
-    <TabStripTab Title="Claim" Disabled="@(User.Office == Offices.RMD.ToString() ? ProgressIndex < 3 : User.Office == Offices.HRMD.ToString() ? ProgressIndex < 2 : false)">
+    <TabStripTab Title="Claim" Disabled="@(User.Office == Offices.RMD.ToString() ? ProgressIndex < 4 : User.Office == Offices.HRMD.ToString() ? ProgressIndex < 3 : false)">
         <div class="row">
             @if (!XSmall)
             {
@@ -626,54 +662,103 @@
                             }
                         </div>
                     </div>
-                    <div class="row mb-1">
-                        <div>
-                            <p class="mb-1"><b>Documents Received</b></p>
-                            @if (User.Office == Offices.RMD.ToString() && RMDRecords != null)
-                            {
-                                <p>For pickup at RMD</p>
-                                <ul>
-                                    @foreach (var record in RMDRecords)
-                                    {
-                                        <li>@record.RecordType</li>
-                                    }
-                                </ul>
-                            }
-                            else if (User.Office == Offices.HRMD.ToString() && HRMDRecords != null)
-                            {
-                                <p>For pickup at HRMD</p>
-                                <ul>
-                                    @foreach (var record in HRMDRecords)
-                                    {
-                                        <li>@record.RecordType</li>
-                                    }
-                                </ul>
-                            }
-                            else
-                            {
-                                if (SelectedRecordRequest.RequestedRecords != null && SelectedRecordRequest.RequestedRecords.Count > 0 && GroupedRecords != null)
+                    <div>
+                        <p><b>Documents Received</b></p>
+                    </div>
+                    @if (User.Office == Offices.RMD.ToString() && RMDRecords != null)
+                    {
+                        <div class="row mt-3 mb-1">
+                            <p><b>For pickup at RMD</b></p>
+                        </div>
+                        foreach (var record in RMDRecords)
+                        {
+                            <div class="row mb-1">
+                                <div class="col">
+                                    <p>@record.RecordType</p>
+                                </div>
+                                @if (record.Uri != null)
                                 {
-                                    @foreach (var office in GroupedRecords)
-                                    {
-                                        <p><b>For pickup at @office.Key</b></p>
-                                        <ul>
-                                            @foreach (var record in office)
-                                            {
-                                                <li>@record.RecordType</li>
-                                            }
-                                        </ul>
-                                    }
+                                    <div class="d-flex col-2 gap-4 justify-content-center">
+                                        <NavLink class="fw-bolder" href="@record.Uri" target="_blank">View</NavLink>
+                                        <NavLink class="fw-bolder" style="cursor: pointer;" @onclick="@(() => DownloadFromStream(record.Uri, $"{record.RecordType}.pdf"))">Export</NavLink>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="col-2 text-center">
+                                        <p class="fw-bolder">No Record</p>
+                                    </div>
+                                }
+                            </div>
+                        }
+                    }
+                    else if (User.Office == Offices.HRMD.ToString() && HRMDRecords != null)
+                    {
+                        <div class="row mt-3 mb-1">
+                            <p><b>For pickup at HRMD</b></p>
+                        </div>
+                        foreach (var record in HRMDRecords)
+                        {
+                            <div class="row mb-1">
+                                <div class="col">
+                                    <p>@record.RecordType</p>
+                                </div>
+                                @if (record.Uri != null)
+                                {
+                                    <div class="d-flex col-2 gap-4 justify-content-center">
+                                        <NavLink class="fw-bolder" href="@record.Uri" target="_blank">View</NavLink>
+                                        <NavLink class="fw-bolder" style="cursor: pointer;" @onclick="@(() => DownloadFromStream(record.Uri, $"{record.RecordType}.pdf"))">Export</NavLink>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="col-2 text-center">
+                                        <p class="fw-bolder">No Record</p>
+                                    </div>
+                                }
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        if (SelectedRecordRequest.RequestedRecords != null && SelectedRecordRequest.RequestedRecords.Count > 0 && GroupedRecords != null)
+                        {
+                            @foreach (var office in GroupedRecords)
+                            {
+                                <div class="row mt-3 mb-1">
+                                    <p><b>For pickup at @office.Key</b></p>
+                                </div>
+                                foreach (var record in office)
+                                {
+                                    <div class="row mb-1">
+                                        <div class="col">
+                                            <p>@record.RecordType</p>
+                                        </div>
+                                        @if (record.Uri != null)
+                                        {
+                                            <div class="d-flex col-2 gap-4 justify-content-center">
+                                                <NavLink class="fw-bolder" href="@record.Uri" target="_blank">View</NavLink>
+                                                <NavLink class="fw-bolder" style="cursor: pointer;" @onclick="@(() => DownloadFromStream(record.Uri, $"{record.RecordType}.pdf"))">Export</NavLink>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="col-2 text-center">
+                                                <p class="fw-bolder">No Record</p>
+                                            </div>
+                                        }
+                                    </div>
                                 }
                             }
-                        </div>
-                    </div>
-                    @if (!string.IsNullOrEmpty(User.Office))
+                        }
+                    }
+                    @if (!string.IsNullOrEmpty(User.Office) && string.IsNullOrEmpty(GetTransmittalReceipt.Data?.Uri))
                     {
-                        <div class="row mb-3">
+                        <div class="row my-3">
                             <div class="col">
                                 <p><b>TRANSMITTAL RECEIPT</b></p>
                             </div>
-                            <div class="d-flex col gap-4 justify-content-end">
+                            <div class="d-flex col-2 gap-4 justify-content-center">
                                 <NavLink class="fw-bolder" href="@($"transmittal-receipt/{RequestId}")" target="_blank">View</NavLink>
                                 <NavLink class="fw-bolder" href="@($"transmittal-receipt/{RequestId}/exporting")" target="_blank">Export</NavLink>
                             </div>
@@ -681,23 +766,24 @@
                     }
                     @* else
                     {
-                        <div class="row mb-3">
-                            <div class="col">
-                                <p><b>TRANSMITTAL RECEIPT UNAVAILABLE :</b></p>
-                            </div>
-                            <div class="d-flex col gap-4 justify-content-end">
-                                <p class="d-flex fw-normal text-danger">No assigned office</p>
-                            </div>
-                        </div>
+                    <div class="row mb-3">
+                    <div class="col">
+                    <p><b>TRANSMITTAL RECEIPT UNAVAILABLE :</b></p>
+                    </div>
+                    <div class="d-flex col gap-4 justify-content-end">
+                    <p class="d-flex fw-normal text-danger">No assigned office</p>
+                    </div>
+                    </div>
                     } *@
-                    <div class="row mb-2">
+                    <div class="row my-3">
                         <div class="col align-content-center">
                             <p><b>@(string.IsNullOrEmpty(GetTransmittalReceipt.Data?.Uri) ? "UPLOAD RECEIVED TRANSMITTAL RECEIPT" : "RECEIVED TRANSMITTAL RECEIPT")</b></p>
                         </div>
                         @if (GetTransmittalReceipt.Data != null && !string.IsNullOrEmpty(GetTransmittalReceipt.Data?.Uri))
                         {
-                            <div class="col text-end">
+                            <div class="d-flex col-2 gap-4 justify-content-center">
                                 <NavLink class="fw-bolder text-end" href="@GetTransmittalReceipt.Data.Uri" target="_blank">View</NavLink>
+                                <NavLink class="fw-bolder" style="cursor: pointer;" @onclick="@(() => DownloadFromStream(GetTransmittalReceipt.Data.Uri, "Transmittal Receipt.pdf"))">Export</NavLink>
                             </div>
                         }
                         else
@@ -838,26 +924,29 @@
         <div class="row my-2">
             <h5>Processing Status</h5>
         </div>
-        <TelerikStepper Value="@ProgressIndex" ValueChanged="@ValueChangeHandler" Linear="true" Orientation="@(!XSmall ? StepperOrientation.Vertical: StepperOrientation.Horizontal)">
-            <StepperSteps>
-                @if (string.IsNullOrEmpty(User.Office) || User.Office == Offices.RMD.ToString())
-            {
-                <StepperStep Label="Submit"></StepperStep>
-                <StepperStep Label="Review & Evaluate"></StepperStep>
-                <StepperStep Label="Approve"></StepperStep>
-                <StepperStep Label="Release"></StepperStep>
-                <StepperStep Label="Claim"></StepperStep>
-            }
-            else if (User.Office == Offices.HRMD.ToString())
-            {
-                <StepperStep Label="Submit"></StepperStep>
-                <StepperStep Label="Review & Evaluate"></StepperStep>
-                <StepperStep Label="Release"></StepperStep>
-                <StepperStep Label="Claim"></StepperStep>
-            }
-            </StepperSteps>
-        </TelerikStepper>
-    </div>;
+        <div class="no-focus">
+            <TelerikStepper Value="@ProgressIndex" ValueChanged="@ValueChangeHandler" Linear="true" Orientation="@(!XSmall ? StepperOrientation.Vertical: StepperOrientation.Horizontal)">
+                <StepperSteps>
+                    @if (string.IsNullOrEmpty(User.Office) || User.Office == Offices.RMD.ToString())
+                {
+                    <StepperStep Label="Submit"></StepperStep>
+                    <StepperStep Label="Review & Evaluate"></StepperStep>
+                    <StepperStep Label="Approve"></StepperStep>
+                    <StepperStep Label="Release"></StepperStep>
+                    <StepperStep Label="Claim"></StepperStep>
+                }
+                else if (User.Office == Offices.HRMD.ToString())
+                {
+                    <StepperStep Label="Submit"></StepperStep>
+                    <StepperStep Label="Review & Evaluate"></StepperStep>
+                    <StepperStep Label="Release"></StepperStep>
+                    <StepperStep Label="Claim"></StepperStep>
+                }
+                </StepperSteps>
+            </TelerikStepper>
+        </div>
+    </div>
+    ;
 }
 
 <style>
@@ -903,7 +992,50 @@
         text-decoration: none;
     }
 
-    .record-upload-btn {
-        width: 336px;
+    .k-stepper .k-step-current .k-step-indicator {
+        border-color: #eb4a1f;
+        color: #fff;
+        background-color: #eb4a1f;
+    }
+
+    .k-stepper .k-step:hover .k-step-indicator {
+        background-color: #fff;
+    }
+
+    .k-stepper .k-step-done:hover .k-step-indicator {
+        background-color: #4641ad;
+    }
+    
+    .k-stepper .k-step-current:hover .k-step-indicator {
+        background-color: #eb4a1f;
+    }
+
+    .k-stepper .k-step-link:focus .k-step-indicator::after {
+        display: none;
+    }
+
+    .k-stepper .k-step-done .k-step-link .k-step-indicator::after {
+        display: block;
+    }
+
+    .k-stepper .k-step-done .k-step-indicator::after {
+        box-shadow: inset 0 0 0 2px #fff;
+        border-radius: 100%;
+        content: "";
+        border-width: 1px;
+        border-style: solid;
+        border-color: inherit;
+        pointer-events: none;
+        display: none;
+        position: absolute;
+        top: -4px;
+        right: -4px;
+        bottom: -4px;
+        left: -4px;
+        z-index: 2;
+    }
+
+    .no-focus {
+        pointer-events: none;
     }
 </style>

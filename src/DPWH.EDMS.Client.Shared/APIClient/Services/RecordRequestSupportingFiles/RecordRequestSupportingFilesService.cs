@@ -28,6 +28,11 @@ public class RecordRequestSupportingFilesService : IRecordRequestSupportingFiles
         return _client.UploadTransmittalReceiptFileAsync(dateReceived, timeReceived, document, id);
     }
 
+    public async Task<UpdateResponseBaseApiResponse> UpdateRecordStatus(UpdateRecordsRequestDocumentStatus req)
+    {
+        return await _client.UpdateDocumentStatusAsync(req);
+    }
+
     public Task<GetTransmittalReceiptModelBaseApiResponse> GetTransmittalReceipt(Guid id)
     {
         return _client.GetTransmittalReceiptAsync(id);

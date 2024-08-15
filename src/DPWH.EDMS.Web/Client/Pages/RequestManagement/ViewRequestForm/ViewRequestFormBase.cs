@@ -8,22 +8,25 @@ using DPWH.EDMS.Web.Client.Shared.Services.Document;
 using DPWH.NGOBIA.Client.Shared.APIClient.Services.Users;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.JSInterop;
 using System.Security.Claims;
 using Telerik.Blazor.Components;
+
 
 namespace DPWH.EDMS.Web.Client.Pages.RequestManagement.ViewRequestForm;
 
 public class ViewRequestFormBase : RequestDetailsOverviewBase
 {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateAsync { get; set; }
+    [Inject] protected IJSRuntime? JS { get; set; }
     [Inject] public required IDocumentService DocumentService { get; set; }
     [Inject] public required IUsersService UsersService { get; set; }
     [Inject] public required IRecordRequestSupportingFilesService RecordRequestSupportingFilesService { get; set; }
     [Inject] public required NavigationManager NavigationManager { get; set; }
+    protected RequestedRecordModel RequestedRecordModel { get; set; } = new();
     protected GetTransmittalReceiptModelBaseApiResponse GetTransmittalReceipt { get; set; } = new();
-    protected UpdateResponseBaseApiResponse? UpdateResponse;
-    protected UpdateResponse? UpdateOfficeStatus;
-
+    protected UpdateResponseBaseApiResponse? UpdateResponseBaseApiResponse;
+    protected UpdateResponse? UpdateResponse;
     protected GetUserByIdResult User = new GetUserByIdResult();
     protected int ActiveTabIndex { get; set; } = 0;
     protected int ProgressIndex { get; set; }
@@ -39,7 +42,7 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
     protected DateTime MaxDate = DateTime.Now;
 
     // Uploads
-    protected Dictionary<Guid, UploadRequestedRecordDocumentModel> UploadRequestedRecords { get; set; } = new();
+    protected Dictionary<Guid, UploadRequestedRecordDocumentModel> SelectedRecord { get; set; } = new();
     protected UploadTransmittalReceiptDocumentModel? SelectedTransmittalReceipt { get; set; }
 
     // Validation
@@ -122,7 +125,7 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
 
     protected async Task GetTransmittalData()
     {
-        if ((User.Office == Offices.RMD.ToString() && SelectedRecordRequest.RmdRequestStatus == OfficeRequestedRecordStatus.Claimed.ToString()) || (User.Office == Offices.HRMD.ToString() && SelectedRecordRequest.HrmdRequestStatus == OfficeRequestedRecordStatus.Claimed.ToString()))
+        if (SelectedRecordRequest.RmdRequestStatus == OfficeRequestedRecordStatus.Claimed.ToString() || SelectedRecordRequest.HrmdRequestStatus == OfficeRequestedRecordStatus.Claimed.ToString())
         {
             try
             {
@@ -170,9 +173,9 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
             Status = newOfficeStatus
         };
 
-        UpdateOfficeStatus = await RequestManagementService.UpdateOfficeStatus(request);
+        UpdateResponse = await RequestManagementService.UpdateOfficeStatus(request);
 
-        if (UpdateOfficeStatus.Success)
+        if (UpdateResponse.Success)
         {
             if (User.Office == Offices.RMD.ToString())
             {
@@ -187,6 +190,17 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
         }
     }
 
+    protected async Task OnDocumentStatusChange(Guid recordId, string newDocumentStatus)
+    {
+        var request = new UpdateRecordsRequestDocumentStatus
+        {
+            Id = recordId,
+            Status = newDocumentStatus
+        };
+
+        UpdateResponseBaseApiResponse = await RecordRequestSupportingFilesService.UpdateRecordStatus(request);
+    }
+
     protected async Task OnStatusChange(string newStatus)
     {
         var request = new UpdateRecordRequestStatus
@@ -195,7 +209,7 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
             Status = newStatus
         };
 
-        UpdateResponse = await RequestManagementService.UpdateStatus(request);
+        UpdateResponseBaseApiResponse = await RequestManagementService.UpdateStatus(request);
     }
 
     protected string GetOfficeName(string officeCode)
@@ -211,7 +225,7 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
     {
         try
         {
-            var response = await RequestManagementService.UpdateIsAvailable(record.IsAvailable, new List<Guid> { record.Id });
+            var response = await RequestManagementService.UpdateIsAvailable(record.IsAvailable = true, new List<Guid> { record.Id });
 
             if (!response.Success)
             {
@@ -321,9 +335,9 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
 
         foreach (var record in recordsToCheck)
         {
-            if (UploadRequestedRecords.ContainsKey(record.Id) && UploadRequestedRecords[record.Id].Document != null)
+            if (SelectedRecord.ContainsKey(record.Id) && SelectedRecord[record.Id].Document != null)
             {
-                if (string.IsNullOrEmpty(UploadRequestedRecords[record.Id].DocumentType))
+                if (string.IsNullOrEmpty(SelectedRecord[record.Id].DocumentType))
                 {
                     allHasCopyType = false;
                     break;
@@ -345,12 +359,12 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
 
     protected void OnCopyTypeChanged(Guid recordId)
     {
-        if (UploadRequestedRecords.ContainsKey(recordId))
+        if (SelectedRecord.ContainsKey(recordId))
         {
             var record = SelectedRecordRequest.RequestedRecords.FirstOrDefault(r => r.Id == recordId);
             if (record != null)
             {
-                UploadRequestedRecords[recordId].DocumentType = record.DocumentType;
+                SelectedRecord[recordId].DocumentType = record.DocumentType;
             }
         }
 
@@ -393,13 +407,19 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
         IsLoading = true;
         IsModalVisible = false;
 
-        if (UploadRequestedRecords != null && UploadRequestedRecords.Count > 0)
+        foreach (var uploadRecord in SelectedRecord.Values)
         {
-            foreach (var uploadRecord in UploadRequestedRecords.Values)
+            if (uploadRecord.Document != null && uploadRecord.DocumentType != null)
             {
-                if (uploadRecord.Document != null && uploadRecord.DocumentType != null)
+                var req = await RecordRequestSupportingFilesService.UploadRequestedRecord(uploadRecord.Document, uploadRecord.Id, uploadRecord.DocumentType);
+
+                if (User.Office == Offices.RMD.ToString())
                 {
-                    await RecordRequestSupportingFilesService.UploadRequestedRecord(uploadRecord.Document, uploadRecord.Id, uploadRecord.DocumentType);
+                    await OnDocumentStatusChange(uploadRecord.Id!.Value, RequestedRecordStatus.Evaluated.ToString());
+                }
+                else
+                {
+                    await OnDocumentStatusChange(uploadRecord.Id!.Value, RequestedRecordStatus.Completed.ToString());
                 }
             }
         }
@@ -412,6 +432,18 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
             SelectedRecordRequest = res;
         });
 
+        foreach (var record in SelectedRecordRequest.RequestedRecords)
+        {
+            if (string.IsNullOrEmpty(record.Uri))
+            {
+                await OnDocumentStatusChange(record.Id, RequestedRecordStatus.NoRecord.ToString());
+            }
+            else
+            {
+                await UpdateIsAvailable(record);
+            }
+        }
+
         StateHasChanged();
         IsLoading = false;
     }
@@ -420,6 +452,15 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
     {
         IsLoading = true;
         IsModalVisible = false;
+
+        foreach (var record in SelectedRecordRequest.RequestedRecords)
+        {
+            if (!string.IsNullOrEmpty(record.Uri))
+            {
+                await OnDocumentStatusChange(record.Id, RequestedRecordStatus.Completed.ToString());
+            }
+        }
+
         await OnOfficeStatusChange(OfficeRequestedRecordStatus.Approved.ToString());
         StateHasChanged();
         IsLoading = false;
@@ -465,14 +506,14 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
         {
             var document = await DocumentService.GetFileToUpload(args);
 
-            if (UploadRequestedRecords.ContainsKey(recordId))
+            if (SelectedRecord.ContainsKey(recordId))
             {
-                UploadRequestedRecords[recordId].Document = document;
-                UploadRequestedRecords[recordId].DocumentType = requestedRecord.DocumentType;
+                SelectedRecord[recordId].Document = document;
+                SelectedRecord[recordId].DocumentType = requestedRecord.DocumentType;
             }
             else
             {
-                UploadRequestedRecords[recordId] = new UploadRequestedRecordDocumentModel()
+                SelectedRecord[recordId] = new UploadRequestedRecordDocumentModel()
                 {
                     Document = document,
                     Id = recordId,
@@ -499,15 +540,15 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
 
     protected bool IsFileSelected(Guid recordId)
     {
-        return UploadRequestedRecords.ContainsKey(recordId) && UploadRequestedRecords[recordId].Document != null;
+        return SelectedRecord.ContainsKey(recordId) && SelectedRecord[recordId].Document != null;
     }
 
     protected void OnRemoveDocument(FileSelectEventArgs args, Guid recordId)
     {
-        if (UploadRequestedRecords.ContainsKey(recordId))
+        if (SelectedRecord.ContainsKey(recordId))
         {
-            UploadRequestedRecords[recordId].DocumentType = null;
-            UploadRequestedRecords.Remove(recordId);
+            SelectedRecord[recordId].DocumentType = null;
+            SelectedRecord.Remove(recordId);
         }
     }
 
@@ -532,23 +573,49 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
 
     protected void UpdateProgressIndex()
     {
-        if (User.Office == Offices.RMD.ToString())
+        if (User.Office == null || User.Office == Offices.RMD.ToString())
         {
             switch (SelectedRecordRequest.RmdRequestStatus)
             {
                 case var status when status == OfficeRequestedRecordStatus.Submitted.ToString():
-                    ProgressIndex = 0;
+                    ProgressIndex = 1;
                     ActiveTabIndex = 1;
                     IsRecordUploadEnabled = true;
                     break;
                 case var status when status == OfficeRequestedRecordStatus.Reviewed.ToString():
-                    ProgressIndex = 1;
+                    ProgressIndex = 2;
                     ActiveTabIndex = 2;
                     IsRecordUploadEnabled = false;
                     break;
                 case var status when status == OfficeRequestedRecordStatus.Approved.ToString():
+                    ProgressIndex = 3;
+                    ActiveTabIndex = 3;
+                    break;
+                case var status when status == OfficeRequestedRecordStatus.ForRelease.ToString():
+                    ProgressIndex = 4;
+                    ActiveTabIndex = 4;
+                    break;
+                case var status when status == OfficeRequestedRecordStatus.Claimed.ToString():
+                    ProgressIndex = 5;
+                    ActiveTabIndex = 4;
+                    break;
+                default:
+                    break;
+            }
+        }
+        else if (User.Office == Offices.HRMD.ToString())
+        {
+            switch (SelectedRecordRequest.HrmdRequestStatus)
+            {
+                case var status when status == OfficeRequestedRecordStatus.Submitted.ToString():
+                    ProgressIndex = 1;
+                    ActiveTabIndex = 1;
+                    IsRecordUploadEnabled = true;
+                    break;
+                case var status when status == OfficeRequestedRecordStatus.Reviewed.ToString():
                     ProgressIndex = 2;
                     ActiveTabIndex = 3;
+                    IsRecordUploadEnabled = false;
                     break;
                 case var status when status == OfficeRequestedRecordStatus.ForRelease.ToString():
                     ProgressIndex = 3;
@@ -562,32 +629,24 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
                     break;
             }
         }
-        else if (User.Office == Offices.HRMD.ToString())
-        {
-            switch (SelectedRecordRequest.HrmdRequestStatus)
-            {
-                case var status when status == OfficeRequestedRecordStatus.Submitted.ToString():
-                    ProgressIndex = 0;
-                    ActiveTabIndex = 1;
-                    IsRecordUploadEnabled = true;
-                    break;
-                case var status when status == OfficeRequestedRecordStatus.Reviewed.ToString():
-                    ProgressIndex = 1;
-                    ActiveTabIndex = 3;
-                    IsRecordUploadEnabled = false;
-                    break;
-                case var status when status == OfficeRequestedRecordStatus.ForRelease.ToString():
-                    ProgressIndex = 2;
-                    ActiveTabIndex = 4;
-                    break;
-                case var status when status == OfficeRequestedRecordStatus.Claimed.ToString():
-                    ProgressIndex = 3;
-                    ActiveTabIndex = 3;
-                    break;
-                default:
-                    break;
-            }
-        }
+    }
+
+    protected async Task<Stream> GetFileStreamFromUri(string fileUri)
+    {
+        using var httpClient = new HttpClient();
+        var fileBytes = await httpClient.GetByteArrayAsync(fileUri);
+        var fileStream = new MemoryStream(fileBytes);
+        return fileStream;
+    }
+
+    protected async Task DownloadFromStream(string uri, string name)
+    {
+        var fileUri = uri;
+        var fileStream = await GetFileStreamFromUri(fileUri);
+        var fileName = name;
+
+        using var streamRef = new DotNetStreamReference(stream: fileStream);
+        await JS!.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
     }
 
     public void ValueChangeHandler(int newStep)
