@@ -3,6 +3,7 @@
 @using DPWH.EDMS.Client.Shared.Models
 @using DPWH.EDMS.Components.Helpers
 @using System.Globalization
+@using DPWH.EDMS.Web.Client.Pages.RecordsManagement.Employee.Records.Model
 @inherits RecordsBase
 @inject NavigationManager Navigation
 @attribute [Authorize(Policy = "RequireActiveRoles")]
@@ -16,6 +17,8 @@
     <span class="role-chip">@Role</span>
 </div>
 <hr />
+<TelerikMediaQuery Media="(max-width: 480px)" OnChange="((changed) => XSmall = changed)"></TelerikMediaQuery>
+
 <div class="d-flex flex-row mt-3">
     <TelerikCard Width="100%">
         <CardBody>
@@ -27,47 +30,97 @@
 
                 @if (GetEmployeeRecords.Data != null && !XSmall)
                 {
-                    <TelerikGrid TItem="LookupRecordModels"
+                    @*  <div class="d-flex flex-row justify-content-end">
+                <TelerikButton Class="mb-2"
+                Icon="@FontIcon.Plus"
+                ThemeColor="@ThemeConstants.Button.ThemeColor.Primary"
+                OnClick="GoToAddNewRecord">
+                Add Request
+                </TelerikButton>
+                </div> *@
+                    <TelerikGrid TItem="GetLookupResult"
                                  @bind-PageSize="@PageSize"
-                                 OnRowClick="@OnRowClickHandler"
+                                 Height="@GridHeight"
                                  FilterMode="GridFilterMode.FilterRow"
                                  Sortable=true
                                  Pageable=true
-                                 Data="GetRecordType"
+                                 Data="GetEmployeeRecords.Data"
                                  OnStateChanged="@OnStateChanged"
                                  @ref="GridRef"
-                                 Context="docContext">
+                                 Context="docversion">
                         <GridSettings>
                             <GridPagerSettings PageSizes="@PageSizes">
                             </GridPagerSettings>
                         </GridSettings>
                         <DetailTemplate>
                             @{
-                                var document = docContext as LookupRecordModels;
-                                <TelerikGrid Data="GridData.Where(item => item.RecordTypeId == document.Id).ToList()" FilterMode="GridFilterMode.FilterRow" Sortable="true" Pageable="true" PageSize="5">
-                                    <GridColumns>
-                                        <GridColumn Field=@nameof(RecordModels.DocVersion) Title="Document Version">
-                                            <Template>
-                                                @{
-                                                    var data = context as LookupRecordModels;
-                                                    var date = DateTime.ParseExact(data!.DocVersion, "MMddyyyy", CultureInfo.InvariantCulture);
-                                                    <p>@GenericHelper.GetDateDisplay(date)</p>
-                                                }
-                                            </Template>
-                                        </GridColumn>
-                                        <GridColumn Field=@nameof(RecordModels.RecordName) Title="Document Name" />
-                                        <GridCommandColumn Width="5%">
-                                            <GridCommandButton Class="commandButton" Command="ExportData" OnClick="@viewData">View</GridCommandButton>
-                                        </GridCommandColumn>
-                                        <GridCommandColumn Width="5%">
-                                            <GridCommandButton Class="commandButton">Export</GridCommandButton>
-                                        </GridCommandColumn>
-                                    </GridColumns>
-                                </TelerikGrid>
+                                var recordType = docversion as GetLookupResult;
+                                var recordVersions = RecordDocuments.Where(x => x.RecordTypeId == recordType.Id).ToList();
+                                @if (recordVersions != null && recordVersions.Count > 0)
+                                {
+
+                                    <TelerikGrid Class="grid-no-scroll"
+                                                 TItem="RecordDocumentModel"
+                                                 @bind-PageSize="@pageAction"
+                                                 Height="@GridHeight"
+                                                 FilterMode="@GridFilterMode.FilterRow"
+                                                 Sortable=true
+                                                 Pageable=true
+                                                 Data="recordVersions">
+                                        <GridSettings>
+                                            <GridPagerSettings PageSizes="@PageSizesChild">
+                                            </GridPagerSettings>
+                                        </GridSettings>
+                                        <GridColumns>
+                                            <GridColumn Field=@nameof(RecordDocumentModel.DocVersion) Title="Document Version">
+                                                <Template>
+                                                    @{
+                                                        var data = context as RecordDocumentModel;
+                                                        var date = DateTime.ParseExact(data!.DocVersion, "MMddyyyy", CultureInfo.InvariantCulture);
+                                                        <p>@GenericHelper.GetDateDisplay(date)</p>
+                                                    }
+                                                </Template>
+                                            </GridColumn>
+                                            <GridColumn Field=@nameof(RecordDocumentModel.RecordName) Title="Document Name" />
+
+                                            <GridColumn Width="5%">
+                                                <Template>
+                                                    <TelerikButton OnClick="@(() => viewData(recordType))">View</TelerikButton>
+
+                                                </Template>
+                                            </GridColumn>
+                                            <GridColumn Width="5%">
+                                                <Template>
+                                                    <TelerikButton OnClick="@(() => viewData(recordType))">Export</TelerikButton>
+                                                </Template>
+                                            </GridColumn>
+                                        </GridColumns>
+                                    </TelerikGrid>
+                                }
+                                else
+                                {
+                                    <div class="d-flex justify-content-around">
+                                        <span>No Data to display.</span>
+                                    </div>
+                                }
                             }
                         </DetailTemplate>
                         <GridColumns>
-                            <GridColumn Field=@nameof(RecordModel.RecordName) Title="Document Name" />
+                            <GridColumn Field=@nameof(GetLookupResult.Name) Title="Document Name">
+                                <Template>
+                                    @{
+                                        var data = context as GetLookupResult;
+
+                                        if (data != null)
+                                        {
+                                            var recordVersions = RecordDocuments.Where(x => x.RecordTypeId == data.Id).ToList();
+
+                                            <p>@data.Name <span class="versions fw-bolder">@(recordVersions.Count > 0 ? recordVersions.Count : "")</span></p>
+                                        }
+                                    }
+
+                                </Template>
+                            </GridColumn>
                         </GridColumns>
                     </TelerikGrid>
                 }
@@ -87,14 +140,48 @@
                         </GridSettings>
                         <DetailTemplate>
                             @{
-                                var prop = employee as GetLookupResult;
-                                <div class="d-flex flex-column">
-                                    <p><b>Document Name :</b> @prop.Name </p>
-                                </div>
+                                var recordType = employee as GetLookupResult;
+                                var recordVersions = RecordDocuments.Where(x => x.RecordTypeId == recordType.Id).ToList();
+                                @if (recordVersions != null && recordVersions.Count > 0)
+                                {
+                                    <TelerikGrid Class="grid-no-scroll"
+                                                 TItem="RecordDocumentModel"
+                                                 @bind-PageSize="@pageAction"
+                                                 Height="@GridHeight"
+                                                 FilterMode="@GridFilterMode.FilterRow"
+                                                 Sortable=true
+                                                 Pageable=true
+                                                 Data="recordVersions">
+                                        <GridSettings>
+                                            <GridPagerSettings PageSizes="@PageSizesChild">
+                                            </GridPagerSettings>
+                                        </GridSettings>
+                                        <GridColumns>
+
+                                            <GridColumn Field=@nameof(RecordDocumentModel.RecordName) Title="Document Name">
+                                                <Template>
+                                                    @{
+                                                        var record = context as RecordDocumentModel;
+                                                    }
+                                                    <div class="d-flex justify-content-center">
+                                                        <a class="fw-bolder text-decoration-underline" target="_blank" href="@($"my-records/{recordType.Id}")">@record!.RecordName</a>
+                                                    </div>
+                                                </Template>
+                                            </GridColumn>
+
+                                        </GridColumns>
+                                    </TelerikGrid>
+                                }
+                                else
+                                {
+                                    <div class="d-flex justify-content-around">
+                                        <span>No Data to display.</span>
+                                    </div>
+                                }
                             }
                         </DetailTemplate>
                         <GridColumns>
-                            <GridColumn Field=@nameof(GetLookupResult.Name) />
+                            <GridColumn Field=@nameof(GetLookupResult.Name) Title="Document Name" />
                         </GridColumns>
                     </TelerikGrid>
                 }
@@ -104,10 +191,11 @@
                 }
             </div>
 
-        </CardBody>
+
+         </CardBody>
     </TelerikCard>
-</div>
-<style>
+ </div>
+ <style>
     .mobile-property-grid .k-hierarchy-cell .k-svg-i-plus svg path {
         d: path('M352 256 160 384V128l192 128z');
         fill: #7f56d9;
@@ -131,17 +219,12 @@
     .grid-no-scroll .k-grid-footer-wrap {
         border-right-width: 0;
     }
-    .commandButton {
-        font-weight: 500;
-        width: 100%;
-    }
 
-    .role-chip {
-        background-color: #38339b;
-        color: #fff;
-        font-size: 16px;
-        border-radius: 25px;
-        padding: 3px 16px;
-        margin: 0 10px;
+    .k-grid a {
+        color: #38339B;
+        text-decoration: underline;
+    }
+    .versions{
+        color: #38339B;
     }
 </style>

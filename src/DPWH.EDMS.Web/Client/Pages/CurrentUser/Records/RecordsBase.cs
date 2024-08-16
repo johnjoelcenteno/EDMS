@@ -7,7 +7,9 @@ using DPWH.EDMS.Client.Shared.Models;
 using DPWH.EDMS.Components.Components.ReusableGrid;
 using DPWH.EDMS.Components.Helpers;
 using DPWH.EDMS.IDP.Core.Constants;
+using DPWH.EDMS.IDP.Core.Extensions;
 using DPWH.EDMS.Web.Client.Pages.DataLibrary.RecordTypes.Common.Model;
+using DPWH.EDMS.Web.Client.Pages.RecordsManagement.Employee.Records.Model;
 using DPWH.EDMS.Web.Client.Shared.Services.ExceptionHandler;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -16,26 +18,22 @@ using Telerik.Blazor.Components.Common.Trees.Models;
 
 namespace DPWH.EDMS.Web.Client.Pages.CurrentUser.Records;
 
-public class RecordsBase : GridBase<LookupRecordModels>
+public class RecordsBase : GridBase<GetLookupResult>
 {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateAsync { get; set; }
-    [Parameter] public required string Id { get; set; }
-    [Inject] public required NavigationManager NavigationManager { get; set; }
+    [Parameter] public required GetUserByIdResult SelectedEmployee { get; set; }
     [Inject] public required ILookupsService LookupsService { get; set; }
     [Inject] public required IRecordManagementService RecordManagementService { get; set; }
-    protected EDMS.Client.Shared.MockModels.RecordModel Record { get; set; }
-    protected MockCurrentData CurrentData { get; set; }
-    protected List<LookupRecordModels> GetRecordType = new List<LookupRecordModels>();
-    protected List<Document> DocumentList = new List<Document>();
-    protected string? SearchDocVersion { get; set; }
-    protected string? SearchName { get; set; }
-    public IEnumerable<TreeItem> Data { get; set; }
-    public IEnumerable<object> ExpandedItems { get; set; }
+    [Inject] public required NavigationManager NavigationManager { get; set; }
     protected GetLookupResultIEnumerableBaseApiResponse GetEmployeeRecords { get; set; } = new GetLookupResultIEnumerableBaseApiResponse();
+    protected List<RecordDocumentModel> RecordDocuments { get; set; } = new();
+    protected int pageAction = 5;
+    protected List<int?> PageSizesChild { get; set; } = new List<int?> { 5, 10, 15 };
 
     protected string DisplayName = "---";
     protected string Role = string.Empty;
     protected string EmployeeId;
+
     protected override void OnInitialized()
     {
         BreadcrumbItems.Add(new BreadcrumbModel
@@ -44,37 +42,29 @@ public class RecordsBase : GridBase<LookupRecordModels>
             Text = "My Records",
             Url = "/my-records"
         });
-
-        Record = MockCurrentData.GetCurrentRecord();
-
     }
 
     protected async override Task OnInitializedAsync()
     {
         IsLoading = true;
+
         await GetUserInfo();
-        await GetDocumentRecordsDetails();
+        await GetDocumentRecords();
+        await GetMyRecords();
+
         IsLoading = false;
     }
-
-    public async Task OnRowClickHandler(GridRowClickEventArgs args)
+    protected async Task GetDocumentRecords()
     {
-        var currItem = args.Item as LookupRecordModels;
+        IsLoading = true;
 
-        var state = GridRef.GetState();
-
-        bool isCurrItemExpanded = state.ExpandedItems.Any(x => x.Id == currItem?.Id);
-
-        if (isCurrItemExpanded)
+        var res = await LookupsService.GetPersonalRecords();
+        if (res.Success)
         {
-            state.ExpandedItems.Remove(currItem!);
-        }
-        else
-        {
-            state.ExpandedItems.Add(currItem!);
+            GetEmployeeRecords = res;
         }
 
-        await GridRef.SetStateAsync(state);
+        IsLoading = false;
     }
     private async Task GetUserInfo()
     {
@@ -88,76 +78,41 @@ public class RecordsBase : GridBase<LookupRecordModels>
         if (user.Identity is not null && user.Identity.IsAuthenticated)
         {
             var roleValue = user.Claims.FirstOrDefault(c => c.Type == "role")!.Value;
-            EmployeeId = user.Claims.FirstOrDefault(c => c.Type == "employee_number")!.Value;
-            DisplayName = !string.IsNullOrEmpty(user.Identity.Name) ? GenericHelper.CapitalizeFirstLetter(user.Identity.Name) : "---";
+            EmployeeId = ClaimsPrincipalExtensions.GetEmployeeNumber(user)!;
+            DisplayName = ClaimsPrincipalExtensions.GetDisplayName(user)!;
             Role = GetRoleLabel(roleValue);
 
         }
     }
-
     private string GetRoleLabel(string roleValue)
     {
         return ApplicationRoles.GetDisplayRoleName(roleValue, "Unknown Role");
     }
-
-
-    protected async Task GetDocumentRecordsDetails()
+    protected async Task GetMyRecords()
     {
-        IsLoading = true;
-        ServiceCb = RecordManagementService.Query;
-        var filters = new List<Api.Contracts.Filter>();
-        AddTextSearchFilterIfNotNull(filters, nameof(LookupRecordModels.EmployeeId), EmployeeId, "eq");
-        SearchFilterRequest.Logic = DataSourceHelper.AND_LOGIC;
-        SearchFilterRequest.Filters = filters.Any() ? filters : null;
-        await LoadData();
-
-        var res = await LookupsService.GetPersonalRecords();
-        if (res.Success)
+        var recordResult = await RecordManagementService.QueryByEmployeeId(EmployeeId, DataSourceReq);
+        if (recordResult.Data != null)
         {
-            GetEmployeeRecords = res;
-            var convertedData = GetEmployeeRecords.Data
-                    .Select(item => new LookupRecordModels
-                    {
-                        Id = item.Id,
-                        RecordName = item.Name,
-                 
-                     
-                    }).ToList();
-            GetRecordType = convertedData;
+            RecordDocuments = GenericHelper.GetListByDataSource<RecordDocumentModel>(recordResult.Data);
         }
-
-        IsLoading = false;
     }
-
-    public async Task viewData(GridCommandEventArgs args)
+    public void viewData(GetLookupResult data)
     {
-        LookupRecordModels? selectedId = args.Item as LookupRecordModels;
-
-        //Int32.TryParse(samp, out sampNumber);
-        Console.WriteLine(selectedId?.Id);
-        NavigationManager.NavigateTo($"/my-records/{selectedId.Id}");
+        ToastService.ShowError($"{data.Id}");
+        return;
+        NavigationManager.NavigateTo($"/my-records/{data.Id}");
     }
-    //protected async void SetFilterGrid()
+
+    //protected void GoToAddNewRequest()
     //{
-    //    var document = GetRecordType;
-    //    var filters = new List<Api.Contracts.Filter>();
-
-    //    AddTextSearchFilterIfNotNull(filters, nameof(LookupRecordModels.EmployeeId), EmployeeId?.ToString(), "eq");
-    //    AddTextSearchFilterIfNotNull(filters, nameof(LookupRecordModels.Documents), SearchDocVersion, "contains");
-    //    AddTextSearchFilterIfNotNull(filters, nameof(LookupRecordModels.RecordName), SearchName, "contains");
-
-    //    SearchFilterRequest.Logic = DataSourceHelper.AND_LOGIC;
-    //    SearchFilterRequest.Filters = filters.Any() ? filters : null;
-
-    //    await LoadData();
-
-    //    StateHasChanged();
+    //    HandleGoToAddNewRequest("record-management/request-history/add/" + SelectedEmployee.Id);
     //}
-    private void AddTextSearchFilterIfNotNull(List<Api.Contracts.Filter> filters, string fieldName, string? value, string operation)
+    protected void GoToAddNewRecord()
     {
-        if (!string.IsNullOrEmpty(value))
-        {
-            AddTextSearchFilter(filters, fieldName, value, operation);
-        }
+        // NavigationManager.NavigateTo("record-management/records/add/" + SelectedEmployee.Id);
+    }
+    protected void GoToSelectedItemOverview(GridRowClickEventArgs args)
+    {
+        //HandleSelectedItemOverview(args, "request-management/view-request-form/");
     }
 }
