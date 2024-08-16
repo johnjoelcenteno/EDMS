@@ -89,7 +89,21 @@
                 }
             </DetailTemplate>
             <GridColumns>
-                <GridColumn Field=@nameof(GetLookupResult.Name) Title="Document Name" />
+                <GridColumn Field=@nameof(GetLookupResult.Name) Title="Document Name">
+                    <Template>
+                        @{
+                            var data = context as GetLookupResult;
+
+                            if (data != null)
+                            {
+                                var recordVersions = RecordDocuments.Where(x => x.RecordTypeId == data.Id).ToList();
+
+                                <p>@data.Name <span class="versions fw-bolder">@(recordVersions.Count > 0 ? recordVersions.Count : "")</span></p>
+                            }
+                        }
+
+                    </Template>
+                </GridColumn>
             </GridColumns>
         </TelerikGrid>
     }
@@ -187,5 +201,23 @@
     .k-grid a {
         color: #38339B;
         text-decoration: underline;
+    }
+
+    .commandButton {
+        font-weight: 500;
+        width: 100%;
+    }
+
+    .role-chip {
+        background-color: #38339b;
+        color: #fff;
+        font-size: 16px;
+        border-radius: 25px;
+        padding: 3px 16px;
+        margin: 0 10px;
+    }
+
+    .versions {
+        color: #38339B;
     }
 </style>
