@@ -10,10 +10,10 @@ public enum RequestedRecordStatus
 
 public enum OfficeRequestedRecordStatus
 {
-    NA,
-    Submitted,
-    Reviewed,
-    Approved,
-    ForRelease,
-    Claimed
+    NA = 1,
+    Submitted = 2,
+    Reviewed = 3,
+    Approved = 4,
+    Released = 5,
+    Claimed = 6
 }

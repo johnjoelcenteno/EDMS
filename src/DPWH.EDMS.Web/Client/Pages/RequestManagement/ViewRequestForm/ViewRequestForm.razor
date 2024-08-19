@@ -606,11 +606,11 @@
                         <TelerikButton OnClick="OnCancel" FillMode="@ThemeConstants.Button.FillMode.Outline">Cancel</TelerikButton>
                         @if (User.Office == Offices.RMD.ToString())
                         {
-                            <TelerikButton OnClick="ValidateTransmittalFileSelect" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.RmdRequestStatus == OfficeRequestedRecordStatus.ForRelease.ToString())">Submit</TelerikButton>
+                            <TelerikButton OnClick="ValidateTransmittalFileSelect" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.RmdRequestStatus == OfficeRequestedRecordStatus.Released.ToString())">Submit</TelerikButton>
                         }
                         else if (User.Office == Offices.HRMD.ToString())
                         {
-                            <TelerikButton OnClick="ValidateTransmittalFileSelect" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.HrmdRequestStatus == OfficeRequestedRecordStatus.ForRelease.ToString())">Submit</TelerikButton>
+                            <TelerikButton OnClick="ValidateTransmittalFileSelect" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.HrmdRequestStatus == OfficeRequestedRecordStatus.Released.ToString())">Submit</TelerikButton>
                         }
                     </div>
                 </div>
@@ -834,7 +834,7 @@
                         <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.RmdRequestStatus == OfficeRequestedRecordStatus.Approved.ToString())">Submit</TelerikButton>
                         break;
                     case 4:
-                        <TelerikButton OnClick="ValidateTransmittalFileSelect" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.RmdRequestStatus == OfficeRequestedRecordStatus.ForRelease.ToString())">Submit</TelerikButton>
+                        <TelerikButton OnClick="ValidateTransmittalFileSelect" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.RmdRequestStatus == OfficeRequestedRecordStatus.Released.ToString())">Submit</TelerikButton>
                         break;
                     default:
                         break;
@@ -852,7 +852,7 @@
                         <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.HrmdRequestStatus == OfficeRequestedRecordStatus.Reviewed.ToString())">Submit</TelerikButton>
                         break;
                     case 3:
-                        <TelerikButton OnClick="ValidateTransmittalFileSelect" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.HrmdRequestStatus == OfficeRequestedRecordStatus.ForRelease.ToString())">Submit</TelerikButton>
+                        <TelerikButton OnClick="ValidateTransmittalFileSelect" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.HrmdRequestStatus == OfficeRequestedRecordStatus.Released.ToString())">Submit</TelerikButton>
                         break;
                     default:
                         break;

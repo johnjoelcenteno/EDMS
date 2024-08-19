@@ -425,7 +425,7 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
         }
 
         await OnOfficeStatusChange(OfficeRequestedRecordStatus.Reviewed.ToString());
-        await OnStatusChange(RecordRequestStates.Pending.ToString());
+        //await OnStatusChange(RecordRequestStates.Pending.ToString());
 
         await LoadData((res) =>
         {
@@ -470,7 +470,7 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
     {
         IsLoading = true;
         IsModalVisible = false;
-        await OnOfficeStatusChange(OfficeRequestedRecordStatus.ForRelease.ToString());
+        await OnOfficeStatusChange(OfficeRequestedRecordStatus.Released.ToString());
         StateHasChanged();
         IsLoading = false;
     }
@@ -490,7 +490,7 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
             || (SelectedRecordRequest.RmdRequestStatus == OfficeRequestedRecordStatus.Claimed.ToString() && SelectedRecordRequest.HrmdRequestStatus == OfficeRequestedRecordStatus.NA.ToString())
             || (SelectedRecordRequest.RmdRequestStatus == OfficeRequestedRecordStatus.Claimed.ToString() && SelectedRecordRequest.HrmdRequestStatus == OfficeRequestedRecordStatus.Claimed.ToString()))
         {
-            await OnStatusChange(RecordRequestStates.Completed.ToString());
+            //await OnStatusChange(RecordRequestStates.Completed.ToString());
         }
 
         NavigationManager.NavigateTo("/request-management");
@@ -591,7 +591,7 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
                     ProgressIndex = 3;
                     ActiveTabIndex = 3;
                     break;
-                case var status when status == OfficeRequestedRecordStatus.ForRelease.ToString():
+                case var status when status == OfficeRequestedRecordStatus.Released.ToString():
                     ProgressIndex = 4;
                     ActiveTabIndex = 4;
                     break;
@@ -617,7 +617,7 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
                     ActiveTabIndex = 3;
                     IsRecordUploadEnabled = false;
                     break;
-                case var status when status == OfficeRequestedRecordStatus.ForRelease.ToString():
+                case var status when status == OfficeRequestedRecordStatus.Released.ToString():
                     ProgressIndex = 3;
                     ActiveTabIndex = 4;
                     break;
