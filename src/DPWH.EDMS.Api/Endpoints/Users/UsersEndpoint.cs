@@ -227,17 +227,10 @@ public static class UsersEndpoint
             }
 
             metadata.Add("DocumentType", "Signature");
-            metadata.Add("SignatoriesId", model.SignatoriesId.ToString());
-
-            var signatory = await mediator.Send(new GetByIdRequest(model.SignatoriesId));
-            if (signatory is null)
-            {
-                return Results.BadRequest(new ValidationFailureResponse() { Errors = [new ValidationResponse() { Message = "Invalid SignatoriesId", PropertyName = "SignatoriesId" }] });
-            }
 
             var uri = await blobService.Put(WellKnownContainers.UserDocuments, request.Id.ToString(), data, request.File.ContentType, metadata);
 
-            var command = new UpdateSignatoryUriRequest(model.SignatoriesId, uri);
+            var command = new UpsertSignatoryUriRequest(uri);
 
             var response = await mediator.Send(command, token);
             return TypedResults.Ok(new UpdateResponse(response));

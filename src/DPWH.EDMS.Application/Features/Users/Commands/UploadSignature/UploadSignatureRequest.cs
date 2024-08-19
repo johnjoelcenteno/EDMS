@@ -4,5 +4,5 @@ using Microsoft.AspNetCore.Http;
 
 namespace DPWH.EDMS.Application.Features.Users.Commands.UploadSignature
 {
-    public record UploadSignatureRequest([FromForm] IFormFile? Signature, [FromForm] Guid SignatoriesId);
+    public record UploadSignatureRequest([FromForm] IFormFile? Signature);
 }
