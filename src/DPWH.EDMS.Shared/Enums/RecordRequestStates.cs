@@ -4,7 +4,9 @@ namespace DPWH.EDMS.Shared.Enums;
 
 public enum RecordRequestStates
 {
-    Submitted,
-    Pending,
-    Completed
+    Submitted = 1,
+    Reviewed = 2,
+    Approved = 3,
+    Released = 4,
+    Claimed = 5
 }
