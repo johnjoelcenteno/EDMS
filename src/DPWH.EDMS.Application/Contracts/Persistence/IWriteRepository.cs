@@ -24,6 +24,7 @@ public interface IWriteRepository
     DbSet<Agency> Agencies { get; }    
     DbSet<DataSyncLog> DataSyncLogs { get; }
     DbSet<MenuItem> MenuItems { get; }
+    DbSet<UserProfileDocument> UserProfileDocuments { get; }
     DatabaseFacade Database { get; }
     Task<int> SaveChangesAsync(CancellationToken token = default);
 }

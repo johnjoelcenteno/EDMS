@@ -20,5 +20,6 @@ public interface IReadRepository
     IQueryable<ChangeLog> ChangeLogsView { get; }
     IQueryable<Agency> AgenciesView { get; }    
     IQueryable<DataSyncLog> DataSyncLogsView { get; }    
+    IQueryable<UserProfileDocument> UserProfileDocumentsView { get; }    
 
 }
