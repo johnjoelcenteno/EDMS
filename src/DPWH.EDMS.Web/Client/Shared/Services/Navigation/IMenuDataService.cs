@@ -7,5 +7,5 @@ public interface IMenuDataService
     IEnumerable<MenuModel> GetMenuItems();
     IEnumerable<MenuModel> GetMenuItems2();
     IEnumerable<MenuModel> GetSettingsItems();
-    Task<List<MenuModel>> GetNavigationMenuAsync(NavType navType);
+    Task<List<MenuModel>> GetNavigationMenuAsync(NavType navType, string role);
 }
