@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.JSInterop;
 using System.Security.Claims;
 using Telerik.Blazor.Components;
+using Telerik.DataSource.Extensions;
 
 
 namespace DPWH.EDMS.Web.Client.Pages.RequestManagement.ViewRequestForm;
@@ -201,12 +202,12 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
         UpdateResponseBaseApiResponse = await RecordRequestSupportingFilesService.UpdateRecordStatus(request);
     }
 
-    protected async Task OnStatusChange(string newStatus)
+    protected async Task OnStatusChange(RecordRequestStates newStatus)
     {
         var request = new UpdateRecordRequestStatus
         {
             Id = SelectedRecordRequest.Id,
-            Status = newStatus
+            Status = newStatus.ToString()
         };
 
         UpdateResponseBaseApiResponse = await RequestManagementService.UpdateStatus(request);
@@ -425,7 +426,11 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
         }
 
         await OnOfficeStatusChange(OfficeRequestedRecordStatus.Reviewed.ToString());
-        //await OnStatusChange(RecordRequestStates.Pending.ToString());
+
+        var rmdStatusEnum = ParseOfficeStatus(SelectedRecordRequest.RmdRequestStatus);
+        var hrmdStatusEnum = ParseOfficeStatus(SelectedRecordRequest.HrmdRequestStatus);
+        var newStatus = DetermineRequestStatus(rmdStatusEnum, hrmdStatusEnum);
+        await OnStatusChange(newStatus);
 
         await LoadData((res) =>
         {
@@ -462,6 +467,12 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
         }
 
         await OnOfficeStatusChange(OfficeRequestedRecordStatus.Approved.ToString());
+
+        var rmdStatusEnum = ParseOfficeStatus(SelectedRecordRequest.RmdRequestStatus);
+        var hrmdStatusEnum = ParseOfficeStatus(SelectedRecordRequest.HrmdRequestStatus);
+        var newStatus = DetermineRequestStatus(rmdStatusEnum, hrmdStatusEnum);
+        await OnStatusChange(newStatus);
+
         StateHasChanged();
         IsLoading = false;
     }
@@ -471,6 +482,12 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
         IsLoading = true;
         IsModalVisible = false;
         await OnOfficeStatusChange(OfficeRequestedRecordStatus.Released.ToString());
+
+        var rmdStatusEnum = ParseOfficeStatus(SelectedRecordRequest.RmdRequestStatus);
+        var hrmdStatusEnum = ParseOfficeStatus(SelectedRecordRequest.HrmdRequestStatus);
+        var newStatus = DetermineRequestStatus(rmdStatusEnum, hrmdStatusEnum);
+        await OnStatusChange(newStatus);
+
         StateHasChanged();
         IsLoading = false;
     }
@@ -486,12 +503,17 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
         }
         await OnOfficeStatusChange(OfficeRequestedRecordStatus.Claimed.ToString());
 
-        if ((SelectedRecordRequest.RmdRequestStatus == OfficeRequestedRecordStatus.NA.ToString() && SelectedRecordRequest.HrmdRequestStatus == OfficeRequestedRecordStatus.Claimed.ToString())
-            || (SelectedRecordRequest.RmdRequestStatus == OfficeRequestedRecordStatus.Claimed.ToString() && SelectedRecordRequest.HrmdRequestStatus == OfficeRequestedRecordStatus.NA.ToString())
-            || (SelectedRecordRequest.RmdRequestStatus == OfficeRequestedRecordStatus.Claimed.ToString() && SelectedRecordRequest.HrmdRequestStatus == OfficeRequestedRecordStatus.Claimed.ToString()))
-        {
-            //await OnStatusChange(RecordRequestStates.Completed.ToString());
-        }
+        var rmdStatusEnum = ParseOfficeStatus(SelectedRecordRequest.RmdRequestStatus);
+        var hrmdStatusEnum = ParseOfficeStatus(SelectedRecordRequest.HrmdRequestStatus);
+        var newStatus = DetermineRequestStatus(rmdStatusEnum, hrmdStatusEnum);
+        await OnStatusChange(newStatus);
+
+        //if ((SelectedRecordRequest.RmdRequestStatus == OfficeRequestedRecordStatus.NA.ToString() && SelectedRecordRequest.HrmdRequestStatus == OfficeRequestedRecordStatus.Claimed.ToString())
+        //    || (SelectedRecordRequest.RmdRequestStatus == OfficeRequestedRecordStatus.Claimed.ToString() && SelectedRecordRequest.HrmdRequestStatus == OfficeRequestedRecordStatus.NA.ToString())
+        //    || (SelectedRecordRequest.RmdRequestStatus == OfficeRequestedRecordStatus.Claimed.ToString() && SelectedRecordRequest.HrmdRequestStatus == OfficeRequestedRecordStatus.Claimed.ToString()))
+        //{
+        //    await OnStatusChange(RecordRequestStates.Completed.ToString());
+        //}
 
         NavigationManager.NavigateTo("/request-management");
         StateHasChanged();
@@ -647,6 +669,45 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
 
         using var streamRef = new DotNetStreamReference(stream: fileStream);
         await JS!.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
+    }
+
+    public RecordRequestStates DetermineRequestStatus(OfficeRequestedRecordStatus rmdStatus, OfficeRequestedRecordStatus hrmdStatus)
+    {
+        if (rmdStatus == OfficeRequestedRecordStatus.NA)
+        {
+            return hrmdStatus == OfficeRequestedRecordStatus.NA ? RecordRequestStates.Submitted : MapOfficeStatusToRequestStatus(hrmdStatus);
+        }
+
+        if (hrmdStatus == OfficeRequestedRecordStatus.NA)
+        {
+            return MapOfficeStatusToRequestStatus(rmdStatus);
+        }
+
+        var minStatus = (OfficeRequestedRecordStatus)Math.Min((int)rmdStatus, (int)hrmdStatus);
+        return MapOfficeStatusToRequestStatus(minStatus);
+    }
+
+    private RecordRequestStates MapOfficeStatusToRequestStatus(OfficeRequestedRecordStatus officeStatus)
+    {
+        return officeStatus switch
+        {
+            OfficeRequestedRecordStatus.Submitted => RecordRequestStates.Submitted,
+            OfficeRequestedRecordStatus.Reviewed => RecordRequestStates.Reviewed,
+            OfficeRequestedRecordStatus.Approved => RecordRequestStates.Approved,
+            OfficeRequestedRecordStatus.Released => RecordRequestStates.Released,
+            OfficeRequestedRecordStatus.Claimed => RecordRequestStates.Claimed,
+            _ => RecordRequestStates.Submitted
+        };
+    }
+
+    private OfficeRequestedRecordStatus ParseOfficeStatus(string status)
+    {
+        if (Enum.TryParse<OfficeRequestedRecordStatus>(status, true, out var parsedStatus))
+        {
+            return parsedStatus;
+        }
+
+        return OfficeRequestedRecordStatus.NA;
     }
 
     public void ValueChangeHandler(int newStep)

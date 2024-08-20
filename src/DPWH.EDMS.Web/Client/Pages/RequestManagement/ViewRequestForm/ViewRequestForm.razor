@@ -779,7 +779,8 @@
                         <div class="col align-content-center">
                             <p><b>@(string.IsNullOrEmpty(GetTransmittalReceipt.Data?.Uri) ? "UPLOAD RECEIVED TRANSMITTAL RECEIPT" : "RECEIVED TRANSMITTAL RECEIPT")</b></p>
                         </div>
-                        @if (GetTransmittalReceipt.Data != null && !string.IsNullOrEmpty(GetTransmittalReceipt.Data?.Uri))
+                        @* @if (GetTransmittalReceipt.Data != null && !string.IsNullOrEmpty(GetTransmittalReceipt.Data?.Uri)) *@
+                        @if (!string.IsNullOrEmpty(GetTransmittalReceipt.Data?.Uri) && SelectedRecordRequest.Status == OfficeRequestedRecordStatus.Claimed.ToString())
                         {
                             <div class="d-flex col-2 gap-4 justify-content-center">
                                 <NavLink class="fw-bolder text-end" href="@GetTransmittalReceipt.Data.Uri" target="_blank">View</NavLink>
