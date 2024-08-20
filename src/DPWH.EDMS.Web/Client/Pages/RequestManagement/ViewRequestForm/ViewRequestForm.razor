@@ -365,7 +365,7 @@
             </div>
         </div>
     </TabStripTab>
-    <TabStripTab Title="Approve" Disabled="@(User.Office == Offices.RMD.ToString() && ProgressIndex < 2 )" Visible="@(User.Office != Offices.HRMD.ToString())">
+    <TabStripTab Title="Approve" Disabled="@(User.Office == Offices.RMD.ToString() && ProgressIndex < 2 )" Visible="@(User.Office != Offices.HRMD.ToString() && User.UserAccess != "Staff")">
         <div class="row">
             @if (!XSmall)
             {
@@ -434,7 +434,10 @@
             </div>
         </div>
     </TabStripTab>
-    <TabStripTab Title="Release" Disabled="@(User.Office == Offices.RMD.ToString() ? ProgressIndex < 3 : User.Office == Offices.HRMD.ToString() ? ProgressIndex < 2 : false)">
+    <TabStripTab Title="Release" Disabled="@(User.UserAccess == "Manager" && User.Office == Offices.RMD.ToString() ? ProgressIndex < 3
+                                            : User.UserAccess == "Manager" && User.Office == Offices.HRMD.ToString() ? ProgressIndex < 2
+                                            : User.UserAccess == "Staff" ? ProgressIndex < 2
+                                            : false)">
         <div class="row">
             @if (!XSmall)
             {
@@ -442,13 +445,27 @@
                     @StepperFragment
                     <div class="d-flex gap-3 justify-content-center">
                         <TelerikButton OnClick="OnCancel" FillMode="@ThemeConstants.Button.FillMode.Outline">Cancel</TelerikButton>
-                        @if (User.Office == Offices.RMD.ToString())
+                        @if (User.UserAccess == "Manager")
                         {
-                            <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.RmdRequestStatus == OfficeRequestedRecordStatus.Approved.ToString())">Submit</TelerikButton>
+                            if (User.Office == Offices.RMD.ToString())
+                            {
+                                <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.RmdRequestStatus == OfficeRequestedRecordStatus.Approved.ToString())">Submit</TelerikButton>
+                            }
+                            else if (User.Office == Offices.HRMD.ToString())
+                            {
+                                <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.HrmdRequestStatus == OfficeRequestedRecordStatus.Reviewed.ToString())">Submit</TelerikButton>
+                            }                            
                         }
-                        else if (User.Office == Offices.HRMD.ToString())
+                        else if (User.UserAccess == "Staff")
                         {
-                            <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.HrmdRequestStatus == OfficeRequestedRecordStatus.Reviewed.ToString())">Submit</TelerikButton>
+                            if (User.Office == Offices.RMD.ToString())
+                            {
+                                <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.RmdRequestStatus == OfficeRequestedRecordStatus.Reviewed.ToString())">Submit</TelerikButton>
+                            }
+                            else if (User.Office == Offices.HRMD.ToString())
+                            {
+                                <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.HrmdRequestStatus == OfficeRequestedRecordStatus.Reviewed.ToString())">Submit</TelerikButton>
+                            }
                         }
                     </div>
                 </div>
@@ -552,33 +569,6 @@
                                 }
                             </div>
                         }
-                        @* foreach (var office in GroupedRecords)
-                        {
-                            <div class="row mb-1">
-                                <p><b>@office.Key</b></p>
-                            </div>
-                            foreach (var record in office)
-                            {
-                                <div class="row">
-                                    <div class="col mb-1">
-                                        <label for="@record.RecordType">@record.RecordType</label>
-                                    </div>
-                                    @if (record.Uri != null)
-                                    {
-                                        <div class="d-flex col-2 gap-4 justify-content-center">
-                                            <NavLink class="fw-bolder" href="@record.Uri" target="_blank">View</NavLink>
-                                            <NavLink class="fw-bolder" style="cursor: pointer;" @onclick="@(() => DownloadRecordFromStream(record.Uri, record.RecordType))">Export</NavLink>
-                                        </div>
-                                    }
-                                    else
-                                    {
-                                        <div class="col-2 text-center">
-                                            <p class="fw-bolder">No Record</p>
-                                        </div>
-                                    }
-                                </div>
-                            }
-                        } *@
                     }
                 }
                 @if (HasNoRecords && User.Office == Offices.RMD.ToString())
@@ -596,7 +586,10 @@
             </div>
         </div>
     </TabStripTab>
-    <TabStripTab Title="Claim" Disabled="@(User.Office == Offices.RMD.ToString() ? ProgressIndex < 4 : User.Office == Offices.HRMD.ToString() ? ProgressIndex < 3 : false)">
+    <TabStripTab Title="Claim" Disabled="@(User.UserAccess == "Manager" && User.Office == Offices.RMD.ToString() ? ProgressIndex < 4
+                                         : User.UserAccess == "Manager" && User.Office == Offices.HRMD.ToString() ? ProgressIndex < 3
+                                         : User.UserAccess == "Staff" && (User.Office == Offices.RMD.ToString() || User.Office == Offices.HRMD.ToString()) ? ProgressIndex < 3
+                                         : false)">
         <div class="row">
             @if (!XSmall)
             {
@@ -779,8 +772,14 @@
                         <div class="col align-content-center">
                             <p><b>@(string.IsNullOrEmpty(GetTransmittalReceipt.Data?.Uri) ? "UPLOAD RECEIVED TRANSMITTAL RECEIPT" : "RECEIVED TRANSMITTAL RECEIPT")</b></p>
                         </div>
-                        @* @if (GetTransmittalReceipt.Data != null && !string.IsNullOrEmpty(GetTransmittalReceipt.Data?.Uri)) *@
-                        @if (!string.IsNullOrEmpty(GetTransmittalReceipt.Data?.Uri) && SelectedRecordRequest.Status == OfficeRequestedRecordStatus.Claimed.ToString())
+                        @if (User.Office == Offices.RMD.ToString() && SelectedRecordRequest.RmdRequestStatus == RecordRequestStates.Claimed.ToString() && !string.IsNullOrEmpty(GetTransmittalReceipt.Data?.Uri))
+                        {
+                            <div class="d-flex col-2 gap-4 justify-content-center">
+                                <NavLink class="fw-bolder text-end" href="@GetTransmittalReceipt.Data.Uri" target="_blank">View</NavLink>
+                                <NavLink class="fw-bolder" style="cursor: pointer;" @onclick="@(() => DownloadFromStream(GetTransmittalReceipt.Data.Uri, "Transmittal Receipt.pdf"))">Export</NavLink>
+                            </div>
+                        }
+                        else if (User.Office == Offices.HRMD.ToString() && SelectedRecordRequest.HrmdRequestStatus == RecordRequestStates.Claimed.ToString() && !string.IsNullOrEmpty(GetTransmittalReceipt.Data?.Uri))
                         {
                             <div class="d-flex col-2 gap-4 justify-content-center">
                                 <NavLink class="fw-bolder text-end" href="@GetTransmittalReceipt.Data.Uri" target="_blank">View</NavLink>
@@ -928,21 +927,21 @@
         <div class="no-focus">
             <TelerikStepper Value="@ProgressIndex" ValueChanged="@ValueChangeHandler" Linear="true" Orientation="@(!XSmall ? StepperOrientation.Vertical: StepperOrientation.Horizontal)">
                 <StepperSteps>
-                    @if (string.IsNullOrEmpty(User.Office) || User.Office == Offices.RMD.ToString())
-                {
-                    <StepperStep Label="Submit"></StepperStep>
-                    <StepperStep Label="Review & Evaluate"></StepperStep>
-                    <StepperStep Label="Approve"></StepperStep>
-                    <StepperStep Label="Release"></StepperStep>
-                    <StepperStep Label="Claim"></StepperStep>
-                }
-                else if (User.Office == Offices.HRMD.ToString())
-                {
-                    <StepperStep Label="Submit"></StepperStep>
-                    <StepperStep Label="Review & Evaluate"></StepperStep>
-                    <StepperStep Label="Release"></StepperStep>
-                    <StepperStep Label="Claim"></StepperStep>
-                }
+                    @if (string.IsNullOrEmpty(User.Office) || (User.UserAccess == "Manager" && User.Office == Offices.RMD.ToString()))
+                    {
+                        <StepperStep Label="Submit"></StepperStep>
+                        <StepperStep Label="Review & Evaluate"></StepperStep>
+                        <StepperStep Label="Approve"></StepperStep>
+                        <StepperStep Label="Release"></StepperStep>
+                        <StepperStep Label="Claim"></StepperStep>
+                    }
+                    else if ((User.UserAccess == "Manager" && User.Office == Offices.HRMD.ToString()) || User.UserAccess == "Staff")
+                    {
+                        <StepperStep Label="Submit"></StepperStep>
+                        <StepperStep Label="Review & Evaluate"></StepperStep>
+                        <StepperStep Label="Release"></StepperStep>
+                        <StepperStep Label="Claim"></StepperStep>
+                    }
                 </StepperSteps>
             </TelerikStepper>
         </div>
