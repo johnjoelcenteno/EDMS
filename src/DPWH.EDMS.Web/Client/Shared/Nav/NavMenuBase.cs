@@ -94,9 +94,9 @@ public class NavMenuBase : RxBaseComponent
             //NavSettings = MenuDataService.GetSettingsItems().Where(m => m.AuthorizedRoles.Any(r => r == role)).ToList();
 
             // api integrated menus
-            NavMenus = await MenuDataService.GetNavigationMenuAsync(NavType.MainMenu);
-            NavMenus2 = await MenuDataService.GetNavigationMenuAsync(NavType.CurrentUserMenu);
-            NavSettings = await MenuDataService.GetNavigationMenuAsync(NavType.Settings);
+            NavMenus = await MenuDataService.GetNavigationMenuAsync(NavType.MainMenu, role);
+            NavMenus2 = await MenuDataService.GetNavigationMenuAsync(NavType.CurrentUserMenu, role);
+            NavSettings = await MenuDataService.GetNavigationMenuAsync(NavType.Settings, role);
 
             // DO NOT DELETE: FOR REFERENCE
             // TEST: Get current user menus

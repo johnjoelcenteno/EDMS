@@ -26,7 +26,7 @@ public class MenuDataService : IMenuDataService
     }
 
     // 3 Level Nav UI Builder
-    public async Task<List<MenuModel>> GetNavigationMenuAsync(NavType navType)
+    public async Task<List<MenuModel>> GetNavigationMenuAsync(NavType navType, string role)
     {
         // Create a request object with dynamic parameters
         var dataSourceRequest = new DataSourceRequest { Skip = 0 };
@@ -36,7 +36,7 @@ public class MenuDataService : IMenuDataService
         bool isSuccess = await ExceptionHandlerService.IsSuccess(async () =>
         {
             var menuRes = await NavigationService.QueryByNavType(navType.ToString(), dataSourceRequest);
-            var menus = GenericHelper.GetListByDataSource<Api.Contracts.MenuItemModel>(menuRes.Data);
+            var menus = GenericHelper.GetListByDataSource<Api.Contracts.MenuItemModel>(menuRes.Data).Where(m => m.AuthorizedRoles.Any(r => r == role)).ToList();
 
             // Map the raw data to the MenuModel type
             var navMenusAll = Mapper.Map<List<MenuModel>>(menus);
