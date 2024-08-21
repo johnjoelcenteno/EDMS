@@ -43,7 +43,7 @@
         else
         {
             <TelerikButton Class="mb-2"
-                           ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" OnClick="@(() => GenerateStamp($"{RequestedRecord.Uri}", "pdfs/modified.pdf"))">
+                           ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" OnClick="@(() => GenerateStamp($"{RequestedRecord.Uri}", "pdfs/modified.pdf", $"{NavManager.BaseUri}requested-signed-document/{RequestId}/{DocumentId}"))">
                 <TelerikSvgIcon Icon="@SvgIcon.Signature" Size="@ThemeConstants.SvgIcon.Size.ExtraExtraLarge" />
                 Sign
             </TelerikButton>
