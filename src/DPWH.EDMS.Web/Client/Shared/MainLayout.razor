@@ -1,5 +1,6 @@
 ﻿@using Blazored.Toast
 @using Blazored.Toast.Configuration
+@using DPWH.EDMS.Client.Shared.Configurations
 @using DPWH.EDMS.Web.Client.Shared.Nav
 @using DPWH.EDMS.Web.Client.Shared.Services.Navigation
 
@@ -12,34 +13,46 @@
 <TelerikMediaQuery Media="(max-width: 480px)" OnChange="((changed) => XSmall = changed)"></TelerikMediaQuery>
 
 <TelerikRootComponent>
-     <BlazoredToasts Position="ToastPosition.TopRight"
+    <BlazoredToasts Position="ToastPosition.TopRight"
                     Timeout="10"
                     IconType="Blazored.Toast.Configuration.IconType.FontAwesome"
                     ErrorIcon="fa fa-bug"
                     SuccessIcon="fa fa-check"
                     InfoIcon="fa fa-info"
                     ShowProgressBar="true" />
-    <div class="page">
-        <main>
-            <div class="top-row">
-                <NavMenu />
-            </div>
 
-            <article class="content px-4" 
-                style="margin-left: @(IsEdmsLogin() ? "0" : (IsSidebarExpanded ? "320px" : "64px")); 
+    @if (!IsPagePublic())
+    {
+        <div class="page">
+            <main>
+                <div class="top-row">
+                    <NavMenu />
+                </div>
+
+                <article class="content px-4"
+                         style="margin-left: @(IsEdmsLogin() ? "0" : (IsSidebarExpanded ? "320px" : "64px"));
                     @(XSmall ? "margin-left: 0px; margin-top: 64px" : "")">
-                @Body
-            </article>
-        </main>
-    </div>
+                    @Body
+                </article>
+            </main>
+        </div>
+    }
+    else
+    {
+        @Body
+    }
 </TelerikRootComponent>
 
 @code {
+    [Inject] public required ConfigManager ConfigManager { get; set; }
+
     protected bool XSmall { get; set; }
     protected bool IsSidebarExpanded = false;
+    protected List<string> PublicUrls = new List<string>() {};
 
     protected override void OnInitialized()
     {
+        PublicUrls = ConfigManager.PublicUrls.ToList();
         NavRx.IsExpanded.Subscribe((res) =>
         {
             IsSidebarExpanded = res;
@@ -48,4 +61,12 @@
     }
 
     protected bool IsEdmsLogin() => NavManager.Uri.EndsWith("/edms/login", StringComparison.OrdinalIgnoreCase);
+
+    private bool IsPagePublic()
+    {        
+        var currentUri = NavManager.Uri.ToLower();
+
+        // Check if the current URI contains any of the anonymous URIs
+        return PublicUrls.Any(uri => currentUri.Contains(uri.ToLower()));
+    }
 }

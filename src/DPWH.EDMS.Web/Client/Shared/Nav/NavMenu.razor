@@ -70,7 +70,7 @@
                                 {
                                     <li class="d-flex align-items-center">
                                         <NavLink title="@level0Item.Text" @onclick="@(() => { OnXsSidebarCollapse(); NavManager.NavigateTo(level0Item.Url!); })"
-                                                 Match="@( level0Item.Url == "" ? NavLinkMatch.All : NavLinkMatch.Prefix )"
+                                                 Match="NavLinkMatch.All"
                                                  href="@level0Item.Url"
                                                  class="nav-link d-flex align-items-center flex-grow-1 p-4"
                                                  aria-current="page">
