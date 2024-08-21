@@ -155,8 +155,7 @@ public class UserProfileBase : RxBaseComponent
         } catch (Exception ex) 
         {
             // catch if no signature yet uploaded
-            UriSignature = string.Empty;
-            ToastService.ShowError("No Uploaded Signature");
+            UriSignature = string.Empty; 
 
         }
         
