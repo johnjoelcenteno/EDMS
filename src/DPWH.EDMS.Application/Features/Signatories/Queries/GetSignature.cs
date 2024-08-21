@@ -1,12 +1,13 @@
 ﻿using DPWH.EDMS.Application.Contracts.Persistence;
+using DPWH.EDMS.Application.Models.UserProfileDocuments;
 using DPWH.EDMS.IDP.Core.Extensions;
 using MediatR;
 using System.Security.Claims;
 
 namespace DPWH.EDMS.Application.Features.Signatories.Queries
 {
-    public record GetSignatureRequest() : IRequest<string?>;
-    public class GetSignature : IRequestHandler<GetSignatureRequest, string?>
+    public record GetSignatureRequest() : IRequest<GetUserProfileDocumentModel>;
+    public class GetSignature : IRequestHandler<GetSignatureRequest, GetUserProfileDocumentModel>
     {
         private readonly IReadRepository _readRepository;
         private readonly ClaimsPrincipal _claimsPrincipal;
@@ -16,15 +17,23 @@ namespace DPWH.EDMS.Application.Features.Signatories.Queries
             _readRepository = readRepository;
             _claimsPrincipal = claimsPrincipal;
         }
-        public Task<string?> Handle(GetSignatureRequest request, CancellationToken cancellationToken)
+        public Task<GetUserProfileDocumentModel> Handle(GetSignatureRequest request, CancellationToken cancellationToken)
         {
             var employeeNumber = _claimsPrincipal.GetEmployeeNumber();
-            var uriSignature = _readRepository.UserProfileDocumentsView.FirstOrDefault(x => x.EmployeeNumber == employeeNumber);
-            if (uriSignature is null)
+            var userProfileDocument = _readRepository.UserProfileDocumentsView.FirstOrDefault(x => x.EmployeeNumber == employeeNumber);
+            if (userProfileDocument is null)
             {
                 return null;
             }
-            return Task.FromResult(uriSignature.UriSignature);
+
+            GetUserProfileDocumentModel model = new()
+            {
+                Id = userProfileDocument.Id,
+                EmployeeNumber = userProfileDocument.EmployeeNumber,
+                UriSignature = userProfileDocument.UriSignature
+            };
+
+            return Task.FromResult(model);
         }
     }
 }
