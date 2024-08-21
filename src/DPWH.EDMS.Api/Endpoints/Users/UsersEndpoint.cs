@@ -182,14 +182,14 @@ public static class UsersEndpoint
             var command = new GetSignatureRequest();
             var result = await mediator.Send(command, token);
 
-            return Results.Ok(result);
+            return result is null ? Results.NotFound() : Results.Ok(result);
         })
             .WithName("GetUserSignature")
             .WithTags(TagName)
             .WithDescription("Get user signature")
             .WithApiVersionSet(ApiVersioning.VersionSet)
             .HasApiVersion(1.0)
-            .Produces<string>()
+            .Produces<BaseApiResponse<string?>>()
             .Produces<ProblemDetails>(StatusCodes.Status400BadRequest)
             .Produces<ProblemDetails>(StatusCodes.Status500InternalServerError);
 
