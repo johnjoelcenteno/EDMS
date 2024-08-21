@@ -33,7 +33,7 @@ public class RecordRequestSupportingFilesService : IRecordRequestSupportingFiles
         return await _client.UpdateDocumentStatusAsync(req);
     }
 
-    public Task<GetTransmittalReceiptModelBaseApiResponse> GetTransmittalReceipt(Guid id)
+    public Task<GetTransmittalReceiptModelIEnumerableBaseApiResponse> GetTransmittalReceipt(Guid id)
     {
         return _client.GetTransmittalReceiptAsync(id);
     }
