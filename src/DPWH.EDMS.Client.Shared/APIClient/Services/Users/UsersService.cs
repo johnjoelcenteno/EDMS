@@ -51,4 +51,12 @@ public class UsersService : IUsersService
     {
         return await _client.GetUserByEmployeeIdAsync(id);
     }
+    public Task<UpdateResponse> UploadSignature(FileParameter document)
+    {
+        return _client.UploadSignatureAsync(document);
+    }
+    public Task<GetUserProfileDocumentModelBaseApiResponse> GetUserSignature()
+    {
+        return _client.GetUserSignatureAsync();
+    }
 }

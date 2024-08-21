@@ -12,4 +12,8 @@ public interface IUsersService
     Task<CreateUserWithRoleResultBaseApiResponse> CreateUserWithRole(CreateUserWithRoleCommand body);
     Task<DeactivateUserResultBaseApiResponse> DeactivateUser(DeactivateUserCommand body);
     Task<GetUserByIdResultBaseApiResponse> GetUserByEmployeeId(string id);
+    Task<UpdateResponse> UploadSignature(FileParameter document);
+    Task<GetUserProfileDocumentModelBaseApiResponse> GetUserSignature();
+
+
 }
