@@ -24,5 +24,6 @@ public class ConfigManager
     
     public List<string> SectionDataLibrary { get; set; }
     public List<string> OfficeDataLibrary { get; set; }
+    public List<string> PublicUrls { get; set; }
 
 }

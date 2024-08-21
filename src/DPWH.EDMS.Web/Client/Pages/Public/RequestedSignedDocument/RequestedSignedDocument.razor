@@ -1,0 +1,8 @@
+﻿@page "/requested-signed-document/{Id}"
+@page "/requested-signed-document"
+
+<h3>RequestedSignedDocument: @(!string.IsNullOrEmpty(Id) ? Id : "N/A")</h3>
+
+@code {
+    [Parameter] public required string Id { get; set; }
+}
