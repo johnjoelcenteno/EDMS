@@ -8,6 +8,6 @@ namespace DPWH.EDMS.Client.Shared.APIClient.Services.RecordRequestSupportingFile
         Task<CreateResponse> UploadRequestedRecord(FileParameter document, Guid? id, string DocumentType);
         Task<CreateResponse> UploadTransmittalReceipt(System.DateTimeOffset dateReceived, System.DateTimeOffset timeReceived, FileParameter document, Guid? id);
         Task<UpdateResponseBaseApiResponse> UpdateRecordStatus(UpdateRecordsRequestDocumentStatus req);
-        Task<GetTransmittalReceiptModelBaseApiResponse> GetTransmittalReceipt(Guid id);
+        Task<GetTransmittalReceiptModelIEnumerableBaseApiResponse> GetTransmittalReceipt(Guid id);
     }
 }

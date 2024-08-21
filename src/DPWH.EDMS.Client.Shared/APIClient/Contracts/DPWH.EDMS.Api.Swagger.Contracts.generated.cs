@@ -426,12 +426,12 @@ namespace DPWH.EDMS.Api.Contracts
     {
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<GetTransmittalReceiptModelBaseApiResponse> GetTransmittalReceiptAsync(System.Guid id);
+        System.Threading.Tasks.Task<GetTransmittalReceiptModelIEnumerableBaseApiResponse> GetTransmittalReceiptAsync(System.Guid id);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<GetTransmittalReceiptModelBaseApiResponse> GetTransmittalReceiptAsync(System.Guid id, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<GetTransmittalReceiptModelIEnumerableBaseApiResponse> GetTransmittalReceiptAsync(System.Guid id, System.Threading.CancellationToken cancellationToken);
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -904,6 +904,15 @@ namespace DPWH.EDMS.Api.Contracts
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<DeactivateUserResultBaseApiResponse> DeactivateUserAsync(DeactivateUserCommand body, System.Threading.CancellationToken cancellationToken);
+
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<UpdateResponse> UploadSignatureAsync(FileParameter signature);
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<UpdateResponse> UploadSignatureAsync(FileParameter signature, System.Threading.CancellationToken cancellationToken);
 
     }
 
@@ -2057,6 +2066,9 @@ namespace DPWH.EDMS.Api.Contracts
         [Newtonsoft.Json.JsonProperty("uri", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string Uri { get; set; }
 
+        [Newtonsoft.Json.JsonProperty("office", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Office { get; set; }
+
         [Newtonsoft.Json.JsonProperty("dateReceived", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public System.DateTimeOffset? DateReceived { get; set; }
 
@@ -2066,13 +2078,13 @@ namespace DPWH.EDMS.Api.Contracts
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.0.7.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class GetTransmittalReceiptModelBaseApiResponse
+    public partial class GetTransmittalReceiptModelIEnumerableBaseApiResponse
     {
         [Newtonsoft.Json.JsonProperty("success", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public bool Success { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("data", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public GetTransmittalReceiptModel Data { get; set; }
+        [Newtonsoft.Json.JsonProperty("data", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<GetTransmittalReceiptModel> Data { get; set; }
 
     }
 

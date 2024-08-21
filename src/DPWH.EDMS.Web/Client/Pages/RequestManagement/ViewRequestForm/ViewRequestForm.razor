@@ -634,20 +634,33 @@
                     <div class="row">
                         <div class="col-sm-12 col-md-4 mb-3">
                             <label class="mb-1"><b>Date Received</b></label>
-                            @if (GetTransmittalReceipt.Data != null)
-                            {
-                                <p>@GenericHelper.GetDateDisplay(GetTransmittalReceipt.Data.DateReceived)</p>
-                            }
-                            else
-                            {
-                                <TelerikDatePicker @bind-Value="@DateReceived" Placeholder="Select Date" Max="MaxDate" Enabled="!string.IsNullOrEmpty(User.Office)"></TelerikDatePicker>
+                            @{
+                                var rmdTransmittal = GetTransmittalReceipt.Data.FirstOrDefault(r => r.Office == "RMD");
+                                var hrmdTransmittal = GetTransmittalReceipt.Data.FirstOrDefault(r => r.Office == "HRMD");
+
+                                if (User.Office == Offices.RMD.ToString() && rmdTransmittal != null)
+                                {
+                                    <p>@GenericHelper.GetDateDisplay(rmdTransmittal.DateReceived)</p>
+                                }
+                                else if (User.Office == Offices.HRMD.ToString() && hrmdTransmittal != null)
+                                {
+                                    <p>@GenericHelper.GetDateDisplay(hrmdTransmittal.DateReceived)</p>
+                                }
+                                else
+                                {
+                                    <TelerikDatePicker @bind-Value="@DateReceived" Placeholder="Select Date" Max="MaxDate" Enabled="!string.IsNullOrEmpty(User.Office)"></TelerikDatePicker>
+                                }
                             }
                         </div>
                         <div class="col-sm-12 col-md-4 mb-3">
                             <label class="mb-1"><b>Time Received</b></label>
-                            @if (GetTransmittalReceipt.Data != null)
+                            @if (User.Office == Offices.RMD.ToString() && rmdTransmittal != null)
                             {
-                                <p>@GenericHelper.GetTimeDisplay(GetTransmittalReceipt.Data.TimeReceived)</p>
+                                <p>@GenericHelper.GetTimeDisplay(rmdTransmittal.TimeReceived)</p>
+                            }
+                            else if (User.Office == Offices.HRMD.ToString() && hrmdTransmittal != null)
+                            {
+                                <p>@GenericHelper.GetTimeDisplay(hrmdTransmittal.TimeReceived)</p>
                             }
                             else
                             {
@@ -745,17 +758,35 @@
                             }
                         }
                     }
-                    @if (!string.IsNullOrEmpty(User.Office) && string.IsNullOrEmpty(GetTransmittalReceipt.Data?.Uri))
+                    @if (!string.IsNullOrEmpty(User.Office) && User.Office == Offices.RMD.ToString() && GetTransmittalReceipt.Data != null)
                     {
-                        <div class="row my-3">
-                            <div class="col">
-                                <p><b>TRANSMITTAL RECEIPT</b></p>
+                        if (string.IsNullOrEmpty(rmdTransmittal?.Uri))
+                        {
+                            <div class="row my-3">
+                                <div class="col">
+                                    <p><b>TRANSMITTAL RECEIPT</b></p>
+                                </div>
+                                <div class="d-flex col-2 gap-4 justify-content-center">
+                                    <NavLink class="fw-bolder" href="@($"transmittal-receipt/{RequestId}")" target="_blank">View</NavLink>
+                                    <NavLink class="fw-bolder" href="@($"transmittal-receipt/{RequestId}/exporting")" target="_blank">Export</NavLink>
+                                </div>
                             </div>
-                            <div class="d-flex col-2 gap-4 justify-content-center">
-                                <NavLink class="fw-bolder" href="@($"transmittal-receipt/{RequestId}")" target="_blank">View</NavLink>
-                                <NavLink class="fw-bolder" href="@($"transmittal-receipt/{RequestId}/exporting")" target="_blank">Export</NavLink>
+                        }
+                    }
+                    else if (!string.IsNullOrEmpty(User.Office) && User.Office == Offices.RMD.ToString() && GetTransmittalReceipt.Data != null)
+                    {
+                        if (string.IsNullOrEmpty(hrmdTransmittal?.Uri))
+                        {
+                            <div class="row my-3">
+                                <div class="col">
+                                    <p><b>TRANSMITTAL RECEIPT</b></p>
+                                </div>
+                                <div class="d-flex col-2 gap-4 justify-content-center">
+                                    <NavLink class="fw-bolder" href="@($"transmittal-receipt/{RequestId}")" target="_blank">View</NavLink>
+                                    <NavLink class="fw-bolder" href="@($"transmittal-receipt/{RequestId}/exporting")" target="_blank">Export</NavLink>
+                                </div>
                             </div>
-                        </div>
+                        }
                     }
                     @* else
                     {
@@ -770,21 +801,27 @@
                     } *@
                     <div class="row my-3">
                         <div class="col align-content-center">
-                            <p><b>@(string.IsNullOrEmpty(GetTransmittalReceipt.Data?.Uri) ? "UPLOAD RECEIVED TRANSMITTAL RECEIPT" : "RECEIVED TRANSMITTAL RECEIPT")</b></p>
+                            <p><b>RECEIVED TRANSMITTAL RECEIPT</b></p>
                         </div>
-                        @if (User.Office == Offices.RMD.ToString() && SelectedRecordRequest.RmdRequestStatus == RecordRequestStates.Claimed.ToString() && !string.IsNullOrEmpty(GetTransmittalReceipt.Data?.Uri))
+                        @if (User.Office == Offices.RMD.ToString() && SelectedRecordRequest.RmdRequestStatus == OfficeRequestedRecordStatus.Claimed.ToString() && GetTransmittalReceipt.Data != null)
                         {
-                            <div class="d-flex col-2 gap-4 justify-content-center">
-                                <NavLink class="fw-bolder text-end" href="@GetTransmittalReceipt.Data.Uri" target="_blank">View</NavLink>
-                                <NavLink class="fw-bolder" style="cursor: pointer;" @onclick="@(() => DownloadFromStream(GetTransmittalReceipt.Data.Uri, "Transmittal Receipt.pdf"))">Export</NavLink>
-                            </div>
+                            if (!string.IsNullOrEmpty(rmdTransmittal?.Uri))
+                            {
+                                <div class="d-flex col-2 gap-4 justify-content-center">
+                                    <NavLink class="fw-bolder text-end" href="@rmdTransmittal.Uri" target="_blank">View</NavLink>
+                                    <NavLink class="fw-bolder" style="cursor: pointer;" @onclick="@(() => DownloadFromStream(rmdTransmittal.Uri, "Transmittal Receipt.pdf"))">Export</NavLink>
+                                </div>
+                            }
                         }
-                        else if (User.Office == Offices.HRMD.ToString() && SelectedRecordRequest.HrmdRequestStatus == RecordRequestStates.Claimed.ToString() && !string.IsNullOrEmpty(GetTransmittalReceipt.Data?.Uri))
+                        else if (User.Office == Offices.HRMD.ToString() && SelectedRecordRequest.HrmdRequestStatus == OfficeRequestedRecordStatus.Claimed.ToString() && GetTransmittalReceipt.Data != null)
                         {
-                            <div class="d-flex col-2 gap-4 justify-content-center">
-                                <NavLink class="fw-bolder text-end" href="@GetTransmittalReceipt.Data.Uri" target="_blank">View</NavLink>
-                                <NavLink class="fw-bolder" style="cursor: pointer;" @onclick="@(() => DownloadFromStream(GetTransmittalReceipt.Data.Uri, "Transmittal Receipt.pdf"))">Export</NavLink>
-                            </div>
+                            if (!string.IsNullOrEmpty(hrmdTransmittal?.Uri))
+                            {
+                                <div class="d-flex col-2 gap-4 justify-content-center">
+                                    <NavLink class="fw-bolder text-end" href="@hrmdTransmittal.Uri" target="_blank">View</NavLink>
+                                    <NavLink class="fw-bolder" style="cursor: pointer;" @onclick="@(() => DownloadFromStream(hrmdTransmittal.Uri, "Transmittal Receipt.pdf"))">Export</NavLink>
+                                </div>
+                            }
                         }
                         else
                         {

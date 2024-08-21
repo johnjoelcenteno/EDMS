@@ -24,7 +24,7 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
     [Inject] public required IRecordRequestSupportingFilesService RecordRequestSupportingFilesService { get; set; }
     [Inject] public required NavigationManager NavigationManager { get; set; }
     protected RequestedRecordModel RequestedRecordModel { get; set; } = new();
-    protected GetTransmittalReceiptModelBaseApiResponse GetTransmittalReceipt { get; set; } = new();
+    protected GetTransmittalReceiptModelIEnumerableBaseApiResponse GetTransmittalReceipt { get; set; } = new();
     protected UpdateResponseBaseApiResponse? UpdateResponseBaseApiResponse;
     protected UpdateResponse? UpdateResponse;
     protected GetUserByIdResult User = new GetUserByIdResult();
