@@ -195,7 +195,7 @@ public class ViewRequestedRecordFormBase : ComponentBase
             IsSigning = false;
             IsLoading = false;
 
-            ToastService.ShowError("Please upload signature file in your profile page");
+            ToastService.ShowError("Please ensure your signature file is uploaded to your profile page.");
             return;
         }
         try
@@ -402,7 +402,7 @@ public class ViewRequestedRecordFormBase : ComponentBase
             }
             catch (Exception)
             {
-                ToastService.ShowError("You need to upload signature first");
+                ToastService.ShowError("Please ensure your signature file is uploaded to your profile page.");
             }
         });
     }
