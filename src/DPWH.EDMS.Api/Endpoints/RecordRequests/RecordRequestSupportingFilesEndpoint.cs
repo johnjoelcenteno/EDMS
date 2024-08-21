@@ -26,9 +26,9 @@ public static class RecordRequestSupportingFilesEndpoint
             {
                 var result = await mediator.Send(new GetTransmittalReceiptQuery(id), token);
 
-                var data = new BaseApiResponse<GetTransmittalReceiptModel>(result);
+                var data = new BaseApiResponse<IEnumerable<GetTransmittalReceiptModel>>(result);
 
-                return result is null ? Results.NotFound() : Results.Ok(data);
+                return Results.Ok(data);
 
             })
             .WithName("GetTransmittalReceipt")
@@ -36,7 +36,7 @@ public static class RecordRequestSupportingFilesEndpoint
             .WithDescription("Get transmittal receipt using the id.")
             .WithApiVersionSet(ApiVersioning.VersionSet)
             .HasApiVersion(1.0)
-            .Produces<BaseApiResponse<GetTransmittalReceiptModel>>()
+            .Produces<BaseApiResponse<IEnumerable<GetTransmittalReceiptModel>>>()
             .Produces(StatusCodes.Status404NotFound);
 
         #endregion
