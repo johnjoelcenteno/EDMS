@@ -101,10 +101,10 @@
                                 </td>
                             </tr>
                             <tr style="height:54pt">
-                                <td style="width:108pt">
-                                    <p class="s2" style="padding-top: 2pt;padding-left: 2pt;text-indent: 0pt;text-align: left;">Office Concerned:</p>
+                                <td style="width:128pt">
+                                    <p class="s2" style="width:428pt; padding-top: 2pt;padding-left: 2pt;text-indent: 0pt;text-align: left;">Office Concerned: @GetOfficeName(User.Office)</p>
                                 </td>
-                                <td style="width:240pt">
+                                @* <td style="width:240pt">
                                     <p class="s2" style="padding-top: 2pt;padding-left: 2pt;text-indent: 0pt;text-align: left;">Options:</p>
                                     <ul id="l1">
                                         <li data-list-text="-">
@@ -114,7 +114,7 @@
                                             <p class="s2" style="padding-top: 1pt;padding-left: 38pt;text-indent: -17pt;text-align: left;">Human Resource Management Division</p>
                                         </li>
                                     </ul>
-                                </td>
+                                </td> *@
                             </tr>
                             <tr style="height:20pt">
                                 <td style="width:348pt" colspan="2">
@@ -165,7 +165,7 @@
                                 </td>
                                 <td style="width:285pt;border-bottom-style:solid;border-bottom-width:1pt">
 
-                                    <p class="s2" style="padding-left: 5pt;text-indent: 0pt;text-align: center;">@(User.LastName + ", " + User.FirstName)</p>
+                                    <p class="s2" style="padding-left: 5pt;text-indent: 0pt;text-align: center;">@(User.FirstName + " " + User.MiddleInitial + " " + User.LastName)</p>
                                 </td>
                             </tr>
                             <tr style="height:17pt">
