@@ -9,6 +9,7 @@ using DPWH.EDMS.Web.Client.Shared.Services.ExceptionHandlerEmployee;
 using DPWH.EDMS.Web.Client.Shared.Services.ExceptionHandlerPIS;
 using DPWH.EDMS.Web.Client.Shared.Services.Export;
 using DPWH.EDMS.Web.Client.Shared.Services.Export.ExportAuditTrail;
+using DPWH.EDMS.Web.Client.Shared.Services.FontService;
 using DPWH.EDMS.Web.Client.Shared.Services.Navigation;
 
 namespace DPWH.EDMS.Web.Client.Shared.Core;
@@ -29,6 +30,7 @@ public static class SharedServiceProvider
         services.AddScoped<OverviewFilterService>();
         services.AddScoped<NavRx>();
         services.AddScoped<DrawingService>();
+        services.AddScoped<FontServices>();
         return services;
     }
 }

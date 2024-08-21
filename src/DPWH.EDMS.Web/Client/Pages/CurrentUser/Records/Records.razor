@@ -85,13 +85,33 @@
 
                                             <GridColumn Width="5%">
                                                 <Template>
-                                                    <TelerikButton OnClick="@(() => viewData(recordType))">View</TelerikButton>
+                                                    @{
+                                                        var data = context as RecordDocumentModel;
+                                                        if (data != null)
+                                                        {
+                                                            <div class="d-flex justify-content-center">
+                                                                <NavLink class="fw-bolder custom-button" href="@data.RecordUri" target="_blank">View</NavLink>
+                                                            </div>
+                                                        }
+                                                    }
+                                                    
 
                                                 </Template>
                                             </GridColumn>
                                             <GridColumn Width="5%">
                                                 <Template>
-                                                    <TelerikButton OnClick="@(() => viewData(recordType))">Export</TelerikButton>
+                                                    @{
+                                                        var data = context as RecordDocumentModel;
+                                                        if(data != null)
+                                                        {
+                                                            <div class="d-flex justify-content-center">
+                                                                <NavLink class="fw-bolder custom-button" style="cursor: pointer;" @onclick="@(() => DownloadFromStream(data.RecordUri, $"{data.RecordName}.pdf"))">Export</NavLink>
+                                                            </div>
+                                                             
+                                                            //<TelerikButton OnClick="@(() => DownloadFromStream(data.RecordUri, $"{data.RecordName}.pdf"))">Export</TelerikButton>
+                                                        }
+                                                    }
+                                                     
                                                 </Template>
                                             </GridColumn>
                                         </GridColumns>
@@ -222,9 +242,25 @@
 
     .k-grid a {
         color: #38339B;
-        text-decoration: underline;
+        text-decoration: none;
     }
     .versions{
         color: #38339B;
     }
+
+    .custom-button {
+        background-color: #f6f0ff;
+        border: none;
+        padding: 10px 10px;
+        font-size: 16px;
+        font-weight: bold;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s, transform 0.3s;
+    }
+
+        .custom-button:hover {
+            background-color: #edcfff;
+            transform: scale(1.05);
+        }
 </style>

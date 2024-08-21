@@ -1,0 +1,55 @@
+﻿.loader {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+    padding: 15px 30px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15);
+    width: 180px;
+}
+
+.loader-circle {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background-color: #eb4a1f;
+    background-image: url('/dpwh_dark.png'); /* Path to your image */
+    background-size: calc(100% - 10px) calc(100% - 10px); /* Adjust size to account for padding */
+    background-repeat: no-repeat;
+    background-position: center;
+    background-origin: content-box; /* Apply padding effect */
+    background-clip: content-box; /* Apply padding effect */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px; /* Add padding to the element */
+    box-sizing: border-box; /* Ensure padding is included in the total size */
+    animation: rotate 2.5s ease-in-out infinite;
+}
+
+.loader-text {
+    color: #211d70;
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 16px;
+    background-color: #fff;
+    padding: 0px 16px;
+    border-radius: 10px;
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
