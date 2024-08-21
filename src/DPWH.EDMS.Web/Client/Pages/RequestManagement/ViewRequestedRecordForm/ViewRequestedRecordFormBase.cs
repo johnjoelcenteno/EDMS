@@ -317,7 +317,7 @@ public class ViewRequestedRecordFormBase : ComponentBase
         }
         if (RequestedRecord.DocumentType == "MC")
         {
-            gfx.DrawString($"Certified Machine Copy from Original File", font, XBrushes.DarkGreen, new XRect(28, 0, qrImageHeight, positionY), XStringFormats.TopLeft);
+            gfx.DrawString($"Certified Machine Copy from the Record on File", font, XBrushes.DarkGreen, new XRect(18, 0, qrImageHeight, positionY), XStringFormats.TopLeft);
         }
 
         gfx.TranslateTransform(0, 38);
