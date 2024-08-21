@@ -7,6 +7,8 @@ using DPWH.EDMS.Components.Components.ReusableGrid;
 using DPWH.EDMS.Web.Client.Pages.RecordsManagement.Employee.Records.Model;
 using DPWH.EDMS.Client.Shared.APIClient.Services.RecordManagement;
 using DPWH.EDMS.Components.Helpers;
+using Microsoft.JSInterop;
+using Telerik.SvgIcons;
 
 namespace DPWH.EDMS.Web.Client.Pages.RecordsManagement.Employee.Records;
 
@@ -14,6 +16,7 @@ public class RecordsBase : GridBase<GetLookupResult>
 {
     [Parameter] public required GetUserByIdResult SelectedEmployee { get; set; }
     [Inject] public required ILookupsService LookupsService { get; set; }
+    [Inject] protected IJSRuntime? JS { get; set; }
     [Inject] public required IRecordManagementService RecordManagementService { get; set; }
     [Inject] public required NavigationManager NavigationManager { get; set; }
     protected GetLookupResultIEnumerableBaseApiResponse GetEmployeeRecords { get; set; } = new GetLookupResultIEnumerableBaseApiResponse();
@@ -48,12 +51,23 @@ public class RecordsBase : GridBase<GetLookupResult>
             RecordDocuments = GenericHelper.GetListByDataSource<RecordDocumentModel>(recordResult.Data);
         }
     }
-    public void viewData(GetLookupResult data)
+    protected async Task DownloadFromStream(string uri, string name)
     {
-        ToastService.ShowError($"{data.Id}");
-        return;
-        NavigationManager.NavigateTo($"/my-records/{data.Id}");
+        var fileUri = uri;
+        var fileStream = await GetFileStreamFromUri(fileUri);
+        var fileName = name;
+
+        using var streamRef = new DotNetStreamReference(stream: fileStream);
+        await JS!.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
     }
+    protected async Task<Stream> GetFileStreamFromUri(string fileUri)
+    {
+        using var httpClient = new HttpClient();
+        var fileBytes = await httpClient.GetByteArrayAsync(fileUri);
+        var fileStream = new MemoryStream(fileBytes);
+        return fileStream;
+    }
+ 
     protected override void OnInitialized()
     {
         // ----

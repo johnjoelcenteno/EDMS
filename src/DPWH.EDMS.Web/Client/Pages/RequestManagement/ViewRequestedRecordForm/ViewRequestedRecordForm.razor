@@ -1,31 +1,83 @@
 ﻿@page "/request-management/requested-record/{RequestId}/{DocumentId}"
 @inherits ViewRequestedRecordFormBase
-
+ 
 
 <TelerikMediaQuery Media="(max-width: 480px)" OnChange="((changed) => XSmall = changed)"></TelerikMediaQuery>
 <EdmsBreadcrumbs Data="@BreadcrumbItems" />
-<EdmsLoader Visible="IsLoading" />
+<TelerikLoaderContainer Visible="@IsLoading">
+    <Template>
+        <div class="loader">
+            <div class="loader-circle"></div>
+            <span class="loader-text">@Status</span>
+        </div>
+    </Template>
+</TelerikLoaderContainer>
 
 @if (RequestedRecord != null)
 {
-    <div class="d-flex justify-content-between pt-3" style="width: 22cm; margin-left: auto; margin-right: auto;">
-        <h3>@RequestedRecord.RecordType</h3>
-         
-        <TelerikButton 
-            Class="mb-2"
-            Icon="@SvgIcon.Signature"
-            ThemeColor="@ThemeConstants.Button.ThemeColor.Primary">
-                  Signature
+    <div class="d-flex justify-content-between pt-3 mt-5" style="width: 22cm; margin-left: auto; margin-right: auto;">
+         <TelerikButton Class="mb-2"
+                       ThemeColor="@ThemeConstants.Button.ThemeColor.Base" OnClick="@(() => NavManager.NavigateTo($"/request-management/view-request-form/{RequestId}"))">
+          @*   <TelerikSvgIcon Icon="@SvgIcon.ClockArrowRotate" Size="@ThemeConstants.SvgIcon.Size.ExtraExtraLarge" /> *@
+            Back
         </TelerikButton>
+        <div class="row text-center">
+            <div class="col-12">
+                <h3>@RequestedRecord.RecordType</h3>
+               
+            </div>
+            <div class="col-12">
+                <p>@(RequestedRecord.DocumentType == "MC" ? "Machine Copy from Original File" : "Certified True Copy")</p>
+            </div>
+        </div>
+        
+        @if (IsSigning)
+        {
+            <TelerikButton Class="mb-2"
+                           ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="false">
+                <TelerikSvgIcon Icon="@SvgIcon.Signature" Size="@ThemeConstants.SvgIcon.Size.ExtraExtraLarge" />
+                Signing ...
+            </TelerikButton>
+        }
+        else
+        {
+            <TelerikButton Class="mb-2"
+                           ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" OnClick="@(() => GenerateStamp($"{RequestedRecord.Uri}", "pdfs/modified.pdf"))">
+                <TelerikSvgIcon Icon="@SvgIcon.Signature" Size="@ThemeConstants.SvgIcon.Size.ExtraExtraLarge" />
+                Sign
+            </TelerikButton>
+        }
+       
     </div>
     <div class="container page-legal-size">
         @if (!string.IsNullOrEmpty(RequestedRecord.Uri))
         {
-            <iframe src="@RequestedRecord.Uri" height="100%" width="100%" title="@RequestedRecord.RecordType"></iframe>
+            <iframe src="@($"{RequestedRecord.Uri}?t={DateTime.Now.Ticks}")"
+                    height="100%"
+                    width="100%"
+                    title="@RequestedRecord.RecordType"></iframe>
+ 
         }
     </div>
+
 }
- 
+<TelerikDialog @bind-Visible="@IsSignatureOpen" Width="320px" Title="Please sign here">
+    <DialogContent>
+        <TelerikSignature Width="100%"
+                          Height="100%"
+                          Color="black"
+                          BackgroundColor="transparent" 
+                          Smooth="true" 
+                          @bind-Value="@SignedValue">
+          
+        </TelerikSignature>
+    </DialogContent>
+    <DialogButtons>
+        <TelerikButton OnClick="@(() => { IsSignatureOpen = false; })">Cancel</TelerikButton>
+        <TelerikButton ThemeColor="@(ThemeConstants.Button.ThemeColor.Primary)" OnClick="@(() => { IsSignatureOpen = false; })">Sign</TelerikButton>
+    </DialogButtons>
+</TelerikDialog>
+
 <style>
     .page-legal-size {
         height: 1108px;

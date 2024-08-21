@@ -13,8 +13,10 @@ using DPWH.EDMS.Web.Client.Pages.RecordsManagement.Employee.Records.Model;
 using DPWH.EDMS.Web.Client.Shared.Services.ExceptionHandler;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.JSInterop;
 using Telerik.Blazor.Components;
 using Telerik.Blazor.Components.Common.Trees.Models;
+using Telerik.SvgIcons;
 
 namespace DPWH.EDMS.Web.Client.Pages.CurrentUser.Records;
 
@@ -23,6 +25,7 @@ public class RecordsBase : GridBase<GetLookupResult>
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateAsync { get; set; }
     [Parameter] public required GetUserByIdResult SelectedEmployee { get; set; }
     [Inject] public required ILookupsService LookupsService { get; set; }
+    [Inject] protected IJSRuntime? JS { get; set; }
     [Inject] public required IRecordManagementService RecordManagementService { get; set; }
     [Inject] public required NavigationManager NavigationManager { get; set; }
     protected GetLookupResultIEnumerableBaseApiResponse GetEmployeeRecords { get; set; } = new GetLookupResultIEnumerableBaseApiResponse();
@@ -96,13 +99,26 @@ public class RecordsBase : GridBase<GetLookupResult>
             RecordDocuments = GenericHelper.GetListByDataSource<RecordDocumentModel>(recordResult.Data);
         }
     }
-    public void viewData(GetLookupResult data)
+    //protected void viewData(GetLookupResult data)
+    //{
+    //    NavigationManager.NavigateTo($"/my-records/{data.Id}");
+    //}
+    protected async Task DownloadFromStream(string uri, string name)
     {
-        ToastService.ShowError($"{data.Id}");
-        return;
-        NavigationManager.NavigateTo($"/my-records/{data.Id}");
-    }
+        var fileUri = uri;
+        var fileStream = await GetFileStreamFromUri(fileUri);
+        var fileName = name;
 
+        using var streamRef = new DotNetStreamReference(stream: fileStream);
+        await JS!.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
+    }
+    protected async Task<Stream> GetFileStreamFromUri(string fileUri)
+    {
+        using var httpClient = new HttpClient();
+        var fileBytes = await httpClient.GetByteArrayAsync(fileUri);
+        var fileStream = new MemoryStream(fileBytes);
+        return fileStream;
+    }
     //protected void GoToAddNewRequest()
     //{
     //    HandleGoToAddNewRequest("record-management/request-history/add/" + SelectedEmployee.Id);
