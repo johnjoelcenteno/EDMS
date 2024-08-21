@@ -4077,6 +4077,46 @@
         }
       }
     },
+    "/api/users/Profile/GetSignature": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "GetUserSignature",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetUserProfileDocumentModelBaseApiResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/users/deactivate": {
       "post": {
         "tags": [
@@ -5762,6 +5802,36 @@
           },
           "data": {
             "$ref": "#/components/schemas/GetUserByIdResult"
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetUserProfileDocumentModel": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "employeeNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "uriSignature": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetUserProfileDocumentModelBaseApiResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "$ref": "#/components/schemas/GetUserProfileDocumentModel"
           }
         },
         "additionalProperties": false

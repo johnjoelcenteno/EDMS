@@ -13,6 +13,7 @@ using DPWH.EDMS.Application.Features.Users.Commands.UploadSignature;
 using DPWH.EDMS.Application.Features.Users.Queries.GetUserById;
 using DPWH.EDMS.Application.Features.Users.Queries.GetUsers;
 using DPWH.EDMS.Application.Models;
+using DPWH.EDMS.Application.Models.UserProfileDocuments;
 using DPWH.EDMS.IDP.Core.Constants;
 using DPWH.EDMS.Infrastructure.Storage;
 using KendoNET.DynamicLinq;
@@ -181,15 +182,15 @@ public static class UsersEndpoint
         {
             var command = new GetSignatureRequest();
             var result = await mediator.Send(command, token);
-
-            return result is null ? Results.NotFound() : Results.Ok(result);
+            var data = new BaseApiResponse<GetUserProfileDocumentModel>(result);
+            return result is null ? Results.NotFound() : Results.Ok(data);
         })
             .WithName("GetUserSignature")
             .WithTags(TagName)
             .WithDescription("Get user signature")
             .WithApiVersionSet(ApiVersioning.VersionSet)
-            .HasApiVersion(1.0)
-            .Produces<BaseApiResponse<string?>>()
+            .HasApiVersion(1.0)            
+            .Produces<BaseApiResponse<GetUserProfileDocumentModel>>()
             .Produces<ProblemDetails>(StatusCodes.Status400BadRequest)
             .Produces<ProblemDetails>(StatusCodes.Status500InternalServerError);
 
