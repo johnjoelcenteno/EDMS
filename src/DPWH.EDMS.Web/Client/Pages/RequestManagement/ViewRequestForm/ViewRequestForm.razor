@@ -460,7 +460,7 @@
                         {
                             if (User.Office == Offices.RMD.ToString())
                             {
-                                <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.RmdRequestStatus == OfficeRequestedRecordStatus.Reviewed.ToString())">Submit</TelerikButton>
+                                <TelerikButton OnClick="ValidateManagerApproval" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.RmdRequestStatus == OfficeRequestedRecordStatus.Reviewed.ToString() || SelectedRecordRequest.RmdRequestStatus == OfficeRequestedRecordStatus.Approved.ToString())">Submit</TelerikButton>
                             }
                             else if (User.Office == Offices.HRMD.ToString())
                             {
@@ -492,7 +492,30 @@
                             <div class="col mb-1">
                                 <label for="@record.RecordType">@record.RecordType</label>
                             </div>
-                            @if (record.Uri != null)
+                            @if (User.UserAccess == "Staff" && User.Office == Offices.RMD.ToString() && SelectedRecordRequest.RmdRequestStatus == OfficeRequestedRecordStatus.Reviewed.ToString())
+                            {
+                                <p>@string.Empty</p>
+                            }
+                            else
+                            {
+                                if (record.Uri != null)
+                                {
+                                    HasNoRecords = false;
+                                
+                                    <div class="d-flex col-2 gap-4 justify-content-center">
+                                        <NavLink class="fw-bolder" href="@record.Uri" target="_blank">View</NavLink>
+                                        <NavLink class="fw-bolder" style="cursor: pointer;" @onclick="@(() => DownloadFromStream(record.Uri, $"{record.RecordType}.pdf"))">Export</NavLink>
+                                    </div>
+                                }
+                                else
+                                {
+                                    HasNoRecords = true;
+                                    <div class="col-2 text-center">
+                                        <p class="fw-bolder">No Record</p>
+                                    </div>
+                                }                                
+                            }
+                            @* @if (record.Uri != null)
                             {
                                 HasNoRecords = false;
                                 
@@ -507,7 +530,7 @@
                                 <div class="col-2 text-center">
                                     <p class="fw-bolder">No Record</p>
                                 </div>
-                            }
+                            } *@
                         </div>
                     }
                 }
@@ -583,6 +606,9 @@
                         </div>
                     </div>
                 }
+                <div class="row mt-3">
+                    <p class="text-danger">@ManagerApprovalValidation</p>
+                </div>
             </div>
         </div>
     </TabStripTab>
@@ -634,17 +660,40 @@
                     <div class="row">
                         <div class="col-sm-12 col-md-4 mb-3">
                             <label class="mb-1"><b>Date Received</b></label>
-                            @{
-                                var rmdTransmittal = GetTransmittalReceipt.Data.FirstOrDefault(r => r.Office == "RMD");
-                                var hrmdTransmittal = GetTransmittalReceipt.Data.FirstOrDefault(r => r.Office == "HRMD");
+                            @if (User.Office == Offices.RMD.ToString())
+                            {
+                                if (GetTransmittalReceipt.Data != null)
+                                {
+                                    var rmdTransmittal = GetTransmittalReceipt.Data.FirstOrDefault(r => r.Office == "RMD");
 
-                                if (User.Office == Offices.RMD.ToString() && rmdTransmittal != null)
-                                {
-                                    <p>@GenericHelper.GetDateDisplay(rmdTransmittal.DateReceived)</p>
+                                    if (rmdTransmittal != null)
+                                    {
+                                        <p>@GenericHelper.GetDateDisplay(rmdTransmittal.DateReceived)</p>
+                                    }
+                                    else
+                                    {
+                                        <TelerikDatePicker @bind-Value="@DateReceived" Placeholder="Select Date" Max="MaxDate" Enabled="!string.IsNullOrEmpty(User.Office)"></TelerikDatePicker>
+                                    }
                                 }
-                                else if (User.Office == Offices.HRMD.ToString() && hrmdTransmittal != null)
+                                else
                                 {
-                                    <p>@GenericHelper.GetDateDisplay(hrmdTransmittal.DateReceived)</p>
+                                    <TelerikDatePicker @bind-Value="@DateReceived" Placeholder="Select Date" Max="MaxDate" Enabled="!string.IsNullOrEmpty(User.Office)"></TelerikDatePicker>
+                                }
+                            }
+                            else if (User.Office == Offices.HRMD.ToString())
+                            {
+                                if (GetTransmittalReceipt.Data != null)
+                                {
+                                    var hrmdTransmittal = GetTransmittalReceipt.Data.FirstOrDefault(r => r.Office == "HRMD");
+
+                                    if (hrmdTransmittal != null)
+                                    {
+                                        <p>@GenericHelper.GetDateDisplay(hrmdTransmittal.DateReceived)</p>
+                                    }
+                                    else
+                                    {
+                                        <TelerikDatePicker @bind-Value="@DateReceived" Placeholder="Select Date" Max="MaxDate" Enabled="!string.IsNullOrEmpty(User.Office)"></TelerikDatePicker>
+                                    }
                                 }
                                 else
                                 {
@@ -654,17 +703,45 @@
                         </div>
                         <div class="col-sm-12 col-md-4 mb-3">
                             <label class="mb-1"><b>Time Received</b></label>
-                            @if (User.Office == Offices.RMD.ToString() && rmdTransmittal != null)
+                            @if (User.Office == Offices.RMD.ToString())
                             {
-                                <p>@GenericHelper.GetTimeDisplay(rmdTransmittal.TimeReceived)</p>
+                                if (GetTransmittalReceipt.Data != null)
+                                {
+                                    var rmdTransmittal = GetTransmittalReceipt.Data?.FirstOrDefault(r => r.Office == "RMD");
+
+                                    if (GetTransmittalReceipt.Data != null && rmdTransmittal != null)
+                                    {
+                                        <p>@GenericHelper.GetTimeDisplay(rmdTransmittal.TimeReceived)</p>
+                                    }
+                                    else
+                                    {
+                                        <TelerikTimePicker @bind-Value="@TimeReceived" Placeholder="Select Time" Enabled="!string.IsNullOrEmpty(User.Office)"></TelerikTimePicker>
+                                    }                                    
+                                }
+                                else
+                                {
+                                    <TelerikTimePicker @bind-Value="@TimeReceived" Placeholder="Select Time" Enabled="!string.IsNullOrEmpty(User.Office)"></TelerikTimePicker>
+                                }
                             }
-                            else if (User.Office == Offices.HRMD.ToString() && hrmdTransmittal != null)
+                            else if (User.Office == Offices.HRMD.ToString())
                             {
-                                <p>@GenericHelper.GetTimeDisplay(hrmdTransmittal.TimeReceived)</p>
-                            }
-                            else
-                            {
-                                <TelerikTimePicker @bind-Value="@TimeReceived" Placeholder="Select Time" Enabled="!string.IsNullOrEmpty(User.Office)"></TelerikTimePicker>
+                                if (GetTransmittalReceipt.Data != null)
+                                {
+                                    var hrmdTransmittal = GetTransmittalReceipt.Data?.FirstOrDefault(r => r.Office == "HRMD");
+
+                                    if (GetTransmittalReceipt.Data != null && hrmdTransmittal != null)
+                                    {
+                                        <p>@GenericHelper.GetTimeDisplay(hrmdTransmittal.TimeReceived)</p>
+                                    }
+                                    else
+                                    {
+                                        <TelerikTimePicker @bind-Value="@TimeReceived" Placeholder="Select Time" Enabled="!string.IsNullOrEmpty(User.Office)"></TelerikTimePicker>
+                                    }
+                                }
+                                else
+                                {
+                                    <TelerikTimePicker @bind-Value="@TimeReceived" Placeholder="Select Time" Enabled="!string.IsNullOrEmpty(User.Office)"></TelerikTimePicker>
+                                }
                             }
                         </div>
                     </div>
@@ -758,35 +835,18 @@
                             }
                         }
                     }
-                    @if (!string.IsNullOrEmpty(User.Office) && User.Office == Offices.RMD.ToString() && GetTransmittalReceipt.Data != null)
+                    @if ((User.Office == Offices.RMD.ToString() && SelectedRecordRequest.RmdRequestStatus != OfficeRequestedRecordStatus.Claimed.ToString())
+                    || (User.Office == Offices.HRMD.ToString() && SelectedRecordRequest.HrmdRequestStatus != OfficeRequestedRecordStatus.Claimed.ToString()))
                     {
-                        if (string.IsNullOrEmpty(rmdTransmittal?.Uri))
-                        {
-                            <div class="row my-3">
-                                <div class="col">
-                                    <p><b>TRANSMITTAL RECEIPT</b></p>
-                                </div>
-                                <div class="d-flex col-2 gap-4 justify-content-center">
-                                    <NavLink class="fw-bolder" href="@($"transmittal-receipt/{RequestId}")" target="_blank">View</NavLink>
-                                    <NavLink class="fw-bolder" href="@($"transmittal-receipt/{RequestId}/exporting")" target="_blank">Export</NavLink>
-                                </div>
+                        <div class="row my-3">
+                            <div class="col">
+                                <p><b>TRANSMITTAL RECEIPT</b></p>
                             </div>
-                        }
-                    }
-                    else if (!string.IsNullOrEmpty(User.Office) && User.Office == Offices.RMD.ToString() && GetTransmittalReceipt.Data != null)
-                    {
-                        if (string.IsNullOrEmpty(hrmdTransmittal?.Uri))
-                        {
-                            <div class="row my-3">
-                                <div class="col">
-                                    <p><b>TRANSMITTAL RECEIPT</b></p>
-                                </div>
-                                <div class="d-flex col-2 gap-4 justify-content-center">
-                                    <NavLink class="fw-bolder" href="@($"transmittal-receipt/{RequestId}")" target="_blank">View</NavLink>
-                                    <NavLink class="fw-bolder" href="@($"transmittal-receipt/{RequestId}/exporting")" target="_blank">Export</NavLink>
-                                </div>
+                            <div class="d-flex col-2 gap-4 justify-content-center">
+                                <NavLink class="fw-bolder" href="@($"transmittal-receipt/{RequestId}")" target="_blank">View</NavLink>
+                                <NavLink class="fw-bolder" href="@($"transmittal-receipt/{RequestId}/exporting")" target="_blank">Export</NavLink>
                             </div>
-                        }
+                        </div>                        
                     }
                     @* else
                     {
@@ -803,8 +863,10 @@
                         <div class="col align-content-center">
                             <p><b>RECEIVED TRANSMITTAL RECEIPT</b></p>
                         </div>
-                        @if (User.Office == Offices.RMD.ToString() && SelectedRecordRequest.RmdRequestStatus == OfficeRequestedRecordStatus.Claimed.ToString() && GetTransmittalReceipt.Data != null)
+                        @if (User.Office == Offices.RMD.ToString() && SelectedRecordRequest.RmdRequestStatus == OfficeRequestedRecordStatus.Claimed.ToString() && GetTransmittalReceipt.Data != null && GetTransmittalReceipt.Data.Any())
                         {
+                            var rmdTransmittal = GetTransmittalReceipt.Data.FirstOrDefault(r => r.Office == "RMD");
+
                             if (!string.IsNullOrEmpty(rmdTransmittal?.Uri))
                             {
                                 <div class="d-flex col-2 gap-4 justify-content-center">
@@ -813,8 +875,10 @@
                                 </div>
                             }
                         }
-                        else if (User.Office == Offices.HRMD.ToString() && SelectedRecordRequest.HrmdRequestStatus == OfficeRequestedRecordStatus.Claimed.ToString() && GetTransmittalReceipt.Data != null)
+                        else if (User.Office == Offices.HRMD.ToString() && SelectedRecordRequest.HrmdRequestStatus == OfficeRequestedRecordStatus.Claimed.ToString() && GetTransmittalReceipt.Data != null && GetTransmittalReceipt.Data.Any())
                         {
+                            var hrmdTransmittal = GetTransmittalReceipt.Data.FirstOrDefault(r => r.Office == "HRMD");
+
                             if (!string.IsNullOrEmpty(hrmdTransmittal?.Uri))
                             {
                                 <div class="d-flex col-2 gap-4 justify-content-center">
@@ -964,7 +1028,7 @@
         <div class="no-focus">
             <TelerikStepper Value="@ProgressIndex" ValueChanged="@ValueChangeHandler" Linear="true" Orientation="@(!XSmall ? StepperOrientation.Vertical: StepperOrientation.Horizontal)">
                 <StepperSteps>
-                    @if (string.IsNullOrEmpty(User.Office) || (User.UserAccess == "Manager" && User.Office == Offices.RMD.ToString()))
+                    @if (string.IsNullOrEmpty(User.Office) || (User.UserAccess == "Manager" && User.Office == Offices.RMD.ToString()) || (User.UserAccess == "Staff" && User.Office == Offices.RMD.ToString()))
                     {
                         <StepperStep Label="Submit"></StepperStep>
                         <StepperStep Label="Review & Evaluate"></StepperStep>
@@ -972,7 +1036,7 @@
                         <StepperStep Label="Release"></StepperStep>
                         <StepperStep Label="Claim"></StepperStep>
                     }
-                    else if ((User.UserAccess == "Manager" && User.Office == Offices.HRMD.ToString()) || User.UserAccess == "Staff")
+                    else if ((User.UserAccess == "Manager" && User.Office == Offices.HRMD.ToString()) || (User.UserAccess == "Staff" && User.Office == Offices.HRMD.ToString()))
                     {
                         <StepperStep Label="Submit"></StepperStep>
                         <StepperStep Label="Review & Evaluate"></StepperStep>
