@@ -1,5 +1,7 @@
 ﻿@page "/profile"
 @using DPWH.EDMS.Components.Helpers
+@using DPWH.EDMS.IDP.Core.Constants
+@using DPWH.EDMS.Shared.Enums;
 
 @inherits UserProfileBase
 @attribute [Authorize(Policy = "RequireActiveRoles")]
@@ -9,11 +11,11 @@
 <EdmsLoader Visible="@IsLoading" />
 
 <h3>Profile</h3>
-    <div class="d-flex flex-row align-items-center mb-2">
+<div class="d-flex flex-row align-items-center mb-2">
     <p>@(GenericHelper.GetDisplayValue(CurrentUser.UserName)) (@(GenericHelper.GetDisplayValue(CurrentUser.EmployeeId)))</p>
     <span class="role-chip">@(GenericHelper.GetDisplayValue(Role))</span>
 </div>
-    <p>Email: @(GenericHelper.GetDisplayValue(CurrentUser.Email)) / Contact: @(GenericHelper.GetDisplayValue(CurrentUser.MobileNumber))</p>
+<p>Email: @(GenericHelper.GetDisplayValue(CurrentUser.Email)) / Contact: @(GenericHelper.GetDisplayValue(CurrentUser.MobileNumber))</p>
 <hr />
 
 <TelerikTabStrip>
@@ -23,8 +25,8 @@
             Personal Details
         </HeaderTemplate>
         <Content>
-                <div class="d-flex flex-column">
-                    <div class="d-flex flex-row mb-2">
+            <div class="d-flex flex-column">
+                <div class="d-flex flex-row mb-2">
                     <p class="edms-text-header-small">Designation Details</p>
                 </div>
                 <div class="detail-flex">
@@ -40,10 +42,79 @@
                     <p class="edms-text-header-small">Account Information</p>
                 </div>
                 <div class="detail-flex">
-                    <p><b>Account Status:</b>&nbsp; @(CurrentUser.UserAccess != "Deactivated"? "Active" : "Inactive")</p>
-                        <p><b>Date Joined:</b>&nbsp;@(GenericHelper.GetDisplayValue(GenericHelper.GetDateDisplay(CurrentUser.Created)))</p>
+                    <p><b>Account Status:</b>&nbsp; @(CurrentUser.UserAccess != "Deactivated" ? "Active" : "Inactive")</p>
+                    <p><b>Date Joined:</b>&nbsp;@(GenericHelper.GetDisplayValue(GenericHelper.GetDateDisplay(CurrentUser.Created)))</p>
                 </div>
-         </div>
+            </div>
         </Content>
-    </TabStripTab>   
+    </TabStripTab>
+
+    @if (Office == Offices.RMD.ToString() || (GenericHelper.GetDisplayValue(CurrentUser.Role)) == ApplicationRoles.SuperAdmin)
+    {
+        @if ((GenericHelper.GetDisplayValue(CurrentUser.Role)) == ApplicationRoles.Manager || (GenericHelper.GetDisplayValue(CurrentUser.Role)) == ApplicationRoles.SuperAdmin)
+        {
+            <TabStripTab>
+                <HeaderTemplate>
+                    <span class="bi me-2 material-symbols-outlined">upload</span>
+                    Signature
+                </HeaderTemplate>
+                <Content>
+                    <div class="d-flex flex-column">
+                        <div class="d-flex flex-row mb-2">
+                            <div class="col">
+                                <p class="edms-text-header-small">Signature</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-3">
+                            <TelerikFileSelect Class="@(XSmall ? "mb-3" : "signature-upload-btn")"
+                                               AllowedExtensions="@AllowedExtensions"
+                                               OnSelect="OnSelectSignature"
+                                               Accept="image/png"
+                                               MaxFileSize="@MaxFileSize"
+                                               MinFileSize="@MinFileSize"
+                                               Multiple="false">
+                                <SelectFilesButtonTemplate>
+                                    <TelerikSvgIcon Icon="@SvgIcon.Upload" />
+                                    Upload Signature
+                                </SelectFilesButtonTemplate>
+                            </TelerikFileSelect>
+                            <div class="@(XSmall ? "text-danger mb-3" : "text-danger text-end mb-3") d-flex justify-content-start">
+                                <p>@SignatureValidation</p>
+                            </div>
+                            <TelerikButton OnClick="OnSubmitUpload" Class="mt-2" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary">Upload</TelerikButton>
+                        </div>
+                        <div class="col d-flex justify-content-start">
+                            <TelerikCard>
+                                <CardHeader>
+                                    Uploaded Signature
+                                </CardHeader>
+                                <CardBody>
+                                 
+                                    @if (UriSignature!.ToString() != null)
+                                    {
+                                        <img class="signatureimage" src="@UriSignature.ToString()" style="width:200px; height: 50px; object-fit:scale-down" alt="No signature found" />
+                                    }
+                                   
+
+                                </CardBody>
+                            </TelerikCard>
+
+                        </div>
+                    </div>
+                </Content>
+            </TabStripTab>
+        }
+    }
+
 </TelerikTabStrip>
+<style>
+    .signature-upload-btn {
+        width: 370px;
+    }
+
+    .SignatureImage {
+        background-color: lightgray;
+    }
+</style>
