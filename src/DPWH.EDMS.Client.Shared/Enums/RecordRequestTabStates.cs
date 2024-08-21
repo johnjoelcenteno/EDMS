@@ -9,7 +9,9 @@ namespace DPWH.EDMS.Client.Shared.Enums;
 public enum RecordRequestTabStates
 {
     All = 0,
-    Review = 1,
-    Release = 2,
-    Claimed = 3,
+    Submitted = 1,
+    Reviewed = 2,
+    Approved =3,
+    Released = 4,
+    Claimed = 5,
 }

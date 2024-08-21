@@ -17,8 +17,10 @@ public class RequestManagementBase : RecordRequestGridComponentBase
     protected string? SearchStatus { get; set; }
     protected List<string> StatusList = new List<string>
     {
-        "Review",
-        "Release",
+        "Submitted",
+        "Reviewed",
+        "Approved",
+        "Released",
         "Claimed"
     };
     protected async override Task OnInitializedAsync()

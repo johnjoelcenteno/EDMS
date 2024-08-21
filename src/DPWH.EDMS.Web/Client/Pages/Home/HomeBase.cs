@@ -53,8 +53,10 @@ public class HomeBase : GridBase<RecordRequestModel>
 
     protected List<string> StatusList = new List<string>
     {
-        "Review",
-        "Release",
+        "Submitted",
+        "Reviewed",
+        "Approved",
+        "Released",
         "Claimed"
     };
 

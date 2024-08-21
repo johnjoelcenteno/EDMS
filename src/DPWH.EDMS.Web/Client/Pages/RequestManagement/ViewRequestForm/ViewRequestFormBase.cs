@@ -695,12 +695,16 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
                         ActiveTabIndex = 3;
                         IsRecordUploadEnabled = false;
                         break;
-                    case var status when status == OfficeRequestedRecordStatus.Released.ToString():
+                    case var status when status == OfficeRequestedRecordStatus.Approved.ToString():
                         ProgressIndex = 3;
+                        ActiveTabIndex = 3;
+                        break;
+                    case var status when status == OfficeRequestedRecordStatus.Released.ToString():
+                        ProgressIndex = 4;
                         ActiveTabIndex = 4;
                         break;
                     case var status when status == OfficeRequestedRecordStatus.Claimed.ToString():
-                        ProgressIndex = 4;
+                        ProgressIndex = 5;
                         ActiveTabIndex = 4;
                         break;
                     default:
@@ -757,5 +761,21 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
     public void ValueChangeHandler(int newStep)
     {
 
+    }
+
+    protected string? ManagerApprovalValidation { get; set; }
+
+    protected void ValidateManagerApproval()
+    {
+        ManagerApprovalValidation = string.Empty;
+
+        if (User.UserAccess == "Staff" && SelectedRecordRequest.RmdRequestStatus == OfficeRequestedRecordStatus.Approved.ToString())
+        {
+            IsModalVisible = true;
+        }
+        else
+        {
+            ManagerApprovalValidation = "Request is still under approval.";
+        }
     }
 }
