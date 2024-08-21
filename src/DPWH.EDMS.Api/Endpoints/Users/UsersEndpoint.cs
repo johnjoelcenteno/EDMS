@@ -177,6 +177,22 @@ public static class UsersEndpoint
             .Produces<ProblemDetails>(StatusCodes.Status400BadRequest)
             .Produces<ProblemDetails>(StatusCodes.Status500InternalServerError);
 
+        app.MapGet(ApiEndpoints.Users.GetSignature, async (IMediator mediator, CancellationToken token) =>
+        {
+            var command = new GetSignatureRequest();
+            var result = await mediator.Send(command, token);
+
+            return result is null ? Results.NotFound() : Results.Ok(result);
+        })
+            .WithName("GetUserSignature")
+            .WithTags(TagName)
+            .WithDescription("Get user signature")
+            .WithApiVersionSet(ApiVersioning.VersionSet)
+            .HasApiVersion(1.0)
+            .Produces<BaseApiResponse<string?>>()
+            .Produces<ProblemDetails>(StatusCodes.Status400BadRequest)
+            .Produces<ProblemDetails>(StatusCodes.Status500InternalServerError);
+
         app.MapPost(ApiEndpoints.Users.Deactivate, async (DeactivateUserCommand request, IMediator mediator, CancellationToken token) =>
             {
                 var deactivateResult = await mediator.Send(request, token);
