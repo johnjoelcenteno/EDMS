@@ -20,7 +20,10 @@ using SixLabors.ImageSharp.PixelFormats;
 using QRCoder;
 using SixLabors.ImageSharp.Formats.Jpeg;
 using SixLabors.ImageSharp;
-using DPWH.EDMS.Shared.Enums; 
+using DPWH.EDMS.Shared.Enums;
+using DPWH.NGOBIA.Client.Shared.APIClient.Services.Users;
+using DPWH.EDMS.Components.Helpers;
+using System.Net;
 
 namespace DPWH.EDMS.Web.Client.Pages.RequestManagement.ViewRequestedRecordForm;
 
@@ -33,6 +36,7 @@ public class ViewRequestedRecordFormBase : ComponentBase
     [Inject] public required IExceptionHandlerService ExceptionHandlerService { get; set; }
     [Inject] public required IRecordRequestSupportingFilesService RecordRequestSupportingFilesService { get; set; }
     [Inject] public required IDocumentService DocumentService { get; set; }
+    [Inject] public required IUsersService UserService { get; set; }
     [Inject] public required FontServices FontService { get; set; }
     protected RecordRequestModel SelectedRecordRequest { get; set; } = new();
     protected RequestedRecordModel RequestedRecord { get; set; } = new();
@@ -49,6 +53,7 @@ public class ViewRequestedRecordFormBase : ComponentBase
     protected string SignedValue { get; set; }
     protected string QRCodeValue = "";
     public string Status { get; set; } = "Initializing...";
+    protected string SignedUrl { get; set; }
     public List<BreadcrumbModel> BreadcrumbItems { get; set; } = new()
     {
          new() { Icon = "home", Url = "/"},
@@ -137,7 +142,7 @@ public class ViewRequestedRecordFormBase : ComponentBase
         return byteArray;
     }
 
-    public byte[] GenerateQRCode(string Uri)
+    public byte[] QRImageDownloader(string Uri)
     {
         if (!string.IsNullOrEmpty(Uri))
         {
@@ -180,40 +185,49 @@ public class ViewRequestedRecordFormBase : ComponentBase
     //    }
     //}
 
-    public async Task GenerateStamp(string pdfUri, string relativeOutputFilePath)
+    public async Task GenerateStamp(string pdfUri, string relativeOutputFilePath, string QRUrl)
     {
+       
         IsSigning = true;
         IsLoading = true;
 
+        if (string.IsNullOrEmpty(SignedUrl)) 
+        {
+            IsSigning = false;
+            IsLoading = false;
+
+            ToastService.ShowError("Please ensure your signature file is uploaded to your profile page.");
+            return;
+        }
         try
         {
             Status = "Modifying PDF...";
-            StateHasChanged();
+            
             using var httpClient = new HttpClient();
             string cacheBusterUri = $"{pdfUri}?timestamp={DateTime.UtcNow.Ticks}";
 
             // Download the PDF from the URI
             byte[] pdfData = await httpClient.GetByteArrayAsync(cacheBusterUri);
             Status = "Processing PDF...";
-            StateHasChanged();
+            
 
             using MemoryStream pdfStream = new MemoryStream(pdfData);
-            PdfDocument document = PdfReader.Open(pdfStream, PdfDocumentOpenMode.Modify);
-
+            PdfDocument document = PdfReader.Open(pdfStream, PdfDocumentOpenMode.Modify, PdfSharpCore.Pdf.IO.enums.PdfReadAccuracy.Moderate);
+            
             Status = "Generating stamp...";
-            StateHasChanged();
-
+          
             // Generate the stamp content only once
-            byte[] qrImageData = GenerateQRCode(pdfUri);
+            byte[] qrImageData = QRImageDownloader(QRUrl);
             XImage qrImage = CreateXImageFromByteArray(qrImageData, "qr_code.png");
 
-            byte[] signatureImageData = await GetImage("_content/DPWH.EDMS.Components/images/signaturePNG.png");
-            XImage signatureImage = CreateXImageFromByteArray(signatureImageData, "signaturePNG.png");
+            //byte[] signatureImageData = await GetImage("_content/DPWH.EDMS.Components/images/signaturePNG.png");
+            byte[] signatureImageData = await GetImage(SignedUrl);
+            XImage signatureImage = CreateXImageFromByteArray(signatureImageData, "signature.png");
 
             XFont font = new("Arial", 9, XFontStyle.Bold);
 
             Status = "Applying stamp to PDF pages...";
-            StateHasChanged();
+            
             // Iterate over all pages in the PDF and apply the stamp
             foreach (PdfPage page in document.Pages)
             {
@@ -222,14 +236,14 @@ public class ViewRequestedRecordFormBase : ComponentBase
             }
 
             Status = "Saving stamped PDF...";
-            StateHasChanged();
+            
 
             using MemoryStream outputStream = new MemoryStream();
             document.Save(outputStream);
             byte[] outputData = outputStream.ToArray();
 
             Status = "Uploading stamped PDF...";
-            StateHasChanged();
+            
 
             FileParameter file = new FileParameter(
                 new MemoryStream(outputData, writable: false),
@@ -247,12 +261,13 @@ public class ViewRequestedRecordFormBase : ComponentBase
                 };
                 await RecordRequestSupportingFilesService.UpdateRecordStatus(documentStatus);
             }
-
+            StateHasChanged();
             await LoadSelectedDocuments();
         }
         catch (Exception ex)
         {
-            ToastService.ShowError($"Error in GenerateStamp: {ex.Message}");
+            ToastService.ShowError($"Unable to sign corrupted PDF: {ex.Message}");
+            ToastService.ShowError($"Scan and re-upload again the Document: {ex.Message}");
         }
         finally
         {
@@ -303,7 +318,7 @@ public class ViewRequestedRecordFormBase : ComponentBase
         }
         if (RequestedRecord.DocumentType == "MC")
         {
-            gfx.DrawString($"Certified Machine Copy from Original File", font, XBrushes.DarkGreen, new XRect(28, 0, qrImageHeight, positionY), XStringFormats.TopLeft);
+            gfx.DrawString($"Certified Machine Copy from the Record on File", font, XBrushes.DarkGreen, new XRect(18, 0, qrImageHeight, positionY), XStringFormats.TopLeft);
         }
 
         gfx.TranslateTransform(0, 38);
@@ -376,6 +391,19 @@ public class ViewRequestedRecordFormBase : ComponentBase
             {
                 ToastService.ShowError("Something went wrong on loading record request.");
                 NavManager.NavigateTo(CancelReturnUrl);
+            }
+
+            try
+            {
+                var signedUri = await UserService.GetUserSignature();
+                if (signedUri.Data != null)
+                {
+                    SignedUrl = signedUri.Data.UriSignature;
+                }
+            }
+            catch (Exception)
+            {
+                ToastService.ShowError("Please ensure your signature file is uploaded to your profile page.");
             }
         });
     }

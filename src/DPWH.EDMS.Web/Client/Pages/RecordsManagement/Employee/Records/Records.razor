@@ -38,7 +38,7 @@
             <DetailTemplate>
                 @{
                     var recordType = docversion as GetLookupResult;
-                    var recordVersions = RecordDocuments.Where(x => x.RecordTypeId == recordType.Id).ToList();
+                    var recordVersions = RecordDocuments.Where(x => x.RecordTypeId == recordType.Id).OrderByDescending(x => DateTime.ParseExact(x.DocVersion, "MMddyyyy", null)).ToList();
                     @if (recordVersions != null && recordVersions.Count > 0)
                     {
                        
