@@ -421,6 +421,20 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
         StateHasChanged();
     }
 
+    protected void ValidateManagerApproval()
+    {
+        ManagerApprovalValidation = string.Empty;
+
+        if (User.UserAccess == "Staff" && SelectedRecordRequest.RmdRequestStatus == OfficeRequestedRecordStatus.Approved.ToString())
+        {
+            IsModalVisible = true;
+        }
+        else
+        {
+            ManagerApprovalValidation = "Request is still under approval.";
+        }
+    }
+
     protected void ValidateTransmittalFileSelect()
     {
         TransmittalValidation = string.Empty;
@@ -432,6 +446,20 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
         else
         {
             TransmittalValidation = "Transmittal Receipt is required.";
+        }
+    }
+
+    protected void OnEdit()
+    {
+        IsRecordUploadEnabled = true;
+
+        foreach (var record in SelectedRecordRequest.RequestedRecords)
+        {
+            if (SelectedRecord.ContainsKey(record.Id))
+            {
+                SelectedRecord[record.Id].DocumentType = null;
+                SelectedRecord.Remove(record.Id);
+            }
         }
     }
 
@@ -764,18 +792,4 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
     }
 
     protected string? ManagerApprovalValidation { get; set; }
-
-    protected void ValidateManagerApproval()
-    {
-        ManagerApprovalValidation = string.Empty;
-
-        if (User.UserAccess == "Staff" && SelectedRecordRequest.RmdRequestStatus == OfficeRequestedRecordStatus.Approved.ToString())
-        {
-            IsModalVisible = true;
-        }
-        else
-        {
-            ManagerApprovalValidation = "Request is still under approval.";
-        }
-    }
 }

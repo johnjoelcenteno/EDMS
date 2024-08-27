@@ -135,12 +135,12 @@
                         <TelerikButton OnClick="OnCancel" FillMode="@ThemeConstants.Button.FillMode.Outline">Cancel</TelerikButton>
                         @if (User.Office == Offices.RMD.ToString())
                         {
-                            <TelerikButton OnClick="@(() => IsRecordUploadEnabled = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.RmdRequestStatus == OfficeRequestedRecordStatus.Reviewed.ToString() && IsRecordUploadEnabled == false)">Edit</TelerikButton>
+                            <TelerikButton OnClick="OnEdit" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.RmdRequestStatus == OfficeRequestedRecordStatus.Reviewed.ToString() && IsRecordUploadEnabled == false)">Edit</TelerikButton>
                             <TelerikButton OnClick="OnSubmitReview" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.RmdRequestStatus == OfficeRequestedRecordStatus.Submitted.ToString() || IsRecordUploadEnabled == true)">Submit</TelerikButton>                            
                         }
                         else if (User.Office == Offices.HRMD.ToString())
                         {
-                            <TelerikButton OnClick="@(() => IsRecordUploadEnabled = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.HrmdRequestStatus == OfficeRequestedRecordStatus.Reviewed.ToString() && IsRecordUploadEnabled == false)">Edit</TelerikButton>
+                            <TelerikButton OnClick="OnEdit" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.HrmdRequestStatus == OfficeRequestedRecordStatus.Reviewed.ToString() && IsRecordUploadEnabled == false)">Edit</TelerikButton>
                             <TelerikButton OnClick="OnSubmitReview" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.HrmdRequestStatus == OfficeRequestedRecordStatus.Submitted.ToString() || IsRecordUploadEnabled == true)">Submit</TelerikButton>
                         }
                     </div>
@@ -612,9 +612,8 @@
             </div>
         </div>
     </TabStripTab>
-    <TabStripTab Title="Claim" Disabled="@(User.UserAccess == "Manager" && User.Office == Offices.RMD.ToString() ? ProgressIndex < 4
-                                         : User.UserAccess == "Manager" && User.Office == Offices.HRMD.ToString() ? ProgressIndex < 3
-                                         : User.UserAccess == "Staff" && (User.Office == Offices.RMD.ToString() || User.Office == Offices.HRMD.ToString()) ? ProgressIndex < 3
+    <TabStripTab Title="Claim" Disabled="@((User.UserAccess == "Manager" || User.UserAccess == "Staff") && User.Office == Offices.RMD.ToString() ? ProgressIndex < 4
+                                         : (User.UserAccess == "Manager" || User.UserAccess == "Staff") && User.Office == Offices.HRMD.ToString() ? ProgressIndex < 3
                                          : false)">
         <div class="row">
             @if (!XSmall)
