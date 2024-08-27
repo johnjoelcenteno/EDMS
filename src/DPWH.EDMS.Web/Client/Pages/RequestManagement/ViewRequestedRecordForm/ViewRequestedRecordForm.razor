@@ -43,7 +43,7 @@
         else
         {
             <TelerikButton Class="mb-2"
-                           ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" OnClick="@(() => GenerateStamp($"{RequestedRecord.Uri}", $"{NavManager.BaseUri}requested-signed-document/{SelectedRecordRequest.FullName}/{DateTime.Now.ToString("MMMddyyyy")}/{Guid.NewGuid}"))">
+                           ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" OnClick="@(() => GenerateStamp($"{RequestedRecord.Uri}", $"{NavManager.BaseUri}requested-signed-document/{SelectedRecordRequest.FullName}/{DateTime.Now.ToString("MMMddyyyy")}/{SelectedRecordRequest.ControlNumber}"))">
                 <TelerikSvgIcon Icon="@SvgIcon.Signature" Size="@ThemeConstants.SvgIcon.Size.ExtraExtraLarge" />
                 Sign
             </TelerikButton>

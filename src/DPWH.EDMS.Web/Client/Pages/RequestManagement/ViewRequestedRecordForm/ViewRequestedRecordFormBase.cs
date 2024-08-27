@@ -220,7 +220,7 @@ public class ViewRequestedRecordFormBase : ComponentBase
             Status = "Generating stamp...";
           
             // Generate the stamp content only once
-            byte[] qrImageData = QRImageDownloader(pdfUri);
+            byte[] qrImageData = QRImageDownloader(QRUrl);
             XImage qrImage = CreateXImageFromByteArray(qrImageData, "qr_code.png");
 
             //byte[] signatureImageData = await GetImage("_content/DPWH.EDMS.Components/images/signaturePNG.png");
