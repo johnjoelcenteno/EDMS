@@ -24,6 +24,7 @@ using DPWH.EDMS.Shared.Enums;
 using DPWH.NGOBIA.Client.Shared.APIClient.Services.Users;
 using DPWH.EDMS.Components.Helpers;
 using System.Net;
+using DPWH.EDMS.Client.Shared.Configurations;
 
 namespace DPWH.EDMS.Web.Client.Pages.RequestManagement.ViewRequestedRecordForm;
 
@@ -54,6 +55,8 @@ public class ViewRequestedRecordFormBase : ComponentBase
     protected string QRCodeValue = "";
     public string Status { get; set; } = "Initializing...";
     protected string SignedUrl { get; set; }
+    [Inject]
+    protected ConfigManager ConfigManager { get; set; } = default!;
     public List<BreadcrumbModel> BreadcrumbItems { get; set; } = new()
     {
          new() { Icon = "home", Url = "/"},
@@ -185,7 +188,7 @@ public class ViewRequestedRecordFormBase : ComponentBase
     //    }
     //}
 
-    public async Task GenerateStamp(string pdfUri, string relativeOutputFilePath, string QRUrl)
+    public async Task GenerateStamp(string pdfUri, string QRUrl)
     {
        
         IsSigning = true;
@@ -217,7 +220,7 @@ public class ViewRequestedRecordFormBase : ComponentBase
             Status = "Generating stamp...";
           
             // Generate the stamp content only once
-            byte[] qrImageData = QRImageDownloader(pdfUri);
+            byte[] qrImageData = QRImageDownloader(QRUrl);
             XImage qrImage = CreateXImageFromByteArray(qrImageData, "qr_code.png");
 
             //byte[] signatureImageData = await GetImage("_content/DPWH.EDMS.Components/images/signaturePNG.png");
