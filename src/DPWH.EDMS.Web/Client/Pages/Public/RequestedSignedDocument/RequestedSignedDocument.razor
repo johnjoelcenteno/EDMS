@@ -1,5 +1,5 @@
-﻿@page "/requested-signed-document/{Id}/{DocumentId}"
-@page "/requested-signed-document"
+﻿@* @page "/requested-signed-document/{Id}/{DocumentId}" *@
+@page "/requested-signed-document/{FullName}/{DateCert}/{CertRefNo}"
 @inject NavigationManager NavManager
 @using EDMS.Api.Contracts
 @using DPWH.EDMS.Web.Client.Shared.Services.ExceptionHandler
@@ -7,40 +7,68 @@
 @using Blazored.Toast.Services
 
 <TelerikMediaQuery Media="(max-width: 480px)" OnChange="((changed) => XSmall = changed)"></TelerikMediaQuery>
- 
-<EdmsLoader Visible="@IsLoading" />
 
-
-@if (RequestedRecord != null)
-{
-    <div class="d-flex justify-content-center pt-3 mt-5" style="width: 22cm; margin-left: auto; margin-right: auto;">
-       
-        <div class="row text-center">
-            <div class="col-12">
-                <h3>@RequestedRecord.RecordType</h3>
-
-            </div>
-            <div class="col-12">
-                <p>@(RequestedRecord.DocumentType == "MC" ? "Machine Copy from Original File" : "Certified True Copy")</p>
+<TelerikLoaderContainer Visible="@IsLoading">
+    <Template>
+        <div class="loader">
+            <div class="loader-circle"></div>
+            <span class="loader-text">"Loading..."</span>
+        </div>
+    </Template>
+</TelerikLoaderContainer>
+<div class="border-card mt-5 ">
+    <div class="row">
+        <div class="col-4 d-flex justify-content-center">
+            <img src="_content/DPWH.EDMS.Components/images/dpwh_dark.png" height="100" width="100" alt="logo-detailed" />
+        </div>
+        <div class="col">
+            <div class="align-content-center mt-3">
+                <p>Department of Public Works and Highways</p>
+                <p class="record-style">RECORD CERTIFICATE</p>
             </div>
         </div>
+        <div class="col-12 mt-5">
+            <p class="mb-0">This is a certified <span class="text-decoration-underline fst-italic">true copy / photocopy </span> of the document on file</p>
 
+        </div>
+        <div class="col-12">
+            <p>as requested by:</p>
+        </div>
+        <div class="mt-3">
+            <div class="row">
+                <div class="col-12 mb-3">
+                    Full Name : @FullName
+                </div>
+              @*   <div class="col-12 mb-3">
+                    Last Name : @LastName
+                </div> *@
+                <div class="col-12 mb-3">
+                    Date and time certified : @DateCert
+                </div>
+                <div class="col-12">
+                    Certification Reference Number : @CertRefNo
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="container page-legal-size">
-        @if (!string.IsNullOrEmpty(RequestedRecord.Uri))
-        {
-            <iframe src="@($"{RequestedRecord.Uri}?t={DateTime.Now.Ticks}")"
-                    height="100%"
-                    width="100%"
-                    title="@RequestedRecord.RecordType"></iframe>
-
-        }
-    </div>
-
-}
+</div>
  
 
 <style>
+    .record-style {
+        margin-left: 60px;
+    }
+
+    .border-card {
+        border: 2px solid black;
+        width: 700px;
+        height: 550px;
+        margin: 0 auto;
+        margin-top: 20px;
+        padding: 40px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+    }
+
     .page-legal-size {
         height: 1108px;
         padding: 0.8cm;
@@ -54,67 +82,69 @@
     }
 </style>
 @code {
-    [Parameter] public required string Id { get; set; }
-    [Parameter] public required string DocumentId { get; set; }
-    [Inject] public required IExceptionHandlerService ExceptionHandlerService { get; set; }
-    [Inject] public required IRequestManagementService RequestManagementService { get; set; }
-    [Inject] public required IToastService ToastService { get; set; }
-    protected bool IsSigning { get; set; } = false;
-    protected bool XSmall { get; set; }
-    protected bool IsLoading { get; set; }
-    protected string CancelReturnUrl = string.Empty;
-    protected RequestedRecordModel RequestedRecord { get; set; } = new();
-    protected RecordRequestModel SelectedRecordRequest { get; set; } = new();
-    protected async override Task OnInitializedAsync()
-    {
-        IsLoading = true;
+    [Parameter] public required string FullName { get; set; }
+    // [Parameter] public required string LastName { get; set; }
+    [Parameter] public required string DateCert { get; set; }
+    [Parameter] public required string CertRefNo { get; set; }
+    // [Inject] public required IExceptionHandlerService ExceptionHandlerService { get; set; }
+    // [Inject] public required IRequestManagementService RequestManagementService { get; set; }
+    // [Inject] public required IToastService ToastService { get; set; }
+    // protected bool IsSigning { get; set; } = false;
+     protected bool XSmall { get; set; }
+     protected bool IsLoading { get; set; }
+    // protected string CancelReturnUrl = string.Empty;
+    // protected RequestedRecordModel RequestedRecord { get; set; } = new();
+    // protected RecordRequestModel SelectedRecordRequest { get; set; } = new();
+    // protected async override Task OnInitializedAsync()
+    // {
+    //     IsLoading = true;
 
-        await LoadData(async (res) =>
-          {
-              SelectedRecordRequest = res;
-              if (SelectedRecordRequest != null)
-              {
-                  LoadDocument(SelectedRecordRequest);
+    //     await LoadData(async (res) =>
+    //       {
+    //           SelectedRecordRequest = res;
+    //           if (SelectedRecordRequest != null)
+    //           {
+    //               LoadDocument(SelectedRecordRequest);
 
-              }
-          });
+    //           }
+    //       });
 
-        IsLoading = false;
-    }
-    protected async void LoadDocument(RecordRequestModel data)
-    {
-        var guid = Guid.Parse(DocumentId);
-        var document = data.RequestedRecords.FirstOrDefault(x => x.Id == guid);
-        if (document != null)
-        {
-            RequestedRecord = document;
+    //     IsLoading = false;
+    // }
+    // protected async void LoadDocument(RecordRequestModel data)
+    // {
+    //     var guid = Guid.Parse(DocumentId);
+    //     var document = data.RequestedRecords.FirstOrDefault(x => x.Id == guid);
+    //     if (document != null)
+    //     {
+    //         RequestedRecord = document;
 
-        }
-        if (string.IsNullOrEmpty(RequestedRecord.Uri))
-        {
-            NavManager.NavigateTo("/404");
-        }
+    //     }
+    //     if (string.IsNullOrEmpty(RequestedRecord.Uri))
+    //     {
+    //         NavManager.NavigateTo("/404");
+    //     }
 
-        StateHasChanged();
-    }
-    protected async Task LoadData(Action<RecordRequestModel> onLoadCb)
-    {
-        await ExceptionHandlerService.HandleApiException(async () =>
-        {
-            var recordReq = await RequestManagementService.GetById(Guid.Parse(Id));
+    //     StateHasChanged();
+    // }
+    // protected async Task LoadData(Action<RecordRequestModel> onLoadCb)
+    // {
+    //     await ExceptionHandlerService.HandleApiException(async () =>
+    //     {
+    //         var recordReq = await RequestManagementService.GetById(Guid.Parse(Id));
 
-            if (recordReq.Success)
-            {
-                if (onLoadCb != null)
-                {
-                    onLoadCb.Invoke(recordReq.Data);
-                }
-            }
-            else
-            {
-                ToastService.ShowError("Something went wrong on loading record request.");
-                NavManager.NavigateTo(CancelReturnUrl);
-            }
-        });
-    }
+    //         if (recordReq.Success)
+    //         {
+    //             if (onLoadCb != null)
+    //             {
+    //                 onLoadCb.Invoke(recordReq.Data);
+    //             }
+    //         }
+    //         else
+    //         {
+    //             ToastService.ShowError("Something went wrong on loading record request.");
+    //             NavManager.NavigateTo(CancelReturnUrl);
+    //         }
+    //     });
+    // }
 }
