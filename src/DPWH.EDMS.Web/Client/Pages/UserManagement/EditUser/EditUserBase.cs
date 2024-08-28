@@ -2,7 +2,7 @@
 using DPWH.EDMS.Api.Contracts;
 using DPWH.EDMS.Client.Shared.Models;
 using DPWH.EDMS.Components;
-using DPWH.NGOBIA.Client.Shared.APIClient.Services.Users;
+using DPWH.EDMS.Client.Shared.APIClient.Services.Users;
 using Microsoft.AspNetCore.Components;
 
 namespace DPWH.EDMS.Web.Client.Pages.UserManagement.EditUser;

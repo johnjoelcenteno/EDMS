@@ -1,6 +1,6 @@
 using DPWH.EDMS.Api.Contracts;
 
-namespace DPWH.NGOBIA.Client.Shared.APIClient.Services.Users;
+namespace DPWH.EDMS.Client.Shared.APIClient.Services.Users;
 
 public interface IUsersService
 {
