@@ -1,6 +1,6 @@
 ﻿using DPWH.EDMS.Client.Shared.Models;
 using DPWH.EDMS.Web.Client.Shared.RecordRequest.Grid;
-using DPWH.NGOBIA.Client.Shared.APIClient.Services.Users;
+using DPWH.EDMS.Client.Shared.APIClient.Services.Users;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components;
 using Telerik.Blazor.Components;

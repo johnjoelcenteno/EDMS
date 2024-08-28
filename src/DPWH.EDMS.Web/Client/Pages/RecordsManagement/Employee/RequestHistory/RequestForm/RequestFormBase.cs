@@ -4,7 +4,7 @@ using DPWH.EDMS.Components.Helpers;
 using DPWH.EDMS.Web.Client.Shared.RecordRequest.RequestForm;
 using DPWH.EDMS.Web.Client.Shared.Services.ExceptionHandler;
 using DPWH.EDMS.Web.Client.Shared.Services.ExceptionHandlerPIS;
-using DPWH.NGOBIA.Client.Shared.APIClient.Services.Users;
+using DPWH.EDMS.Client.Shared.APIClient.Services.Users;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 

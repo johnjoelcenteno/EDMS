@@ -15,7 +15,7 @@ using System.Linq;
 using DPWH.EDMS.Components.Helpers;
 using DPWH.EDMS.Client.Shared.APIClient.Services.DataLibrary;
 using Microsoft.AspNetCore.Components.Authorization;
-using DPWH.NGOBIA.Client.Shared.APIClient.Services.Users;
+using DPWH.EDMS.Client.Shared.APIClient.Services.Users;
 using AutoMapper;
 using DPWH.EDMS.Client.Shared.APIClient.Services.DpwhIntegrations;
 using DPWH.EDMS.Client.Shared.APIClient.Services.Licenses;
