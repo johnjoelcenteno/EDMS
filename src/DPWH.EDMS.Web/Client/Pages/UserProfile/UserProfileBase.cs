@@ -11,7 +11,7 @@ using DPWH.EDMS.IDP.Core.Extensions;
 using DPWH.EDMS.Shared.Enums;
 using DPWH.EDMS.Web.Client.Shared.Services.Document;
 using DPWH.EDMS.Web.Client.Shared.Services.ExceptionHandler;
-using DPWH.NGOBIA.Client.Shared.APIClient.Services.Users;
+using DPWH.EDMS.Client.Shared.APIClient.Services.Users;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Telerik.Blazor.Components;
