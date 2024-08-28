@@ -11,7 +11,7 @@ using DPWH.EDMS.Components.Helpers;
 using DPWH.EDMS.Shared.Enums;
 using DPWH.EDMS.Web.Client.Shared.BlazoredFluentValidator;
 using DPWH.EDMS.Web.Client.Shared.Services.Document;
-using DPWH.NGOBIA.Client.Shared.APIClient.Services.Users;
+using DPWH.EDMS.Client.Shared.APIClient.Services.Users;
 using Microsoft.AspNetCore.Components;
 using Telerik.Blazor.Components;
 

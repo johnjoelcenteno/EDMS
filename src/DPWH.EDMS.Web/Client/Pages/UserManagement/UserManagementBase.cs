@@ -2,7 +2,7 @@
 using DPWH.EDMS.Client.Shared.Models;
 using DPWH.EDMS.Components.Components.ReusableGrid;
 using DPWH.EDMS.Web.Client.Shared.Services.ExceptionHandler;
-using DPWH.NGOBIA.Client.Shared.APIClient.Services.Users;
+using DPWH.EDMS.Client.Shared.APIClient.Services.Users;
 using DPWH.EDMS.Api.Contracts;
 using Microsoft.AspNetCore.Components;
 using System.ComponentModel;

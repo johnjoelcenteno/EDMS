@@ -10,7 +10,7 @@ using DPWH.EDMS.Client.Shared.APIClient.Services.Reports;
 using DPWH.EDMS.Client.Shared.APIClient.Services.RequestManagement;
 using DPWH.EDMS.Client.Shared.APIClient.Services.Signatories;
 using DPWH.EDMS.Client.Shared.APIClient.Services.SystemReport;
-using DPWH.NGOBIA.Client.Shared.APIClient.Services.Users;
+using DPWH.EDMS.Client.Shared.APIClient.Services.Users;
 using Microsoft.Extensions.DependencyInjection; 
 namespace DPWH.EDMS.Client.Shared.APIClient.Core;
 
