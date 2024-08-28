@@ -21,7 +21,7 @@ using QRCoder;
 using SixLabors.ImageSharp.Formats.Jpeg;
 using SixLabors.ImageSharp;
 using DPWH.EDMS.Shared.Enums;
-using DPWH.NGOBIA.Client.Shared.APIClient.Services.Users;
+using DPWH.EDMS.Client.Shared.APIClient.Services.Users;
 using DPWH.EDMS.Components.Helpers;
 using System.Net;
 using DPWH.EDMS.Client.Shared.Configurations;
