@@ -4,6 +4,8 @@
 
 @inject NavigationManager Navigation
 
+<EdmsLoader Text="Logging Out.." Visible="true" />
+
 @code {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateAsync { get; set; }
 
