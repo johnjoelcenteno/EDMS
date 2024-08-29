@@ -28,6 +28,7 @@ public class QuerySignatory : IRequestHandler<QuerySignatoryRequest, DataSourceR
                     Office2 = x.Office2,
                     SignatoryNo = x.SignatoryNo,
                     IsActive = x.IsActive,
+                    EmployeeNumber = x.EmployeeNumber
                 })
                 .ToDataSourceResult(request.DataSourceRequest.FixSerialization());
 

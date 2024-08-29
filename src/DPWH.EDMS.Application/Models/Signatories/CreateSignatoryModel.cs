@@ -9,4 +9,5 @@ public class CreateSignatoryModel
     public string? Office2 { get; set; }
     public int SignatoryNo { get; set; }
     public bool IsActive { get; set; }
+    public string? EmployeeNumber { get; set; }
 }

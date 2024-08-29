@@ -32,7 +32,8 @@ public class UpdateSignatory : IRequestHandler<UpdateSignatoryRequest, Guid?>
             model.Office1,
             model.Office2,
             model.SignatoryNo,
-            _claimsPrincipal.GetUserName()
+            _claimsPrincipal.GetUserName(),
+            model.EmployeeNumber
         );
 
         if (model.IsActive)

@@ -51,6 +51,7 @@
     <EmbeddedResource Include="Scripts\01\13-AddSignaturesUriSignature.sql" />
     <EmbeddedResource Include="Scripts\01\15-UpdateRequestedRecords.sql" />
     <EmbeddedResource Include="Scripts\01\14-AddUserProfileDocuments.sql" />
+    <EmbeddedResource Include="Scripts\01\16-AddEmployeeNumberInSignatoriesTable.sql" />
   </ItemGroup>
   
 	<ItemGroup>
