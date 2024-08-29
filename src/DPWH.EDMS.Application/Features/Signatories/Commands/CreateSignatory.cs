@@ -28,7 +28,8 @@ public class CreateSignatory : IRequestHandler<CreateSignatoryRequest, Guid>
             model.Office1,
             creator,
             model.Office2,
-            request.model.SignatoryNo
+            request.model.SignatoryNo,
+            model.EmployeeNumber
         );
 
         if (model.IsActive)

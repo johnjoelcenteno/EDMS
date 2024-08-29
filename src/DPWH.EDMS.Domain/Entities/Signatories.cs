@@ -14,7 +14,8 @@ public class Signatory : EntityBase
         string office1,
         string createdBy,
         string? office2 = null,
-        int signatoryNo = 0
+        int signatoryNo = 0,
+        string? employeeNumber = null
     )
     {
         var entity = new Signatory
@@ -26,7 +27,8 @@ public class Signatory : EntityBase
             Office1 = office1,
             Office2 = office2,
             SignatoryNo = signatoryNo,
-            IsActive = true
+            IsActive = true,
+            EmployeeNumber = employeeNumber
         };
         entity.SetCreated(createdBy);
         return entity;
@@ -39,7 +41,7 @@ public class Signatory : EntityBase
     public string? Office2 { get; private set; }
     public int SignatoryNo { get; private set; }
     public bool IsActive { get; private set; }
-    public string? UriSignature { get; set; }
+    public string? EmployeeNumber { get; set; }
 
     public void Deactivate(string updatedBy)
     {
@@ -60,7 +62,8 @@ public class Signatory : EntityBase
         string office1,
         string? office2,
         int signatoryNo,
-        string updatedBy
+        string updatedBy,
+        string? employeeNumber
     )
     {
         DocumentType = documentType;
@@ -69,11 +72,7 @@ public class Signatory : EntityBase
         Office1 = office1;
         Office2 = office2;
         SignatoryNo = signatoryNo;
+        EmployeeNumber = employeeNumber;
         SetModified(updatedBy);
-    }
-    
-    public void UpdateUriSignature(string uriSignature)
-    {
-        UriSignature = uriSignature;
     }
 }
