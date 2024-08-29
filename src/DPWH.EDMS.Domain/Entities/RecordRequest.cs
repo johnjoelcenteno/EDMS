@@ -21,7 +21,7 @@ public class RecordRequest : EntityBase
        string createdBy,
        string fullName
     )
-    {        
+    {
         var entity = new RecordRequest
         {
             Id = Uuid.NewDatabaseFriendly(Database.SqlServer),
@@ -32,7 +32,7 @@ public class RecordRequest : EntityBase
             DateRequested = dateRequested,
             AuthorizedRepresentative = representative,
             Purpose = purpose,
-            OtherPurpose = otherPurpose,    
+            OtherPurpose = otherPurpose,
             Remarks = remarks,
             Status = RecordRequestStates.Submitted.ToString(),
             RequestedRecords = [],
@@ -64,11 +64,11 @@ public class RecordRequest : EntityBase
 
     public void UpdateStatus(RecordRequestStates status, string modifiedBy)
     {
-        Status = status.ToString(); 
+        Status = status.ToString();
 
         SetModified(modifiedBy);
     }
-    
+
     public void UpdateOfficeStatus(OfficeRequestedRecordStatus status, string modifiedBy, Offices? office)
     {
         if (office == null)
@@ -96,12 +96,12 @@ public class RecordRequest : EntityBase
     public AuthorizedRepresentative? AuthorizedRepresentative { get; private set; }
     public string Purpose { get; private set; }
     public string? OtherPurpose { get; private set; }
-    public string? Remarks {  get; private set; }
+    public string? Remarks { get; private set; }
     public string Status { get; private set; }
     public string? HRMDRequestStatus { get; private set; }
     public string? RMDRequestStatus { get; private set; }
     public string? FullName { get; set; }
     public virtual IList<RequestedRecord> RequestedRecords { get; set; }
     public virtual IList<RecordRequestDocument>? Files { get; set; }
-    public virtual IList<RequestedRecordReceipt>? RequestedRecordReceipts { get; set; }    
+    public virtual IList<RequestedRecordReceipt>? RequestedRecordReceipts { get; set; }
 }
