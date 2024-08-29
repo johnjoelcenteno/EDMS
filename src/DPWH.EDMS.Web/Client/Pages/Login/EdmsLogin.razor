@@ -2,30 +2,148 @@
 
 @inject NavigationManager NavManager
 
-<div id="edms-login" class="container">
-    <TelerikCard Class="px-5 py-3">
-        <div class="d-flex flex-column gap-3 align-items-center">
-            <span id="login-icon" class="material-symbols-outlined">passkey</span>
-            <TelerikButton Class="w-100" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" OnClick="GoToLogin">Log In to Continue</TelerikButton>
-        </div>
-    </TelerikCard>
+<div id="edms-login">
+    @* <TelerikCard Class="px-5 py-3">
+    <div class="d-flex flex-column gap-3 align-items-center">
+    <span id="login-icon" class="material-symbols-outlined">passkey</span>
+    <TelerikButton Class="w-100" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" OnClick="GoToLogin">Log In to Continue</TelerikButton>
+    </div>
+    </TelerikCard> *@
+    <div class="login-container" style="opacity: @(loginOpacity);">
+        <div class="login-bg"></div>
+        <div class="watermark">DPWH.EDMS</div>
+        <div class="login-form">
+            <img class="brand-img" src="/dpwh_dark.png" />
+            <h2 class="edms-text-color mb-0">Login to your Account</h2>            
+            <p class="mt-1 ms-2"><small><b>Welcome back!</b> Please click the button below to continue.</small></p>
+            <TelerikButton Class="w-100 mt-5 py-3" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Icon="@SvgIcon.Login" OnClick="GoToLogin" Enabled="!IsLoading">
+                @if (IsLoading)
+                {
+                    <TelerikLoader ThemeColor="@ThemeConstants.Loader.ThemeColor.Light"></TelerikLoader>
+
+                }
+                else
+                {
+                    <span>Sign In</span>
+
+                }
+            </TelerikButton>
+            <div class="copyright">
+                <p class="text-muted"><small>2022©MovementSoft Inc. (all rights reserved.)</small></p>
+            </div>
+        </div>        
+    </div>
 </div>
 
 @code {
+    protected bool IsLoading = false;
+    protected int loginOpacity = 0;
+
     protected void GoToLogin()
     {
+        IsLoading = true;
         NavManager.NavigateTo("/bff/login", true);
+    }
+
+    protected async override Task OnInitializedAsync()
+    {
+        await Task.Delay(500).ContinueWith((res) =>
+        {
+            loginOpacity = 1;
+            StateHasChanged();
+        });        
     }
 }
 
 <style>
     #edms-login {
-        max-width: 500px;
-        width: 100%;
+        position: fixed;
+        overflow: hidden;
+        width: 100vw;
+        max-width: 100vw;
+        height: 100vh;
+        top: 0;
+        left: 0;
+        background-color: #dddddd;
+        /* background: #b92b27;
+                background: -webkit-linear-gradient(to right, #1565C0, #b92b27);
+                background: linear-gradient(to right, #1565C0, #b92b27); */
+        z-index: 10;
     }
 
     #login-icon {
         font-size: 110px;
         color: #4641ad;
+    }
+
+    div.login-container {
+        position: relative;
+        display: flex;
+        width: 60%;
+        height: 60%;
+        background-color: #FFF;
+        border-radius: 3px;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        min-width: 500px;
+        transition: 200ms;
+    }
+
+    div.login-bg {
+        display: flex;
+        flex: 55;
+        justify-content: center;
+        align-content: center;
+        background: url('/login-icon.png') no-repeat center, linear-gradient(135deg, #6F6B9B, #5A559B, #4F4A9B, #38339B);
+        transform: scaleX(-1);
+    }
+
+        div.login-bg img {
+            max-width: 340px;
+            width: 100%;
+            max-height: 340px;
+            height: 100%;
+            margin: auto;
+        }
+
+    div.login-form {
+        display: flex;
+        flex-direction: column;
+        flex: 45;
+        justify-content: center;
+        align-items: start;
+        padding: 40px;
+        min-width: 500px;
+        position: relative;
+    }
+
+    img.brand-img {
+        max-width: 60px;
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        opacity: 0.6;
+    }
+
+    div.watermark {
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        font-weight: bold;
+        opacity: 0.4;
+        font-style: italic;
+    }
+
+    div.copyright {
+        position: absolute;
+        bottom: 10px;
+        right: 15px;
+        text-transform: uppercase;
+        width: 100%;
+        display: flex;
+        justify-content: center;
     }
 </style>

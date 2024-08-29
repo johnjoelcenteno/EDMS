@@ -70,47 +70,62 @@ p {
     left: 50%;
     margin-right: -50%;
     transform: translate(-50%, -50%);
+    padding: 15px 30px;
+    background-color: transparent;
+    box-shadow: none;
+    /*border-radius: 5px;*/
+    /*box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15);*/
 }
 
 .loader-circle {
     width: 120px;
     height: 120px;
     border-radius: 50%;
-    background-color: #ffffff;
+    background-color: #eb4a1f;
+    background-image: url('/dpwh_dark.png'); /* Path to your image */
+    background-size: calc(100% - 10px) calc(100% - 10px); /* Adjust size to account for padding */
+    background-repeat: no-repeat;
+    background-position: center;
+    background-origin: content-box; /* Apply padding effect */
+    background-clip: content-box; /* Apply padding effect */
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     display: flex;
     justify-content: center;
     align-items: center;
-    animation: pulse 1.5s ease-in-out infinite;
+    padding: 5px; /* Add padding to the element */
+    box-sizing: border-box; /* Ensure padding is included in the total size */
+    animation: rotate 2.5s ease-in-out infinite;
 }
-
-    .loader-circle:before {
-        content: "";
-        display: block;
-        width: 70px;
-        height: 70px;
-        border-radius: 50%;
-        border: 8px solid #7e3af2;
-        border-color: #7e3af2 transparent #7e3af2 transparent;
-        animation: loader 1.2s linear infinite;
-    }
 
 .loader-text {
-    color: #7e3af2;
-    font-size: 24px;
-    font-weight: bold;
+    animation: glow 1s ease-in-out infinite alternate;
+    color: #1b1771;
+    font-size: 12px;
     margin-top: 16px;
+    background-color: transparent;
+    padding: 0px 16px;
 }
 
-@keyframes loader {
-    0% {
+@keyframes rotate {
+    from {
         transform: rotate(0deg);
     }
 
-    100% {
+    to {
         transform: rotate(360deg);
     }
 }
+
+@-webkit-keyframes glow {
+    from {
+        text-shadow: 0 0 4px #fff, 0 0 6px #fff, 0 0 8px #fff, 0 0 10px #e6e6e6, 0 0 12px #e6e6e6;
+    }
+
+    to {
+        text-shadow: 0 0 6px #fff, 0 0 8px #fff, 0 0 10px #fff, 0 0 12px #f2f2f2, 0 0 14px #f2f2f2;
+    }
+}
+
 
 @keyframes pulse {
     0% {
