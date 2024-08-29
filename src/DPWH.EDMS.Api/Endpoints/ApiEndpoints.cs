@@ -157,7 +157,7 @@ public static class ApiEndpoints
         public const string Query = $"{Base}/query";
         public const string UploadSignature = $"{Base}/Profile/UploadSignature";
         public const string GetSignature = $"{Base}/Profile/GetSignature";
-
+        public const string GetSignatureByEmployeeId = $"{Base}/Profile/GetSignatureByEmployeeId";
     }
 
     public static class Roles

@@ -13,16 +13,19 @@ using DPWH.EDMS.Components.Components.ReusableGrid;
 using DPWH.EDMS.Client.Shared.Models;
 using DPWH.EDMS.Components.Helpers;
 using DPWH.EDMS.Client.Shared.APIClient.Services.DataLibrary;
+using DPWH.EDMS.Client.Shared.APIClient.Services.Lookups;
+using DPWH.EDMS.IDP.Core.Constants;
 
 namespace DPWH.EDMS.Web.Client.Pages.RequestManagement.GeneratedForms.CertificateOfNorRecordForm;
 
-public class CertificateOfNoRecordBase : GridBase<SignatoriesModel>
+public class CertificateOfNoRecordBase : GridBase<SignatoryModel>
 {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateAsync { get; set; }
     [Parameter] public required string RequestId { get; set; }
     [Inject] public required IRequestManagementService RequestManagementService { get; set; }
     [Inject] public required IExceptionHandlerService ExceptionHandlerService { get; set; } 
     [Inject] public required IUsersService UsersService { get; set; }
+    [Inject] public required ILookupsService LookupsService { get; set; }
     [Inject] public required ISignatoryManagementService SignatoryManagementService { get; set; }
     [Inject] public required NavigationManager Navigate { get; set; }
     [Inject] protected DrawingService drawingService { get; set; } = default!;
@@ -30,7 +33,16 @@ public class CertificateOfNoRecordBase : GridBase<SignatoriesModel>
     [Parameter] public required string IsExporting { get; set; }
     protected RecordRequestModel SelectedRecordRequest { get; set; } = new();
     protected GetUserByIdResult User = new GetUserByIdResult();
-    protected ElementReference PdfContainerRef { get; set; }
+    protected SignatoryModel SignatoryData { get; set; }
+    protected ElementReference CurrentPdfContainerRef { get; set; }
+    protected ElementReference NonCurrentPdfContainerRef { get; set; }
+    protected string DisplayName = "---";
+    protected string Role = string.Empty;
+    protected string Office = string.Empty;
+    protected bool IsCurrentSection { get; set; } = false;
+    protected bool IsNonCurrentSection { get; set; } = false;
+    protected string CurrentSectionSignature { get; set; }
+    protected string NonCurrentSectionSignature { get; set; }
     protected async override Task OnInitializedAsync()
     {
 
@@ -41,6 +53,20 @@ public class CertificateOfNoRecordBase : GridBase<SignatoriesModel>
         {
             SelectedRecordRequest = res;
 
+            if(SelectedRecordRequest.RequestedRecords != null && SelectedRecordRequest.RequestedRecords.Count > 0)
+{
+                var office = !string.IsNullOrEmpty(User.Office) ? User.Office : "";
+                var norecords = SelectedRecordRequest.RequestedRecords.Where(x => x.Uri == null).ToList();
+
+                foreach (var item in norecords)
+                {
+                    if (item.Office == office)
+                    {
+                        ValidateSection(item.CategoryType);
+
+                    }
+                }
+            }
         });
         await GetSignatories();
         await InvokeAsync(StateHasChanged);
@@ -86,39 +112,6 @@ public class CertificateOfNoRecordBase : GridBase<SignatoriesModel>
 
         IsLoading = false;
     }
-   
-    protected async Task FetchUser()
-    {
-        var authState = await AuthenticationStateAsync!;
-        var user = authState.User;
-        var userId = user.GetUserId();
-
-        var userRes = await UsersService.GetById(userId);
-
-        if (userRes.Success)
-        {
-            User.UserAccess = userRes.Data.UserAccess;
-            User.Office = userRes.Data.Office;
-        }
-        else
-        {
-            ToastService.ShowError("Something went wrong on fetching user data");
-        }
-        if (string.IsNullOrEmpty(User.Office))
-        {
-            Navigate.NavigateTo("/404");
-        }
-    }
-    protected string GetOfficeName(string officeCode)
-    {
-        return officeCode switch
-        {
-            nameof(Offices.RMD) => "Records Management Division",
-            nameof(Offices.HRMD) => "Human Resource Management Division",
-            _ => string.Empty
-        };
-    }
-
     protected async Task ExportPdf()
     {
         IsLoading = true;
@@ -126,14 +119,31 @@ public class CertificateOfNoRecordBase : GridBase<SignatoriesModel>
         if (SelectedRecordRequest?.RequestedRecords is null)
             return;
 
-       
-        var options = new { padding = "0cm", margin = "0cm", paperSize = "A4", scale = 0.7, multiPage = true, landscape = false, };
-        var data = await drawingService.ExportPdf(PdfContainerRef, options);
-        await drawingService.SaveAs(data, $"Certificate-Of-No-Records-{DateTime.Now.ToString("MMM dd, yyyy")}.pdf");
+       if(IsCurrentSection && IsNonCurrentSection)
+        {
 
+            var references = new List<(ElementReference reference, string section)>
+            {
+                (CurrentPdfContainerRef, "Current Section"),
+                (NonCurrentPdfContainerRef, "Non-Current Section")
+            };
+
+            foreach (var (reference, section) in references)
+            {
+                var options = new { padding = "0cm", margin = "0cm", paperSize = "A4", scale = 0.7, multiPage = true, landscape = false };
+                var data = await drawingService.ExportPdf(reference, options);
+                await drawingService.SaveAs(data, $"{section}-Certificate-Of-No-Records-{DateTime.Now:MMM dd, yyyy}.pdf");
+            }
+        }
+        
         IsLoading = false;
     }
 
+    protected async Task GetSignatures(string employeeId)
+    {
+        //Ongoing
+        //var data = await UsersService.GetUserSignature
+    }
     protected override async Task OnParametersSetAsync()
     {
         if (!string.IsNullOrEmpty(IsExporting))
@@ -159,5 +169,109 @@ public class CertificateOfNoRecordBase : GridBase<SignatoriesModel>
             3 => day.ToString() + "rd",
             _ => day.ToString() + "th",
         };
+    }
+    protected async Task GetAuthorizedStampSignatories(string employeeId)
+    {
+        //Ongoing integration
+        //BE Ongoing
+        var dataSource = new DataSourceRequest();
+        var filters = new Api.Contracts.Filter
+        {
+            Field = nameof(SignatoryModel.EmployeeNumber),
+            Operator = "eq",
+            Value = employeeId
+        };
+        dataSource.Filter = filters;
+
+        var getSignature = await SignatoryManagementService.Query(dataSource);
+    
+        if (getSignature != null)
+        {
+            var data = GenericHelper.GetListByDataSource<SignatoryModel>(getSignature.Data);
+            if (data != null)
+            {
+                var userData = data.FirstOrDefault(x => x.EmployeeNumber == employeeId);
+                if (userData != null)
+                {
+                    SignatoryData = userData;
+                }
+                //else
+                //{
+                //    ToastService.ShowError($"Employee ID :{employeeId} not found");
+                //}
+            }
+        }
+    }
+    protected async Task FetchUser()
+    {
+        var authState = await AuthenticationStateAsync!;
+        var user = authState.User;
+
+        if (authState != null)
+        {
+            var roles = user.Claims.Where(c => c.Type == "role")!.ToList();
+
+            var role = roles.FirstOrDefault(role => !string.IsNullOrEmpty(role.Value) && role.Value.Contains(ApplicationRoles.RolePrefix))?.Value ?? ClaimsPrincipalExtensions.GetRole(user);
+
+            var firstnameValue = ClaimsPrincipalExtensions.GetFirstName(user);
+            var lastnameValue = ClaimsPrincipalExtensions.GetLastName(user);
+            var office = ClaimsPrincipalExtensions.GetOffice(user);
+            var employeeId = ClaimsPrincipalExtensions.GetEmployeeNumber(user);
+
+            DisplayName = (!string.IsNullOrEmpty(firstnameValue) && !string.IsNullOrEmpty(lastnameValue))
+                ? GenericHelper.CapitalizeFirstLetter($"{firstnameValue} {lastnameValue}")
+                : "---";
+            if (employeeId != null)
+            {
+                await GetAuthorizedStampSignatories(employeeId);
+            }
+            User.Office = office;
+            Role = GetRoleLabel(role);
+        }
+    }
+
+    protected void ValidateSection(string section)
+    {
+        if (section == "Current Section")
+        {
+            IsCurrentSection = true;
+        }
+        else if (section == "Non-Current Section")
+        {
+            IsNonCurrentSection = true;
+        }
+    }
+    protected string GetOfficeName(string officeCode)
+    {
+        return officeCode switch
+        {
+            nameof(Offices.RMD) => "Records Management Division",
+            nameof(Offices.HRMD) => "Human Resource Management Division",
+            _ => string.Empty
+        };
+    }
+    private string GetRoleLabel(string roleValue)
+    {
+        return ApplicationRoles.GetDisplayRoleName(roleValue, "Unknown Role");
+    }
+    protected async Task<bool> GetCurrentSection(string DocumentType)
+    {
+        var data = await LookupsService.GetIssuances();
+        if (data != null)
+        {
+            var Issuances = data.Data;
+            return Issuances.Any(x => x.Name == DocumentType);
+        }
+        return false;
+    }
+    protected async Task<bool> GetNonCurrentSection(string DocumentType)
+    {
+        var data = await LookupsService.GetPersonalRecords();
+        if (data != null)
+        {
+            var PersonalRecord = data.Data;
+            return PersonalRecord.Any(x => x.Name == DocumentType);
+        }
+        return false;
     }
 }
