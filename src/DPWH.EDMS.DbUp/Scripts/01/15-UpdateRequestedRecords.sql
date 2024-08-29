@@ -1,0 +1,8 @@
+IF NOT EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'RequestedRecords' AND COLUMN_NAME = 'Created')
+    BEGIN
+        ALTER TABLE RequestedRecords
+        ADD Created DATETIMEOFFSET(7) NOT NULL DEFAULT getdate(),
+        CreatedBy NVARCHAR(150) NOT NULL DEFAULT 'auto',
+        LastModified DATETIMEOFFSET(7) NULL,
+        LastModifiedBy NVARCHAR(150) NULL;
+END
