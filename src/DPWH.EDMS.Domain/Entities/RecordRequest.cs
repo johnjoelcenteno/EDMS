@@ -104,5 +104,4 @@ public class RecordRequest : EntityBase
     public virtual IList<RequestedRecord> RequestedRecords { get; set; }
     public virtual IList<RecordRequestDocument>? Files { get; set; }
     public virtual IList<RequestedRecordReceipt>? RequestedRecordReceipts { get; set; }
-    public virtual IList<RecordType>? RecordTypes { get; set; }
 }
