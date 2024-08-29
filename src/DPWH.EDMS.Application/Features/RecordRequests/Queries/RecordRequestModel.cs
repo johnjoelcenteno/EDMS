@@ -4,7 +4,7 @@ public record RecordRequestModel
     public Guid Id { get; set; }
     public int ControlNumber { get; set; }
     public string EmployeeNumber { get; set; }
-    public string? Email {  get; set; }
+    public string? Email { get; set; }
     public string ClaimantType { get; set; }
     public DateTimeOffset DateRequested { get; set; }
     public AuthorizedRepresentativeModel? AuthorizedRepresentative { get; set; }
@@ -32,6 +32,9 @@ public record AuthorizedRepresentativeModel
     public string? AuthorizationDocumentUri { get; set; }
 }
 
-public record RequestedRecordModel(Guid Id, Guid RecordTypeId, string RecordType, string Office, string Status, bool IsAvailable, string? Uri, string? DocumentType);
+public record RequestedRecordModel(Guid Id, Guid RecordTypeId, string RecordType, string Office, string Status, bool IsAvailable, string? Uri, string? DocumentType, string? CategoryType = "")
+{
+    public string? CategoryType { get; set; }
+};
 
 public record RequestedRecordSummaryModel(Guid RecordTypeId, string RecordType);

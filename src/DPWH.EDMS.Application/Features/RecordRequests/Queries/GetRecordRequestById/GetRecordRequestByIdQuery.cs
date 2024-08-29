@@ -1,5 +1,6 @@
 using DPWH.EDMS.Application.Contracts.Persistence;
 using DPWH.EDMS.Application.Features.RecordRequests.Mappers;
+using DPWH.EDMS.Domain;
 using DPWH.EDMS.IDP.Core.Constants;
 using DPWH.EDMS.IDP.Core.Extensions;
 using MediatR;
@@ -17,13 +18,15 @@ internal sealed class GetRecordRequestByIdQueryHandler(IReadRepository repositor
 
     public async Task<RecordRequestModel?> Handle(GetRecordRequestByIdQuery request, CancellationToken cancellationToken)
     {
-        var entity = await _repository.RecordRequestsView            
+        var recordTypes = _repository.RecordTypesView.Select(x => new { x.Id, x.Section });
+
+        var entity = await _repository.RecordRequestsView
             .Include(r => r.Files)
             .Include(r => r.RequestedRecords)
             .AsSplitQuery()
             .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
 
-        if (entity is null) return null;        
+        if (entity is null) return null;
 
         var result = RecordRequestMappers.MapToModel(entity);
 
@@ -33,6 +36,14 @@ internal sealed class GetRecordRequestByIdQueryHandler(IReadRepository repositor
             result.RequestedRecords = result.RequestedRecords.Where(r => r.Office == _claimsPrincipal.GetOffice()).ToList();
         }
 
-        return result;        
+        result.RequestedRecords = result.RequestedRecords
+                                .Select(rr =>
+                                {
+                                    rr.CategoryType = recordTypes.FirstOrDefault(x => x.Id == rr.RecordTypeId).Section;
+                                    return rr;
+                                }).ToList();
+
+
+        return result;
     }
 }
