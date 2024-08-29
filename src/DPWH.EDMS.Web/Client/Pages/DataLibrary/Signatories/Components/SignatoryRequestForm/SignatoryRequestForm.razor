@@ -7,6 +7,11 @@
     <FluentValidationValidator @ref="FluentValidationValidator" DisableAssemblyScanning="@true"></FluentValidationValidator>
     <div class="row g-3 mb-3">
         <div class="col-md-12">
+            <label class="mb-2" for="EmployeeId">Employee ID*</label>
+            <TelerikTextBox Size="@ThemeConstants.Button.Size.Large" Id="Name" @bind-Value="@NewConfig.EmployeeNumber" PlaceHolder="EmployeeId"></TelerikTextBox>
+            <ValidationMessage Class="text-danger" For="@(() => NewConfig.EmployeeNumber)" />
+        </div>
+        <div class="col-md-12">
             <label class="mb-2" for="Name">Name*</label>
             <TelerikTextBox Size="@ThemeConstants.Button.Size.Large" Id="Name" @bind-Value="@NewConfig.Name" PlaceHolder="Name"></TelerikTextBox>
             <ValidationMessage Class="text-danger" For="@(() => NewConfig.Name)" />
