@@ -42,7 +42,7 @@ public class SignatoryRequestFormBase : RxBaseComponent
             NewConfig.Office2 = EditItem.Office2;
             NewConfig.SignatoryNo = EditItem.SignatoryNo;
             NewConfig.Id = EditItem.Id;
-
+            NewConfig.EmployeeNumber = EditItem.EmployeeNumber;
         }
         NewConfig.DataType = DataType;
     }

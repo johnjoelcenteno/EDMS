@@ -236,7 +236,8 @@ public class SignatoriesManagementBase : GridBase<SignatoriesModel>
                 Position = model.Position,
                 Office1 = model.Office1,
                 Office2 = model.Office2,
-                SignatoryNo = model.SignatoryNo
+                SignatoryNo = model.SignatoryNo,
+                EmployeeNumber = model.EmployeeNumber
             };
 
             await ExceptionHandlerService.HandleApiException(async () =>
