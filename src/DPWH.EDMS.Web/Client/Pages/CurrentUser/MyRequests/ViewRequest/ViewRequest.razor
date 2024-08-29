@@ -69,33 +69,32 @@
                         <p class="d-md-inline d-block">@SelectedRecordRequest.Remarks</p>
                     </div>
                 </div>
-
-                <hr />
-
-                <div class="row mb-3">
-                    <div class="col-12 mb-3">
-                        <p class="edms-text-header-small">Uploaded Supporting Documents</p>
+                @if (SelectedRecordRequest.ClaimantType == ClaimantTypes.AuthorizedRepresentative.ToString())
+                {
+                    <hr />
+                    <div class="row mb-3">
+                        <div class="col-12 mb-3">
+                            <p class="edms-text-header-small">Uploaded Supporting Documents</p>
+                        </div>
+                        <div class="col-12">
+                            <ul>
+                                <li class="mb-2">
+                                    <p class="d-md-inline d-block"><b>Valid ID:</b></p>
+                                    <a class="d-md-inline d-block" href="@SelectedRecordRequest!.AuthorizedRepresentative.ValidIdUri" target="_blank">
+                                        @GetValidIdTextDisplay()
+                                    </a>
+                                </li>
+                                <li class="mb-2">
+                                    <p class="d-md-inline d-block"><b>Authorization Document:</b></p>
+                                    <a class="d-md-inline d-block" href="@SelectedRecordRequest.AuthorizedRepresentative.AuthorizationDocumentUri" target="_blank">
+                                        @GetSupportingDocTextDisplay()
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
-                    <div class="col-12">
-                        <ul>
-                            <li class="mb-2">
-                                <p class="d-md-inline d-block"><b>Valid ID:</b></p>
-                                <a class="d-md-inline d-block" href="@SelectedRecordRequest!.AuthorizedRepresentative.ValidIdUri" target="_blank">
-                                    @GetValidIdTextDisplay()
-                                </a>
-                            </li>
-                            <li class="mb-2">
-                                <p class="d-md-inline d-block"><b>Authorization Document:</b></p>
-                                <a class="d-md-inline d-block" href="@SelectedRecordRequest.AuthorizedRepresentative.AuthorizationDocumentUri" target="_blank">
-                                    @GetSupportingDocTextDisplay()
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-
+                }
                 <hr />
-
                 <div class="row mb-3">
                     <div class="col">
                         <p class="edms-text-header-small">Requested Record(s)</p>
@@ -120,12 +119,23 @@
                                             <div class="col d-flex align-items-center pe-0">
                                                 <p>@record.RecordType</p>
                                             </div>
-                                            @if (!string.IsNullOrEmpty(record.Uri))
-                                            {
-                                                <div class=@(XSmall ? "col mb-1 ps-0 text-center" : "col mb-1 ps-0")>
-                                                    <NavLink class="telerik-blazor k-button k-button-solid k-rounded-md k-button-md k-button-solid-primary" target="_blank" href=@record.Uri>View</NavLink>
-                                                </div>
-                                            }
+                                            <div class=@(XSmall ? "col mb-1 ps-0 text-center" : "col mb-1 ps-0")>
+                                                @if ((SelectedRecordRequest.RmdRequestStatus == OfficeRequestedRecordStatus.Released.ToString() || SelectedRecordRequest.RmdRequestStatus == OfficeRequestedRecordStatus.Claimed.ToString()) && !string.IsNullOrEmpty(record.Uri))
+                                                {
+                                                    <NavLink target="_blank" href=@record.Uri><b>View</b></NavLink>
+                                                }
+                                                else if ((SelectedRecordRequest.RmdRequestStatus == OfficeRequestedRecordStatus.Released.ToString() || SelectedRecordRequest.RmdRequestStatus == OfficeRequestedRecordStatus.Claimed.ToString()) && string.IsNullOrEmpty(record.Uri))
+                                                {
+                                                    <p><b>No Record</b></p>
+                                                }
+                                                else
+                                                {
+                                                    <div class=@(XSmall ? "col mb-1 ps-0 text-center" : "col mb-1 ps-0")>
+                                                        <p><b>Pending</b></p>
+                                                    </div>
+                                                }
+                                            </div>
+
                                         </div>
                                     </li>
                                 }
@@ -146,12 +156,23 @@
                                             <div class="col d-flex align-items-center pe-0">
                                                 <p>@record.RecordType</p>
                                             </div>
-                                            @if (!string.IsNullOrEmpty(record.Uri))
-                                            {
-                                                <div class=@(XSmall ? "col mb-1 ps-0 text-center" : "col mb-1 ps-0")>
-                                                    <NavLink class="telerik-blazor k-button k-button-solid k-rounded-md k-button-md k-button-solid-primary" target="_blank" href=@record.Uri>View</NavLink>
-                                                </div>
-                                            }
+                                            <div class=@(XSmall ? "col mb-1 ps-0 text-center" : "col mb-1 ps-0")>
+                                                @if ((SelectedRecordRequest.HrmdRequestStatus == OfficeRequestedRecordStatus.Released.ToString() || SelectedRecordRequest.HrmdRequestStatus == OfficeRequestedRecordStatus.Claimed.ToString()) && !string.IsNullOrEmpty(record.Uri))
+                                                {
+                                                    <NavLink target="_blank" href=@record.Uri><b>View</b></NavLink>
+                                                }
+                                                else if ((SelectedRecordRequest.HrmdRequestStatus == OfficeRequestedRecordStatus.Released.ToString() || SelectedRecordRequest.HrmdRequestStatus == OfficeRequestedRecordStatus.Claimed.ToString()) && string.IsNullOrEmpty(record.Uri))
+                                                {
+                                                    <p><b>No Record</b></p>
+                                                }
+                                                else
+                                                {
+                                                    <div class=@(XSmall ? "col mb-1 ps-0 text-center" : "col mb-1 ps-0")>
+                                                        <p><b>Pending</b></p>
+                                                    </div>
+                                                }
+                                            </div>
+
                                         </div>
                                     </li>
                                 }
