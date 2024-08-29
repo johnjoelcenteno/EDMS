@@ -25,11 +25,18 @@ using DPWH.EDMS.Client.Shared.APIClient.Services.Users;
 using DPWH.EDMS.Components.Helpers;
 using System.Net;
 using DPWH.EDMS.Client.Shared.Configurations;
+using DPWH.EDMS.Client.Shared.APIClient.Services.Signatories;
+using Microsoft.AspNetCore.Components.Authorization;
+using DPWH.EDMS.IDP.Core.Extensions;
+using Telerik.SvgIcons;
+using DPWH.EDMS.IDP.Core.Constants;
+using System.Buffers;
 
 namespace DPWH.EDMS.Web.Client.Pages.RequestManagement.ViewRequestedRecordForm;
 
 public class ViewRequestedRecordFormBase : ComponentBase
 {
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationStateAsync { get; set; }
     [Parameter] public required string RequestId { get; set; }
     [Parameter] public required string DocumentId { get; set; }
     [Inject] public required IRequestManagementService RequestManagementService { get; set; }
@@ -38,9 +45,11 @@ public class ViewRequestedRecordFormBase : ComponentBase
     [Inject] public required IRecordRequestSupportingFilesService RecordRequestSupportingFilesService { get; set; }
     [Inject] public required IDocumentService DocumentService { get; set; }
     [Inject] public required IUsersService UserService { get; set; }
+    [Inject] public required ISignatoryManagementService SignatoriesClient { get; set; }
     [Inject] public required FontServices FontService { get; set; }
     protected RecordRequestModel SelectedRecordRequest { get; set; } = new();
     protected RequestedRecordModel RequestedRecord { get; set; } = new();
+    protected SignatoryModel SignatoryData { get; set; }    
     [Inject] public required NavigationManager NavManager { get; set; }
     protected TelerikDialog dialogReference = new();
     protected bool IsOpen { get; set; } = false;
@@ -62,6 +71,9 @@ public class ViewRequestedRecordFormBase : ComponentBase
          new() { Icon = "home", Url = "/"},
     };
     protected bool XSmall { get; set; }
+    protected string DisplayName = "---";
+    protected string Role = string.Empty;
+    protected string Office = string.Empty;
     protected async override Task OnInitializedAsync()
     {
         await LoadSelectedDocuments();
@@ -91,7 +103,7 @@ public class ViewRequestedRecordFormBase : ComponentBase
     protected async Task LoadSelectedDocuments()
     {
         IsLoading = true;
-
+        await FetchUser();
         await LoadData(async (res) =>
         {
             SelectedRecordRequest = res;
@@ -101,7 +113,7 @@ public class ViewRequestedRecordFormBase : ComponentBase
 
             }
         });
-
+        
         IsLoading = false;
     }
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -156,7 +168,7 @@ public class ViewRequestedRecordFormBase : ComponentBase
             byte[] pngBytes = qrCode.GetGraphic(20);
 
             using MemoryStream pngStream = new(pngBytes);
-            using Image<Rgba32> image = Image.Load<Rgba32>(pngStream);
+            using Image<Rgba32> image = SixLabors.ImageSharp.Image.Load<Rgba32>(pngStream);
 
             using MemoryStream jpegStream = new();
             image.Save(jpegStream, new JpegEncoder());
@@ -188,6 +200,7 @@ public class ViewRequestedRecordFormBase : ComponentBase
     //    }
     //}
 
+  
     public async Task GenerateStamp(string pdfUri, string QRUrl)
     {
        
@@ -204,14 +217,14 @@ public class ViewRequestedRecordFormBase : ComponentBase
         }
         try
         {
-            Status = "Modifying PDF...";
+            Status = "Signing document...";
             
             using var httpClient = new HttpClient();
             string cacheBusterUri = $"{pdfUri}?timestamp={DateTime.UtcNow.Ticks}";
 
             // Download the PDF from the URI
             byte[] pdfData = await httpClient.GetByteArrayAsync(cacheBusterUri);
-            Status = "Processing PDF...";
+            Status = "Processing document...";
             
 
             using MemoryStream pdfStream = new MemoryStream(pdfData);
@@ -238,7 +251,7 @@ public class ViewRequestedRecordFormBase : ComponentBase
                 ApplyStampToPage(gfx, page, qrImage, signatureImage, font);
             }
 
-            Status = "Saving stamped PDF...";
+            Status = "Saving stamped document...";
             
 
             using MemoryStream outputStream = new MemoryStream();
@@ -294,7 +307,80 @@ public class ViewRequestedRecordFormBase : ComponentBase
             throw new Exception($"Failed to load image '{imageName}': {ex.Message}", ex);
         }
     }
+  
+    protected async Task FetchUser()
+    {
+        var authState = await AuthenticationStateAsync!;
+        var user = authState.User;
 
+        if (authState != null)
+        {
+            var roles = user.Claims.Where(c => c.Type == "role")!.ToList();
+
+            var role = roles.FirstOrDefault(role => !string.IsNullOrEmpty(role.Value) && role.Value.Contains(ApplicationRoles.RolePrefix))?.Value ?? ClaimsPrincipalExtensions.GetRole(user);
+
+            var firstnameValue = ClaimsPrincipalExtensions.GetFirstName(user);
+            var lastnameValue = ClaimsPrincipalExtensions.GetLastName(user);
+            var office = ClaimsPrincipalExtensions.GetOffice(user);
+            var employeeId = ClaimsPrincipalExtensions.GetEmployeeNumber(user);
+
+            DisplayName = (!string.IsNullOrEmpty(firstnameValue) && !string.IsNullOrEmpty(lastnameValue))
+                ? GenericHelper.CapitalizeFirstLetter($"{firstnameValue} {lastnameValue}")
+                : "---"; 
+            if (employeeId != null) {
+                await GetAuthorizedStampSignatories(employeeId);
+            }
+            Office = !string.IsNullOrEmpty(office) ? GetOfficeName(office) : "---";
+            Role = GetRoleLabel(role);
+        }
+    }
+
+    protected async Task GetAuthorizedStampSignatories(string employeeId)
+    {
+        //Ongoing integration
+        //BE Ongoing
+        var dataSource = new DataSourceRequest();
+        var filters = new Api.Contracts.Filter
+        {
+            Field = nameof(SignatoryModel.EmployeeNumber),
+            Operator = "eq",
+            Value = employeeId
+        };
+        dataSource.Filter = filters;
+
+        var getSignature = await SignatoriesClient.Query(dataSource);
+
+        if (getSignature != null)
+        {
+            var data = GenericHelper.GetListByDataSource<SignatoryModel>(getSignature.Data);
+            if (data != null)
+            {
+                var userData = data.FirstOrDefault(x => x.EmployeeNumber == employeeId);
+                if (userData != null)
+                {
+                    SignatoryData = userData;
+                }
+                else
+                {
+                    ToastService.ShowError($"Employee ID :{employeeId} not found");
+                }
+            }
+        }
+    }
+
+    protected string GetOfficeName(string officeCode)
+    {
+        return officeCode switch
+        {
+            nameof(Offices.RMD) => "Records Management Division",
+            nameof(Offices.HRMD) => "Human Resource Management Division",
+            _ => string.Empty
+        };
+    }
+    private string GetRoleLabel(string roleValue)
+    {
+        return ApplicationRoles.GetDisplayRoleName(roleValue, "Unknown Role");
+    }
     private void ApplyStampToPage(XGraphics gfx, PdfPage page, XImage qrImage, XImage signatureImage, XFont font)
     {
         double qrImageWidth = 55;
