@@ -327,9 +327,9 @@ public class ViewRequestedRecordFormBase : ComponentBase
             DisplayName = (!string.IsNullOrEmpty(firstnameValue) && !string.IsNullOrEmpty(lastnameValue))
                 ? GenericHelper.CapitalizeFirstLetter($"{firstnameValue} {lastnameValue}")
                 : "---"; 
-            if (employeeId != null) {
-                await GetAuthorizedStampSignatories(employeeId);
-            }
+            //if (employeeId != null) {
+            //    var signature = await UserService.GetUserSignatureByEmployeeId(employeeId);
+            //}
             Office = !string.IsNullOrEmpty(office) ? GetOfficeName(office) : "---";
             Role = GetRoleLabel(role);
         }

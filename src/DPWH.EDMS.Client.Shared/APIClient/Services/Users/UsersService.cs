@@ -59,4 +59,8 @@ public class UsersService : IUsersService
     {
         return _client.GetUserSignatureAsync();
     }
+    public Task<GetUserProfileDocumentModelBaseApiResponse> GetUserSignatureByEmployeeId(string employeeId)
+    {
+        return _client.GetSignatureByEmployeeIdAsync(employeeId);
+    }
 }
