@@ -15,6 +15,7 @@ public static class ApiEndpoints
         public const string Delete = $"{Base}/{{id:guid}}";
         public const string Query = $"{Base}/Query";
         public const string QueryById = $"{Base}/GetById/{{id:guid}}";
+        public const string GetSignatoryByEmployeeId = $"{Base}/GetSignatoryByEmployeeId";
     }
 
     public static class RecordTypes

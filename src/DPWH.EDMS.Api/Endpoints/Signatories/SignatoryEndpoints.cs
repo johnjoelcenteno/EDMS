@@ -1,5 +1,6 @@
 ﻿using DPWH.EDMS.Api.Endpoints;
 using DPWH.EDMS.Application;
+using DPWH.EDMS.Application.Features.Signatories.Queries;
 using DPWH.EDMS.Application.Models;
 using KendoNET.DynamicLinq;
 using MediatR;
@@ -25,6 +26,24 @@ public static class SignatoryEndpoints
         .Produces<BaseApiResponse<Guid>>()
         .Produces<ProblemDetails>(StatusCodes.Status400BadRequest)
         .Produces<ProblemDetails>(StatusCodes.Status500InternalServerError);
+
+        builder.MapGet(ApiEndpoints.Signatories.GetSignatoryByEmployeeId, async (string employeeId, IMediator mediator, CancellationToken token) =>
+        {
+            var command = new GetSignatoryByEmployeeId(employeeId);
+            var result = await mediator.Send(command, token);
+            var data = new BaseApiResponse<QuerySignatoryModel>(result);
+            return result is null ? Results.NotFound() : Results.Ok(data);
+        })
+         .WithName("GetSignatoryByEmployeeId")
+         .WithTags(TagName)
+         .WithDescription("Get user signatory by employee Id")
+         .WithApiVersionSet(ApiVersioning.VersionSet)
+         .HasApiVersion(1.0)
+         .Produces<BaseApiResponse<QuerySignatoryModel>>()
+         .Produces<ProblemDetails>(StatusCodes.Status404NotFound)
+         .Produces<ProblemDetails>(StatusCodes.Status400BadRequest)
+         .Produces<ProblemDetails>(StatusCodes.Status500InternalServerError);
+
 
         builder.MapPost(ApiEndpoints.Signatories.Query, async (DataSourceRequest request, IMediator mediator) =>
         {

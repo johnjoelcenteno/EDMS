@@ -14,6 +14,6 @@ public interface IUsersService
     Task<GetUserByIdResultBaseApiResponse> GetUserByEmployeeId(string id);
     Task<UpdateResponse> UploadSignature(FileParameter document);
     Task<GetUserProfileDocumentModelBaseApiResponse> GetUserSignature();
-
+    Task<GetUserProfileDocumentModelBaseApiResponse> GetUserSignatureByEmployeeId(string employeeId);
 
 }

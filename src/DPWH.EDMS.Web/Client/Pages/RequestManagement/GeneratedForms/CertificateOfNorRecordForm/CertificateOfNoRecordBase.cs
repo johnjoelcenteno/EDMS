@@ -43,13 +43,14 @@ public class CertificateOfNoRecordBase : GridBase<SignatoryModel>
     protected bool IsNonCurrentSection { get; set; } = false;
     protected string CurrentSectionSignature { get; set; }
     protected string NonCurrentSectionSignature { get; set; }
+    protected string NotedSignature { get; set; }
     protected async override Task OnInitializedAsync()
     {
 
         IsLoading = true;
         await FetchUser();
 
-        await LoadData((res) =>
+        await LoadData(async (res) =>
         {
             SelectedRecordRequest = res;
 
@@ -67,6 +68,7 @@ public class CertificateOfNoRecordBase : GridBase<SignatoryModel>
                     }
                 }
             }
+             
         });
         await GetSignatories();
         await InvokeAsync(StateHasChanged);
@@ -110,6 +112,8 @@ public class CertificateOfNoRecordBase : GridBase<SignatoryModel>
 
         });
 
+        await GetSignatures();
+
         IsLoading = false;
     }
     protected async Task ExportPdf()
@@ -139,10 +143,49 @@ public class CertificateOfNoRecordBase : GridBase<SignatoryModel>
         IsLoading = false;
     }
 
-    protected async Task GetSignatures(string employeeId)
+    protected async Task GetSignatures()
     {
-        //Ongoing
-        //var data = await UsersService.GetUserSignature
+        var currentSection = GridData.FirstOrDefault(x => x.Office1 == "Current Section" && x.SignatoryNo == 0);
+        var nonCurrentSection = GridData.FirstOrDefault(x => x.Office1 == "Non-Current Section" && x.SignatoryNo == 0);
+
+        var notedSignature = GridData.FirstOrDefault(x => x.Office1 == "Office of the Chief" && x.SignatoryNo == 1);
+
+        var tasks = new List<Task<GetUserProfileDocumentModelBaseApiResponse>>();
+
+        if (currentSection != null && IsCurrentSection)
+        {
+            tasks.Add(UsersService.GetUserSignatureByEmployeeId(currentSection.EmployeeNumber));
+        }
+
+        if (nonCurrentSection != null && IsNonCurrentSection)
+        {
+            tasks.Add(UsersService.GetUserSignatureByEmployeeId(nonCurrentSection.EmployeeNumber));
+        }
+
+        if(notedSignature != null)
+        {
+            tasks.Add(UsersService.GetUserSignatureByEmployeeId(notedSignature.EmployeeNumber));
+        }
+        var results = await Task.WhenAll(tasks);
+        var timestamp = DateTime.UtcNow.Ticks.ToString();
+        foreach (var result in results)
+        {
+            if (result != null && result.Data != null)
+            {
+                if (currentSection != null && result.Data.EmployeeNumber == currentSection.EmployeeNumber)
+                {
+                    CurrentSectionSignature = $"{result.Data.UriSignature}?t={timestamp}";
+                }
+                if (nonCurrentSection != null && result.Data.EmployeeNumber == nonCurrentSection.EmployeeNumber)
+                {
+                    NonCurrentSectionSignature = $"{result.Data.UriSignature}?t={timestamp}";
+                }
+                if (notedSignature != null && result.Data.EmployeeNumber == notedSignature.EmployeeNumber)
+                {
+                    NotedSignature = $"{result.Data.UriSignature}?t={timestamp}";
+                }
+            }
+        }
     }
     protected override async Task OnParametersSetAsync()
     {

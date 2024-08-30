@@ -49,7 +49,7 @@
                                 {
                                     ValidateSection(item.CategoryType);
                                     count++;
-                                    <p class="fw-bolder" style="padding-top: 3pt;padding-left: 6pt;text-indent: 0pt;text-align: left;"><span class="fw-normal">@count</span>. @item.RecordType - @item.CategoryType</p>
+                                    <p class="fw-bolder" style="padding-top: 3pt;padding-left: 6pt;text-indent: 0pt;text-align: left;"><span class="fw-normal">@count</span>. @item.RecordType</p>
                                 }
 
                             }
@@ -69,7 +69,12 @@
 
                         if (currentSection != null && IsCurrentSection)
                         {
-                            <h2 style="padding-left: 6pt;text-indent: 0pt;text-align: left;">@currentSection!.Name</h2>
+                            <div class="section-stamp">
+                                <h2>@currentSection!.Name</h2>
+                                <img src="@CurrentSectionSignature" alt="No signature found" />
+                            </div>
+
+                            //<h2 style="padding-left: 6pt;text-indent: 0pt;text-align: left;">@currentSection!.Name</h2>
                             <p style="padding-left: 6pt;text-indent: 0pt;text-align: left;">@currentSection!.Position</p>
                             <p style="padding-left: 6pt;text-indent: 0pt;text-align: left;">@currentSection!.Office1</p>
                             <p style="padding-left: 6pt;text-indent: 0pt;text-align: left;">@currentSection!.Office2</p>
@@ -77,8 +82,11 @@
                         }
 
                         <h2 style="padding-left: 6pt;text-indent: 0pt;text-align: left;margin-bottom:30px;">NOTED:</h2>
-
-                        <h2 style="padding-left: 6pt;text-indent: 0pt;line-height: 13pt;text-align: left;">@secondSignatory!.Name</h2>
+                        <div class="noted-section-stamp">
+                            <h2>@secondSignatory!.Name</h2>
+                            <img src="@NotedSignature" alt="No signature found" />
+                        </div>
+                        //<h2 style="padding-left: 6pt;text-indent: 0pt;line-height: 13pt;text-align: left;">@secondSignatory!.Name</h2>
                         <p style="padding-left: 6pt;text-indent: 0pt;line-height: 13pt;text-align: left;">@secondSignatory!.Position</p>
                         <p style="padding-left: 6pt;text-indent: 0pt;text-align: left;">@secondSignatory!.Office1, @secondSignatory!.Office2</p>
                     }
@@ -124,7 +132,7 @@
                                 if (item.Office == office && item.CategoryType == "Non-Current Section")
                                 {
                                     count++;
-                                    <p class="fw-bolder" style="padding-top: 3pt;padding-left: 6pt;text-indent: 0pt;text-align: left;"><span class="fw-normal">@count</span>. @item.RecordType - @item.CategoryType</p>
+                                    <p class="fw-bolder" style="padding-top: 3pt;padding-left: 6pt;text-indent: 0pt;text-align: left;"><span class="fw-normal">@count</span>. @item.RecordType</p>
                                 }
 
                             }
@@ -144,7 +152,12 @@
 
                         if (nonCurrentSection != null && IsNonCurrentSection)
                         {
-                            <h2 style="padding-left: 6pt;text-indent: 0pt;text-align: left;">@nonCurrentSection!.Name</h2>
+
+                            <div class="section-stamp">
+                                <h2>@nonCurrentSection!.Name</h2>
+                                <img src="@NonCurrentSectionSignature" alt="No signature found" />
+                            </div>
+
                             <p style="padding-left: 6pt;text-indent: 0pt;text-align: left;">@nonCurrentSection!.Position</p>
                             <p style="padding-left: 6pt;text-indent: 0pt;text-align: left;">@nonCurrentSection!.Office1</p>
                             <p style="padding-left: 6pt;text-indent: 0pt;text-align: left;">@nonCurrentSection!.Office2</p>
@@ -153,7 +166,11 @@
 
                         <h2 style="padding-left: 6pt;text-indent: 0pt;text-align: left;margin-bottom:30px;">NOTED:</h2>
 
-                        <h2 style="padding-left: 6pt;text-indent: 0pt;line-height: 13pt;text-align: left;">@secondSignatory!.Name</h2>
+                        <div class="noted-section-stamp">
+                            <h2>@secondSignatory!.Name</h2>
+                            <img src="@NotedSignature" alt="No signature found" />
+                        </div>
+                        //<h2 style="padding-left: 6pt;text-indent: 0pt;line-height: 13pt;text-align: left;">@secondSignatory!.Name</h2>
                         <p style="padding-left: 6pt;text-indent: 0pt;line-height: 13pt;text-align: left;">@secondSignatory!.Position</p>
                         <p style="padding-left: 6pt;text-indent: 0pt;text-align: left;">@secondSignatory!.Office1, @secondSignatory!.Office2</p>
                     }
@@ -167,3 +184,48 @@
     }
 }
  
+<style>
+    .section-stamp {
+    position: relative;
+    display: inline-block;
+}
+
+.section-stamp h2 {
+    margin: 0;
+    padding-left: 6pt;
+    text-indent: 0pt;
+    text-align: left;
+}
+
+.section-stamp img {
+    position: absolute;
+    top: -55px;
+    left: 10px;
+    width: 100px;
+    height: 100px;
+    object-fit: scale-down;
+    opacity: 1.2;
+}
+
+    .noted-section-stamp {
+        position: relative;
+        display: inline-block;
+    }
+
+        .noted-section-stamp h2 {
+            margin: 0;
+            padding-left: 6pt;
+            text-indent: 0pt;
+            text-align: left;
+        }
+
+        .noted-section-stamp img {
+            position: absolute;
+            top: -55px;
+            left: 10px;
+            width: 100px;
+            height: 100px;
+            object-fit: scale-down;
+            opacity: 1.2;
+        }
+</style>
