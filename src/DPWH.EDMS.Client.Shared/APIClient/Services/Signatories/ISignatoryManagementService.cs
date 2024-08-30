@@ -8,5 +8,6 @@ namespace DPWH.EDMS.Client.Shared.APIClient.Services.Signatories
         Task<DataSourceResult> Query(DataSourceRequest body);
         Task<GuidNullableBaseApiResponse> UpdateSignatoriesAsync(Guid id, UpdateSignatoryModel body);
         Task<GuidNullableBaseApiResponse> DeleteSignatoriesAsync(Guid id);
+        Task<QuerySignatoryModelBaseApiResponse> GetSignatoryByEmployeeId(string employeeId);
     }
 } 

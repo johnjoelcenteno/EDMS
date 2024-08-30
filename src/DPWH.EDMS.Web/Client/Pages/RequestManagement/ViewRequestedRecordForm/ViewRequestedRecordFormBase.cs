@@ -74,6 +74,9 @@ public class ViewRequestedRecordFormBase : ComponentBase
     protected string DisplayName = "---";
     protected string Role = string.Empty;
     protected string Office = string.Empty;
+    protected string EmployeeId = string.Empty;
+    protected bool IsCategoryType { get; set; } = true;
+    protected QuerySignatoryModel querySignatoryData { get; set; } = new();
     protected async override Task OnInitializedAsync()
     {
         await LoadSelectedDocuments();
@@ -326,10 +329,11 @@ public class ViewRequestedRecordFormBase : ComponentBase
 
             DisplayName = (!string.IsNullOrEmpty(firstnameValue) && !string.IsNullOrEmpty(lastnameValue))
                 ? GenericHelper.CapitalizeFirstLetter($"{firstnameValue} {lastnameValue}")
-                : "---"; 
-            //if (employeeId != null) {
-            //    var signature = await UserService.GetUserSignatureByEmployeeId(employeeId);
-            //}
+                : "---";
+            if (employeeId != null)
+            {
+                EmployeeId = employeeId;
+            }
             Office = !string.IsNullOrEmpty(office) ? GetOfficeName(office) : "---";
             Role = GetRoleLabel(role);
         }
@@ -416,8 +420,12 @@ public class ViewRequestedRecordFormBase : ComponentBase
         double textY = -12;
         double textHeight = 30;
 
-        gfx.DrawString("Ma. Kathrina B. Abary", font, XBrushes.DarkGreen, new XRect(textX, textY, qrImageHeight, textHeight), XStringFormats.TopLeft);
-        gfx.DrawString("Non-Current Record Section", font, XBrushes.DarkGreen, new XRect(55, -5, qrImageHeight, textHeight), XStringFormats.TopLeft);
+        var sectionType = RequestedRecord.CategoryType == "Non-Current Section" || RequestedRecord.CategoryType == "Current Section"
+                   ? RequestedRecord.CategoryType
+                   : "";
+
+        gfx.DrawString($"{querySignatoryData.Name}", font, XBrushes.DarkGreen, new XRect(textX, textY, qrImageHeight, textHeight), XStringFormats.TopLeft);
+        gfx.DrawString($"{sectionType} Record Section", font, XBrushes.DarkGreen, new XRect(55, -5, qrImageHeight, textHeight), XStringFormats.TopLeft);
         gfx.Restore();
 
         gfx.DrawImage(qrImage, qrImageX, qrImageY, qrImageWidth, qrImageHeight);
@@ -455,7 +463,24 @@ public class ViewRequestedRecordFormBase : ComponentBase
         if (document != null)
         {
             RequestedRecord = document;
+            if (EmployeeId != null)
+            {
+                var signature = await SignatoriesClient.GetSignatoryByEmployeeId(EmployeeId);
+                if (signature != null)
+                {
+                    if (signature.Data.Office1 == RequestedRecord.CategoryType)
+                    {
+                        querySignatoryData = signature.Data;
+                    }
+                    else
+                    {
+                        IsCategoryType = false;
+                        ToastService.ShowError($"The document is {RequestedRecord.CategoryType}");
+                        ToastService.ShowError($"The user is currently in {signature.Data.Office1} which is not allowed to sign {RequestedRecord.CategoryType}");
+                    }
 
+                }
+            }
         }
         if (string.IsNullOrEmpty(RequestedRecord.Uri))
         {
