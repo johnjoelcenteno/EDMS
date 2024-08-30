@@ -375,13 +375,12 @@
                         <TelerikButton OnClick="OnCancel" FillMode="@ThemeConstants.Button.FillMode.Outline">Cancel</TelerikButton>
                         @if (User.Office == Offices.RMD.ToString())
                         {
-                            <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.RmdRequestStatus == OfficeRequestedRecordStatus.Reviewed.ToString())">Submit</TelerikButton>
+                            <TelerikButton OnClick=ValidateApproval ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.RmdRequestStatus == OfficeRequestedRecordStatus.Reviewed.ToString())">Submit</TelerikButton>
                         }
                         else if (User.Office == Offices.HRMD.ToString())
                         {
                             <TelerikButton OnClick="@(() => IsModalVisible = true)" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@(SelectedRecordRequest.HrmdRequestStatus == OfficeRequestedRecordStatus.Reviewed.ToString())">Submit</TelerikButton>
                         }
-
                     </div>
                 </div>
             }
@@ -410,18 +409,20 @@
                             <div classs="col">
                                 <label for="@record.RecordType">@record.RecordType</label>
                             </div>
-                            @if (record.Uri != null)
-                            {
-                                <div class="col text-end">
-                                    <TelerikButton OnClick="@(() => OnDocumentOpen(record.Id.ToString()))" Enabled="@(!string.IsNullOrEmpty(User.Office))">Approve</TelerikButton>
-                                </div>
-                            }
-                            else
-                            {
-                                <div class="col text-end">
+                            <div class="col text-end">
+                                @if (record.Status != RequestedRecordStatus.Completed.ToString() && record.Uri != null)
+                                {
+                                    <TelerikButton OnClick="@(() => OnDocumentOpen(record.Id.ToString()))" Enabled="@(!string.IsNullOrEmpty(User.Office) && record.Status != RequestedRecordStatus.Completed.ToString())">Approve</TelerikButton>
+                                }
+                                else if (record.Status == RequestedRecordStatus.Completed.ToString() && record.Uri != null)
+                                {
+                                    <p class="fw-bolder">Approved</p>
+                                }
+                                else
+                                {
                                     <p class="fw-bolder">No Record</p>
-                                </div>
-                            }
+                                }
+                            </div>
                         </div>
                     }
                 }
@@ -431,6 +432,9 @@
                         <h5>No RMD Records to be Signed</h5>
                     </div>
                 }
+                <div class="row mt-3">
+                    <p class="text-danger">@ApprovalValidation</p>
+                </div>
             </div>
         </div>
     </TabStripTab>

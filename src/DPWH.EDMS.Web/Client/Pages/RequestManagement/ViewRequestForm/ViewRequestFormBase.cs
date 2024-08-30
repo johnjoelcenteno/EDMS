@@ -48,6 +48,8 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
     // Validation
     protected string? RecordCopyValidation { get; set; }
     protected string? RequestedRecordValidation { get; set; }
+    protected string? ApprovalValidation { get; set; }
+    protected string? ManagerApprovalValidation { get; set; }
     protected string? TransmittalValidation { get; set; }
 
     // Placeholders
@@ -421,6 +423,22 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
         StateHasChanged();
     }
 
+    protected void ValidateApproval()
+    {
+        ApprovalValidation = string.Empty;
+
+        var availableRecords = RMDRecords?.Where(r => r.IsAvailable == true).ToList();
+
+        if (availableRecords != null && availableRecords.All(r => r.Status == RequestedRecordStatus.Completed.ToString()))
+        {
+            IsModalVisible = true;
+        }
+        else
+        {
+            ApprovalValidation = "There are still document/s that needs approval.";
+        }
+    }
+
     protected void ValidateManagerApproval()
     {
         ManagerApprovalValidation = string.Empty;
@@ -530,13 +548,13 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
         IsLoading = true;
         IsModalVisible = false;
 
-        foreach (var record in SelectedRecordRequest.RequestedRecords)
-        {
-            if (!string.IsNullOrEmpty(record.Uri))
-            {
-                await OnDocumentStatusChange(record.Id, RequestedRecordStatus.Completed.ToString());
-            }
-        }
+        //foreach (var record in SelectedRecordRequest.RequestedRecords)
+        //{
+        //    if (!string.IsNullOrEmpty(record.Uri))
+        //    {
+        //        await OnDocumentStatusChange(record.Id, RequestedRecordStatus.Completed.ToString());
+        //    }
+        //}
 
         await OnOfficeStatusChange(OfficeRequestedRecordStatus.Approved.ToString());
         await OnStatusChange();
@@ -790,6 +808,4 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
     {
 
     }
-
-    protected string? ManagerApprovalValidation { get; set; }
 }
