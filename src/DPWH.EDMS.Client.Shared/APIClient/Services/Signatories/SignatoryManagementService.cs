@@ -31,5 +31,8 @@ public class SignatoryManagementService : ISignatoryManagementService
     {
         return await _client.Delete_signatoryAsync(id);
     }
-
+    public async Task<QuerySignatoryModelBaseApiResponse> GetSignatoryByEmployeeId(string employeeId)
+    {
+        return await _client.GetSignatoryByEmployeeIdAsync(employeeId);
+    }
 }

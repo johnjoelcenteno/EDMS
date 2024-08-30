@@ -43,12 +43,12 @@
         else
         {
             <TelerikButton Class="mb-2"
-                           ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" OnClick="@(() => GenerateStamp($"{RequestedRecord.Uri}", $"{NavManager.BaseUri}requested-signed-document/{SelectedRecordRequest.FullName}/{DateTime.Now.ToString("MMMddyyyy")}/{SelectedRecordRequest.ControlNumber}/{RequestedRecord.DocumentType}"))">
+                           ThemeColor="@ThemeConstants.Button.ThemeColor.Primary" Enabled="@IsCategoryType" OnClick="@(() => GenerateStamp($"{RequestedRecord.Uri}", $"{NavManager.BaseUri}requested-signed-document/{SelectedRecordRequest.FullName}/{DateTime.Now.ToString("MMMddyyyy")}/{SelectedRecordRequest.ControlNumber}/{RequestedRecord.DocumentType}"))">
                 <TelerikSvgIcon Icon="@SvgIcon.Signature" Size="@ThemeConstants.SvgIcon.Size.ExtraExtraLarge" />
                 Sign
             </TelerikButton>
         }
-       
+        
     </div>
     <div class="container page-legal-size">
         @if (!string.IsNullOrEmpty(RequestedRecord.Uri))
