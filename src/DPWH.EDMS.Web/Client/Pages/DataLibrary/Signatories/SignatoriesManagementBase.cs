@@ -36,6 +36,7 @@ public class SignatoriesManagementBase : GridBase<SignatoriesModel>
     protected string? SearchPosition { get; set; }
     protected string? SearchOffice1 { get; set; }
     protected string? SearchOffice2 { get; set; }
+    protected string? SearchEmployeeNumber { get; set; }
     protected DataSourceResult GetSignatoryResult { get; set; } = new DataSourceResult();
 
     protected TelerikDialog dialogReference = new();
@@ -116,6 +117,7 @@ public class SignatoriesManagementBase : GridBase<SignatoriesModel>
                 case "Edit":
                     GetOpenbtn = "Edit";
 
+                    NewConfig.EmployeeNumber = SelectedItem.EmployeeNumber;
                     NewConfig.Name = SelectedItem.Name;
                     NewConfig.DocumentType = SelectedItem.DocumentType;
                     NewConfig.Position = SelectedItem.Position;
@@ -184,6 +186,7 @@ public class SignatoriesManagementBase : GridBase<SignatoriesModel>
         {
             var newitem = new UpdateSignatoryModel()
             {
+                EmployeeNumber = item.EmployeeNumber,
                 Name = item.Name,
                 DocumentType = item.DocumentType,
                 Position = item.Position,
@@ -264,7 +267,7 @@ public class SignatoriesManagementBase : GridBase<SignatoriesModel>
         AddTextSearchFilterIfNotNull(filters, nameof(SignatoriesModel.Office1), SearchOffice1, "contains");
         AddTextSearchFilterIfNotNull(filters, nameof(SignatoriesModel.Office2), SearchOffice2, "contains");
         AddTextSearchFilterIfNotNull(filters, nameof(SignatoriesModel.IsActive), true.ToString(), "eq");
-
+        AddTextSearchFilterIfNotNull(filters, nameof(SignatoriesModel.EmployeeNumber), SearchEmployeeNumber, "contains");
         SearchFilterRequest.Logic = DataSourceHelper.AND_LOGIC;
         SearchFilterRequest.Filters = filters.Any() ? filters : null;
 
