@@ -366,19 +366,29 @@
 
                     <ChartSeriesItems>
                         <ChartSeries Type="ChartSeriesType.Line"
-                                     Name="Request"
+                                     Name="Hrmd"
+                                     Data="@MockData.MonthlyRequestAverageTimeList()"
+                                     Field="@nameof(ModelData.Series1)">
+                        </ChartSeries>
+                        <ChartSeries Type="ChartSeriesType.Line"
+                                     Name="Rmd"
                                      Data="@MockData.MonthlyRequestAverageTimeList()"
                                      Field="@nameof(ModelData.Series3)">
+                        </ChartSeries>
+                        <ChartSeries Type="ChartSeriesType.Line"
+                                     Name="Combined"
+                                     Data="@MockData.MonthlyRequestAverageTimeList()"
+                                     Field="@nameof(ModelData.Series2)">
                         </ChartSeries>
                     </ChartSeriesItems>
 
                     <ChartCategoryAxes>
-                        <ChartCategoryAxis Categories="@Categories"></ChartCategoryAxis>
+                        <ChartCategoryAxis Categories="@HrmdCategories"></ChartCategoryAxis>
                     </ChartCategoryAxes>
 
                     <ChartValueAxes>
                         <ChartValueAxis Name="my-value-axis">
-                            <ChartValueAxisLabels Format="# 'min'"></ChartValueAxisLabels>
+                            <ChartValueAxisLabels Format="#"></ChartValueAxisLabels>
                         </ChartValueAxis>
                     </ChartValueAxes>
                 </TelerikChart>

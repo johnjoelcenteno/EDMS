@@ -36,6 +36,7 @@ public class HomeBase : GridBase<RecordRequestModel>
 
     public List<object> Series1Data;
     public string[] Categories;
+    public string[] HrmdCategories;
 
     public List<object> SeriesTopRequest;
     public string[] CategoriesTopRequest;
@@ -81,7 +82,6 @@ public class HomeBase : GridBase<RecordRequestModel>
     protected async override Task OnInitializedAsync()
     {
         IsLoading = true;
-
         await HandleEndUserAccess();
         await GetRecordRequest();
         await GetOverviewTotal();
@@ -145,6 +145,7 @@ public class HomeBase : GridBase<RecordRequestModel>
             GetMonthlyRequestData = res.Data.ToList();
 
             Categories = GetMonthlyRequestData.Select(d => d.Month).ToArray();
+            HrmdCategories = new string[] { "Day 1", "Day 2", "Day 3", "Day 4", "Day 5", "Day 6", "Day 7" };
 
             Series1Data = GetMonthlyRequestData.Select(d => (object)d.Count).ToList();
              
