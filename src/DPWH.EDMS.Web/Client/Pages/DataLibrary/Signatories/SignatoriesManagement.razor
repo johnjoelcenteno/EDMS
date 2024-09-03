@@ -40,6 +40,33 @@
                                 <TelerikButton Icon="@FontIcon.Plus" ThemeColor="@(ThemeConstants.Button.ThemeColor.Primary)" OnClick="@( () => { GetOpenbtn = "Add"; IsOpen = true;})">Add</TelerikButton>
                             </GridToolBarTemplate>
                             <GridColumns>
+                                <GridColumn Field=@nameof(SignatoriesModel.EmployeeNumber) Title="EmployeeNumber" Visible="false">
+                                    <FilterCellTemplate>
+                                        <TelerikTextBox Value="@SearchEmployeeNumber"
+                                                        ValueChanged="@((string? val) =>
+                                               {
+                                                  SearchEmployeeNumber = val;
+
+                                                  SetFilterGrid();
+
+                                               })">
+
+                                        </TelerikTextBox>
+
+                                        <TelerikButton ButtonType="ButtonType.Button"
+                                                       Class="k-clear-button-visible ml-sm"
+                                                       Icon="@SvgIcon.FilterClear"
+                                                       Enabled="@(!string.IsNullOrEmpty(SearchEmployeeNumber))"
+                                                       OnClick="@(() =>
+                                               {
+                                                 SearchEmployeeNumber = null;
+
+                                                 SetFilterGrid();
+
+                                              })">
+                                        </TelerikButton>
+                                    </FilterCellTemplate>
+                                </GridColumn>
                                 <GridColumn Field=@nameof(SignatoriesModel.Name) Title="Name">
                                     <FilterCellTemplate>
                                         <TelerikTextBox Value="@SearchName"
