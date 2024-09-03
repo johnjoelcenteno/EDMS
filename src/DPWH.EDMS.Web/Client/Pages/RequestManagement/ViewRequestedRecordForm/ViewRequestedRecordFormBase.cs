@@ -215,7 +215,7 @@ public class ViewRequestedRecordFormBase : ComponentBase
             IsSigning = false;
             IsLoading = false;
 
-            ToastService.ShowError("Please ensure your signature file is uploaded to your profile page.");
+            ToastService.ShowError("Please ensure your signature PNG file is uploaded to your profile page.");
             return;
         }
         try
@@ -336,41 +336,55 @@ public class ViewRequestedRecordFormBase : ComponentBase
             }
             Office = !string.IsNullOrEmpty(office) ? GetOfficeName(office) : "---";
             Role = GetRoleLabel(role);
-        }
-    }
 
-    protected async Task GetAuthorizedStampSignatories(string employeeId)
-    {
-        //Ongoing integration
-        //BE Ongoing
-        var dataSource = new DataSourceRequest();
-        var filters = new Api.Contracts.Filter
-        {
-            Field = nameof(SignatoryModel.EmployeeNumber),
-            Operator = "eq",
-            Value = employeeId
-        };
-        dataSource.Filter = filters;
-
-        var getSignature = await SignatoriesClient.Query(dataSource);
-
-        if (getSignature != null)
-        {
-            var data = GenericHelper.GetListByDataSource<SignatoryModel>(getSignature.Data);
-            if (data != null)
+            if (string.IsNullOrEmpty(office))
             {
-                var userData = data.FirstOrDefault(x => x.EmployeeNumber == employeeId);
-                if (userData != null)
-                {
-                    SignatoryData = userData;
-                }
-                else
-                {
-                    ToastService.ShowError($"Employee ID :{employeeId} not found");
-                }
+                ToastService.ShowError("Current user don't have office");
+                NavManager.NavigateTo("/404");
+                return;
+            }
+            //await SignatoriesClient.GetSignatoryByEmployeeId(employeeId);
+            if (office == "HRMD")
+            {
+                ToastService.ShowError("HRMD is not allowed to sign document");
+                NavManager.NavigateTo("/404");
+                return;
             }
         }
     }
+
+    //protected async Task GetAuthorizedStampSignatories(string employeeId)
+    //{
+    //    //Ongoing integration
+    //    //BE Ongoing
+    //    //var dataSource = new DataSourceRequest();
+    //    //var filters = new Api.Contracts.Filter
+    //    //{
+    //    //    Field = nameof(SignatoryModel.EmployeeNumber),
+    //    //    Operator = "eq",
+    //    //    Value = employeeId
+    //    //};
+    //    //dataSource.Filter = filters;
+
+    //    //var getSignature = await SignatoriesClient.Query(dataSource);
+    //    var getSignature = await SignatoriesClient.GetSignatoryByEmployeeId(employeeId);
+    //    if (getSignature != null)
+    //    {
+          
+    //        if (getSignature.Data != null)
+    //        {
+    //            var userData = getSignature.Data;
+    //            if (userData.EmployeeNumber != null)
+    //            {
+    //                SignatoryData = getSignature.Data;
+    //            }
+    //            else
+    //            {
+    //                ToastService.ShowError($"Employee ID :{employeeId} not found");
+    //            }
+    //        }
+    //    }
+    //}
 
     protected string GetOfficeName(string officeCode)
     {
@@ -389,7 +403,7 @@ public class ViewRequestedRecordFormBase : ComponentBase
     {
         double qrImageWidth = 55;
         double qrImageHeight = qrImage.PixelHeight * (qrImageWidth / qrImage.PixelWidth);
-        double padding = 6;
+        double padding = 1;
         double bottomMargin = 78;
         double pageHeight = gfx.PageSize.Height;
         double qrImageX = padding;
@@ -426,6 +440,7 @@ public class ViewRequestedRecordFormBase : ComponentBase
 
         gfx.DrawString($"{querySignatoryData.Name}", font, XBrushes.DarkGreen, new XRect(textX, textY, qrImageHeight, textHeight), XStringFormats.TopLeft);
         gfx.DrawString($"{sectionType} Record Section", font, XBrushes.DarkGreen, new XRect(55, -5, qrImageHeight, textHeight), XStringFormats.TopLeft);
+        gfx.DrawString($"{SelectedRecordRequest.ControlNumber}", font, XBrushes.DarkGreen, new XRect(-53, 7, qrImageHeight, textHeight), XStringFormats.TopLeft);
         gfx.Restore();
 
         gfx.DrawImage(qrImage, qrImageX, qrImageY, qrImageWidth, qrImageHeight);
@@ -465,21 +480,30 @@ public class ViewRequestedRecordFormBase : ComponentBase
             RequestedRecord = document;
             if (EmployeeId != null)
             {
-                var signature = await SignatoriesClient.GetSignatoryByEmployeeId(EmployeeId);
-                if (signature != null)
-                {
-                    if (signature.Data.Office1 == RequestedRecord.CategoryType)
-                    {
-                        querySignatoryData = signature.Data;
-                    }
-                    else
-                    {
-                        IsCategoryType = false;
-                        ToastService.ShowError($"The document is {RequestedRecord.CategoryType}");
-                        ToastService.ShowError($"The user is currently in {signature.Data.Office1} which is not allowed to sign {RequestedRecord.CategoryType}");
-                    }
 
+                try
+                {
+                    var signature = await SignatoriesClient.GetSignatoryByEmployeeId(EmployeeId);
+                    if (signature != null)
+                    {
+                        if (signature.Data.Office1 == RequestedRecord.CategoryType)
+                        {
+                            querySignatoryData = signature.Data;
+                        }
+                        else
+                        {
+                            IsCategoryType = false;
+                            //ToastService.ShowError($"The document is {RequestedRecord.CategoryType}");
+                            ToastService.ShowError($"The user is currently in {signature.Data.Office1} which is not allowed to sign {RequestedRecord.CategoryType}");
+                        }
+                    }
                 }
+                catch (Exception)
+                {
+                    IsCategoryType = false;
+                    ToastService.ShowError($"User {DisplayName} was not found in Data Library signatory.");
+                }
+
             }
         }
         if (string.IsNullOrEmpty(RequestedRecord.Uri))

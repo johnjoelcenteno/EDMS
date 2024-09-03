@@ -2,6 +2,7 @@
 using DPWH.EDMS.Domain.Extensions;
 using KendoNET.DynamicLinq;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace DPWH.EDMS.Application;
 
@@ -16,8 +17,9 @@ public class QuerySignatory : IRequestHandler<QuerySignatoryRequest, DataSourceR
     }
     public Task<DataSourceResult> Handle(QuerySignatoryRequest request, CancellationToken cancellationToken)
     {
-        var result = _readRepository
-                .SignatoriesView
+        var recordRequests = _readRepository.SignatoriesView.Include(r => r.DocumentType).AsQueryable();
+
+        var result = recordRequests
                 .Select(x => new QuerySignatoryModel() // Fix for where "could not be translated error"
                 {
                     Id = x.Id,
