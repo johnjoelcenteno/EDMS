@@ -1,4 +1,5 @@
 ﻿@using DPWH.EDMS.Web.Client.Pages.DataLibrary.Common.Enum
+@using DPWH.EDMS.Client.Shared.Models
 @inherits SignatoryRequestFormBase
 
 <EdmsLoader Visible="@IsLoading" />
@@ -6,16 +7,39 @@
 <EditForm Model="NewConfig" OnSubmit="@HandleOnSubmitCallback">
     <FluentValidationValidator @ref="FluentValidationValidator" DisableAssemblyScanning="@true"></FluentValidationValidator>
     <div class="row g-3 mb-3">
+        @if (isEdit == true)
+        {
+            <div class="col-md-12">
+                <label class="mb-2" for="EmployeeId">Search Signatory by Employee ID/First Name/Last Name:</label>
+                <TelerikAutoComplete @ref="@EmployeeAutoCompleteRef"
+                                     Class=@(OnSearch == true ? "" : "invalid")
+                                     Size="@ThemeConstants.DropDownList.Size.Large"
+                                     Placeholder="@("Search Signatory")"
+                                     ValueField="@nameof(UserModel.Employee)"
+                                     ClearButton="false"
+                                     Data="@UserDataList"
+                                     ValueExpression="@( () => SelectedEmployeeId )"
+                                     Value="@SelectedEmployeeId"
+                                     ValueChanged="@(OnEmployeeAutoCompleteValueChanged)"
+                                     OnChange="@(OnEmployeeChanged)"
+                                     Enabled="@isEdit">
+                </TelerikAutoComplete>
+                <div class="row mt-1">
+                    <label class="validation-message">@(OnSearch == true ? "" : "Employee is required")</label>
+                </div>
+            </div>
+        } 
         <div class="col-md-12">
             <label class="mb-2" for="EmployeeId">Employee ID*</label>
-            <TelerikTextBox Size="@ThemeConstants.Button.Size.Large" Id="Name" @bind-Value="@NewConfig.EmployeeNumber" PlaceHolder="EmployeeId"></TelerikTextBox>
+            <TelerikTextBox Enabled="false" Size="@ThemeConstants.Button.Size.Large" Id="EmployeeNumber" @bind-Value="@NewConfig.EmployeeNumber" PlaceHolder="EmployeeId"></TelerikTextBox>
             <ValidationMessage Class="text-danger" For="@(() => NewConfig.EmployeeNumber)" />
         </div>
         <div class="col-md-12">
             <label class="mb-2" for="Name">Name*</label>
-            <TelerikTextBox Size="@ThemeConstants.Button.Size.Large" Id="Name" @bind-Value="@NewConfig.Name" PlaceHolder="Name"></TelerikTextBox>
-            <ValidationMessage Class="text-danger" For="@(() => NewConfig.Name)" />
+            <TelerikTextBox Enabled="false" Size="@ThemeConstants.Button.Size.Large" Id="Name" @bind-Value="@NewConfig.Name" PlaceHolder="Name"></TelerikTextBox>
+            <ValidationMessage Class="text-danger" For="@(() => NewConfig.Name)" /> 
         </div>
+        
         <div class="col-md-12">
             <label class="mb-2" for="Name">Document Type*</label>
             <TelerikTextBox Size="@ThemeConstants.Button.Size.Large" Id="DocumentType" @bind-Value="@NewConfig.DocumentType" PlaceHolder="Document Type"></TelerikTextBox>
@@ -41,7 +65,7 @@
             <TelerikNumericTextBox Size="@ThemeConstants.Button.Size.Large" Id="SignatoryNo" @bind-Value="@NewConfig.SignatoryNo" PlaceHolder="Signatory Number"></TelerikNumericTextBox>
             <ValidationMessage Class="text-danger" For="@(() => NewConfig.SignatoryNo)" />
         </div>
-        
+
         <CardSeparator Class="my-2" />
         <div class="k-actions k-actions-horizontal k-window-actions k-dialog-actions k-actions-stretched dialog">
 
