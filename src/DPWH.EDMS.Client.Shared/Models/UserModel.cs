@@ -23,6 +23,7 @@ public record UserModel
     public string LastModifiedBy { get; set; }
     public DateTimeOffset? LastModified { get; set; }
     public string Employee => $"({EmployeeId}) {LastName}, {FirstName} {CheckMiddleInitial()}";
+    public string EmployeeFullName => $"{FirstName} {CheckMiddleInitial()} {LastName}";
     public string CheckMiddleInitial() => !string.IsNullOrEmpty(MiddleInitial) ? $"{MiddleInitial}." : "";
 
 }

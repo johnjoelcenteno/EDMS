@@ -1,10 +1,17 @@
-﻿using DPWH.EDMS.Client.Shared.Models;
+﻿using AutoMapper;
+using DPWH.EDMS.Client.Shared.APIClient.Services.Users;
+using DPWH.EDMS.Client.Shared.Models;
 using DPWH.EDMS.Components;
+using DPWH.EDMS.Components.Helpers;
 using DPWH.EDMS.Web.Client.Pages.DataLibrary.Common.Enum;
 using DPWH.EDMS.Web.Client.Shared.BlazoredFluentValidator;
+using DPWH.EDMS.Web.Client.Shared.Services.ExceptionHandler;
 using Microsoft.AspNetCore.Components;
 using System.Text.RegularExpressions;
 using Telerik.Blazor.Components;
+using Filter = DPWH.EDMS.Api.Contracts.Filter;
+using DPWH.EDMS.Api.Contracts;
+using DPWH.EDMS.IDP.Core.Constants;
 
 namespace DPWH.EDMS.Web.Client.Pages.DataLibrary.Signatories.Components.SignatoryRequestForm;
 
@@ -20,7 +27,16 @@ public class SignatoryRequestFormBase : RxBaseComponent
     protected TelerikDialog dialogReference = new();
     //validator
     protected FluentValidationValidator? FluentValidationValidator;
+    public TelerikAutoComplete<UserModel> EmployeeAutoCompleteRef { get; set; } = new();
+    protected List<UserModel> UserDataList = new List<UserModel>();
+    public CancellationTokenSource _tokenSource = new(); // for debouncing the service calls
+    public UserModel? SelectedEmployee { get; set; } = new(); 
+    [Inject] public IMapper _mapper { get; set; }
+    [Inject] public required IUsersService UsersService { get; set; }
+    public string SelectedEmployeeId { get; set; } = string.Empty;
+    protected bool OnSearch { get; set; } = true;
     protected bool IsVisible { get; set; } = false;
+    protected bool isEdit { get; set; } = true;
 
     protected override async void OnInitialized()
     {
@@ -43,6 +59,7 @@ public class SignatoryRequestFormBase : RxBaseComponent
             NewConfig.SignatoryNo = EditItem.SignatoryNo;
             NewConfig.Id = EditItem.Id;
             NewConfig.EmployeeNumber = EditItem.EmployeeNumber;
+            isEdit = false;
         }
         NewConfig.DataType = DataType;
     }
@@ -78,4 +95,105 @@ public class SignatoryRequestFormBase : RxBaseComponent
         }
     }
 
+    public async Task OnEmployeeAutoCompleteValueChanged(string newValue)
+    {
+        SelectedEmployeeId = newValue;
+
+        if (!string.IsNullOrWhiteSpace(newValue))
+        {
+            await _DebounceDelay();
+            // for fetching data
+            var filter = new Filter
+            {
+                Logic = "or",
+                Filters = new List<Filter>
+                {
+                       new Filter
+                        {
+                            Field = nameof(UserModel.EmployeeId),
+                            Operator = "contains",
+                            Value = newValue,
+                        },
+                        new Filter
+                        {
+                            Field = nameof(UserModel.FirstName),
+                            Operator = "contains",
+                            Value = newValue,
+                        }
+                        ,
+                        new Filter
+                        {
+                            Field = nameof(UserModel.LastName),
+                            Operator = "contains",
+                            Value = newValue,
+                        }
+                }
+            };
+
+            //await UsersService.Query(new DataSourceRequest() { Filter = filter });
+            var res = await UsersService.Query(new DataSourceRequest() { Filter = filter });
+            if (res != null && res.Data.Count != 0)
+            {
+
+                var result = GenericHelper.GetListByDataSource<UserModel>(res.Data);
+                UserDataList = _mapper.Map<List<UserModel>>(result.Where(result => result.UserAccess == "Super Admin" || result.UserAccess == "Manager"));
+
+                EmployeeAutoCompleteRef.Rebind();
+                OnSearch = true;
+                
+            }
+            else
+            {
+                
+                UserDataList.Clear();
+                EmployeeAutoCompleteRef.Rebind();
+            }
+
+        }
+    } 
+    private async Task _DebounceDelay()
+    {
+        // debouncing
+        _tokenSource.Cancel();
+        _tokenSource.Dispose();
+
+        _tokenSource = new CancellationTokenSource();
+        var token = _tokenSource.Token;
+
+        await Task.Delay(100, token); // 300ms timeout for the debouncing
+    }
+
+
+    protected void OnEmployeeChanged()
+    {
+        //if (SelectedEmployee is null) return;
+
+        SelectedEmployee = UserDataList.FirstOrDefault(c => c.Employee?.ToUpper() == SelectedEmployeeId.ToUpper());
+
+        if (SelectedEmployee == null)
+        {
+            if (NewConfig.EmployeeNumber == null)
+            {
+                OnSearch = false;
+                UserDataList.Clear();
+            }
+        }
+        else
+        {
+            NewConfig.Name = SelectedEmployee.EmployeeFullName;
+            NewConfig.EmployeeNumber = SelectedEmployee.EmployeeId;
+            OnSearch = true;
+            SelectedEmployeeId = string.Empty;
+        }
+
+        if (NewConfig.Name == SelectedEmployeeId)
+        {
+            OnSearch = true;
+            NewConfig.EmployeeNumber = SelectedEmployee.EmployeeId;
+            NewConfig.Name = SelectedEmployee.EmployeeFullName;
+            SelectedEmployeeId = string.Empty;
+        }
+        dialogReference.Refresh();
+        FluentValidationValidator!.ValidateAsync();
+    }
 }
