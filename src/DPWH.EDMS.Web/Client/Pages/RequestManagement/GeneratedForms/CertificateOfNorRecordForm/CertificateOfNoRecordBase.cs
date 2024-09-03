@@ -44,6 +44,7 @@ public class CertificateOfNoRecordBase : GridBase<SignatoryModel>
     protected string CurrentSectionSignature { get; set; }
     protected string NonCurrentSectionSignature { get; set; }
     protected string NotedSignature { get; set; }
+    protected string QRUri = "certificate-of-no-record";
     protected async override Task OnInitializedAsync()
     {
 
@@ -268,6 +269,12 @@ public class CertificateOfNoRecordBase : GridBase<SignatoryModel>
             {
                 await GetAuthorizedStampSignatories(employeeId);
             }
+            if (string.IsNullOrEmpty(office))
+            {
+                ToastService.ShowError("Current user don't have office");
+                NavManager.NavigateTo("/404");
+                return;
+            }
             User.Office = office;
             Role = GetRoleLabel(role);
         }
@@ -297,24 +304,5 @@ public class CertificateOfNoRecordBase : GridBase<SignatoryModel>
     {
         return ApplicationRoles.GetDisplayRoleName(roleValue, "Unknown Role");
     }
-    protected async Task<bool> GetCurrentSection(string DocumentType)
-    {
-        var data = await LookupsService.GetIssuances();
-        if (data != null)
-        {
-            var Issuances = data.Data;
-            return Issuances.Any(x => x.Name == DocumentType);
-        }
-        return false;
-    }
-    protected async Task<bool> GetNonCurrentSection(string DocumentType)
-    {
-        var data = await LookupsService.GetPersonalRecords();
-        if (data != null)
-        {
-            var PersonalRecord = data.Data;
-            return PersonalRecord.Any(x => x.Name == DocumentType);
-        }
-        return false;
-    }
+  
 }

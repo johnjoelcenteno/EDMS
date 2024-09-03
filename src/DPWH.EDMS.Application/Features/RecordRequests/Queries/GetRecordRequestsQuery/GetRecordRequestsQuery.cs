@@ -34,6 +34,8 @@ public class GetRecordRequestsQueryHandler(IReadRepository readRepository, Claim
             DateRequested = s.DateRequested,
             Status = s.Status,
             Purpose = s.Purpose,
+            HRMDRequestStatus = s.HRMDRequestStatus,
+            RMDRequestStatus = s.RMDRequestStatus,
             RequestedRecords = s.RequestedRecords.Select(x => new RequestedRecordSummaryModel(x.RecordTypeId, x.RecordType)),
             FullName = s.FullName,
         })
