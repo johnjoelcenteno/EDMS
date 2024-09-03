@@ -1,4 +1,6 @@
-﻿namespace DPWH.EDMS.Client.Shared.MockModels;
+﻿using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
+
+namespace DPWH.EDMS.Client.Shared.MockModels;
 public class RecordModel
 {
     public string Id { get; set; }
@@ -137,54 +139,48 @@ public class MockData
         {
             new ModelData()
             {
-
+                Series1 = 2,
+                Series2 = 4,
                 Series3 = 3
+
             },
             new ModelData()
             {
-
+                 Series1 = 2,
+                Series2 = 7,
                 Series3 = 5
             },
             new ModelData()
             {
-
+                Series1 = 5,
+                Series2 = 11,
                 Series3 = 6
             },
             new ModelData()
             {
-
+                Series1 = 7,
+                Series2 = 19,
                 Series3 = 12
             },
             new ModelData()
             {
-
+                Series1 = 5,
+                Series2 = 11,
                 Series3 = 6
             },
             new ModelData()
             {
-
+                Series1 = 14,
+                Series2 = 40,
                 Series3 = 26
             },
             new ModelData()
             {
-
+                Series1 = 15,
+                Series2 = 27,
                 Series3 = 12
             },
-            new ModelData()
-            {
-
-                Series3 = 12
-            },
-            new ModelData()
-            {
-
-                Series3 = 6
-            },
-            new ModelData()
-            {
-
-                Series3 = 3
-            }
+            
         };
     }
     
