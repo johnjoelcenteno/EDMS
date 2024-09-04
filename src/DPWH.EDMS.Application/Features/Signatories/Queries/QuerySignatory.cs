@@ -17,7 +17,7 @@ public class QuerySignatory : IRequestHandler<QuerySignatoryRequest, DataSourceR
     }
     public Task<DataSourceResult> Handle(QuerySignatoryRequest request, CancellationToken cancellationToken)
     {
-        var recordRequests = _readRepository.SignatoriesView.Include(r => r.DocumentType).AsQueryable();
+        var recordRequests = _readRepository.SignatoriesView.AsQueryable();
 
         var result = recordRequests
                 .Select(x => new QuerySignatoryModel() // Fix for where "could not be translated error"
