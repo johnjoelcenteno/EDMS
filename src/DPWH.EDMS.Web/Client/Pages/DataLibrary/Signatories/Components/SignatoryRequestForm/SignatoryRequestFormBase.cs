@@ -12,6 +12,7 @@ using Telerik.Blazor.Components;
 using Filter = DPWH.EDMS.Api.Contracts.Filter;
 using DPWH.EDMS.Api.Contracts;
 using DPWH.EDMS.IDP.Core.Constants;
+using Telerik.SvgIcons;
 
 namespace DPWH.EDMS.Web.Client.Pages.DataLibrary.Signatories.Components.SignatoryRequestForm;
 
@@ -196,4 +197,19 @@ public class SignatoryRequestFormBase : RxBaseComponent
         dialogReference.Refresh();
         FluentValidationValidator!.ValidateAsync();
     }
+    protected List<string> ListOfOffice1 = new List<string>()
+        {
+            "Current Section",
+            "Non-Current Section",
+            "Office of the Chief",
+            "N/A"
+        };
+
+    protected List<string> ListOfDocumentType = new List<string>()
+        {
+            "Current Document",
+            "Non-Current Document",
+            "Certificate of No Records Found",
+            "All" 
+        };
 }
