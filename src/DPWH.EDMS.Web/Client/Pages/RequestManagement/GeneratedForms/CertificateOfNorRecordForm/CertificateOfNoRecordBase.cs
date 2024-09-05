@@ -73,7 +73,7 @@ public class CertificateOfNoRecordBase : GridBase<SignatoryModel>
         });
         await GetSignatories();
         await InvokeAsync(StateHasChanged);
-
+        
         IsLoading = false;
     }
 

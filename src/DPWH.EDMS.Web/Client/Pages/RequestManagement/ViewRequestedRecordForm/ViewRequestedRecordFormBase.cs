@@ -440,8 +440,14 @@ public class ViewRequestedRecordFormBase : ComponentBase
 
         gfx.DrawString($"{querySignatoryData.Name}", font, XBrushes.DarkGreen, new XRect(textX, textY, qrImageHeight, textHeight), XStringFormats.TopLeft);
         gfx.DrawString($"{sectionType} Record Section", font, XBrushes.DarkGreen, new XRect(55, -5, qrImageHeight, textHeight), XStringFormats.TopLeft);
-        gfx.DrawString($"{SelectedRecordRequest.ControlNumber}", font, XBrushes.DarkGreen, new XRect(-53, 7, qrImageHeight, textHeight), XStringFormats.TopLeft);
+
         gfx.Restore();
+
+        double controlNumberX = qrImageX + 4.8;
+        double controlNumberY = qrImageY + qrImageHeight + -1;
+        XFont controlNumberFont = new("Arial", 8, XFontStyle.Bold);
+        
+        gfx.DrawString($"{SelectedRecordRequest.ControlNumber}", controlNumberFont, XBrushes.DarkGreen, new XRect(controlNumberX, controlNumberY, qrImageHeight, textHeight), XStringFormats.TopLeft);
 
         gfx.DrawImage(qrImage, qrImageX, qrImageY, qrImageWidth, qrImageHeight);
 
@@ -460,7 +466,8 @@ public class ViewRequestedRecordFormBase : ComponentBase
 
         gfx.Restore();
     }
-     
+
+
 
     protected async Task<byte[]> ConvertUrlToByte(string pdfUrl)
     {
@@ -492,9 +499,16 @@ public class ViewRequestedRecordFormBase : ComponentBase
                         }
                         else
                         {
-                            IsCategoryType = false;
-                            //ToastService.ShowError($"The document is {RequestedRecord.CategoryType}");
-                            ToastService.ShowError($"The user is currently in {signature.Data.Office1} which is not allowed to sign {RequestedRecord.CategoryType}");
+                            if(signature.Data.SignatoryNo != 3)
+                            {
+                                IsCategoryType = false;
+                                //ToastService.ShowError($"The document is {RequestedRecord.CategoryType}");
+                                ToastService.ShowError($"The user is currently in {signature.Data.Office1} which is not allowed to sign {RequestedRecord.CategoryType}");
+                            }
+                            else
+                            {
+                                querySignatoryData = signature.Data;
+                            }
                         }
                     }
                 }
