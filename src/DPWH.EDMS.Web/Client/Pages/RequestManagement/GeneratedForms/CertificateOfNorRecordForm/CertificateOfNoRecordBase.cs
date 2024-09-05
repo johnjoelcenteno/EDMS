@@ -44,7 +44,7 @@ public class CertificateOfNoRecordBase : GridBase<SignatoryModel>
     protected string CurrentSectionSignature { get; set; }
     protected string NonCurrentSectionSignature { get; set; }
     protected string NotedSignature { get; set; }
-    protected string QRUri = "certificate-of-no-record";
+    protected string QRUri = "qr-code-certificate";
     protected async override Task OnInitializedAsync()
     {
 
