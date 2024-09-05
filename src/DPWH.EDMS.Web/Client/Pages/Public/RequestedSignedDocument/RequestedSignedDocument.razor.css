@@ -1,7 +1,7 @@
 ﻿.record-style {
     margin-left: 1rem;
     font-size: 1.2rem;
-    text-align: left;
+    text-align: center;
 }
 
 .border-card {
@@ -26,14 +26,7 @@
         flex-direction: column;
     }
 
-    .col-md-4, .col-md-8 {
-        width: 100%;
-        max-width: 100%;
-    }
-
-    .col-md-4 {
-        order: -1;
-    }
+   
 
     .logo-image {
         display: block;
