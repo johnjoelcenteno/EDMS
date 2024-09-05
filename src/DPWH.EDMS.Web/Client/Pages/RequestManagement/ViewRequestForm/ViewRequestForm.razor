@@ -432,6 +432,18 @@
                         <h5>No RMD Records to be Signed</h5>
                     </div>
                 }
+                @if (RMDRecords != null && RMDRecords.Any(r => r.IsAvailable == false) && User.Office == Offices.RMD.ToString())
+                {
+                    <div class="row my-4">
+                        <div class="col">
+                            <p><b>CERTIFICATE OF NO RECORDS</b></p>
+                        </div>
+                        <div class="d-flex col-2 gap-4 justify-content-center">
+                            <NavLink class="fw-bolder" target="_blank" href="@($"certificate-of-no-records/{RequestId}")">View</NavLink>
+                            <NavLink class="fw-bolder" target="_blank" href="@($"certificate-of-no-records/{RequestId}/exporting")">Export</NavLink>
+                        </div>
+                    </div>
+                }
                 <div class="row mt-3">
                     <p class="text-danger">@ApprovalValidation</p>
                 </div>
@@ -598,7 +610,7 @@
                         }
                     }
                 }
-                @if (HasNoRecords && User.Office == Offices.RMD.ToString())
+                @if (RMDRecords != null && RMDRecords.Any(r => r.IsAvailable == false) && User.Office == Offices.RMD.ToString())
                 {
                     <div class="row my-4">
                         <div class="col">
@@ -862,6 +874,18 @@
                     </div>
                     </div>
                     } *@
+                    @if (RMDRecords != null && RMDRecords.Any(r => r.IsAvailable == false) && User.Office == Offices.RMD.ToString())
+                    {
+                        <div class="row my-4">
+                            <div class="col">
+                                <p><b>CERTIFICATE OF NO RECORDS</b></p>
+                            </div>
+                            <div class="d-flex col-2 gap-4 justify-content-center">
+                                <NavLink class="fw-bolder" target="_blank" href="@($"certificate-of-no-records/{RequestId}")">View</NavLink>
+                                <NavLink class="fw-bolder" target="_blank" href="@($"certificate-of-no-records/{RequestId}/exporting")">Export</NavLink>
+                            </div>
+                        </div>
+                    }
                     <div class="row my-3">
                         <div class="col align-content-center">
                             <p><b>RECEIVED TRANSMITTAL RECEIPT</b></p>

@@ -3,6 +3,7 @@ using DPWH.EDMS.Client.Shared.APIClient.Services.RequestManagement;
 using DPWH.EDMS.Client.Shared.Enums;
 using DPWH.EDMS.Components.Components.ReusableGrid;
 using DPWH.EDMS.Components.Helpers;
+using DPWH.EDMS.Shared.Enums;
 using Microsoft.AspNetCore.Components;
 using Telerik.Blazor.Components;
 
@@ -55,9 +56,13 @@ public class RecordRequestGridComponentBase : GridBase<RecordRequestModel>
         var filters = new List<Api.Contracts.Filter>();
         string status = Enum.GetName(typeof(RecordRequestTabStates), ActiveTabIndex)!;
 
-        if (ActiveTabIndex != 0 && !string.IsNullOrEmpty(status))
+        if (ActiveTabIndex != 0 && ActiveTabIndex != 6 && !string.IsNullOrEmpty(status))
         {
             AddTextSearchFilter(filters, nameof(RecordRequestModel.Status), status);
+        }
+        else if (ActiveTabIndex == 6)
+        {
+            AddTextSearchFilter(filters, "RMDRequestStatus", OfficeRequestedRecordStatus.Reviewed.ToString());
         }
 
         // Set the filters
