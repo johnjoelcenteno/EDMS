@@ -133,7 +133,7 @@ public class HomeBase : GridBase<RecordRequestModel>
         var user = authState.User;
       
 
-        if (NavigationManager.BaseUri.Contains("7082"))
+        if (NavigationManager.BaseUri.Contains("-trn"))
         {
             if (user.Identity is not null && user.Identity.IsAuthenticated)
             {
