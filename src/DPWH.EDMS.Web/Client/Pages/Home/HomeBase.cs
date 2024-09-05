@@ -14,6 +14,10 @@ using DPWH.EDMS.Client.Shared.Models;
 using Telerik.Blazor;
 using Telerik.DataSource;
 using Telerik.Blazor.Components.Grid;
+using Microsoft.AspNetCore.Http;
+using DocumentFormat.OpenXml.Office2016.Excel;
+ 
+
 
 namespace DPWH.EDMS.Web.Client.Pages.Home;
 
@@ -127,14 +131,18 @@ public class HomeBase : GridBase<RecordRequestModel>
     {
         var authState = await AuthenticationStateAsync!;
         var user = authState.User;
+      
 
-        if (user.Identity is not null && user.Identity.IsAuthenticated)
+        if (NavigationManager.BaseUri.Contains("-trn"))
         {
-            if (user.IsInRole(ApplicationRoles.EndUser))
+            if (user.Identity is not null && user.Identity.IsAuthenticated)
             {
-                NavigationManager.NavigateTo("/my-requests");
+                if (user.IsInRole(ApplicationRoles.EndUser))
+                {
+                    NavigationManager.NavigateTo("/my-records");
+                }
             }
-        }
+        } 
     }
 
     private async Task GetMonthlyRequestTotal()

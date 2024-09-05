@@ -80,10 +80,14 @@ public class RecordsBase : GridBase<GetLookupResult>
 
         if (user.Identity is not null && user.Identity.IsAuthenticated)
         {
-            var roleValue = user.Claims.FirstOrDefault(c => c.Type == "role")!.Value;
+           
+            var roleValue = user.Claims.Where(c => c.Type == "role")!.ToList();
+            var role = roleValue.FirstOrDefault(role => !string.IsNullOrEmpty(role.Value) && role.Value.Contains(ApplicationRoles.RolePrefix))?.Value ?? string.Empty;
+
             EmployeeId = ClaimsPrincipalExtensions.GetEmployeeNumber(user)!;
             DisplayName = ClaimsPrincipalExtensions.GetDisplayName(user)!;
-            Role = GetRoleLabel(roleValue);
+
+            Role = GetRoleLabel(role);
 
         }
     }
