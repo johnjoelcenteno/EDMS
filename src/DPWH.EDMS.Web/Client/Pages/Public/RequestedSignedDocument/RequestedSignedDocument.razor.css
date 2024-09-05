@@ -1,7 +1,7 @@
 ﻿.record-style {
     margin-left: 1rem;
     font-size: 1.2rem;
-    text-align: center;
+    text-align: left;
 }
 
 .border-card {
@@ -20,12 +20,31 @@
     height: auto;
     max-height: 100px;
 }
- 
+
 @media (max-width: 480px) {
+    .row {
+        flex-direction: column;
+    }
+
+    .col-md-4, .col-md-8 {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .col-md-4 {
+        order: -1;
+    }
+
+    .logo-image {
+        display: block;
+        margin: 0 auto;
+    }
+
     .record-style {
         text-align: center;
         font-size: 0.8rem;
-        margin-left: 0px;
+        margin-left: 0;
+        margin-top: 10px;
     }
 
     .border-card {
