@@ -22,12 +22,7 @@
 }
 
 @media (max-width: 480px) {
-    .row {
-        flex-direction: column;
-    }
-
-   
-
+     
     .logo-image {
         display: block;
         margin: 0 auto;
