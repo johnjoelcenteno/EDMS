@@ -22,10 +22,12 @@ namespace DPWH.EDMS.Application.Features.RecordRequests.Queries.GetMonthlyReques
         {
             // Filter
             var filteredHrmdRequest = _readRepository.RecordRequestsView
-                                            .Where(x => x.HRMDNoDaysUntilReleased != null);
+                                            .Where(x => x.HRMDNoDaysUntilReleased != null)
+                                            .Where(x => x.Created.Year == DateTime.Now.Year);
 
             var filteredRmdRequest = _readRepository.RecordRequestsView
-                                            .Where(x => x.RMDNoDaysUntilReleased != null);
+                                            .Where(x => x.RMDNoDaysUntilReleased != null)
+                                            .Where(x => x.Created.Year == DateTime.Now.Year);
 
             // Get average
             var hrmdMonthlyAverage = filteredHrmdRequest
