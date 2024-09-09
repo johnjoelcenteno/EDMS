@@ -6,6 +6,7 @@ using DPWH.EDMS.Client.Shared.Models;
 using DPWH.EDMS.Components.Helpers;
 using DPWH.EDMS.IDP.Core.Constants;
 using DPWH.EDMS.IDP.Core.Extensions;
+using DPWH.EDMS.Shared.Enums;
 using DPWH.EDMS.Web.Client.Shared.RecordRequest.Grid;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -27,7 +28,6 @@ public class RequestManagementBase : RecordRequestGridComponentBase
     protected string Office = string.Empty;
     protected int? SearchControlNumber { get; set; }
     protected int? ForApprovalCount { get; set; } = 0;
-    protected string? ForApproval { get; set; }
     protected string? SearchFullName { get; set; }
     protected string? SearchPurpose { get; set; }
     protected string? SearchRmdStatus { get; set; }
@@ -77,7 +77,7 @@ public class RequestManagementBase : RecordRequestGridComponentBase
                             {
                                 Field = "RMDRequestStatus",
                                 Operator = "eq",
-                                Value = "Reviewed"
+                                Value = OfficeRequestedRecordStatus.Reviewed.ToString()
                             }
                         }
                     }
@@ -87,7 +87,6 @@ public class RequestManagementBase : RecordRequestGridComponentBase
 
         var res = await RequestManagementService.Query(req);
         ForApprovalCount = res.Total;
-        ForApproval = $"For Approval {ForApprovalCount}";
     }
 
     protected override void OnInitialized()
