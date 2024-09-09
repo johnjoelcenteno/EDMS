@@ -36,10 +36,15 @@
                         @LoadGrid()
                     </TabStripTab>
                 }
-                @if ((GenericHelper.GetDisplayValue(CurrentUser.Role)) == ApplicationRoles.Manager && Office == Offices.RMD.ToString())
+                @if ((GenericHelper.GetDisplayValue(CurrentUser.Role)) == ApplicationRoles.Manager && Office == Offices.RMD.ToString() && ForApprovalCount > 0)
                 {
-                    <TabStripTab Title="For Approval">
-                        @LoadGrid()
+                    <TabStripTab>
+                        <HeaderTemplate>
+                            <label>For Approval <sup class="counter-chip">@ForApprovalCount</sup></label>
+                        </HeaderTemplate>
+                        <Content>
+                            @LoadGrid()
+                        </Content>
                     </TabStripTab>
                 }
                 
@@ -355,5 +360,13 @@
 
     .k-tabstrip-top > .k-tabstrip-items-wrapper .k-item:active, .k-tabstrip-top > .k-tabstrip-items-wrapper .k-item.k-active {
         box-shadow: none;
+    }
+
+    .counter-chip {
+        background-color: #FF0000;
+        color: #fff;
+        font-size: 12px;
+        border-radius: 50%;
+        padding: 3px 5px;
     }
 </style>
