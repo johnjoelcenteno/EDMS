@@ -126,11 +126,9 @@ public static class RecordRequestEndpoint
 
         app.MapGet(ApiEndpoints.RecordRequest.GetMonthlyRequests, async (IMediator mediator) =>
         {
-            var result = await mediator.Send(new GetMonthlyAverageFromSubmittedToReleaseRequest());
+            var result = await mediator.Send(new GetMonthlyRequestQuery());
 
-            var data = new BaseApiResponse<List<MonthlyRequestAverageTimeModel>>(result);
-
-            return result is null ? Results.NotFound() : Results.Ok(data);
+            var data = new BaseApiResponse<IEnumerable<GetMonthlyRequestModel>>(result);
         })
             .WithName("GetMonthlyRequestsTotalCount")
             .WithTags(TagName)
