@@ -71,6 +71,22 @@ public static class RecordRequestEndpoint
             .Produces<ProblemDetails>(StatusCodes.Status400BadRequest)
             .Produces<ProblemDetails>(StatusCodes.Status500InternalServerError);
 
+        app.MapGet(ApiEndpoints.RecordRequest.GetMonthlyAverageNumberOfDaysUntilRelease, async (IMediator mediator) =>
+        {
+            var result = await mediator.Send(new GetMonthlyAverageFromSubmittedToReleaseRequest());
+            var data = new BaseApiResponse<List<MonthlyRequestAverageTimeModel>>(result);
+
+            return Results.Ok(data);
+        })
+        .WithName("GetMonthlyAverageNumberOfDaysUntilRelease")
+        .WithTags(TagName)
+        .WithDescription("Get monthly average number of days until release")
+        .WithApiVersionSet(ApiVersioning.VersionSet)
+        .HasApiVersion(1.0)
+        .Produces<BaseApiResponse<RecordRequestStatusCountModel>>()
+        .Produces<ProblemDetails>(StatusCodes.Status400BadRequest)
+        .Produces<ProblemDetails>(StatusCodes.Status500InternalServerError);
+
         app.MapPost(ApiEndpoints.RecordRequest.UpdateRequestedRecordIsAvailable, async ([FromBody] List<Guid> id, bool isActive, IMediator mediator) =>
         {
             try
@@ -110,9 +126,9 @@ public static class RecordRequestEndpoint
 
         app.MapGet(ApiEndpoints.RecordRequest.GetMonthlyRequests, async (IMediator mediator) =>
         {
-            var result = await mediator.Send(new GetMonthlyRequestQuery());
+            var result = await mediator.Send(new GetMonthlyAverageFromSubmittedToReleaseRequest());
 
-            var data = new BaseApiResponse<IEnumerable<GetMonthlyRequestModel>>(result);
+            var data = new BaseApiResponse<List<MonthlyRequestAverageTimeModel>>(result);
 
             return result is null ? Results.NotFound() : Results.Ok(data);
         })
