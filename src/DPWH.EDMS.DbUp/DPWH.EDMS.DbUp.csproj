@@ -25,6 +25,7 @@
     <None Remove="Scripts\01\13-AddSignaturesUriSignature.sql" />
     <None Remove="Scripts\01\14-AddUserProfileDocuments.sql" />
     <None Remove="Scripts\01\15-UpdateRequestedRecords.sql" />
+    <None Remove="Scripts\01\17-UpdateRecordRequestColumnsForOfficeStats.sql" />
   </ItemGroup>
 
   <ItemGroup>
@@ -52,6 +53,7 @@
     <EmbeddedResource Include="Scripts\01\15-UpdateRequestedRecords.sql" />
     <EmbeddedResource Include="Scripts\01\14-AddUserProfileDocuments.sql" />
     <EmbeddedResource Include="Scripts\01\16-AddEmployeeNumberInSignatoriesTable.sql" />
+    <EmbeddedResource Include="Scripts\01\17-UpdateRecordRequestColumnsForOfficeStats.sql" />
   </ItemGroup>
   
 	<ItemGroup>

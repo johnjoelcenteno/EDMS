@@ -2784,6 +2784,46 @@
         }
       }
     },
+    "/api/recordrequests/monthlyAverageNumberOfDaysUntilRelease": {
+      "get": {
+        "tags": [
+          "Requests Management"
+        ],
+        "operationId": "GetMonthlyAverageNumberOfDaysUntilRelease",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecordRequestStatusCountModelBaseApiResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error",
+            "content": {
+              "application/json; api-version=1.0": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/recordrequests/updateRequestedRecordIsAvailable": {
       "post": {
         "tags": [
