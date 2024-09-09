@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DPWH.EDMS.Api.Contracts;
+using DPWH.EDMS.Client.Shared.APIClient.Services.RequestManagement;
 using DPWH.EDMS.Client.Shared.APIClient.Services.Users;
 using DPWH.EDMS.Client.Shared.Models;
 using DPWH.EDMS.Components.Helpers;
@@ -9,6 +10,7 @@ using DPWH.EDMS.Web.Client.Shared.RecordRequest.Grid;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Telerik.Blazor.Components;
+using Telerik.DataSource;
 
 
 namespace DPWH.EDMS.Web.Client.Pages.RequestManagement;
@@ -24,7 +26,8 @@ public class RequestManagementBase : RecordRequestGridComponentBase
     protected string Role = string.Empty;
     protected string Office = string.Empty;
     protected int? SearchControlNumber { get; set; }
-    protected string? ForApprovalCount { get; set; }
+    protected int? ForApprovalCount { get; set; } = 0;
+    protected string? ForApproval { get; set; }
     protected string? SearchFullName { get; set; }
     protected string? SearchPurpose { get; set; }
     protected string? SearchRmdStatus { get; set; }
@@ -52,13 +55,39 @@ public class RequestManagementBase : RecordRequestGridComponentBase
         await GetUser();
         await HandleOnLoadGrid();
 
-        //var res = new Api.Contracts.DataSourceResult();
-        //res = await RequestManagementService.Query(DataSourceReq);
-        //if (res != null)
-        //{
-        //    var reviewedCount = res.Total;
-        //    ForApprovalCount = $"For Approval {reviewedCount}";
-        //}
+        var req = new DPWH.EDMS.Api.Contracts.DataSourceRequest
+        {
+
+            Filter = new Filter
+            {
+                Logic = "and",
+                Filters = new List<Filter>
+                {
+                    new Filter
+                    {
+                        Logic = "and",
+                        Filters = new List<Filter>
+                        {
+                            new Filter
+                            {
+                                Field = "RMDRequestStatus",
+                                Operator = "isnotnull"
+                            },
+                            new Filter
+                            {
+                                Field = "RMDRequestStatus",
+                                Operator = "eq",
+                                Value = "Reviewed"
+                            }
+                        }
+                    }
+                }
+            }
+        };
+
+        var res = await RequestManagementService.Query(req);
+        ForApprovalCount = res.Total;
+        ForApproval = $"For Approval {ForApprovalCount}";
     }
 
     protected override void OnInitialized()
