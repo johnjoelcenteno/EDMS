@@ -15,58 +15,9 @@
 <div class="d-flex flex-row mt-3 mb-4">
     <TelerikCard Width="100%">
         <CardBody>
-          @*   <div class="col-12 mt-4 row">
-                <div class="col-12 col-md-6 col-lg-3 align-self-end">
-                    <label>Purpose</label>
-                    <TelerikDropDownList Data="@Purposes"
-                                        Value="SelectedPurpose"
-                                         ValueField="@nameof(GetLookupResult.Name)"
-                                         TextField="@nameof(GetLookupResult.Name)"
-                                         DefaultText="Select" 
-                                         ValueChanged="@((string? val) =>
-                                               {
-                                                  if(val!.Contains("Other")){
-                                                      OtherPurpose = string.Empty;
-                                                  }
-                                                  SelectedPurpose = val!;
-
-                                               })" />
-
-                </div>
-                @if (!string.IsNullOrEmpty(SelectedPurpose) && SelectedPurpose.Contains("Other"))
-                {
-                    <div class="col-12 col-md-6 col-lg-3 align-self-end">
-                        <label>Other purpose</label>
-                        <TelerikTextBox Value="@OtherPurpose"
-                                        ValueChanged="@((string? val) =>
-                                               {
-                                                  OtherPurpose = val!;
-
-                                               })">
-
-                        </TelerikTextBox>
-                    </div>
-                }
-               
-            </div> *@
+         
             <div class="col-12 mt-4 row">
-               @*   
-                <div class="col-12 col-md-6 col-lg-3 align-self-end mt-3">
-                    <label>Status</label>
-                    <TelerikDropDownList Data="@StatusList"
-                                         @bind-Value="SelectedStatus" 
-                                         ValueField="string"
-                                         TextField="string"
-                                         DefaultText="Select" />
-
-                </div> *@
                 <div class="col-12 col-md-6 col-lg-4 align-self-end mt-3">
-                    @* <label>Date started</label> *@
-                 @*    <label class="date-completed">Date completed</label>
-                    <TelerikDateRangePicker Class="date-picker" StartId="outbound-date" @bind-StartValue="@dateFrom" @bind-EndValue="@dateTo" Format="d" OnClose="@OnDateRangePickerPopupClose" AdaptiveMode="@AdaptiveMode.Auto">
-                        <DateRangePickerFormatPlaceholder Year="year" Month="month" Day="day" Hour="hour" Minute="min" Second="sec"></DateRangePickerFormatPlaceholder>
-                    </TelerikDateRangePicker>
- *@
                      <label class="mb-3" for="dateAcquired">Date Modified</label>
                      <TelerikDateRangePicker @bind-StartValue="@dateFrom"
                                             @bind-EndValue="@dateTo" 

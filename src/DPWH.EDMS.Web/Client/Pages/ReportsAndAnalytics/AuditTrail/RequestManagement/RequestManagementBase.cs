@@ -3,6 +3,7 @@ using DPWH.EDMS.Api.Contracts;
 using DPWH.EDMS.Client.Shared.APIClient.Services.AuditLog;
 using DPWH.EDMS.Client.Shared.APIClient.Services.Lookups;
 using DPWH.EDMS.Client.Shared.APIClient.Services.RequestManagement;
+using DPWH.EDMS.Client.Shared.Configurations;
 using DPWH.EDMS.Client.Shared.Models;
 using DPWH.EDMS.Components.Helpers;
 using DPWH.EDMS.Web.Client.Pages.ReportsAndAnalytics.AuditTrail.AuditTrailGridBase;
@@ -29,8 +30,9 @@ public class RequestManagementBase : AuditTrailsGridBase<AuditLogModel>
     protected string SelectedType { get; set; } = "User";
     protected bool XSmall { get; set; }
     protected List<int?> PageSizes { get; set; } = new List<int?> { 5, 10, 15 };
-    protected List<UserActivityModel> ReportType { get; set; } = new();
+    protected List<string> ReportType { get; set; } = new();
     protected UserActivityModel UserActivityData = new UserActivityModel();
+    [Inject] public required ConfigManager ConfigManager { get; set; }
     public List<BreadcrumbModel> BreadcrumbItems { get; set; } = new()
     {
          new() { Icon = "home", Url = "/"},
@@ -40,15 +42,6 @@ public class RequestManagementBase : AuditTrailsGridBase<AuditLogModel>
     protected string SelectedPurpose = "";
     protected string SelectedStatus = "";
     protected string OtherPurpose = "";
-    protected List<string> StatusList = new List<string>
-    {
-        "All",
-        "Submitted",
-        "Reviewed",
-        "Approved",
-        "Released",
-        "Claimed"
-    };
 
     protected async override Task OnInitializedAsync()
     {
@@ -78,6 +71,7 @@ public class RequestManagementBase : AuditTrailsGridBase<AuditLogModel>
                     Url = NavManager.Uri.ToString(),
                 },
             });
+
         IsLoading = false;
     }
     protected async Task ShowReport(string Value,DateTime? start, DateTime? end)
@@ -86,14 +80,7 @@ public class RequestManagementBase : AuditTrailsGridBase<AuditLogModel>
 
         SearchValue = Value;
         var filters = new List<Filter>();
-        //if(!string.IsNullOrEmpty(Purpose))
-        //{
-        //    AddTextSearchFilter(filters, nameof(AuditLogModel.pup), start.Value.ToString(), "gte");
-        //}
-        //if (!string.IsNullOrEmpty(Status))
-        //{
-
-        //}
+   
         AddTextSearchFilter(filters, nameof(AuditLogModel.Created), start.Value.ToString(), "gte");
         AddTextSearchFilter(filters, nameof(AuditLogModel.Created), end.Value.ToString(), "lte");
 
@@ -115,13 +102,7 @@ public class RequestManagementBase : AuditTrailsGridBase<AuditLogModel>
     }
     protected void GetDropdownValues()
     {
-        ReportType = new List<UserActivityModel>
-            {
-                new UserActivityModel { ReportTypeId = "RecordsManagement", ReportTypeName = "Records Management" },
-                new UserActivityModel { ReportTypeId = "RequestsManagement", ReportTypeName = "Requests Management" },
-                new UserActivityModel { ReportTypeId = "UserManagement", ReportTypeName = "User Management" },
-                new UserActivityModel { ReportTypeId = "DataLibrary", ReportTypeName = "Data Library" }
-            };
+        ReportType = ConfigManager.ReportType;
     }
     protected async Task ConfirmToExcel()
     {

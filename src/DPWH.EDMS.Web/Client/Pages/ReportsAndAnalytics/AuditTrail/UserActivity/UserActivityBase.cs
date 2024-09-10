@@ -4,6 +4,7 @@ using DPWH.EDMS.Client.Shared.APIClient.Services.AuditLog;
 using DPWH.EDMS.Client.Shared.APIClient.Services.Navigation;
 using DPWH.EDMS.Client.Shared.APIClient.Services.RequestManagement;
 using DPWH.EDMS.Client.Shared.APIClient.Services.Users;
+using DPWH.EDMS.Client.Shared.Configurations;
 using DPWH.EDMS.Components.Helpers;
 using DPWH.EDMS.Web.Client.Pages.ReportsAndAnalytics.AuditTrail.AuditTrailGridBase;
 using DPWH.EDMS.Web.Client.Pages.ReportsAndAnalytics.AuditTrail.Model;
@@ -23,12 +24,13 @@ namespace DPWH.EDMS.Web.Client.Pages.ReportsAndAnalytics.AuditTrail.UserActivity
         [Inject] public required IRequestManagementService RequestManagementService { get; set; }
         [Inject] public required IToastService ToastService { get; set; }     
         [Inject] public required NavigationManager NavManager { get; set; }
+        [Inject] public required ConfigManager ConfigManager { get; set; }
         protected DateTime dateFrom { get; set; } = DateTime.Now.AddDays(-1);
         protected DateTime dateTo { get; set; } = DateTime.Now;
         protected string SelectedType { get; set; } = "User";
         protected bool XSmall { get; set; }
         protected List<int?> PageSizes { get; set; } = new List<int?> { 5, 10, 15 };
-        protected List<UserActivityModel> ReportType { get; set; } = new();
+        protected List<string> ReportType { get; set; } = new();
         protected UserActivityModel UserActivityData = new UserActivityModel();
         protected string SelectedReportType { get; set; }
         protected override void OnInitialized()
@@ -58,13 +60,7 @@ namespace DPWH.EDMS.Web.Client.Pages.ReportsAndAnalytics.AuditTrail.UserActivity
         }
         protected void GetDropdownValues()
         {
-            ReportType = new List<UserActivityModel>
-            {
-                new UserActivityModel { ReportTypeId = "RecordsManagement", ReportTypeName = "Records Management" },
-                new UserActivityModel { ReportTypeId = "RequestsManagement", ReportTypeName = "Requests Management" },
-                new UserActivityModel { ReportTypeId = "UserManagement", ReportTypeName = "User Management" },
-                new UserActivityModel { ReportTypeId = "DataLibrary", ReportTypeName = "Data Library" }
-            };
+            ReportType = ConfigManager.ReportType;
         }
         protected async Task ConfirmToExcel()
         {

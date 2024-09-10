@@ -20,30 +20,16 @@
             <div class="col-12 row">
                 <div class="col-12 col-md-6 col-lg-3 align-self-end">
                     <label class="mb-3">Report type</label>
-                    <TelerikDropDownList Data="@(ReportType.OrderBy(x => x.ReportTypeName))"
+                    <TelerikDropDownList Data="@DataLibraryType"
                                          @bind-Value="SelectedReportType"
                                          ValueField="@nameof(UserActivityModel.ReportTypeId)"
                                          TextField="@nameof(UserActivityModel.ReportTypeName)"
                                          DefaultText="Select" />
 
                 </div>
-                @*
-                <div class="col-12 col-md-6 col-lg-3 align-self-end mt-3">
-                <label>Status</label>
-                <TelerikDropDownList Data="@StatusList"
-                @bind-Value="SelectedStatus"
-                ValueField="string"
-                TextField="string"
-                DefaultText="Select" />
-
-                </div> *@
+              
                 <div class="col-12 col-md-6 col-lg-4 align-self-end mt-3">
-                    @* <label>Date started</label> *@
-                    @*    <label class="date-completed">Date completed</label>
-                    <TelerikDateRangePicker Class="date-picker" StartId="outbound-date" @bind-StartValue="@dateFrom" @bind-EndValue="@dateTo" Format="d" OnClose="@OnDateRangePickerPopupClose" AdaptiveMode="@AdaptiveMode.Auto">
-                    <DateRangePickerFormatPlaceholder Year="year" Month="month" Day="day" Hour="hour" Minute="min" Second="sec"></DateRangePickerFormatPlaceholder>
-                    </TelerikDateRangePicker>
-                    *@
+                    
                     <label class="mb-3"  for="dateAcquired">Date Modified</label>
                     <TelerikDateRangePicker @bind-StartValue="@dateFrom"
                                             @bind-EndValue="@dateTo"
