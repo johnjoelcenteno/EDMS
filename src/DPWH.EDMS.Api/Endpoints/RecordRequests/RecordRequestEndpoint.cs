@@ -126,9 +126,9 @@ public static class RecordRequestEndpoint
 
         app.MapGet(ApiEndpoints.RecordRequest.GetMonthlyRequests, async (IMediator mediator) =>
         {
-            var result = await mediator.Send(new GetMonthlyRequestQuery());
-
+            var result = await mediator.Send(new GetMonthlyRequestQuery()); 
             var data = new BaseApiResponse<IEnumerable<GetMonthlyRequestModel>>(result);
+            return Results.Ok(data);
         })
             .WithName("GetMonthlyRequestsTotalCount")
             .WithTags(TagName)
@@ -136,6 +136,7 @@ public static class RecordRequestEndpoint
             .WithApiVersionSet(ApiVersioning.VersionSet)
             .HasApiVersion(1.0)
             .Produces<BaseApiResponse<IEnumerable<GetMonthlyRequestModel>>>()
+            .Produces<ProblemDetails>(StatusCodes.Status404NotFound)
             .Produces<ProblemDetails>(StatusCodes.Status400BadRequest)
             .Produces<ProblemDetails>(StatusCodes.Status500InternalServerError);
 

@@ -14,17 +14,17 @@
             
             <div class="col-12 mt-4 row">
                 <div class="col-12 col-md-6 col-lg-3 align-self-end">
-                    <label>Report Type</label>
+                    <label class="mb-3">Report Type</label>
                     <TelerikDropDownList Data="@ReportType"
                                          @bind-Value="SelectedReportType"
                                          Filterable="true"
-                                         ValueField="@nameof(UserActivityModel.ReportTypeId)"
-                                         TextField="@nameof(UserActivityModel.ReportTypeName)"
+                                         ValueField="string"
+                                         TextField="string"
                                          DefaultText="Select" />
 
                 </div>
                 <div class="col-12 col-md-6 col-lg-3 align-self-end">
-                    <label>Action date</label>
+                    <label class="mb-3">Date Modified</label>
                     <TelerikDateRangePicker Class="date-picker" StartId="outbound-date" @bind-StartValue="@dateFrom" @bind-EndValue="@dateTo" Format="d" OnClose="@OnDateRangePickerPopupClose" AdaptiveMode="@AdaptiveMode.Auto">
                         <DateRangePickerFormatPlaceholder Year="year" Month="month" Day="day" Hour="hour" Minute="min" Second="sec"></DateRangePickerFormatPlaceholder>
                     </TelerikDateRangePicker>
