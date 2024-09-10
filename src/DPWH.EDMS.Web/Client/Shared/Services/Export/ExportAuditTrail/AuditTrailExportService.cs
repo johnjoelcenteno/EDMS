@@ -144,6 +144,8 @@ public class AuditTrailExportService : IAuditTrailExportService
             {
                 "EntityId",
                 "Entity",
+                "TargetUser",
+                "BuildingId",
                 "PropertyId",
                 "PropertyName",
                 "EmployeeNumber",
@@ -156,6 +158,8 @@ public class AuditTrailExportService : IAuditTrailExportService
             {
                 "EntityId",
                 "TargetUser",
+                "TargetUser",
+                "BuildingId",
                 "Entity",
                 "PropertyId",
                 "BuildingId",

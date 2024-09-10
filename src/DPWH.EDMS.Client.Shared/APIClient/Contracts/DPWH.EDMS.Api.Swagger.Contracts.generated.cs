@@ -644,6 +644,15 @@ namespace DPWH.EDMS.Api.Contracts
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<RecordRequestStatusCountModelBaseApiResponse> GetMonthlyAverageNumberOfDaysUntilReleaseAsync();
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<RecordRequestStatusCountModelBaseApiResponse> GetMonthlyAverageNumberOfDaysUntilReleaseAsync(System.Threading.CancellationToken cancellationToken);
+
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<GuidNullableBaseApiResponse> UpdateRequestedRecordIsAvailableAsync(bool isActive, System.Collections.Generic.IEnumerable<System.Guid> body);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
