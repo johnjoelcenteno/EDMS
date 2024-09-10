@@ -28,4 +28,5 @@ public class ConfigManager
     public List<string> StatusList { get; set; }
     public List<string> ReportType { get; set; }
     public List<string> DataLibraryType { get; set; }
+    public List<string> ExcludedColumns { get; set; }
 }
