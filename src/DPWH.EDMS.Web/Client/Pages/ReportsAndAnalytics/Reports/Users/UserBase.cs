@@ -81,7 +81,7 @@ public class UserBase : GridBase<UserReportsModel>
             IsLoading = true;
 
             ServiceCb = ReportsService.QueryUser;
-            var filters = GetFilters(selectedTypes, SelectedRegionalOffice, SelectedDEO);
+            var filters = GetFilters(selectedTypes, SelectedRegionalOffice);
 
             SearchFilterRequest.Logic = DataSourceHelper.AND_LOGIC;
             SearchFilterRequest.Filters = filters;
@@ -95,7 +95,7 @@ public class UserBase : GridBase<UserReportsModel>
            
        
     }
-    private List<Filter> GetFilters(List<string> selectedTypes, string regionalOffice, string deo)
+    private List<Filter> GetFilters(List<string> selectedTypes, string regionalOffice)
     {
         var filters = new List<Filter>();
 
@@ -124,10 +124,10 @@ public class UserBase : GridBase<UserReportsModel>
             filters.Add(CreateTextSearchFilter(nameof(UserReportsModel.SubOffice), regionalOffice, "eq"));
         }
 
-        if (!string.IsNullOrEmpty(deo))
-        {
-            filters.Add(CreateTextSearchFilter(nameof(UserReportsModel.Office), deo, "eq"));
-        }
+        //if (!string.IsNullOrEmpty(deo))
+        //{
+        //    filters.Add(CreateTextSearchFilter(nameof(UserReportsModel.Office), deo, "eq"));
+        //}
 
         return filters;
     }
