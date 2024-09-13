@@ -45,10 +45,12 @@ internal sealed class GetAuditLogsHandler : IRequestHandler<GetAuditLogsQuery, D
                .Include(c => c.Changes)
                .Where(c => c.ActionDate >= from && c.ActionDate <= to && c.Entity == "RecordRequest"),
 
-            "Inventory" => _repository.ChangeLogsView
-                .Include(c => c.Changes)
-                .Where(c => c.ActionDate >= from && c.ActionDate <= to && c.Entity == "Asset"),
-
+            "Data Library" => _repository.ChangeLogsView
+              .Include(c => c.Changes)
+              .Where(c => c.ActionDate >= from && c.ActionDate <= to && c.Entity == "DataLibrary" ||
+                          c.ActionDate >= from && c.ActionDate <= to && c.Entity == "Signatory" ||
+                          c.ActionDate >= from && c.ActionDate <= to && c.Entity == "RecordType"), 
+                           
             "User Management" => _repository.ChangeLogsView
                 .Include(c => c.Changes)
                 .Where(c => c.ActionDate >= from && c.ActionDate <= to && c.Entity == category),
