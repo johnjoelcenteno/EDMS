@@ -83,7 +83,7 @@ public static class RecordRequestEndpoint
         .WithDescription("Get monthly average number of days until release")
         .WithApiVersionSet(ApiVersioning.VersionSet)
         .HasApiVersion(1.0)
-        .Produces<BaseApiResponse<RecordRequestStatusCountModel>>()
+        .Produces<BaseApiResponse<List<MonthlyRequestAverageTimeModel>>>()
         .Produces<ProblemDetails>(StatusCodes.Status400BadRequest)
         .Produces<ProblemDetails>(StatusCodes.Status500InternalServerError);
 
