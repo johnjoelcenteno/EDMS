@@ -36,7 +36,7 @@
                         @LoadGrid()
                     </TabStripTab>
                 }
-                @if ((GenericHelper.GetDisplayValue(CurrentUser.Role)) == ApplicationRoles.Manager && Office == Offices.RMD.ToString() && ForApprovalCount > 0)
+                @if ((GenericHelper.GetDisplayValue(CurrentUser.Role) == ApplicationRoles.Manager || GenericHelper.GetDisplayValue(CurrentUser.Role) == ApplicationRoles.SuperAdmin) && Office == Offices.RMD.ToString() && ForApprovalCount > 0)
                 {
                     <TabStripTab>
                         <HeaderTemplate>

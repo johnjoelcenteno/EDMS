@@ -196,7 +196,7 @@
                                                        MaxFileSize="@MaxFileSize"
                                                        MinFileSize="@MinFileSize"
                                                        Multiple="false"
-                                                       Enabled="@(IsRecordUploadEnabled || !string.IsNullOrEmpty(User.Office))">
+                                                       Enabled="@(IsRecordUploadEnabled && !string.IsNullOrEmpty(User.Office))">
                                         <SelectFilesButtonTemplate>
                                             <TelerikSvgIcon Icon="@SvgIcon.Upload" />
                                             Select Record
@@ -260,7 +260,7 @@
                                                        MaxFileSize="@MaxFileSize"
                                                        MinFileSize="@MinFileSize"
                                                        Multiple="false"
-                                                       Enabled="@(IsRecordUploadEnabled || !string.IsNullOrEmpty(User.Office))">
+                                                       Enabled="@(IsRecordUploadEnabled && !string.IsNullOrEmpty(User.Office))">
                                         <SelectFilesButtonTemplate>
                                             <TelerikSvgIcon Icon="@SvgIcon.Upload" />
                                             Select Record
@@ -324,7 +324,7 @@
                                                                MaxFileSize="@MaxFileSize"
                                                                MinFileSize="@MinFileSize"
                                                                Multiple="false"
-                                                               Enabled="@(IsRecordUploadEnabled || !string.IsNullOrEmpty(User.Office))">
+                                                               Enabled="@(IsRecordUploadEnabled && !string.IsNullOrEmpty(User.Office))">
                                                 <SelectFilesButtonTemplate>
                                                     <TelerikSvgIcon Icon="@SvgIcon.Upload" />
                                                     Select Record
@@ -365,7 +365,9 @@
             </div>
         </div>
     </TabStripTab>
-    <TabStripTab Title="Approve" Disabled="@(User.Office == Offices.RMD.ToString() && ProgressIndex < 2 )" Visible="@(User.Office != Offices.HRMD.ToString() && User.UserAccess != "Staff")">
+    <TabStripTab Title="Approve" 
+                 Disabled="@(User.Office == Offices.RMD.ToString() && ProgressIndex < 2 )" 
+                 Visible="@((User.Office != Offices.HRMD.ToString() && User.UserAccess != "Staff") || (string.IsNullOrEmpty(User.Office) && SelectedRecordRequest.RmdRequestStatus != OfficeRequestedRecordStatus.NA.ToString()))">
         <div class="row">
             @if (!XSmall)
             {
@@ -450,8 +452,8 @@
             </div>
         </div>
     </TabStripTab>
-    <TabStripTab Title="Release" Disabled="@(User.UserAccess == "Manager" && User.Office == Offices.RMD.ToString() ? ProgressIndex < 3
-                                            : User.UserAccess == "Manager" && User.Office == Offices.HRMD.ToString() ? ProgressIndex < 2
+    <TabStripTab Title="Release" Disabled="@((User.UserAccess == "Manager" || User.UserAccess == "Super Admin") && User.Office == Offices.RMD.ToString() ? ProgressIndex < 3
+                                            : (User.UserAccess == "Manager" || User.UserAccess == "Super Admin") && User.Office == Offices.HRMD.ToString() ? ProgressIndex < 2
                                             : User.UserAccess == "Staff" ? ProgressIndex < 2
                                             : false)">
         <div class="row">
@@ -461,7 +463,7 @@
                     @StepperFragment
                     <div class="d-flex gap-3 justify-content-center">
                         <TelerikButton OnClick="OnCancel" FillMode="@ThemeConstants.Button.FillMode.Outline">Cancel</TelerikButton>
-                        @if (User.UserAccess == "Manager")
+                        @if (User.UserAccess == "Manager" || User.UserAccess == "Super Admin")
                         {
                             if (User.Office == Offices.RMD.ToString())
                             {
@@ -628,9 +630,7 @@
             </div>
         </div>
     </TabStripTab>
-    <TabStripTab Title="Claim" Disabled="@((User.UserAccess == "Manager" || User.UserAccess == "Staff") && User.Office == Offices.RMD.ToString() ? ProgressIndex < 4
-                                         : (User.UserAccess == "Manager" || User.UserAccess == "Staff") && User.Office == Offices.HRMD.ToString() ? ProgressIndex < 3
-                                         : false)">
+    <TabStripTab Title="Claim" Disabled="@(User.Office == Offices.RMD.ToString() ? ProgressIndex < 4 : User.Office == Offices.HRMD.ToString() ? ProgressIndex < 3 : false)">
         <div class="row">
             @if (!XSmall)
             {
@@ -1055,7 +1055,7 @@
         <div class="no-focus">
             <TelerikStepper Value="@ProgressIndex" ValueChanged="@ValueChangeHandler" Linear="true" Orientation="@(!XSmall ? StepperOrientation.Vertical: StepperOrientation.Horizontal)">
                 <StepperSteps>
-                    @if (string.IsNullOrEmpty(User.Office) || (User.UserAccess == "Manager" && User.Office == Offices.RMD.ToString()) || (User.UserAccess == "Staff" && User.Office == Offices.RMD.ToString()))
+                    @if ((string.IsNullOrEmpty(User.Office) && SelectedRecordRequest.RmdRequestStatus != OfficeRequestedRecordStatus.NA.ToString()) || User.Office == Offices.RMD.ToString())
                     {
                         <StepperStep Label="Submit"></StepperStep>
                         <StepperStep Label="Review & Evaluate"></StepperStep>
@@ -1063,7 +1063,7 @@
                         <StepperStep Label="Release"></StepperStep>
                         <StepperStep Label="Claim"></StepperStep>
                     }
-                    else if ((User.UserAccess == "Manager" && User.Office == Offices.HRMD.ToString()) || (User.UserAccess == "Staff" && User.Office == Offices.HRMD.ToString()))
+                    else if ((string.IsNullOrEmpty(User.Office) && SelectedRecordRequest.RmdRequestStatus == OfficeRequestedRecordStatus.NA.ToString()) || User.Office == Offices.HRMD.ToString())
                     {
                         <StepperStep Label="Submit"></StepperStep>
                         <StepperStep Label="Review & Evaluate"></StepperStep>
