@@ -1,7 +1,240 @@
 ﻿@page "/reports/user-management"
+@using DPWH.EDMS.Api.Contracts
+@using DPWH.EDMS.Components.Helpers
+@using DPWH.EDMS.Web.Client.Pages.ReportsAndAnalytics.Reports.UserManagement.Model
+@using DPWH.EDMS.Client.Shared.Models
 
-<h3>UserManagement</h3>
+@inherits UserManagementBase
+<TelerikMediaQuery Media="(max-width: 480px)" OnChange="((changed) => XSmall = changed)"></TelerikMediaQuery>
+<TelerikBreadcrumb Data="@BreadcrumbItems" />
 
+@if (!!IsLoading)
+{
+    <TelerikLoaderContainer LoaderPosition="@LoaderPosition.End"></TelerikLoaderContainer>
+}
+<p class="header">User Management Report</p>
+<hr />
+
+<div class="container-fluid">
+
+    <div class="card-div d-flex justify-content-center">
+        <div class="col-12">
+            <div class="row g-3 mb-3">
+                <div class="col-12 col-md-6 col-lg-4 align-self-end">
+                    <label class="mb-2" for="propertyType">User Access*</label>
+                    <TelerikMultiSelect Data="@UserTypeList"
+                                        @bind-Value="@SelectedTypes"
+                                        ValueField="string"
+                                        TextField="string"
+                                        Placeholder="Select Access Types"
+                                        Id="products-multiselect" Width="100%">
+                    </TelerikMultiSelect>
+
+                </div>
+                <div class="@TwoFormFieldsResponsiveClass">
+                    <label class="mb-2" for="RegionOffice">Regional Office</label>
+
+                    <TelerikDropDownList @bind-Value="@SelectedRegionalOffice"
+                                         Id="RegionOffice"
+                                         Data="@RequestingOffice"
+                                         ValueField="@nameof(GetRequestingOfficeResult.RegionName)"
+                                         TextField="@nameof(GetRequestingOfficeResult.RegionName)"
+                                         Filterable="true"
+                                         DefaultText="Select"
+                                         AdaptiveMode="@AdaptiveMode.Auto"
+                                         Enabled="true"
+                                         OnChange="@OnChangeRegionOffice"
+                                         @ref="ImplementDropRef">
+                        <NoDataTemplate>
+                            <TelerikLoader Class="loader-indicator" ThemeColor="Primary" Visible="true"></TelerikLoader>
+                        </NoDataTemplate>
+                    </TelerikDropDownList>
+                </div>
+                <div class="@TwoFormFieldsResponsiveClass">
+                    <label class="mb-2" for="DEO">District Engineering Office</label>
+                    <TelerikDropDownList @bind-Value="@SelectedDEO"
+                                         Id="DEO"
+                                         Data="@DEOList"
+                                         ValueField="@nameof(GetRequestingOfficeResultItem.SubOfficeName)"
+                                         TextField="@nameof(GetRequestingOfficeResultItem.SubOfficeName)"
+                                         DefaultText="Select"
+                                         AdaptiveMode="@AdaptiveMode.Auto"
+                                         Enabled="@(SelectedRegionalOffice != null && SelectedRegionalOffice != string.Empty ? true : false)">
+                        <NoDataTemplate>
+                            <TelerikLoader Class="loader-indicator" ThemeColor="Primary" Visible="true"></TelerikLoader>
+                        </NoDataTemplate>
+                    </TelerikDropDownList>
+                </div>
+
+                <div class="d-flex justify-content-end"> 
+                    @if (SelectedTypes != null && SelectedTypes.Count > 0 || !string.IsNullOrEmpty(SelectedRegionalOffice) || !string.IsNullOrEmpty(SelectedDEO))
+                    { 
+                        <TelerikButton ThemeColor="@(ThemeConstants.Button.ThemeColor.Primary)" OnClick="@(() => ShowReport(SelectedTypes))">Generate</TelerikButton>
+
+                    }
+                    else
+                    {
+                        <TelerikButton Enabled="false" ThemeColor="@(ThemeConstants.Button.ThemeColor.Primary)">Generate</TelerikButton>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <TelerikMediaQuery Media="(max-width: 480px)" OnChange="((changed) => XSmall = changed)"></TelerikMediaQuery>
+    @if (IsLoading)
+    {
+        <TelerikLoaderContainer LoaderPosition="@LoaderPosition.End"></TelerikLoaderContainer>
+    }
+    <TelerikCard Width="100%">
+        <CardBody>
+            <CardTitle>User</CardTitle>
+            <CardSeparator Class="my-2"></CardSeparator>
+            @if (GridData != null && GridData.Count > 0)
+            {
+                <div class="mobile-property-grid">
+                
+                    @if (!XSmall)
+                    {
+                        <TelerikGrid Class="grid-no-scroll"
+                                     TItem="UserModel"
+                                     @bind-PageSize="@PageSize"
+                                     Height="@GridHeight"
+                                     Data="GridData">
+                            <GridToolBarTemplate>
+
+                                <span class="k-toolbar-spacer"></span> 
+                                <TelerikButton Icon="@FontIcon.FileExcel" ThemeColor="@(ThemeConstants.Button.ThemeColor.Success)" OnClick="@ConfirmToExcel">Excel</TelerikButton> 
+                            </GridToolBarTemplate>
+                            <GridSettings>
+                                <GridPagerSettings PageSizes="@PageSizes">
+                                </GridPagerSettings>
+                            </GridSettings>
+                            <GridColumns>
+                               @*  EmployeeID | Full Name | DEO | User Access | Created By | Created Date
+ *@
+                                <GridColumn Field=@nameof(UserModel.EmployeeId) Title="Employee ID" />
+                                <GridColumn Field=@nameof(UserModel.EmployeeFullName) Title="Name" />
+                                <GridColumn Visible="false" Field=@nameof(UserModel.RegionalOfficeRegion) Title="Region/Central Office" />
+                                <GridColumn Field=@nameof(UserModel.DistrictEngineeringOffice) Title="District/Bureau/Service" />
+                                <GridColumn Field=@nameof(UserModel.UserAccess) Title="User Access" /> 
+                                <GridColumn Field=@nameof(UserModel.CreatedBy) Title="Created By" />
+                                <GridColumn Field=@nameof(UserModel.Created) DisplayFormat="{0:MMMM dd, yyyy}" Title="Created Date" /> 
+                                 
+                            </GridColumns>
+                        </TelerikGrid>
+                    }
+                    else
+                    {
+                        <TelerikGrid Class="grid-no-scroll"
+                                     TItem="UserModel"
+                                     @bind-PageSize="@PageSize"
+                                     Height="@GridHeight"
+                                     Data="GridData">
+                            <GridToolBarTemplate>
+
+                                <span class="k-toolbar-spacer"></span>
+                                @* OnClick="@ConfirmToExcel" *@
+                                <TelerikButton Icon="@FontIcon.FileExcel" ThemeColor="@(ThemeConstants.Button.ThemeColor.Success)">Excel</TelerikButton>
+                            </GridToolBarTemplate>
+                            <DetailTemplate>
+                                @{
+                                    var prop = context as UserModel;
+                                    <div class="d-flex flex-column">
+                                        <p><b>Employee ID</b> @prop.EmployeeId </p>
+                                        <p><b>User Access:</b> @prop.UserAccess </p>
+                                        <p><b>Position:</b> @prop.Position </p>
+                                        <p><b>Email:</b> @prop.Email </p>
+                                        <p><b>Region/Central Office:</b> @prop.RegionalOfficeRegion </p>
+                                        <p><b>District/Bureau/Service:</b> @prop.DistrictEngineeringOffice </p>
+                                        <p><b>Created By:</b> @prop.CreatedBy </p> 
+                                        <p><b>Date Created:</b> @GenericHelper.GetDateNameAndTimeDisplay(prop.Created) </p>
+
+                                    </div>
+                                }
+                            </DetailTemplate>
+                            <GridSettings>
+                                <GridPagerSettings PageSizes="@PageSizes">
+                                </GridPagerSettings>
+                            </GridSettings>
+                            <GridColumns>
+                                @* <GridColumn Field=@nameof(UserModel.UserName) Title="User Name" /> *@
+                                <GridColumn Field=@nameof(UserModel.UserAccess) Title="Full Name">
+                                    <Template>
+                                        @{
+                                            var res = context as UserModel;
+                                            <p>@res?.LastName, @res?.FirstName</p>
+                                        }
+                                    </Template>
+                                </GridColumn>
+
+                            </GridColumns>
+                        </TelerikGrid>
+                    }
+                    <TelerikPager PageChanged="@PageChangedHandler"
+                                  Total="TotalItems"
+                                  ButtonCount="6"
+                                  PageSize="@PageSize"
+                                  PageSizeChanged="@PageSizeChangedHandler"
+                                  PageSizes="@(new List<int?> {5, 10, 20})"
+                                  Page="@Page">
+                    </TelerikPager>
+                </div>
+
+            }
+        </CardBody>
+    </TelerikCard>
+</div>
+<TelerikDialog @bind-Visible="@Visible" Height="220px" Width="320px" Title="Download File">
+    <DialogContent>
+        <p style="text-align: center">Click <span style="color:#7f56d9;">Continue</span> to download Excel File.</p>
+    </DialogContent>
+    <DialogButtons>
+        <TelerikButton OnClick="@(() => { Visible = false; })">Cancel</TelerikButton>
+        @* OnClick="@ConfirmToExcel" *@
+        <TelerikButton ThemeColor="@(ThemeConstants.Button.ThemeColor.Primary)">Continue</TelerikButton>
+    </DialogButtons>
+</TelerikDialog>
 @code {
 
 }
+<style>
+    p.header {
+        font-size: 20px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 12px; /* 60% */
+    }
+
+    .k-breadcrumb {
+        background-color: transparent;
+        margin-bottom: 16px;
+    }
+
+    .k-breadcrumb-current-item .k-breadcrumb-link, .k-breadcrumb-last-item .k-breadcrumb-link {
+        color: #7f56d9;
+    }
+
+    .card-div {
+        background-color: white;
+        padding-top: 16px;
+        padding-right: 16px;
+        padding-left: 16px;
+        border-radius: 6px;
+        margin-bottom: 20px;
+    }
+
+    .grid-no-scroll .k-grid-content {
+        overflow-y: auto;
+    }
+
+    .grid-no-scroll .k-grid-header,
+    .grid-no-scroll .k-grid-footer {
+        padding-right: 0; /* version 2.26 and older requires !important here */
+    }
+
+    .grid-no-scroll .k-grid-header-wrap,
+    .grid-no-scroll .k-grid-footer-wrap {
+        border-right-width: 0;
+    }
+
+</style>
