@@ -8,8 +8,8 @@ namespace DPWH.EDMS.Application.Features.RecordRequests.Queries.GetMonthlyReques
 {
     public class MonthlyRequestAverageTimeModel
     {
-        public double? HRMDMonthlyAverage { get; set; }
-        public double? RMDMonthlyAverage { get; set; }
-        public double? Both { get; set; }
+        public decimal? HRMDMonthlyAverage { get; set; }
+        public decimal? RMDMonthlyAverage { get; set; }
+        public decimal? Both { get; set; }
     }
 }
