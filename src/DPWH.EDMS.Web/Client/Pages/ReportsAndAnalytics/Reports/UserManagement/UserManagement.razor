@@ -32,7 +32,7 @@
 
                 </div>
                 <div class="@TwoFormFieldsResponsiveClass">
-                    <label class="mb-2" for="RegionOffice">Regional Office</label>
+                    <label class="mb-2" for="RegionOffice">Region/Central Office</label>
 
                     <TelerikDropDownList @bind-Value="@SelectedRegionalOffice"
                                          Id="RegionOffice"
@@ -51,7 +51,7 @@
                     </TelerikDropDownList>
                 </div>
                 <div class="@TwoFormFieldsResponsiveClass">
-                    <label class="mb-2" for="DEO">District Engineering Office</label>
+                    <label class="mb-2" for="DEO">District/Bureau/Service</label>
                     <TelerikDropDownList @bind-Value="@SelectedDEO"
                                          Id="DEO"
                                          Data="@DEOList"
@@ -118,7 +118,7 @@
                                 <GridColumn Field=@nameof(UserModel.DistrictEngineeringOffice) Title="District/Bureau/Service" />
                                 <GridColumn Field=@nameof(UserModel.UserAccess) Title="User Access" /> 
                                 <GridColumn Field=@nameof(UserModel.CreatedBy) Title="Created By" />
-                                <GridColumn Field=@nameof(UserModel.Created) DisplayFormat="{0:MMMM dd, yyyy}" Title="Created Date" /> 
+                                <GridColumn Field=@nameof(UserModel.Created) DisplayFormat="{0:MMMM dd, yyyy}" Title="Date Created" /> 
                                  
                             </GridColumns>
                         </TelerikGrid>

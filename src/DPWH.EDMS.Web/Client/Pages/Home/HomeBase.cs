@@ -58,6 +58,7 @@ public class HomeBase : GridBase<RecordRequestModel>
     protected string? SearchStatus { get; set; }
     protected int ValueAxisMax { get; set; } = 30;
     protected int XAxisMax { get; set; } = 7;
+    protected bool isEndUser { get; set; }
 
     protected List<string> StatusList = new List<string>
     {
@@ -134,7 +135,7 @@ public class HomeBase : GridBase<RecordRequestModel>
     {
         var authState = await AuthenticationStateAsync!;
         var user = authState.User;
-      
+
 
         if (NavigationManager.BaseUri.Contains("-trn"))
         {
@@ -143,8 +144,18 @@ public class HomeBase : GridBase<RecordRequestModel>
                 if (user.IsInRole(ApplicationRoles.EndUser))
                 {
                     NavigationManager.NavigateTo("/my-records");
+                    isEndUser = true;
                 }
+                else { isEndUser = false; }
             }
+        }
+        else
+        {
+            if (user.IsInRole(ApplicationRoles.EndUser))
+            {
+                isEndUser = true;
+            }
+            else { isEndUser = false; }
         } 
     }
 
