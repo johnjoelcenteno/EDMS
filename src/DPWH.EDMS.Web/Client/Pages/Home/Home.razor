@@ -284,6 +284,8 @@
         </CardBody>
     </TelerikCard>
 </div>
+@if (isEndUser == false)
+ {
 <div class="d-flex flex-lg-row flex-column mt-3 gap-3 mb-4">
     <div class="col">
         <TelerikCard Width="100%">
@@ -439,7 +441,8 @@
         </TelerikCard>
     </div>
 </div>
-
+ 
+}
 <style>
     .ch-card {
         background-color: transparent;
