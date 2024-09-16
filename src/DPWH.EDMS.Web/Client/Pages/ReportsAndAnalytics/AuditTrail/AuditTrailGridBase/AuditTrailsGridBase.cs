@@ -1,6 +1,7 @@
 ﻿using Blazored.Toast.Services;
 using DPWH.EDMS.Api.Contracts;
 using DPWH.EDMS.Components.Helpers;
+using DPWH.EDMS.Web.Client.Pages.ReportsAndAnalytics.AuditTrail.Model;
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
@@ -30,7 +31,8 @@ public class AuditTrailsGridBase<T> : ComponentBase
     protected Filter SearchFilterRequest2 { get; set; } = new();
     protected Filter SearchFilterRequest3 { get; set; } = new();
     protected Sort SortRequest { get; set; } = new();
-
+    protected List<AuditLogModel> GridDataAudit { get; set; } = new();
+    protected string SelectedType { get; set; }
     protected Func<DataSourceRequest, Task<DataSourceResult>> ServiceCb { get; set; } = default!;
     protected virtual async Task LoadData(bool bPageChanged = false)
     {
@@ -57,9 +59,37 @@ public class AuditTrailsGridBase<T> : ComponentBase
         {
             // Retrieve data from the BookingService based on the filter requests
             var result = await ServiceCb(DataSourceReq);
-
+            var data = GenericHelper.GetListByDataSource<AuditLogModel>(result.Data);
+            
+            switch (SelectedType)
+            {
+              
+                case "Data Library":
+                    GridDataAudit = data.Where(x => x.Entity == "Signatory").ToList();
+                    break;
+                case "Request Management":
+                    GridDataAudit = data.Where(x => x.Entity == "RecordRequest").ToList();
+                    break;
+                case "DPWH Issuances":
+                    GridDataAudit = data.Where(x => x.Entity == "RecordType").ToList();
+                    break;
+                case "Employee Documents":
+                    GridDataAudit = data.Where(x => x.Entity == "RecordType").ToList();
+                    break;
+                default:
+                  
+                    break;
+            }
+            if (data != null && !string.IsNullOrEmpty(SelectedType))
+            {
+                GridDataAudit = data.Where(x => x.Entity == "Signatory").ToList();
+            }
+            else
+            {
+                GridData = GenericHelper.GetListByDataSource<T>(result.Data);
+            }
             // Convert the retrieved data to a list of BookingModel objects
-            GridData = GenericHelper.GetListByDataSource<T>(result.Data);
+             
 
             // Set the total number of items for pagination purposes
             TotalItems = result.Total;

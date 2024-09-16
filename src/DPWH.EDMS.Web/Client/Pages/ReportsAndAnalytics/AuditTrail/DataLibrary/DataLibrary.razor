@@ -21,9 +21,9 @@
                 <div class="col-12 col-md-6 col-lg-3 align-self-end">
                     <label class="mb-3">Report type</label>
                     <TelerikDropDownList Data="@DataLibraryType"
-                                         @bind-Value="SelectedReportType"
-                                         ValueField="@nameof(UserActivityModel.ReportTypeId)"
-                                         TextField="@nameof(UserActivityModel.ReportTypeName)"
+                                         @bind-Value="SelectedType"
+                                         ValueField="string"
+                                         TextField="string"
                                          DefaultText="Select" />
 
                 </div>
@@ -44,12 +44,12 @@
             <TelerikCard>
                 <CardHeader>
                     <div class="d-flex justify-content-end">
-                        <TelerikButton ThemeColor="@(ThemeConstants.Button.ThemeColor.Primary)" OnClick="@(() => ShowReport("Request Management", dateFrom,dateTo))">Generate</TelerikButton>
+                        <TelerikButton ThemeColor="@(ThemeConstants.Button.ThemeColor.Primary)" OnClick="@(() => ShowReport("Data Library", dateFrom,dateTo))">Generate</TelerikButton>
                     </div>
                 </CardHeader>
                 <CardBody>
                     <div class="mobile-property-grid">
-                        @if (GridData != null && GridData.Count > 0)
+                        @if (GridDataAudit != null && GridDataAudit.Count > 0)
                         {
                             if (!XSmall)
                             {
@@ -57,7 +57,7 @@
                                              TItem="AuditLogModel"
                                              @bind-PageSize="@PageSize"
                                              Height="@GridHeight"
-                                             Data="GridData"
+                                             Data="GridDataAudit"
                                              Context="audit">
                                     <GridToolBarTemplate>
 
@@ -103,6 +103,15 @@
                                         }
                                     </DetailTemplate>
                                     <GridColumns>
+                                        <GridColumn Title="Data Type">
+                                            <Template>
+                                                @{
+                                                    var prop = context as AuditLogModel;
+
+                                                    <p>@(prop?.Entity != null ? prop.Entity : "N/A")</p>
+                                                }
+                                            </Template>
+                                        </GridColumn>
                                         <GridColumn Title="Username">
                                             <Template>
                                                 @{

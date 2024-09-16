@@ -40,6 +40,7 @@ public record GetAuditLogsQueryResult
     public string? EmployeeNumber { get; set; }
     public string? TargetUser { get; set; }
     public DateTimeOffset? Created { get; set; }
+    public string? ControlNumber { get; set; }
     public IList<GetAuditLogsQueryResultItemChange> Changes { get; set; }
 }
 

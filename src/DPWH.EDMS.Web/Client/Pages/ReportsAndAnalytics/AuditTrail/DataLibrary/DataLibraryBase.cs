@@ -31,6 +31,7 @@ public class DataLibraryBase : AuditTrailsGridBase<AuditLogModel>
     protected bool XSmall { get; set; }
     protected List<int?> PageSizes { get; set; } = new List<int?> { 5, 10, 15 };
     protected List<string> DataLibraryType { get; set; } = new();
+    protected List<AuditLogModel> AuditlogData { get; set; } = new();
     protected UserActivityModel UserActivityData = new UserActivityModel();
     public List<BreadcrumbModel> BreadcrumbItems { get; set; } = new()
     {
@@ -78,7 +79,10 @@ public class DataLibraryBase : AuditTrailsGridBase<AuditLogModel>
 
         SearchValue = Value;
         var filters = new List<Filter>();
-     
+        //if (!string.IsNullOrEmpty(SelectedReportType))
+        //{
+        //    AddTextSearchFilter(filters, nameof(AuditLogModel.Entity), SelectedReportType, "contains");
+        //}
         AddTextSearchFilter(filters, nameof(AuditLogModel.Created), start.Value.ToString(), "gte");
         AddTextSearchFilter(filters, nameof(AuditLogModel.Created), end.Value.ToString(), "lte");
 
@@ -87,7 +91,7 @@ public class DataLibraryBase : AuditTrailsGridBase<AuditLogModel>
         ServiceCb = AuditLog.AuditQuery;
 
         await LoadData();
-
+         
         IsLoading = false;
     }
     protected async Task GetPurposes()
