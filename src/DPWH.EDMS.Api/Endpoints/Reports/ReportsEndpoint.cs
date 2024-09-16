@@ -2,6 +2,7 @@
 using DPWH.EDMS.Application.Features.Reports.Queries;
 using DPWH.EDMS.IDP.Core.Constants;
 using DPWH.EDMS.Infrastructure.Context;
+using Microsoft.EntityFrameworkCore;
 
 namespace DPWH.EDMS.Api.Endpoints.Reports;
 
@@ -37,6 +38,7 @@ public static class ReportsEndpoint
         {
             //TODO: Fix this query, should not call `ToList()`
             var usersWithRoles = (from user in idpContext.Users
+                                  .Include(u =>u.EmployeeInfo)
                                   select new
                                   {
                                       UserId = user.Id,
@@ -49,6 +51,10 @@ public static class ReportsEndpoint
                                       Office = user.EmployeeInfo == null ? null : user.EmployeeInfo.DistrictEngineeringOffice,
                                       SubOffice = user.EmployeeInfo == null ? null : user.EmployeeInfo.RegionalOfficeRegion,
                                       user.Created,
+                                      user.CreatedBy,
+                                      user.LastModified,
+                                      user.LastModifiedBy,
+                                      user.EmployeeInfo.EmployeeId,
                                       RoleNames = idpContext.UserClaims
                                           .Where(u => u.UserId == user.Id && (u.ClaimType == "role" || u.ClaimType == "account_status"))
                                           .Select(uc => uc.ClaimValue)
@@ -69,7 +75,11 @@ public static class ReportsEndpoint
                                       FirstName = p.FirstName,
                                       LastName = p.LastName,
                                       Location = "Location Static Text",
-                                      Gender = "Male Static Text"
+                                      Gender = "Male Static Text",
+                                      EmployeeId = p.EmployeeId,
+                                      CreatedBy = p.CreatedBy,
+                                      LastModified = p.LastModified,
+                                      LastModifiedBy = p.LastModifiedBy
                                   }).AsQueryable();
 
             return Results.Ok(usersWithRoles.ToDataSourceResult(request));
