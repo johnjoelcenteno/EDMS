@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using DPWH.EDMS.Domain;
 using DPWH.EDMS.Domain.Common;
 using DPWH.EDMS.Domain.Entities;
 using DPWH.EDMS.Domain.Extensions;
@@ -39,7 +40,9 @@ internal sealed class AuditInterceptor : SaveChangesInterceptor
             .Where(e => e.State is not (EntityState.Detached or EntityState.Unchanged))
             .Select(e => ChangeLog.Create(
                     GetEntityId(e),
-                    e.Entity.GetType().Name,                    
+                    e.Entity.GetType().Name,   
+                    GetPropertyName(e),
+                    GetControlNumber(e),
                     e.State.ToString(),
                     _principal.GetUserId().ToString(),
                     _principal.GetUserName(),
@@ -97,5 +100,33 @@ internal sealed class AuditInterceptor : SaveChangesInterceptor
             })
             .Where(i => i.Field is not null)
             .ToList();
+    }
+
+    private static string? GetPropertyName(EntityEntry<EntityBase> entry)
+    {
+        if (entry.Entity.GetType().Name != nameof(RecordType))
+        {
+            return null;
+        }
+
+        var propertyName = entry.Properties
+            .First(p => p.Metadata.Name == nameof(RecordType.Category))
+            .CurrentValue;
+
+        return propertyName?.ToString();
+    }
+
+    private static string? GetControlNumber(EntityEntry<EntityBase> entry)
+    {
+        if (entry.Entity.GetType().Name != nameof(RecordRequest))
+        {
+            return null;
+        }
+
+        var propertyName = entry.Properties
+            .First(p => p.Metadata.Name == nameof(RecordRequest.ControlNumber))
+            .CurrentValue;
+
+        return propertyName?.ToString();
     }
 }
