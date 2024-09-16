@@ -16,7 +16,11 @@ public class UserReportModel
     public string? FirstName { get; set; }
     public string? LastName { get; set; }
     public string? Location { get; set; }
-    public string? Gender { get; set; }
+    public string? Gender { get; set; }    
+    public string? EmployeeId { get; set; }
+    public string? CreatedBy { get; set; }
+    public DateTimeOffset? LastModified { get; set; }
+    public string? LastModifiedBy { get; set; }
 
 
 
