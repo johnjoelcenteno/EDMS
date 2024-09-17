@@ -59,6 +59,7 @@ public class HomeBase : GridBase<RecordRequestModel>
     protected int ValueAxisMax { get; set; } = 30;
     protected int XAxisMax { get; set; } = 7;
     protected bool isEndUser { get; set; }
+    protected string Role { get; set; } = string.Empty;
 
     protected List<string> StatusList = new List<string>
     {
@@ -135,8 +136,10 @@ public class HomeBase : GridBase<RecordRequestModel>
     {
         var authState = await AuthenticationStateAsync!;
         var user = authState.User;
+        var roles = user.Claims.Where(c => c.Type == "role")!.ToList();
+        var role = roles.FirstOrDefault(role => !string.IsNullOrEmpty(role.Value) && role.Value.Contains(ApplicationRoles.RolePrefix))?.Value ?? string.Empty;
 
-
+        Role = role;
         if (NavigationManager.BaseUri.Contains("-trn"))
         {
             if (user.Identity is not null && user.Identity.IsAuthenticated)
@@ -144,21 +147,10 @@ public class HomeBase : GridBase<RecordRequestModel>
                 if (user.IsInRole(ApplicationRoles.EndUser))
                 {
                     NavigationManager.NavigateTo("/my-records");
-                    isEndUser = true;
                 }
-                else { isEndUser = false; }
             }
-        }
-        else
-        {
-            if (user.IsInRole(ApplicationRoles.EndUser))
-            {
-                isEndUser = true;
-            }
-            else { isEndUser = false; }
         } 
-    }
-
+    } 
     private async Task GetMonthlyRequestTotal()
     {
         var res = await RequestManagementService.GetMonthlyRequestTotal();

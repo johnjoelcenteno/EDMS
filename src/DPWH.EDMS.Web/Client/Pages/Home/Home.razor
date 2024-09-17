@@ -2,6 +2,7 @@
 @using DPWH.EDMS.Api.Contracts
 @using DPWH.EDMS.Client.Shared.MockModels
 @using DPWH.EDMS.Components.Helpers
+@using DPWH.EDMS.IDP.Core.Constants
 
 @attribute [Authorize]
 @inherits HomeBase
@@ -284,7 +285,7 @@
         </CardBody>
     </TelerikCard>
 </div>
-@if (isEndUser == false)
+@if (Role != ApplicationRoles.EndUser)
  {
 <div class="d-flex flex-lg-row flex-column mt-3 gap-3 mb-4">
     <div class="col">
