@@ -135,6 +135,7 @@ public class RecordRequest : EntityBase
     public decimal? HRMDNoDaysUntilReleased { get; set; }
     public decimal? RMDNoDaysUntilReleased { get; set; }
     public string? FullName { get; set; }
+    public DateTimeOffset? DateReleased { get; set; }
     public virtual IList<RequestedRecord> RequestedRecords { get; set; }
     public virtual IList<RecordRequestDocument>? Files { get; set; }
     public virtual IList<RequestedRecordReceipt>? RequestedRecordReceipts { get; set; }

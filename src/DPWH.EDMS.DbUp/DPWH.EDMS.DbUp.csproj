@@ -27,6 +27,7 @@
     <None Remove="Scripts\01\15-UpdateRequestedRecords.sql" />
     <None Remove="Scripts\01\17-UpdateRecordRequestColumnsForOfficeStats.sql" />
     <None Remove="Scripts\01\18-RemoveTriggerForRequestsManagement.sql" />
+    <None Remove="Scripts\01\19-Schema-AddDateReleasedRecordsRequests.sql" />
   </ItemGroup>
 
   <ItemGroup>
@@ -56,6 +57,7 @@
     <EmbeddedResource Include="Scripts\01\16-AddEmployeeNumberInSignatoriesTable.sql" />
     <EmbeddedResource Include="Scripts\01\17-UpdateRecordRequestColumnsForOfficeStats.sql" />
     <EmbeddedResource Include="Scripts\01\18-RemoveTriggerForRequestsManagement.sql" />
+    <EmbeddedResource Include="Scripts\01\19-Schema-AddDateReleasedRecordsRequests.sql" />
   </ItemGroup>
   
 	<ItemGroup>
