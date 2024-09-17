@@ -2,10 +2,12 @@
 using DPWH.EDMS.Api.Contracts;
 using DPWH.EDMS.Client.Shared.APIClient.Services.Lookups;
 using DPWH.EDMS.Client.Shared.APIClient.Services.Reports;
+using DPWH.EDMS.Client.Shared.APIClient.Services.Users;
 using DPWH.EDMS.Client.Shared.Models;
 using DPWH.EDMS.Components.Components.ReusableGrid;
 using DPWH.EDMS.Components.Helpers;
 using DPWH.EDMS.IDP.Core.Constants;
+using DPWH.EDMS.Web.Client.Pages.ReportsAndAnalytics.Reports.UserManagement.Model;
 using DPWH.EDMS.Web.Client.Pages.ReportsAndAnalytics.Reports.Users.Model;
 using DPWH.EDMS.Web.Client.Shared.Services.ExceptionHandler;
 using DPWH.EDMS.Web.Client.Shared.Services.Export;
@@ -13,20 +15,21 @@ using Microsoft.AspNetCore.Components;
 using Telerik.Blazor.Components;
 using Telerik.FontIcons;
 
-namespace DPWH.EDMS.Web.Client.Pages.ReportsAndAnalytics.Reports.Users;
-
-public class UserBase : GridBase<UserReportsModel>
+namespace DPWH.EDMS.Web.Client.Pages.ReportsAndAnalytics.Reports.UserManagement;
+//it should be UserManagementReportModel (Temporary fix) while waiting for BE fix
+public class UserManagementBase : GridBase<UserModel>
 {
     #region
     [Inject] public required ILookupsService LookUpService { get; set; }
     [Inject] public required IExceptionHandlerService ExceptionHandlerService { get; set; }
-    [Inject] public required IReportsService ReportsService {  get; set; }
+    [Inject] public required IReportsService ReportsService { get; set; }
     [Inject] public required IExcelExportService ExcelExportService { get; set; }
+    [Inject] public required IUsersService UserService { get; set; }
     #endregion
 
-    protected List<string> UserTypeList {  get; set; } = new List<string>();
+    protected List<string> UserTypeList { get; set; } = new List<string>();
     protected List<string> SelectedTypes { get; set; } = new List<string>();
-  
+
     protected readonly string TwoFormFieldsResponsiveClass = "col-12 col-md-6 col-lg-3";
 
     protected string SelectedRegionalOffice { get; set; }
@@ -80,8 +83,10 @@ public class UserBase : GridBase<UserReportsModel>
         {
             IsLoading = true;
 
-            ServiceCb = ReportsService.QueryUser;
-            var filters = GetFilters(selectedTypes, SelectedRegionalOffice);
+            //ServiceCb = ReportsService.QueryUser;
+            ServiceCb = UserService.Query;
+
+            var filters = GetFilters(selectedTypes, SelectedRegionalOffice, SelectedDEO);
 
             SearchFilterRequest.Logic = DataSourceHelper.AND_LOGIC;
             SearchFilterRequest.Filters = filters;
@@ -92,17 +97,17 @@ public class UserBase : GridBase<UserReportsModel>
             }
             IsLoading = false;
         });
-           
-       
+
+
     }
-    private List<Filter> GetFilters(List<string> selectedTypes, string regionalOffice)
+    private List<Filter> GetFilters(List<string> selectedTypes, string regionalOffice, string deo)
     {
         var filters = new List<Filter>();
 
         if (selectedTypes != null)
         {
             var groupFilters = selectedTypes
-                .Select(item => CreateTextSearchFilter(nameof(UserReportsModel.UserAccess), item, "contains"))
+                .Select(item => CreateTextSearchFilter(nameof(UserModel.UserAccess), item, "contains"))
                 .ToList();
 
             if (groupFilters.Count > 1)
@@ -121,13 +126,13 @@ public class UserBase : GridBase<UserReportsModel>
 
         if (!string.IsNullOrEmpty(regionalOffice))
         {
-            filters.Add(CreateTextSearchFilter(nameof(UserReportsModel.SubOffice), regionalOffice, "eq"));
+            filters.Add(CreateTextSearchFilter(nameof(UserModel.RegionalOfficeRegion), regionalOffice, "eq"));
         }
 
-        //if (!string.IsNullOrEmpty(deo))
-        //{
-        //    filters.Add(CreateTextSearchFilter(nameof(UserReportsModel.Office), deo, "eq"));
-        //}
+        if (!string.IsNullOrEmpty(deo))
+        {
+            filters.Add(CreateTextSearchFilter(nameof(UserModel.DistrictEngineeringOffice), deo, "eq"));
+        }
 
         return filters;
     }
@@ -153,12 +158,19 @@ public class UserBase : GridBase<UserReportsModel>
 
         IsLoading = false;
     }
-    protected async Task<List<UserReportsModel>> GetAllItems()
+    protected async Task<List<UserModel>> GetAllItems()
     {
+       //Temporary Fix - For Demo Purpose (will change to ReportService once BE Fix the endpoint
 
-        var items = await GenericHelper.GetListByQuery<UserReportsModel>(
+       // var items = await GenericHelper.GetListByQuery<UserModel>(
+       //    new DataSourceRequest() { Skip = 0, Filter = DataSourceReq.Filter },
+       //    ReportsService.QueryUser,
+       //    (err) => ToastService.ShowError(err)
+       //);
+
+        var items = await GenericHelper.GetListByQuery<UserModel>(
             new DataSourceRequest() { Skip = 0, Filter = DataSourceReq.Filter },
-            ReportsService.QueryUser,
+            UserService.Query,
             (err) => ToastService.ShowError(err)
         );
 

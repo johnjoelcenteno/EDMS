@@ -32,7 +32,9 @@ internal sealed class CreateModifyAccessLogHandler : IRequestHandler<CreateModif
         var change = ChangeLogItem.Create("Access", request.CurrentAccess, request.NewAccess);
         var changeLog = ChangeLog.Create(
             request.UserId,
-            "User Management",            
+            "User Management",  
+            null,
+            null,
             request.Action,
             _principal.GetUserId().ToString(),
             _principal.GetUserName(),

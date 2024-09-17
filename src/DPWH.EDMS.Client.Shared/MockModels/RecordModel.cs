@@ -140,45 +140,45 @@ public class MockData
             new ModelData()
             {
                 Series1 = 2,
-                Series2 = 4,
+                Series2 = 2.5,
                 Series3 = 3
 
             },
             new ModelData()
             {
-                 Series1 = 2,
-                Series2 = 7,
+                Series1 = 1,
+                Series2 = 3,
                 Series3 = 5
             },
             new ModelData()
             {
-                Series1 = 5,
-                Series2 = 11,
+                Series1 = 2,
+                Series2 = 4,
                 Series3 = 6
             },
             new ModelData()
             {
-                Series1 = 7,
-                Series2 = 19,
-                Series3 = 12
+                Series1 = 2,
+                Series2 = 1.5,
+                Series3 = 1
+            },
+            new ModelData()
+            {
+                Series1 = 4,
+                Series2 = 3.5,
+                Series3 = 3
             },
             new ModelData()
             {
                 Series1 = 5,
-                Series2 = 11,
+                Series2 = 3,
+                Series3 = 1
+            },
+            new ModelData()
+            {
+                Series1 = 3,
+                Series2 = 4.5,
                 Series3 = 6
-            },
-            new ModelData()
-            {
-                Series1 = 14,
-                Series2 = 40,
-                Series3 = 26
-            },
-            new ModelData()
-            {
-                Series1 = 15,
-                Series2 = 27,
-                Series3 = 12
             },
             
         };

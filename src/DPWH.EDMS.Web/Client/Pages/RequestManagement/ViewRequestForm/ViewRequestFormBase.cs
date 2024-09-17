@@ -144,7 +144,7 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
     {
         get
         {
-            if (User.UserAccess == "Manager" || User.UserAccess == "Staff")
+            if (User.UserAccess == "Super Admin" || User.UserAccess == "Manager" || User.UserAccess == "Staff")
             {
                 if (User.Office == Offices.RMD.ToString())
                 {
@@ -666,122 +666,93 @@ public class ViewRequestFormBase : RequestDetailsOverviewBase
 
     protected void UpdateProgressIndex()
     {
-        if (string.IsNullOrEmpty(User.Office) || User.UserAccess == "Manager")
+        if ((string.IsNullOrEmpty(User.Office) && SelectedRecordRequest.RmdRequestStatus != OfficeRequestedRecordStatus.NA.ToString()) ||
+           (User.UserAccess == "Manager" || User.UserAccess == "Super Admin") && User.Office == Offices.RMD.ToString())
         {
-            if (User.Office == Offices.RMD.ToString())
+            switch (SelectedRecordRequest.RmdRequestStatus)
             {
-                switch (SelectedRecordRequest.RmdRequestStatus)
-                {
-                    case var status when status == OfficeRequestedRecordStatus.Submitted.ToString():
-                        ProgressIndex = 1;
-                        ActiveTabIndex = 1;
-                        IsRecordUploadEnabled = true;
-                        break;
-                    case var status when status == OfficeRequestedRecordStatus.Reviewed.ToString():
-                        ProgressIndex = 2;
-                        ActiveTabIndex = 2;
-                        IsRecordUploadEnabled = false;
-                        break;
-                    case var status when status == OfficeRequestedRecordStatus.Approved.ToString():
-                        ProgressIndex = 3;
-                        ActiveTabIndex = 3;
-                        break;
-                    case var status when status == OfficeRequestedRecordStatus.Released.ToString():
-                        ProgressIndex = 4;
-                        ActiveTabIndex = 4;
-                        break;
-                    case var status when status == OfficeRequestedRecordStatus.Claimed.ToString():
-                        ProgressIndex = 5;
-                        ActiveTabIndex = 4;
-                        break;
-                    default:
-                        break;
-                }
-            }
-            else if (User.Office == Offices.HRMD.ToString())
-            {
-                switch (SelectedRecordRequest.HrmdRequestStatus)
-                {
-                    case var status when status == OfficeRequestedRecordStatus.Submitted.ToString():
-                        ProgressIndex = 1;
-                        ActiveTabIndex = 1;
-                        IsRecordUploadEnabled = true;
-                        break;
-                    case var status when status == OfficeRequestedRecordStatus.Reviewed.ToString():
-                        ProgressIndex = 2;
-                        ActiveTabIndex = 3;
-                        IsRecordUploadEnabled = false;
-                        break;
-                    case var status when status == OfficeRequestedRecordStatus.Released.ToString():
-                        ProgressIndex = 3;
-                        ActiveTabIndex = 4;
-                        break;
-                    case var status when status == OfficeRequestedRecordStatus.Claimed.ToString():
-                        ProgressIndex = 4;
-                        ActiveTabIndex = 4;
-                        break;
-                    default:
-                        break;
-                }
+                case var status when status == OfficeRequestedRecordStatus.Submitted.ToString():
+                    ProgressIndex = 1;
+                    ActiveTabIndex = 1;
+                    IsRecordUploadEnabled = true;
+                    break;
+                case var status when status == OfficeRequestedRecordStatus.Reviewed.ToString():
+                    ProgressIndex = 2;
+                    ActiveTabIndex = 2;
+                    IsRecordUploadEnabled = false;
+                    break;
+                case var status when status == OfficeRequestedRecordStatus.Approved.ToString():
+                    ProgressIndex = 3;
+                    ActiveTabIndex = 3;
+                    break;
+                case var status when status == OfficeRequestedRecordStatus.Released.ToString():
+                    ProgressIndex = 4;
+                    ActiveTabIndex = 4;
+                    break;
+                case var status when status == OfficeRequestedRecordStatus.Claimed.ToString():
+                    ProgressIndex = 5;
+                    ActiveTabIndex = 4;
+                    break;
+                default:
+                    break;
             }
         }
-        else if (User.UserAccess == "Staff")
+        else if ((string.IsNullOrEmpty(User.Office) && SelectedRecordRequest.RmdRequestStatus == OfficeRequestedRecordStatus.NA.ToString()) ||
+                ((User.UserAccess == "Manager" || User.UserAccess == "Super Admin") && User.Office == Offices.HRMD.ToString()) || 
+                (User.UserAccess == "Staff" && User.Office == Offices.HRMD.ToString()))
         {
-            if (User.Office == Offices.RMD.ToString())
+            switch (SelectedRecordRequest.HrmdRequestStatus)
             {
-                switch (SelectedRecordRequest.RmdRequestStatus)
-                {
-                    case var status when status == OfficeRequestedRecordStatus.Submitted.ToString():
-                        ProgressIndex = 1;
-                        ActiveTabIndex = 1;
-                        IsRecordUploadEnabled = true;
-                        break;
-                    case var status when status == OfficeRequestedRecordStatus.Reviewed.ToString():
-                        ProgressIndex = 2;
-                        ActiveTabIndex = 3;
-                        IsRecordUploadEnabled = false;
-                        break;
-                    case var status when status == OfficeRequestedRecordStatus.Approved.ToString():
-                        ProgressIndex = 3;
-                        ActiveTabIndex = 3;
-                        break;
-                    case var status when status == OfficeRequestedRecordStatus.Released.ToString():
-                        ProgressIndex = 4;
-                        ActiveTabIndex = 4;
-                        break;
-                    case var status when status == OfficeRequestedRecordStatus.Claimed.ToString():
-                        ProgressIndex = 5;
-                        ActiveTabIndex = 4;
-                        break;
-                    default:
-                        break;
-                }
+                case var status when status == OfficeRequestedRecordStatus.Submitted.ToString():
+                    ProgressIndex = 1;
+                    ActiveTabIndex = 1;
+                    IsRecordUploadEnabled = true;
+                    break;
+                case var status when status == OfficeRequestedRecordStatus.Reviewed.ToString():
+                    ProgressIndex = 2;
+                    ActiveTabIndex = 3;
+                    IsRecordUploadEnabled = false;
+                    break;
+                case var status when status == OfficeRequestedRecordStatus.Released.ToString():
+                    ProgressIndex = 3;
+                    ActiveTabIndex = 4;
+                    break;
+                case var status when status == OfficeRequestedRecordStatus.Claimed.ToString():
+                    ProgressIndex = 4;
+                    ActiveTabIndex = 4;
+                    break;
+                default:
+                    break;
             }
-            else if (User.Office == Offices.HRMD.ToString())
+        }
+        else if (User.UserAccess == "Staff" && User.Office == Offices.RMD.ToString())
+        {
+            switch (SelectedRecordRequest.RmdRequestStatus)
             {
-                switch (SelectedRecordRequest.HrmdRequestStatus)
-                {
-                    case var status when status == OfficeRequestedRecordStatus.Submitted.ToString():
-                        ProgressIndex = 1;
-                        ActiveTabIndex = 1;
-                        IsRecordUploadEnabled = true;
-                        break;
-                    case var status when status == OfficeRequestedRecordStatus.Reviewed.ToString():
-                        ProgressIndex = 2;
-                        ActiveTabIndex = 3;
-                        IsRecordUploadEnabled = false;
-                        break;
-                    case var status when status == OfficeRequestedRecordStatus.Released.ToString():
-                        ProgressIndex = 3;
-                        ActiveTabIndex = 4;
-                        break;
-                    case var status when status == OfficeRequestedRecordStatus.Claimed.ToString():
-                        ProgressIndex = 4;
-                        ActiveTabIndex = 4;
-                        break;
-                    default:
-                        break;
-                }
+                case var status when status == OfficeRequestedRecordStatus.Submitted.ToString():
+                    ProgressIndex = 1;
+                    ActiveTabIndex = 1;
+                    IsRecordUploadEnabled = true;
+                    break;
+                case var status when status == OfficeRequestedRecordStatus.Reviewed.ToString():
+                    ProgressIndex = 2;
+                    ActiveTabIndex = 3;
+                    IsRecordUploadEnabled = false;
+                    break;
+                case var status when status == OfficeRequestedRecordStatus.Approved.ToString():
+                    ProgressIndex = 3;
+                    ActiveTabIndex = 3;
+                    break;
+                case var status when status == OfficeRequestedRecordStatus.Released.ToString():
+                    ProgressIndex = 4;
+                    ActiveTabIndex = 4;
+                    break;
+                case var status when status == OfficeRequestedRecordStatus.Claimed.ToString():
+                    ProgressIndex = 5;
+                    ActiveTabIndex = 4;
+                    break;
+                default:
+                    break;
             }
         }
     }

@@ -1,6 +1,8 @@
 ﻿@page "/request-management"
 @using DPWH.EDMS.Api.Contracts
 @using DPWH.EDMS.Components.Helpers
+@using DPWH.EDMS.IDP.Core.Constants
+@using DPWH.EDMS.Shared.Enums
 
 @inherits RequestManagementBase
 
@@ -34,6 +36,18 @@
                         @LoadGrid()
                     </TabStripTab>
                 }
+                @if ((GenericHelper.GetDisplayValue(CurrentUser.Role) == ApplicationRoles.Manager || GenericHelper.GetDisplayValue(CurrentUser.Role) == ApplicationRoles.SuperAdmin) && Office == Offices.RMD.ToString() && ForApprovalCount > 0)
+                {
+                    <TabStripTab>
+                        <HeaderTemplate>
+                            <label>For Approval <sup class="counter-chip">@ForApprovalCount</sup></label>
+                        </HeaderTemplate>
+                        <Content>
+                            @LoadGrid()
+                        </Content>
+                    </TabStripTab>
+                }
+                
             </TelerikTabStrip>
         </CardBody>
     </TelerikCard>
@@ -87,7 +101,7 @@
                         </TelerikButton>
                     </FilterCellTemplate>
                 </GridColumn>
-                <GridColumn Field=@nameof(RecordRequestModel.FullName) Title="Full Name">
+                <GridColumn Field=@nameof(RecordRequestModel.FullName) Title="Full Name" >
                     <FilterCellTemplate>
                         <TelerikTextBox Value="@SearchFullName"
                                                ValueChanged="@((string? val) =>
@@ -166,6 +180,68 @@
                                                  SetFilterGrid();
 
                                               })">
+                        </TelerikButton>
+                    </FilterCellTemplate>
+                </GridColumn>
+                <GridColumn Field=@nameof(RecordRequestModel.RmdRequestStatus) Title="RMD Status" Visible="false">
+                    <FilterCellTemplate>
+                        <TelerikDropDownList Data="@OfficeStatusList"
+                                             Value="@SearchRmdStatus"
+                                             ValueField="string"
+                                             TextField="string"
+                                             DefaultText="Select Status"
+                                             Width="100%"
+                                             FilterOperator="@StringFilterOperator.Contains"
+                                             ValueChanged="@((string val) =>
+                                                   {
+                                                      SearchRmdStatus = val;
+
+                                                      SetFilterGrid();
+
+                                                   })">
+                        </TelerikDropDownList>
+                        <TelerikButton ButtonType="ButtonType.Button"
+                                       Class="k-clear-button-visible ml-sm"
+                                       Icon="@SvgIcon.FilterClear"
+                                       Enabled="@(!string.IsNullOrEmpty(SearchRmdStatus))"
+                                       OnClick="@(() =>
+                                                  {
+                                                       SearchRmdStatus = string.Empty;
+
+                                                       SetFilterGrid();
+
+                                                  })">
+                        </TelerikButton>
+                    </FilterCellTemplate>
+                </GridColumn>
+                <GridColumn Field=@nameof(RecordRequestModel.HrmdRequestStatus) Title="HRMD Status" Visible="false">
+                    <FilterCellTemplate>
+                        <TelerikDropDownList Data="@OfficeStatusList"
+                                             Value="@SearchHrmdStatus"
+                                             ValueField="string"
+                                             TextField="string"
+                                             DefaultText="Select Status"
+                                             Width="100%"
+                                             FilterOperator="@StringFilterOperator.Contains"
+                                             ValueChanged="@((string val) =>
+                                                   {
+                                                      SearchHrmdStatus = val;
+
+                                                      SetFilterGrid();
+
+                                                   })">
+                        </TelerikDropDownList>
+                        <TelerikButton ButtonType="ButtonType.Button"
+                                       Class="k-clear-button-visible ml-sm"
+                                       Icon="@SvgIcon.FilterClear"
+                                       Enabled="@(!string.IsNullOrEmpty(SearchHrmdStatus))"
+                                       OnClick="@(() =>
+                                                  {
+                                                       SearchHrmdStatus = string.Empty;
+
+                                                       SetFilterGrid();
+
+                                                  })">
                         </TelerikButton>
                     </FilterCellTemplate>
                 </GridColumn>
@@ -284,5 +360,18 @@
 
     .k-tabstrip-top > .k-tabstrip-items-wrapper .k-item:active, .k-tabstrip-top > .k-tabstrip-items-wrapper .k-item.k-active {
         box-shadow: none;
+    }
+
+    .counter-chip {
+        position: absolute;
+        width: 25px;
+        height: 25px;
+        top: -10px;
+        right: -10px;
+        border-radius: 50%;
+        background: red;
+        color: white;
+        text-align: center;
+        padding-top: 12px;
     }
 </style>

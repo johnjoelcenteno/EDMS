@@ -25,7 +25,6 @@ public static class SharedServiceProvider
         services.AddScoped<IExcelExportService, ExcelExportService>();
         services.AddScoped<IExceptionHandlerEmployeeService, ExceptionHandlerEmployeeService>();
 
-        services.AddScoped<IAuditLogService, AuditLogService>();
         services.AddScoped<IAuditTrailExportService, AuditTrailExportService>();
         services.AddScoped<OverviewFilterService>();
         services.AddScoped<NavRx>();

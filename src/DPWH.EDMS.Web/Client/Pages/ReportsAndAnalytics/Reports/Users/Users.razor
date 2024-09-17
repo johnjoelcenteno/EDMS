@@ -47,7 +47,7 @@
                         </NoDataTemplate>
                     </TelerikDropDownList>
                 </div>
-                <div class="@TwoFormFieldsResponsiveClass">
+              @*   <div class="@TwoFormFieldsResponsiveClass">
                     <label class="mb-2" for="DEO">District Engineering Office</label>
                     <TelerikDropDownList @bind-Value="@SelectedDEO"
                                          Id="DEO"
@@ -61,7 +61,7 @@
                             <TelerikLoader Class="loader-indicator" ThemeColor="Primary" Visible="true"></TelerikLoader>
                         </NoDataTemplate>
                     </TelerikDropDownList>
-                </div>
+                </div> *@
 
                 <div class="d-flex justify-content-end">
 
@@ -123,7 +123,7 @@
                                 <GridColumn Field=@nameof(UserReportsModel.Position) Title="Position" />
                                 <GridColumn Field=@nameof(UserReportsModel.Email) Title="Email" />
                                 <GridColumn Field=@nameof(UserReportsModel.SubOffice) Title="Region/Central Office" />
-                                <GridColumn Field=@nameof(UserReportsModel.Office) Title="Disctrict/Bureau/Service" />
+                                @* <GridColumn Field=@nameof(UserReportsModel.Office) Title="Disctrict/Bureau/Service" /> *@
                                 <GridColumn Field=@nameof(UserReportsModel.CreatedDate) DisplayFormat="{0:MMMM dd, yyyy}" Title="Date Created" />
                             </GridColumns>
                         </TelerikGrid>

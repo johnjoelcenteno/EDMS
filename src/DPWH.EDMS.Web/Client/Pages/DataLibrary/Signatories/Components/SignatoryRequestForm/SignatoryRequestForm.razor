@@ -42,17 +42,29 @@
         
         <div class="col-md-12">
             <label class="mb-2" for="Name">Document Type*</label>
-            <TelerikTextBox Size="@ThemeConstants.Button.Size.Large" Id="DocumentType" @bind-Value="@NewConfig.DocumentType" PlaceHolder="Document Type"></TelerikTextBox>
+            <TelerikDropDownList @bind-Value="@NewConfig.DocumentType"
+                                 Id="documentType"
+                                 Data="@ListOfDocumentType"
+                                 DefaultText="-Select-"
+                                 AdaptiveMode="@AdaptiveMode.Auto"
+                                 Enabled="true">
+            </TelerikDropDownList>
             <ValidationMessage Class="text-danger" For="@(() => NewConfig.DocumentType)" />
         </div>
         <div class="col-md-12">
             <label class="mb-2" for="Name">Position*</label>
             <TelerikTextBox Size="@ThemeConstants.Button.Size.Large" Id="Position" @bind-Value="@NewConfig.Position" PlaceHolder="Position"></TelerikTextBox>
             <ValidationMessage Class="text-danger" For="@(() => NewConfig.Position)" />
-        </div>
+        </div> 
         <div class="col-md-12">
             <label class="mb-2" for="Name">Office 1*</label>
-            <TelerikTextBox Size="@ThemeConstants.Button.Size.Large" Id="Office1" @bind-Value="@NewConfig.Office1" PlaceHolder="Office 1"></TelerikTextBox>
+            <TelerikDropDownList @bind-Value="@NewConfig.Office1"
+                                 Id="office1"
+                                 Data="@ListOfOffice1"
+                                 DefaultText="-Select-" 
+                                 AdaptiveMode="@AdaptiveMode.Auto"
+                                 Enabled="true">
+            </TelerikDropDownList>
             <ValidationMessage Class="text-danger" For="@(() => NewConfig.Office1)" />
         </div>
         <div class="col-md-12">

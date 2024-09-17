@@ -11,4 +11,5 @@ public record RecordRequestSummaryModel
     public string? RMDRequestStatus { get; set; }
     public IEnumerable<RequestedRecordSummaryModel> RequestedRecords { get; set; } = [];
     public string? FullName { get; set; }
+    public DateTimeOffset? DateReleased { get; set; }
 }

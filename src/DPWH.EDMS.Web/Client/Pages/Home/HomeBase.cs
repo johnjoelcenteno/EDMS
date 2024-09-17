@@ -1,19 +1,15 @@
 ﻿using DPWH.EDMS.Api.Contracts;
-using DPWH.EDMS.Client.Shared.MockModels;
-using DPWH.EDMS.Components;
-using DPWH.EDMS.Components.Components.ReusableGrid;
-using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Components;
-using Telerik.SvgIcons;
-using DPWH.EDMS.IDP.Core.Constants;
-using Telerik.Blazor.Components;
 using DPWH.EDMS.Client.Shared.APIClient.Services.RequestManagement;
+using DPWH.EDMS.Client.Shared.MockModels;
+using DPWH.EDMS.Components.Components.ReusableGrid;
 using DPWH.EDMS.Components.Helpers;
+using DPWH.EDMS.IDP.Core.Constants;
 using DPWH.EDMS.Web.Client.Pages.Home.HomeService;
-using DPWH.EDMS.Client.Shared.Models;
-using Telerik.Blazor;
-using Telerik.DataSource;
-using Telerik.Blazor.Components.Grid;
+using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
+using Telerik.Blazor.Components;
+
+
 
 namespace DPWH.EDMS.Web.Client.Pages.Home;
 
@@ -31,10 +27,12 @@ public class HomeBase : GridBase<RecordRequestModel>
     protected List<SimpleKeyValue> SecondStatusList = new List<SimpleKeyValue>();
     protected List<EmployeeModel> EmployeeList = new List<EmployeeModel>();
     protected List<SimpleKeyValue> PieChart = new List<SimpleKeyValue>();
+    protected List<ModelData> XaxisList = MockData.MonthlyRequestAverageTimeList();
     protected List<GetMonthlyRequestModel> GetMonthlyRequestData { get; set; } = new List<GetMonthlyRequestModel>();
     protected List<GetTopRequestQueryModel> GetTopRequestList { get; set; } = new List<GetTopRequestQueryModel>();
 
     public List<object> Series1Data;
+    public List<object> Series2Data;
     public string[] Categories;
     public string[] HrmdCategories;
 
@@ -51,6 +49,9 @@ public class HomeBase : GridBase<RecordRequestModel>
     protected string? SearchPurpose { get; set; }
     protected string? SearchStatus { get; set; }
     protected int ValueAxisMax { get; set; } = 30;
+    protected int XAxisMax { get; set; } = 7;
+    protected bool isEndUser { get; set; }
+    protected string Role { get; set; } = string.Empty;
 
     protected List<string> StatusList = new List<string>
     {
@@ -127,16 +128,21 @@ public class HomeBase : GridBase<RecordRequestModel>
     {
         var authState = await AuthenticationStateAsync!;
         var user = authState.User;
+        var roles = user.Claims.Where(c => c.Type == "role")!.ToList();
+        var role = roles.FirstOrDefault(role => !string.IsNullOrEmpty(role.Value) && role.Value.Contains(ApplicationRoles.RolePrefix))?.Value ?? string.Empty;
 
-        //if (user.Identity is not null && user.Identity.IsAuthenticated)
-        //{
-        //    if (user.IsInRole(ApplicationRoles.EndUser))
-        //    {
-        //        NavigationManager.NavigateTo("/my-requests");
-        //    }
-        //}
-    }
-
+        Role = role;
+        if (NavigationManager.BaseUri.Contains("-trn"))
+        {
+            if (user.Identity is not null && user.Identity.IsAuthenticated)
+            {
+                if (user.IsInRole(ApplicationRoles.EndUser))
+                {
+                    NavigationManager.NavigateTo("/my-records");
+                }
+            }
+        } 
+    } 
     private async Task GetMonthlyRequestTotal()
     {
         var res = await RequestManagementService.GetMonthlyRequestTotal();
@@ -145,10 +151,12 @@ public class HomeBase : GridBase<RecordRequestModel>
             GetMonthlyRequestData = res.Data.ToList();
 
             Categories = GetMonthlyRequestData.Select(d => d.Month).ToArray();
-            HrmdCategories = new string[] { "Day 1", "Day 2", "Day 3", "Day 4", "Day 5", "Day 6", "Day 7" };
 
             Series1Data = GetMonthlyRequestData.Select(d => (object)d.Count).ToList();
-             
+
+            double val = XaxisList.Max(d => d.Series2);
+            int maxVal = Convert.ToInt32(val);
+            XAxisMax = maxVal > 7 ? maxVal : 7;
             int maxValue = Series1Data.Cast<int>().Max();
             ValueAxisMax = maxValue < 28 ? 30 : maxValue;
         }

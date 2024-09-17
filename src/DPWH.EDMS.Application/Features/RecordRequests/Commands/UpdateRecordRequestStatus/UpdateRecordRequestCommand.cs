@@ -24,6 +24,11 @@ internal sealed class UpdateRecordRequestStatusHandler(IWriteRepository writeRep
 
         var status = EnumExtensions.GetValueFromDescription<RecordRequestStates>(model.Status);
 
+        if (status == RecordRequestStates.Released)
+        {
+            record.DateReleased = DateTime.Now;
+        }
+
         record.UpdateStatus(status, _principal.GetUserName());
 
         _writeRepository.RecordRequests.Update(record);

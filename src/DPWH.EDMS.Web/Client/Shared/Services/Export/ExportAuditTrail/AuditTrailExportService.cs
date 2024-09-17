@@ -1,5 +1,7 @@
 ﻿using ClosedXML.Excel;
+using DPWH.EDMS.Client.Shared.Configurations;
 using DPWH.EDMS.Web.Client.Pages.ReportsAndAnalytics.AuditTrail.Model;
+using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 
 namespace DPWH.EDMS.Web.Client.Shared.Services.Export.ExportAuditTrail;
@@ -7,12 +9,12 @@ namespace DPWH.EDMS.Web.Client.Shared.Services.Export.ExportAuditTrail;
 public class AuditTrailExportService : IAuditTrailExportService
 {
     private readonly IJSRuntime _JsRuntime;
-
-    public AuditTrailExportService(IJSRuntime jsRuntime)
+    [Inject] public required ConfigManager ConfigManager { get; set; }
+    public AuditTrailExportService(IJSRuntime jsRuntime, ConfigManager configManager)
     {
         _JsRuntime = jsRuntime;
+        ConfigManager = configManager;
     }
-
     public async Task ExportList<T>(bool IsInventory, List<T> dataList, string filename = $"list.xlsx")
     {
         try
@@ -138,33 +140,8 @@ public class AuditTrailExportService : IAuditTrailExportService
     {
         // List of columns to be excluded
         var excludedColumns = new List<string>();
-        if (IsInventory == false)
-        {
-            excludedColumns = new List<string>
-            {
-                "EntityId",
-                "Entity",
-                "PropertyId",
-                "PropertyName",
-                "EmployeeNumber",
-                "Changes"
-            };
-        }
-        else
-        {
-            excludedColumns = new List<string>
-            {
-                "EntityId",
-                "TargetUser",
-                "Entity",
-                "PropertyId",
-                "BuildingId",
-                "PropertyName",
-                "EmployeeNumber",
-                "Changes"
-            };
-        }
 
+        excludedColumns = ConfigManager.ExcludedColumns;
 
         return excludedColumns.Contains(columnName);
     }

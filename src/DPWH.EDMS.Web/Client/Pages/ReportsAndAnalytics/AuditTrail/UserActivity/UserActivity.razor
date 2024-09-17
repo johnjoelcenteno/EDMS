@@ -1,7 +1,240 @@
 ﻿@page "/audit-trail/user-activity"
 
-<h3>UserActivity</h3>
+@inherits UserActivityBase
+@using DPWH.EDMS.Web.Client.Pages.ReportsAndAnalytics.AuditTrail.UserActivity
+@using DPWH.EDMS.Web.Client.Pages.ReportsAndAnalytics.AuditTrail.Model
+@using DPWH.EDMS.Web.Client.Pages.ReportsAndAnalytics.AuditTrail.AuditTrailGridBase
 
-@code {
+<EdmsLoader Visible="IsLoading" />
 
-}
+
+<div class="d-flex flex-row mt-3 mb-4">
+    <TelerikCard Width="100%">
+        <CardBody>
+            
+            <div class="col-12 mt-4 row">
+                <div class="col-12 col-md-6 col-lg-3 align-self-end">
+                    <label class="mb-3">Report Type</label>
+                    <TelerikDropDownList Data="@ReportType"
+                                         @bind-Value="SelectedReportType"
+                                         Filterable="true"
+                                         ValueField="string"
+                                         TextField="string"
+                                         DefaultText="Select" />
+
+                </div>
+                <div class="col-12 col-md-6 col-lg-3 align-self-end">
+                    <label class="mb-3">Date Modified</label>
+                    <TelerikDateRangePicker Class="date-picker" StartId="outbound-date" @bind-StartValue="@dateFrom" @bind-EndValue="@dateTo" Format="d" OnClose="@OnDateRangePickerPopupClose" AdaptiveMode="@AdaptiveMode.Auto">
+                        <DateRangePickerFormatPlaceholder Year="year" Month="month" Day="day" Hour="hour" Minute="min" Second="sec"></DateRangePickerFormatPlaceholder>
+                    </TelerikDateRangePicker>
+
+                </div>
+                <div class="d-flex justify-content-end">
+                    <TelerikButton ThemeColor="@(ThemeConstants.Button.ThemeColor.Primary)" OnClick="@(() => ShowReport("Request Management", dateFrom,dateTo))">Generate</TelerikButton>
+                </div>
+            </div>
+            <CardSeparator Class="my-2"></CardSeparator>
+            <div class="mobile-property-grid">
+                @if (GridData != null && GridData.Count > 0)
+                {
+                    if (!XSmall)
+                    {
+                        <TelerikGrid Class="grid-no-scroll"
+                                     TItem="AuditLogModel"
+                                     @bind-PageSize="@PageSize"
+                                     Height="@GridHeight"
+                                     Data="GridData"
+                                     Context="audit">
+                            <GridToolBarTemplate>
+
+                                <span class="k-toolbar-spacer"></span>
+
+                                <TelerikButton Icon="@FontIcon.FileExcel" ThemeColor="@(ThemeConstants.Button.ThemeColor.Success)" OnClick="@ConfirmToExcel">Excel</TelerikButton>
+                            </GridToolBarTemplate>
+                            <GridSettings>
+                                <GridPagerSettings PageSizes="@PageSizes">
+                                </GridPagerSettings>
+                            </GridSettings>
+                            <DetailTemplate>
+                                @{
+                                    var auditlog = audit as AuditLogModel;
+                                    <div class="d-flex flex-column">
+                                        <p><b>Action Taken :</b> @auditlog.Action </p>
+                                    </div>
+                                    if (auditlog.Changes != null && auditlog.Changes.Count > 0)
+                                    {
+                                        <TelerikGrid Class="grid-no-scroll"
+                                                     TItem="ChangeModel"
+                                                     @bind-PageSize="@PageSize"
+                                                     Height="@GridHeight"
+                                                     Data="auditlog.Changes">
+                                            <GridSettings>
+                                                <GridPagerSettings PageSizes="@PageSizes">
+                                                </GridPagerSettings>
+                                            </GridSettings>
+
+                                            <GridColumns>
+                                                <GridColumn Field=@nameof(ChangeModel.Field) Title="Field" />
+                                                <GridColumn Field=@nameof(ChangeModel.From) Title="From" />
+                                                <GridColumn Field=@nameof(ChangeModel.To) Title="To" />
+                                            </GridColumns>
+                                        </TelerikGrid>
+                                    }
+                                    else
+                                    {
+                                        <div class="d-flex justify-content-around">
+                                            <span>No Data to display.</span>
+                                        </div>
+                                    }
+                                }
+                            </DetailTemplate>
+                            <GridColumns>
+                                <GridColumn Title="Username">
+                                    <Template>
+                                        @{
+                                            var prop = context as AuditLogModel;
+
+                                            <p>@(prop?.CreatedBy != null ? prop.CreatedBy : "N/A")</p>
+                                        }
+                                    </Template>
+                                </GridColumn>
+                                <GridColumn Title="Last Name">
+                                    <Template>
+                                        @{
+                                            var prop = context as AuditLogModel;
+
+                                            <p>@(prop?.LastName != null ? prop.LastName : "N/A")</p>
+                                        }
+                                    </Template>
+                                </GridColumn>
+                                <GridColumn Title="First Name">
+                                    <Template>
+                                        @{
+                                            var prop = context as AuditLogModel;
+
+                                            <p>@(prop?.FirstName != null ? prop.FirstName : "N/A")</p>
+                                        }
+                                    </Template>
+                                </GridColumn>
+                                <GridColumn Title="Made By">
+                                    <Template>
+                                        @{
+                                            var prop = context as AuditLogModel;
+
+                                            <p>@(prop?.CreatedBy != null ? prop.CreatedBy : "N/A")</p>
+                                        }
+                                    </Template>
+                                </GridColumn>
+                                <GridColumn Title="Date Created">
+                                    <Template>
+                                        @{
+                                            var prop = context as AuditLogModel;
+
+                                            <p>@(prop?.Created != null ? prop.Created.ToString("MMMM dd, yyyy") : "N/A")</p>
+                                        }
+                                    </Template>
+                                </GridColumn>
+
+                            </GridColumns>
+                        </TelerikGrid>
+
+                    }
+                    else
+                    {
+                        <TelerikGrid Class="grid-no-scroll"
+                                     TItem="AuditLogModel"
+                                     @bind-PageSize="@PageSize"
+                                     Height="@GridHeight"
+                                     Data="GridData">
+                            <GridToolBarTemplate>
+
+                                <span class="k-toolbar-spacer"></span>
+
+                                <TelerikButton Icon="@FontIcon.FileExcel" ThemeColor="@(ThemeConstants.Button.ThemeColor.Success)" OnClick="@ConfirmToExcel">Excel</TelerikButton>
+                            </GridToolBarTemplate>
+                            <GridSettings>
+                                <GridPagerSettings PageSizes="@PageSizes">
+                                </GridPagerSettings>
+                            </GridSettings>
+                            <DetailTemplate>
+                                @{
+                                    var prop = context as AuditLogModel;
+                                }
+                                <p>Last Name : @(prop?.LastName != null ? prop.LastName : "N/A")</p>
+                                <p>First Name : @(prop?.FirstName != null ? prop.FirstName : "N/A")</p>
+                                <p>Made By : @(prop?.CreatedBy != null ? prop.CreatedBy : "N/A")</p>
+                                <p>Created By : @(prop?.Created != null ? prop.Created.ToString("MMMM dd, yyyy") : "N/A")</p>
+                            </DetailTemplate>
+                            <GridColumns>
+                                <GridColumn Title="Username">
+                                    <Template>
+                                        @{
+                                            var prop = context as AuditLogModel;
+
+                                            <p>@(prop?.CreatedBy != null ? prop.CreatedBy : "N/A")</p>
+                                        }
+                                    </Template>
+                                </GridColumn>
+
+                            </GridColumns>
+                        </TelerikGrid>
+
+                    }
+
+                }
+
+                <TelerikPager PageChanged="@PageChangedHandler"
+                              Total="TotalItems"
+                              ButtonCount="6"
+                              PageSize="@PageSize"
+                              PageSizeChanged="@PageSizeChangedHandler"
+                              PageSizes="@(new List<int?> {5, 10, 20})"
+                              Page="@Page">
+                </TelerikPager>
+
+            </div>
+
+        </CardBody>
+    </TelerikCard>
+</div>
+
+
+<style>
+    .k-floating-label-container {
+        padding-top: 0px;
+    }
+
+    .mobile-property-grid .k-hierarchy-cell .k-svg-i-plus svg path {
+        d: path('M352 256 160 384V128l192 128z');
+        fill: #7f56d9;
+    }
+
+    .mobile-property-grid .k-hierarchy-cell .k-svg-i-minus svg path {
+        d: path('M256 352 128 160h256L256 352z');
+        fill: #7f56d9;
+    }
+
+    .grid-no-scroll .k-grid-content {
+        overflow-y: auto;
+    }
+
+    .grid-no-scroll .k-grid-header,
+    .grid-no-scroll .k-grid-footer {
+        padding-right: 0; /* version 2.26 and older requires !important here */
+    }
+
+    .grid-no-scroll .k-grid-header-wrap,
+    .grid-no-scroll .k-grid-footer-wrap {
+        border-right-width: 0;
+    }
+
+    .k-grid a {
+        color: #38339B;
+        text-decoration: underline;
+    }
+    
+    .k-floating-label{
+        display: none;
+    }
+</style>

@@ -7,7 +7,8 @@ public record GetAuditLogsQueryResult
     public GetAuditLogsQueryResult(ChangeLog entity, IEnumerable<ApplicationUser>? targetUsers)
     {
         EntityId = entity.EntityId;
-        Entity = entity.Entity;        
+        Entity = entity.Entity;     
+        PropertyName = entity.PropertyName;
         Action = entity.ActionType;
         CreatedBy = entity.UserName;
         FirstName = entity.FirstName;
@@ -20,7 +21,7 @@ public record GetAuditLogsQueryResult
         TargetUser = string.IsNullOrWhiteSpace(targetUser?.LastName) && string.IsNullOrWhiteSpace(targetUser?.FirstName) && string.IsNullOrWhiteSpace(targetUser?.MiddleInitial)
             ? null
             : $"{targetUser.LastName}, {targetUser.FirstName} {targetUser.MiddleInitial}";
-
+        ControlNumber = entity.ControlNumber;
         Changes = entity.Changes
                         .Where(i => i.Field != "LastModified")
                         .Select(i => new GetAuditLogsQueryResultItemChange(i.Field, i.From, i.To))
@@ -40,6 +41,7 @@ public record GetAuditLogsQueryResult
     public string? EmployeeNumber { get; set; }
     public string? TargetUser { get; set; }
     public DateTimeOffset? Created { get; set; }
+    public string? ControlNumber { get; set; }
     public IList<GetAuditLogsQueryResultItemChange> Changes { get; set; }
 }
 

@@ -86,6 +86,38 @@ public class RecordRequest : EntityBase
             GetType().GetProperty(statusProperty)?.SetValue(this, status.ToString());
         }
 
+        // Execute logging number of days until certain status is met
+        UpdateNumberOfDaysUntilStatusIsMet((RecordRequestStates)status, office);
+    }
+
+    private void UpdateNumberOfDaysUntilStatusIsMet(RecordRequestStates status, Offices? office)
+    {
+        decimal diffDays = (decimal)(DateTimeOffset.Now - Created).TotalDays / 1;
+            
+        
+        if(office == Offices.HRMD)
+        {
+            switch (status)
+            {
+                case RecordRequestStates.Released:
+                    HRMDNoDaysUntilReleased = diffDays;
+                    break;
+
+                    // Create case for other status
+            }
+        }
+
+        if (office == Offices.RMD)
+        {
+            switch (status)
+            {
+                case RecordRequestStates.Released:
+                    HRMDNoDaysUntilReleased = diffDays;
+                    break;
+
+                    // Create case for other status
+            }
+        }
     }
 
     public int ControlNumber { get; private set; }
@@ -100,7 +132,10 @@ public class RecordRequest : EntityBase
     public string Status { get; private set; }
     public string? HRMDRequestStatus { get; private set; }
     public string? RMDRequestStatus { get; private set; }
+    public decimal? HRMDNoDaysUntilReleased { get; set; }
+    public decimal? RMDNoDaysUntilReleased { get; set; }
     public string? FullName { get; set; }
+    public DateTimeOffset? DateReleased { get; set; }
     public virtual IList<RequestedRecord> RequestedRecords { get; set; }
     public virtual IList<RecordRequestDocument>? Files { get; set; }
     public virtual IList<RequestedRecordReceipt>? RequestedRecordReceipts { get; set; }

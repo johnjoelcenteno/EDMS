@@ -38,6 +38,7 @@ public class GetRecordRequestsQueryHandler(IReadRepository readRepository, Claim
             RMDRequestStatus = s.RMDRequestStatus,
             RequestedRecords = s.RequestedRecords.Select(x => new RequestedRecordSummaryModel(x.RecordTypeId, x.RecordType)),
             FullName = s.FullName,
+            DateReleased = s.DateReleased
         })
         .ToDataSourceResult(request.Request.FixSerialization());
 

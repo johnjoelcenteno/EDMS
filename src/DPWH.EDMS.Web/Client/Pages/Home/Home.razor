@@ -2,6 +2,7 @@
 @using DPWH.EDMS.Api.Contracts
 @using DPWH.EDMS.Client.Shared.MockModels
 @using DPWH.EDMS.Components.Helpers
+@using DPWH.EDMS.IDP.Core.Constants
 
 @attribute [Authorize]
 @inherits HomeBase
@@ -284,6 +285,8 @@
         </CardBody>
     </TelerikCard>
 </div>
+@if (Role != ApplicationRoles.EndUser)
+ {
 <div class="d-flex flex-lg-row flex-column mt-3 gap-3 mb-4">
     <div class="col">
         <TelerikCard Width="100%">
@@ -366,29 +369,30 @@
 
                     <ChartSeriesItems>
                         <ChartSeries Type="ChartSeriesType.Line"
-                                     Name="Hrmd"
+                                     Name="HRMD"
                                      Data="@MockData.MonthlyRequestAverageTimeList()"
                                      Field="@nameof(ModelData.Series1)">
                         </ChartSeries>
                         <ChartSeries Type="ChartSeriesType.Line"
-                                     Name="Rmd"
+                                     Name="RMD"
                                      Data="@MockData.MonthlyRequestAverageTimeList()"
                                      Field="@nameof(ModelData.Series3)">
                         </ChartSeries>
                         <ChartSeries Type="ChartSeriesType.Line"
                                      Name="Combined"
                                      Data="@MockData.MonthlyRequestAverageTimeList()"
+                                     Color="#eb4a1f"
                                      Field="@nameof(ModelData.Series2)">
                         </ChartSeries>
                     </ChartSeriesItems>
 
                     <ChartCategoryAxes>
-                        <ChartCategoryAxis Categories="@HrmdCategories"></ChartCategoryAxis>
+                        <ChartCategoryAxis Categories="@Categories"></ChartCategoryAxis>
                     </ChartCategoryAxes>
 
                     <ChartValueAxes>
-                        <ChartValueAxis Name="my-value-axis">
-                            <ChartValueAxisLabels Format="#"></ChartValueAxisLabels>
+                        <ChartValueAxis Max="@XAxisMax" Name="my-value-axis">
+                            <ChartValueAxisLabels Format="# 'days'"></ChartValueAxisLabels>
                         </ChartValueAxis>
                     </ChartValueAxes>
                 </TelerikChart>
@@ -438,7 +442,8 @@
         </TelerikCard>
     </div>
 </div>
-
+ 
+}
 <style>
     .ch-card {
         background-color: transparent;
