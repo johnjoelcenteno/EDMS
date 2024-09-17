@@ -128,13 +128,13 @@ public class HomeBase : GridBase<RecordRequestModel>
         var authState = await AuthenticationStateAsync!;
         var user = authState.User;
 
-        if (user.Identity is not null && user.Identity.IsAuthenticated)
-        {
-            if (user.IsInRole(ApplicationRoles.EndUser))
-            {
-                NavigationManager.NavigateTo("/my-requests");
-            }
-        }
+        //if (user.Identity is not null && user.Identity.IsAuthenticated)
+        //{
+        //    if (user.IsInRole(ApplicationRoles.EndUser))
+        //    {
+        //        NavigationManager.NavigateTo("/my-requests");
+        //    }
+        //}
     }
 
     private async Task GetMonthlyRequestTotal()
