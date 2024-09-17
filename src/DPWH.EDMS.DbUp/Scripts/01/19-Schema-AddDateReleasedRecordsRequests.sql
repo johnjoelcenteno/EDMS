@@ -1,0 +1,8 @@
+IF not EXISTS( SELECT 1
+    FROM INFORMATION_SCHEMA.COLUMNS
+    WHERE TABLE_NAME = 'RecordRequests'
+        AND COLUMN_NAME = 'DateReleased')
+BEGIN
+   ALTER TABLE RecordRequests
+    ADD DateReleased DATETIMEOFFSET(7) NULL;
+END
