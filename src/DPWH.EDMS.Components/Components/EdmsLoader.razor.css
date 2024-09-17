@@ -31,7 +31,7 @@
     align-items: center;
     padding: 5px; /* Add padding to the element */
     box-sizing: border-box; /* Ensure padding is included in the total size */
-    animation: rotate 2.5s ease-in-out infinite;
+    /*animation: rotate 2.5s ease-in-out infinite;*/
 }
 
 .loader-text {
@@ -43,7 +43,7 @@
     padding: 0px 16px;
 }
 
-@keyframes rotate {
+/*@keyframes rotate {
     from {
         transform: rotate(0deg);
     }
@@ -51,7 +51,7 @@
     to {
         transform: rotate(360deg);
     }
-}
+}*/
 @-webkit-keyframes glow {
     from {
         text-shadow: 0 0 4px #fff, 0 0 6px #fff, 0 0 8px #fff, 0 0 10px #e6e6e6, 0 0 12px #e6e6e6;

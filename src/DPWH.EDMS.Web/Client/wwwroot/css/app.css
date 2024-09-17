@@ -135,7 +135,7 @@ a, .btn-link {
     align-items: center;
     padding: 5px; /* Add padding to the element */
     box-sizing: border-box; /* Ensure padding is included in the total size */
-    animation: rotate 2.5s ease-in-out infinite;
+    /*animation: rotate 2.5s ease-in-out infinite;*/
 }
 
 .loader-text {
