@@ -31,13 +31,13 @@
             <div class="form-group">
                 <div class="row m-0">
                     <div class="col-md-6 col-12 p-2">
-                        <label for="employeeName">Employee Name</label>
+                        <label for="employeeName">Employee Name*</label>
                         <InputText id="employeeName" class="form-control" @bind-Value="SelectedItem.FullName" />
                         <ValidationMessage For="@(() => SelectedItem.FullName)" class="text-danger" />
                     </div>
                     <div class="col-md-6 col-12 p-2">
                         @* <label for="employeeNo">Employee No.</label> *@
-                        <label for="employeeEmail">Employee Email</label>
+                        <label for="employeeEmail">Employee Email*</label>
                         <InputText id="employeeEmail" class="form-control" @bind-Value="SelectedItem.Email" />
                         <ValidationMessage For="@(() => SelectedItem.Email)" class="text-danger" />
                     </div>                    
@@ -52,7 +52,7 @@
             </div> *@
 
             <div class="form-group p-2">
-                <label>Who will be claiming the document?</label>
+                <label>Who will be claiming the document?*</label>
                 <div>
                     <div class="k-form-field-wrap">
                         <TelerikRadioGroup Layout="@RadioGroupLayout.Horizontal" Data="@DocumentClaimants"
@@ -132,7 +132,7 @@
 
             <div class="form-group">
                 <div class="row m-0">
-                    <label for="recordsRequested" class="px-2 pt-3">Record/s to be Requested</label>
+                    <label for="recordsRequested" class="px-2 pt-3">Record/s to be Requested*</label>
                     <div class="col-md-6 col-12 p-2">
                         <label for="recordsRequested">DPWH Issuance</label>
                         <TelerikMultiSelect Data="@IssuanceList"
@@ -160,7 +160,7 @@
             </div>
 
             <div class="form-group p-2">
-                <label for="remarks">Purpose</label>
+                <label for="remarks">Purpose*</label>
                 <TelerikDropDownList Data="@PurposeList"
                                      @bind-Value="SelectedItem.Purpose"
                                      ValueField="@nameof(GetLookupResult.Name)"
