@@ -178,6 +178,7 @@ public static class ApiEndpoints
         public const string AssetsPerBuildingStatus = $"{Base}/assetsperbuildingstatus";
         public const string UsersPerRole = $"{Base}/usersperrole";
         public const string Users = $"{Base}/users";
+        public const string RecordsManagement = $"{Base}/RecordsManagement";
         public const string QueryInventory = $"{Base}/inventory";
         public const string QueryPropertyDetails = $"{Base}/inventory/propertydetails";
         public const string QueryFinancialDetails = $"{Base}/inventory/financialdetails";

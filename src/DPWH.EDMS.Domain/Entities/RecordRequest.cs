@@ -92,7 +92,7 @@ public class RecordRequest : EntityBase
 
     private void UpdateNumberOfDaysUntilStatusIsMet(RecordRequestStates status, Offices? office)
     {
-        decimal diffDays = (decimal)(DateTimeOffset.Now - Created).TotalDays / 1;
+        decimal diffDays = (decimal)(DateTimeOffset.Now - Created).TotalHours / 24;
             
         
         if(office == Offices.HRMD)
@@ -112,7 +112,7 @@ public class RecordRequest : EntityBase
             switch (status)
             {
                 case RecordRequestStates.Released:
-                    HRMDNoDaysUntilReleased = diffDays;
+                    RMDNoDaysUntilReleased = diffDays;
                     break;
 
                     // Create case for other status

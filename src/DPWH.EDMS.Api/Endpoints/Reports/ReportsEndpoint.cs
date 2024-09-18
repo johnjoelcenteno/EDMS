@@ -3,6 +3,9 @@ using DPWH.EDMS.Application.Features.Reports.Queries;
 using DPWH.EDMS.IDP.Core.Constants;
 using DPWH.EDMS.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
+using MediatR;
+using DPWH.EDMS.Application.Features.RecordRequests.Queries.GetRecordRequestsQuery;
+using Microsoft.AspNetCore.Mvc;
 
 namespace DPWH.EDMS.Api.Endpoints.Reports;
 
@@ -93,6 +96,21 @@ public static class ReportsEndpoint
             .Produces<DataSourceResult>(StatusCodes.Status200OK)
             .CacheOutput(p => p.Expire(TimeSpan.FromMinutes(30)));
 
+
+        app.MapPost(ApiEndpoints.Reports.RecordsManagement, async (DataSourceRequest request, IMediator mediator) =>
+        {
+            var result = await mediator.Send(new QueryRecordManagementRequest(request));
+
+            return result;
+        })
+            .WithName("QueryRecordsManagementReports")
+            .WithTags(TagName)
+            .WithDescription("Query records management reports")
+            .WithApiVersionSet(ApiVersioning.VersionSet)
+            .HasApiVersion(1.0)
+            .Produces<DataSourceResult>()
+            .Produces<ProblemDetails>(StatusCodes.Status400BadRequest)
+            .Produces<ProblemDetails>(StatusCodes.Status500InternalServerError);
         return app;
     }
 }
