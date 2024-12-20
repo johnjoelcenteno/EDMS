@@ -1,0 +1,11 @@
+{
+    "configurations": [
+        {
+            "name": "C#: Span.LogiNextIntegration.DbUp",
+            "type": "dotnet",
+            "request": "launch",
+            "projectPath": "${workspaceFolder}/src/DPWH.EDMS.DbUp/Span.LogiNextIntegration.DbUp.csproj",
+            "launchConfigurationId": "TargetFramework=;Span.LogiNextIntegration.DbUp"
+        }
+    ]
+}
